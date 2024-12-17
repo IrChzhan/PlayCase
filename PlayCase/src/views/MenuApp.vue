@@ -14,7 +14,7 @@
             :src="item.image"
             alt=""
             class="menu-image"
-            @click="openModal"
+            @click="item.function"
         />
         <p>{{ item.name }}</p>
       </div>
@@ -25,9 +25,13 @@
       <button @click="startGame" class="play-button">ИГРА</button>
     </div>
 
-    <Modal
-        :show="showModal"
-        :closeModal="closeModal"
+    <ModalLottery
+        :show="showModalLottery"
+        :closeModal="closeModalLottery"
+    />
+    <ModalFeedback
+        :show="showModalFeedback"
+        :closeModal="closeModalFeedback"
     />
   </div>
 </template>
@@ -43,26 +47,16 @@ import lotteryImage from '@/assets/lotery.png';
 import cashImage from '@/assets/cash.png';
 import helpImage from '@/assets/help.png';
 import contactsImage from '@/assets/contacts.png';
-import Modal from "@/components/widgets/Modal.vue";
+import ModalLottery from "@/components/widgets/ModalLottery.vue";
+import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
 
 const route = useRoute();
 const router = useRouter();
 
 const teamName = ref(route.params.teamName);
 const teamTable = ref(route.params.teamTable);
-const showModal = ref(false);
-const modalContent = ref(null);
-
-const menuItems = ref([
-  {name: 'Правила игры', image: info},
-  {name: 'Результаты игры', image: prizeImage},
-  {name: 'Рейтинг команд', image: ratingImage},
-  {name: 'Меню ресторана', image: menuImage},
-  {name: 'Лотерея', image: lotteryImage},
-  {name: 'Оплата', image: cashImage},
-  {name: 'Хелп', image: helpImage},
-  {name: 'Наши контакты', image: contactsImage},
-]);
+const showModalLottery = ref(false);
+const showModalFeedback = ref(false);
 
 const goToTeamNameDisplay = () => {
   router.push({name: 'TeamNameDisplay'});
@@ -72,13 +66,32 @@ const startGame = () => {
   router.push({name: 'GameScreen'});
 };
 
-const openModal = (content) => {
-  showModal.value = true;
+const openModalLottery = () => {
+  showModalLottery.value = true;
 };
 
-const closeModal = () => {
-  showModal.value = false;
+const closeModalLottery = () => {
+  showModalLottery.value = false;
 };
+
+const openModalFeedback = () => {
+  showModalFeedback.value = true;
+};
+
+const closeModalFeedback = () => {
+  showModalFeedback.value = false;
+};
+
+const menuItems = ref([
+  {name: 'Правила игры', image: info, function: openModalLottery},
+  {name: 'Результаты игры', image: prizeImage, function: () => {}},
+  {name: 'Рейтинг команд', image: ratingImage, function: () => {}},
+  {name: 'Меню ресторана', image: menuImage, function: () => {}},
+  {name: 'Лотерея', image: lotteryImage, function: () => {}},
+  {name: 'Оплата', image: cashImage, function: () => {}},
+  {name: 'Хелп', image: helpImage, function: () => {}},
+  {name: 'Наши контакты', image: contactsImage, function: openModalFeedback},
+]);
 
 </script>
 
