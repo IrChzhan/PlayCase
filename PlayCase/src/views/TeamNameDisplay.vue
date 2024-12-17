@@ -4,7 +4,7 @@
       <h1 class="team-name">{{ teamName }}</h1>
     </div>
     <div class="container_down_menu">
-      <img src="@/assets/House_01.png" class="house-image" width="80" @click="goToMenuApp">
+      <img src="../assets/House_01.png" class="house-image" width="80" @click="goToMenuApp">
       <div class="right-corner">
         <h1 class="team-table">{{ teamTable }}</h1>
         <p class="table-label">стол</p>
@@ -41,7 +41,7 @@ const goToMenuApp = () => {
   text-align: center;
   font-size: 9em; 
   margin: 0; 
-  color: #FFFFFC;
+  color: var(--c-white);
   font-family: "Mulish", sans-serif;
 }
 

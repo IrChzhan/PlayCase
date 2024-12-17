@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import TeamNameInput from '@/components/TeamNameInput.vue';
-import TeamNameDisplay from '@/components/TeamNameDisplay.vue';
-import MenuApp from '@/components/MenuApp.vue';
+import TeamNameInput from '@/views/TeamNameInput.vue';
+import TeamNameDisplay from '@/views/TeamNameDisplay.vue';
+import MenuApp from '@/views/MenuApp.vue';
 
 const routes = [{
         path: '/',
