@@ -80,13 +80,14 @@ const openModalFeedback = () => {
 
 const closeModalFeedback = () => {
   showModalFeedback.value = false;
+  
 };
 
 const menuItems = ref([
   {name: 'Правила игры', image: info, function: openModalLottery},
   {name: 'Результаты игры', image: prizeImage, function: () => {}},
   {name: 'Рейтинг команд', image: ratingImage, function: () => {}},
-  {name: 'Меню ресторана', image: menuImage, function: () => {}},
+  {name: 'Меню ресторана', image: menuImage, function: () => {router.push({name: 'RestourantMenu'})}},
   {name: 'Лотерея', image: lotteryImage, function: () => {}},
   {name: 'Оплата', image: cashImage, function: () => {}},
   {name: 'Хелп', image: helpImage, function: () => {}},
