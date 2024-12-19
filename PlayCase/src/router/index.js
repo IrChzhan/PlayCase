@@ -3,6 +3,8 @@ import TeamNameInput from '@/views/TeamNameInput.vue';
 import TeamNameDisplay from '@/views/TeamNameDisplay.vue';
 import MenuApp from '@/views/MenuApp.vue';
 import MenuRestourant from '@/views/MenuRestourant.vue'
+import AdminHome from "@/admin/AdminHome.vue";
+import AdminPlaces from "@/admin/AdminPlaces.vue";
 
 const routes = [{
         path: '/',
@@ -26,6 +28,18 @@ const routes = [{
         name: 'RestourantMenu',
         component: MenuRestourant,
         props: true
+    },
+    {
+        path: '/admin',
+        name: 'AdminHome',
+        component: AdminHome,
+        props: true
+    },
+    {
+        path: '/admin/places',
+        name: 'AdminPlaces',
+        component: AdminPlaces,
+        props:true
     }
 ];
 
