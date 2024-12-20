@@ -8,7 +8,7 @@ import AdminPlaces from "@/admin/AdminPlaces.vue";
 import AdminPlace from "@/admin/AdminPlace.vue";
 
 const routes = [{
-        path: '/',
+        path: '/PlayCase',
         name: 'TeamNameInput',
         component: TeamNameInput,
     },
