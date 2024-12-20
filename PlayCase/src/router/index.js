@@ -5,6 +5,7 @@ import MenuApp from '@/views/MenuApp.vue';
 import MenuRestourant from '@/views/MenuRestourant.vue'
 import AdminHome from "@/admin/AdminHome.vue";
 import AdminPlaces from "@/admin/AdminPlaces.vue";
+import AdminPlace from "@/admin/AdminPlace.vue";
 
 const routes = [{
         path: '/',
@@ -40,7 +41,13 @@ const routes = [{
         name: 'AdminPlaces',
         component: AdminPlaces,
         props:true
-    }
+    },
+    {
+        path: '/place/:id',
+        name: 'Place',
+        component: AdminPlace,
+        props: true
+    },
 ];
 
 const router = createRouter({
