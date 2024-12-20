@@ -190,8 +190,35 @@ const submitForm = () => {
 }
 
 @media (max-width: 768px) {
+  @media (max-width: 768px) {
   .modal-content {
     width: 90vw;
+    padding: 15px;
   }
+  .main-heading {
+    font-size: clamp(18px, 3vw, 24px);
+  }
+  .team-title {
+    font-size: clamp(10px, 1.5vw, 14px);
+    padding: 0.5vw 1vw;
+  }
+  .textarea {
+    height: 100px;
+    font-size: clamp(10px, 1.5vw, 12px);
+  }
+  .checkbox-title {
+    font-size: clamp(10px, 1.5vw, 14px);
+  }
+  .checkbox-container {
+    font-size: clamp(10px, 1.5vw, 12px);
+  }
+  .submit-button {
+    font-size: clamp(10px, 1.5vw, 12px);
+    padding: 0.8vw 1.5vw;
+  }
+  .checkbox-groups {
+    flex-direction: column;
+  }
+}
 }
 </style>

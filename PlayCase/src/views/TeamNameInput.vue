@@ -28,14 +28,15 @@ const submitTeamName = () => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 20px;
+  margin: 20px;
 }
 
 input {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-left: 15px;
 }
 
 button {

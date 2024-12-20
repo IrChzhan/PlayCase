@@ -193,6 +193,7 @@ export default {
     flex: wrap;
     margin-top: 20px;
     margin-left: 16px;
+    width: 95%;
     margin-top: 25px;
     font-family: "Mulish", sans-serif;
     
@@ -241,7 +242,10 @@ h1 {
     
     .products {
         grid-template-columns: repeat(3, 1fr); 
+        gap: 12px;
     }
+
+
 
     h1 {
         font-size: 32px; 

@@ -46,6 +46,7 @@ import menuImage from '@/assets/menu.png';
 import lotteryImage from '@/assets/lotery.png';
 import cashImage from '@/assets/cash.png';
 import helpImage from '@/assets/help.png';
+import manImage from '@/assets/man.png';
 import contactsImage from '@/assets/contacts.png';
 import ModalLottery from "@/components/widgets/ModalLottery.vue";
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
@@ -92,6 +93,7 @@ const menuItems = ref([
   {name: 'Оплата', image: cashImage, function: () => {}},
   {name: 'Хелп', image: helpImage, function: () => {}},
   {name: 'Наши контакты', image: contactsImage, function: openModalFeedback},
+  {name: 'Регистрация лотереи', image: manImage, function: () => {}}
 ]);
 
 </script>
@@ -105,19 +107,36 @@ const menuItems = ref([
 }
 
 .header {
+  width: 95%;
+  background-color: #3A4C6E;
+  border: 2px solid #CC9F33; 
+  border-radius: 10px; 
+  padding: 10px; 
+  margin-left: 12px;
+  margin-top: 12px; 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: lightblue;
-  padding: 20px;
 }
-
 .team-name {
-  font-size: 24px;
+  font-size: 64px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .table-number {
   font-size: 20px;
+  margin-right: 40px;
+  color: #CC9F33;
+  font-family: "Mulish", sans-serif;
+}
+
+h2 {
+  font-size: 50px;
+}
+
+p {
+  margin-left: 5px;
 }
 
 .menu {
@@ -125,6 +144,7 @@ const menuItems = ref([
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding: 20px;
+  width: 90%;
 }
 
 .menu-item {
@@ -134,18 +154,78 @@ const menuItems = ref([
 }
 
 .menu-image {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 }
 
 .footer {
   display: flex;
   justify-content: space-between;
-  margin: 20px;
+  padding: 20px;
+  margin-top: 90px;
+  margin-left: 20px;
 }
 
-.back-button, .play-button {
-  padding: 10px 20px;
-  font-size: 18px;
+.back-button {
+  width: 230px;
+  height: 45px;
+  border-radius: 5px;
+  background-color: #CC9F33;
+  font-family: "Mulish", sans-serif;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.play-button {
+  background-color: transparent; 
+  border: none; 
+  color: #CC9F33;
+  font-family: "Mulish", sans-serif;
+  font-weight: bold; 
+  font-size: 35px; 
+  cursor: pointer; 
+  margin-left: 730px; 
+  padding: 10px; 
+  margin-bottom: 80px;
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .header {
+    flex-direction: row; 
+    justify-content: space-around; 
+    width: 85%; 
+    height: 85%;
+    margin-left: 50px;
+  }
+
+  .team-name {
+    font-size: 48px; 
+  }
+
+  .table-number {
+    font-size: 30px; 
+    margin-right: 20px;
+  }
+
+  .menu {
+    width: 80%; 
+    margin-left: 45px;
+    margin-top: 5px;
+  }
+  .menu-image {
+    width: 60px;
+    height: 60px;
+  }
+  .play-button {
+    margin-left: 450px; 
+    width: 40px;
+
+  }
+  .footer {
+    margin-top: 3px;
+    margin-left: 35px;
+    justify-content: space-around; 
+    flex-direction: row;
+  }
 }
 </style>

@@ -242,11 +242,57 @@ input[type="checkbox"] {
 @media (max-width: 768px) {
   .modal-content {
     width: 90vw;
+    max-width: 600px;
+    padding: 15px;
   }
 
   .modal-body {
     flex-direction: column;
-    gap: 5vw;
+    gap: 15px;
+    width: 100%; 
+    box-sizing: border-box; 
+  }
+
+  .form-section,
+  .rules-section {
+    width: 100%; 
+    min-width: 0; 
+    box-sizing: border-box;
+  }
+
+  .main-heading {
+    font-size: clamp(1.5vw, 24px, 30px);
+    line-height: 1.3;
+  }
+
+  .team-title {
+    margin-top:50px;
+  }
+
+  .checkbox-container {
+    font-size: clamp(1vw, 12px, 14px);
+  }
+
+  .rules-section h2 {
+    font-size: clamp(1.5vw, 18px, 22px);
+  }
+
+  .rules-section ul {
+    font-size: clamp(1vw, 12px, 14px);
+    padding-left: 1vw;
+    line-height: 1.5;
+  }
+
+  .rules-section p {
+    font-size: clamp(1vw, 12px, 14px);
+  }
+
+  .lottery-greeting {
+    font-size: clamp(1vw, 12px, 14px);
+  }
+
+  .input-container {
+    width: 100%;
   }
 }
 </style>
