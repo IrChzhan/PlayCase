@@ -63,12 +63,14 @@
                 :description="item.description"
             />
         </div>
+      <img src="../assets/House_01.png" class="house-image" width="80" @click="goToMenuApp" alt="g">
     </div>
 </template>
 
 <script>
 import meal from '@/assets/meal.png';
 import ProductCard from './ProductCard.vue';
+import router from "@/router/index.js";
 export default {
     components: {
         ProductCard,
@@ -176,7 +178,10 @@ export default {
     methods: {
         selectCategory(category) {
             this.selectedCategory = category;
-        }
+        },
+        goToMenuApp() {
+          router.push({ name: 'MenuApp', params: { teamName: "dada", teamTable: "dadasd"} });
+       }
     }
 };
 </script>
