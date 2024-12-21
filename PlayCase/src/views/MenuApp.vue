@@ -22,16 +22,20 @@
 
     <div class="footer">
       <button @click="goToTeamNameDisplay" class="back-button">Вернуться к заставке</button>
-      <button @click="startGame" class="play-button">ИГРА.</button>
+      <button @click="startGame" class="play-button">ИГРА</button>
     </div>
 
     <ModalLottery
         :show="showModalLottery"
         :closeModal="closeModalLottery"
     />
-    <ModalFeedback
-        :show="showModalFeedback"
-        :closeModal="closeModalFeedback"
+    <ModalContacts
+        :show="showModalContacts"
+        :closeModal="closeModalContacts"
+    />
+    <ModalPay
+      :show="showModalPay"
+      :closeModal="closeModalPay"
     />
   </div>
 </template>
@@ -50,6 +54,8 @@ import manImage from '@/assets/man.png';
 import contactsImage from '@/assets/contacts.png';
 import ModalLottery from "@/components/widgets/ModalLottery.vue";
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
+import ModalContacts from "@/components/widgets/ModalContacts.vue";
+import ModalPay from '@/components/widgets/ModalPay.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -57,7 +63,8 @@ const router = useRouter();
 const teamName = ref(route.params.teamName);
 const teamTable = ref(route.params.teamTable);
 const showModalLottery = ref(false);
-const showModalFeedback = ref(false);
+const showModalContacts = ref(false);
+const showModalPay = ref(false);
 
 const goToTeamNameDisplay = () => {
   router.push({name: 'TeamNameDisplay'});
@@ -75,24 +82,31 @@ const closeModalLottery = () => {
   showModalLottery.value = false;
 };
 
-const openModalFeedback = () => {
-  showModalFeedback.value = true;
+const openModalContacts = () => {
+  showModalContacts.value = true;
 };
 
-const closeModalFeedback = () => {
-  showModalFeedback.value = false;
-  
+const closeModalContacts = () => {
+  showModalContacts.value = false;
 };
+
+const openModalPay = () => {
+  showModalPay.value = true;
+}
+
+const closeModalPay = () => {
+  showModalPay.value = false;
+}
 
 const menuItems = ref([
-  {name: 'Правила игры', image: info, function: openModalLottery},
-  {name: 'Результаты игры', image: prizeImage, function: () => {}},
+  {name: 'Правила игры', image: info, function: () => {router.push({name: 'Rules'})}},
+  {name: 'Результаты игры', image: prizeImage, function: () => {router.push({name: 'WinnerPage'})}},
   {name: 'Рейтинг команд', image: ratingImage, function: () => {}},
   {name: 'Меню ресторана', image: menuImage, function: () => {router.push({name: 'RestourantMenu'})}},
   {name: 'Лотерея', image: lotteryImage, function: () => {}},
-  {name: 'Оплата', image: cashImage, function: () => {}},
+  {name: 'Оплата', image: cashImage, function: openModalPay},
   {name: 'Хелп', image: helpImage, function: () => {}},
-  {name: 'Наши контакты', image: contactsImage, function: openModalFeedback},
+  {name: 'Наши контакты', image: contactsImage, function: openModalContacts},
   {name: 'Регистрация лотереи', image: manImage, function: () => {}}
 ]);
 
@@ -122,6 +136,9 @@ const menuItems = ref([
   font-size: 64px;
   margin-bottom: 20px;
   margin-top: 20px;
+  color: white;
+  font-family: "Mulish", sans-serif;
+  font-weight: bold;
 }
 
 .table-number {

@@ -6,6 +6,8 @@ import MenuRestourant from '@/views/MenuRestourant.vue'
 import AdminHome from "@/admin/AdminHome.vue";
 import AdminPlaces from "@/admin/AdminPlaces.vue";
 import AdminPlace from "@/admin/AdminPlace.vue";
+import Rules from '@/components/widgets/Rules.vue';
+import WinnerPage from '@/views/WinnerPage.vue';
 
 const routes = [{
         path: '/',
@@ -31,6 +33,20 @@ const routes = [{
         props: true
     },
     {
+        path: '/rules',
+        name: 'Rules',
+        component: Rules,
+        props: true
+    },
+
+    {
+        path: '/winnerpage',
+        name: 'WinnerPage',
+        component: WinnerPage,
+        props: true
+    },
+
+    {
         path: '/admin',
         name: 'AdminHome',
         component: AdminHome,
@@ -40,7 +56,7 @@ const routes = [{
         path: '/admin/places',
         name: 'AdminPlaces',
         component: AdminPlaces,
-        props:true
+        props: true
     },
     {
         path: '/place/:id',

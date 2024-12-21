@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Меню ресторана</h1>
+        <h1 class="menu_name">Меню ресторана</h1>
         <div class="menu">
             <div 
                 class="category" 
@@ -222,7 +222,7 @@ export default {
     color: white;
 }
 
-h1 {
+.menu_name {
     color: white;
     font-family: "Mulish", sans-serif;
     font-size: 40px;
