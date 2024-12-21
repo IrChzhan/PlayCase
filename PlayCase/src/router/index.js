@@ -8,6 +8,7 @@ import AdminPlaces from "@/admin/AdminPlaces.vue";
 import AdminPlace from "@/admin/AdminPlace.vue";
 import Rules from '@/components/widgets/Rules.vue';
 import WinnerPage from '@/views/WinnerPage.vue';
+import ModalTypePay from '@/components/widgets/ModalTypePay.vue';
 
 const routes = [{
         path: '/',
@@ -64,6 +65,12 @@ const routes = [{
         component: AdminPlace,
         props: true
     },
+    {
+        path: '/typepay',
+        name: 'ModalTypePay',
+        component: ModalTypePay,
+        props: true
+    }
 ];
 
 const router = createRouter({

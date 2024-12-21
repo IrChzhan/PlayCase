@@ -23,43 +23,81 @@
               <div class="price-per-player">{{ pricePerPlayer }} ₽ <span>цена за 1 человека</span></div>
             </div>
   
-            <div class="form">
-              <p>Напишите вашу почту, на которую вы хотите, чтобы пришел чек</p>
-              <input type="email" placeholder="Ваша электронная почта" class="email-input" />
-              <input type="text" placeholder="Введите промокод" class="promo-input" />
-              <button class="pay-button">Перейти к оплате</button>
-              <div class="policy">
-                <input type="checkbox" id="policy-checkbox" />
-                <label for="policy-checkbox">
-                  Нажимая на кнопку, вы соглашаетесь с политикой обработки персональных данных
-                </label>
+            <div v-if="!isPaying">
+              <div class="form">
+                <p>Напишите вашу почту, на которую вы хотите, чтобы пришел чек</p>
+                <input type="email" placeholder="Ваша электронная почта" class="email-input" />
+                <input type="text" placeholder="Введите промокод" class="promo-input" />
+                <button class="pay-button" @click="startPayment">Перейти к оплате</button>
+                <div class="policy">
+                  <input type="checkbox" id="policy-checkbox" />
+                  <label for="policy-checkbox">
+                    Нажимая на кнопку, вы соглашаетесь с политикой обработки персональных данных
+                  </label>
+                </div>
               </div>
             </div>
+  
+            <div v-else-if="!paymentMethod">
+              <div class="payment-options">
+                <button class="payment-option" @click="selectPaymentMethod('qr')">QR-код</button>
+                <button class="payment-option" @click="selectPaymentMethod('card')">Карта</button>
+              </div>
+            </div>
+  
+            <div v-else-if="paymentMethod === 'qr'">
+              <p>Сканируйте QR-код для оплаты:</p>
+              <img src="@/assets/qr.png" alt="QR-код" class="qr-code" />
+              <button @click="cancelPaymentMethod" class="back-button">Назад</button>
+            </div>
+  
+            <div v-else-if="paymentMethod === 'card'">
+              <div class="card-payment-form">
+                <input type="text" placeholder="Номер карты" class="card-number" />
+                <input type="text" placeholder="Срок действия (MM/YY)" class="card-expiry" />
+                <input type="text" placeholder="CVV" class="card-cvv" />
+                <button class="pay-now-button">Оплатить</button>
+              </div>
+              <button @click="cancelPaymentMethod" class="back-button">Назад</button>
+            </div>
+  
           </div>
         </div>
       </div>
     </div>
-  </template>  
+  </template>
+  
+  <script setup>
+  import { ref, computed } from 'vue';
+  
+  defineProps({
+    show: Boolean,
+    closeModal: Function
+  });
+  
+  const selectedPlayers = ref(1);
+  const pricePerPlayer = ref(700);
+  const isPaying = ref(false);
+  const paymentMethod = ref(null); 
 
-<script setup>
-import { ref, computed } from 'vue';
-defineProps({
-  show: Boolean,
-  closeModal: Function
-});
-
-const selectedPlayers = ref(1); // По умолчанию выбран 1 игрок
-const pricePerPlayer = ref(700); // Стоимость одного игрока
-
-// Вычисляемая общая сумма
-const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
-
-// Метод для выбора количества игроков
-function selectPlayers(number) {
-  selectedPlayers.value = number;
-}
-
-</script>
+  const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
+  
+  function selectPlayers(number) {
+    selectedPlayers.value = number;
+  }
+  
+  function startPayment() {
+    isPaying.value = true; 
+  }
+  
+  function selectPaymentMethod(method) {
+    paymentMethod.value = method; 
+  }
+  
+  function cancelPaymentMethod() {
+    paymentMethod.value = null; 
+  }
+  </script>
   
   <style scoped>
   .modal-overlay {
@@ -76,7 +114,7 @@ function selectPlayers(number) {
   }
   
   .modal-content {
-    background: var(--c-white, #fff);
+    background: #fff;
     border-radius: 1vw;
     padding: clamp(30px, 4vw, 50px) clamp(20px, 8vw, 100px);
     width: 70vw;
@@ -171,7 +209,6 @@ function selectPlayers(number) {
   color: #777;
   text-align: left;
 }
-
 .policy input {
   margin-right: 5px;
 }
@@ -207,6 +244,60 @@ function selectPlayers(number) {
   background-color: #cc9f33;
   color: #fff;
   border-color: #cc9f33;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.payment-option {
+  background: #cc9f33;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card-payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-number,
+.card-expiry,
+.card-cvv {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.pay-now-button {
+  background: #cc9f33;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.qr-code {
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 790px;
+  margin-top: 9px;
+  background: #cc9f33;
+  color: white;
 }
   
   @media (max-width: 768px) {
