@@ -24,7 +24,12 @@
       </form>
     </div>
 
-    <Toast :message="toastMessage" :type="toastType" :duration="3000" />
+    <Notification
+        v-if="toastMessage"
+        :message="toastMessage"
+        :type="toastType"
+        :duration="3000"
+    />
   </div>
 </template>
 
@@ -40,7 +45,7 @@ defineProps({
 import { ref } from "vue";
 import { useStore } from "vuex";
 import Loader from "../Loader.vue";
-import Toast from "../Toast.vue";
+import Notification from "@/admin/Notification.vue";
 
 const store = useStore();
 const route = useRoute();
@@ -60,10 +65,16 @@ const handleAddCategory = async () => {
     toastMessage.value = "Категория успешно добавлена!";
     toastType.value = "success";
     categoryName.value = "";
+    setTimeout(() => {
+      toastMessage.value = '';
+    }, 3000);
   } catch (error) {
     console.error("Ошибка при добавлении категории:", error);
     toastMessage.value = "Ошибка при добавлении категории.";
     toastType.value = "error";
+    setTimeout(() => {
+      toastMessage.value = '';
+    }, 3000);
   } finally {
     loading.value = false;
   }

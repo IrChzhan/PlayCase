@@ -24,7 +24,12 @@
       </div>
     </div>
 
-    <Toast :message="toastMessage" :type="toastType" :duration="3000" />
+    <Notification
+        v-if="toastMessage"
+        :message="toastMessage"
+        :type="toastType"
+        :duration="3000"
+    />
 
 
   </div>
@@ -49,6 +54,7 @@ import MenuList from './AdminMenuList.vue';
 import EditPlaceModal from './AdminEditPlaceModal.vue';
 import Toast from '../Toast.vue';
 import AdminAddCategoryModal from "@/admin/Place/AdminAddCategoryModal.vue";
+import Notification from "@/admin/Notification.vue";
 
 const route = useRoute();
 const store = useStore();

@@ -1,6 +1,6 @@
 <template>
   <div class="admin-places">
-    <h1>Управление местами</h1>
+    <h1>Управление заведениями</h1>
 
     <div class="places-list">
       <div
@@ -45,7 +45,7 @@
             :disabled="!isFormValid || loading"
             :class="{ disabled: !isFormValid || loading }"
         >
-          <Loader v-if="loading" /> Добавить место
+          <Loader v-if="loading" /> Добавить заведения
         </button>
       </form>
     </div>
@@ -84,7 +84,7 @@ const fetchPlaces = async () => {
 };
 
 const goToEdit = (id) => {
-  router.push(`/place/${id}`);
+  router.push(`/admin/place/${id}`);
 };
 
 const addPlace = async () => {

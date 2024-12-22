@@ -9,11 +9,30 @@ import AdminPlace from "@/admin/Place/AdminPlace.vue";
 import Rules from '@/components/widgets/Rules.vue';
 import WinnerPage from '@/views/WinnerPage.vue';
 import ModalTypePay from '@/components/widgets/ModalTypePay.vue';
+import HomePage from "@/views/HomePage.vue";
+import AdminAuthPage from "@/views/AdminAuthPage.vue";
+import AdminUsers from "@/admin/Place/AdminUsers.vue";
 
-const routes = [{
+const routes = [
+    {
         path: `${import.meta.env.VITE_Path_App}`,
+        name: 'HomePage',
+        component: HomePage,
+    },
+    {
+        path: '/auth',
+        name: 'AdminAuthPage',
+        component: AdminAuthPage
+    },
+    {
+        path: `/TeamNameInput`,
         name: 'TeamNameInput',
         component: TeamNameInput,
+    },
+    {
+        path: '/admin/users',
+        name: 'AdminUsers',
+        component: AdminUsers
     },
     {
         path: '/display/:teamName/:teamTable',
@@ -60,7 +79,7 @@ const routes = [{
         props: true
     },
     {
-        path: '/place/:id',
+        path: '/admin/place/:id',
         name: 'Place',
         component: AdminPlace,
         props: true

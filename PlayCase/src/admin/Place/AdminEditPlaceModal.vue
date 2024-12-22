@@ -45,11 +45,18 @@
         @cancel="handleCancel"
     />
 
-    <Toast :message="toastMessage" :type="toastType" :duration="3000" />
+    <Notification
+        v-if="toastMessage"
+        :message="toastMessage"
+        :type="toastType"
+        :duration="3000"
+    />
   </div>
 </template>
 
 <script setup>
+import Notification from "@/admin/Notification.vue";
+
 defineProps({
   show: Boolean,
   closeModal: Function
@@ -130,10 +137,16 @@ const updatePlace = async () => {
     toastMessage.value = 'Место успешно обновлено!';
     toastType.value = 'success';
     this.props.closeModal();
+    setTimeout(() => {
+      toastMessage.value = '';
+    }, 3000);
   } catch (error) {
     console.error('Ошибка обновления места:', error);
     toastMessage.value = 'Ошибка при обновлении места.';
     toastType.value = 'error';
+    setTimeout(() => {
+      toastMessage.value = '';
+    }, 3000);
   } finally {
     loading.value = false;
   }
@@ -146,10 +159,16 @@ const deletePlace = async () => {
     toastMessage.value = 'Место удалено!';
     toastType.value = 'success';
     this.props.closeModal();
+    setTimeout(() => {
+      toastMessage.value = '';
+    }, 3000);
   } catch (error) {
     console.error('Ошибка удаления места:', error);
     toastMessage.value = 'Ошибка при удалении места.';
     toastType.value = 'error';
+    setTimeout(() => {
+      toastMessage.value = '';
+    }, 3000);
   } finally {
     loading.value = false;
   }

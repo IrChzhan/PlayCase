@@ -1,59 +1,62 @@
-import axios from "axios"
-const TOKEN_KEY = 'jwt-item'
+import axios from "axios";
 
 export default {
     namespaced: true,
-    state(){
+    state() {
         return {
-            token: localStorage.getItem(TOKEN_KEY),
-            activeModel: false
-        }
+            users: [],
+            currentUser: null,
+        };
     },
-    mutations:{
-        setToken(state, token){
-            state.token = token
-            localStorage.setItem(TOKEN_KEY, token)
+    mutations: {
+        SET_USERS(state, users) {
+            state.users = users;
         },
-        activeModelTrue(state){
-            state.activeModel = true
+        SET_CURRENT_USER(state, user) {
+            state.currentUser = user;
         },
-        activeModelFalse(state){
-            state.activeModel = false
+        ADD_USER(state, user) {
+            state.users.push(user);
         },
-        changeActiveModel(state){
-            state.activeModel = !state.activeModel
-        }
     },
-    actions:{
-        async login({commit, dispatch}, payload){
+    actions: {
+        async fetchUsers({ commit }) {
             try {
-                const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDQ9nBretMORrhlJzgE9uQdqpX3dRM5kZA`
-                const {data} = await axios.post(url, {...payload, returnSecureToken:true})
-                commit('setToken', data.idToken)
-                console.log(data)
-            }catch (e){
-                throw new Error()
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/users`);
+                commit("SET_USERS", response.data);
+            } catch (error) {
+                console.error("Ошибка при загрузке пользователей:", error);
             }
         },
-        async register({commit, dispatch}, payload){
+        async login({ state, commit }, login) {
+            const user = state.users.find((user) => user.username === login);
+            if (user) {
+                commit('SET_CURRENT_USER', user);
+                return true;
+            } else {
+                return false;
+            }
+        },
+        async addUser({ commit }, newUser) {
             try {
-                const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDQ9nBretMORrhlJzgE9uQdqpX3dRM5kZA`
-                const {data} = await axios.post(url, {...payload, returnSecureToken:true})
-                commit('setToken', data.idToken)
-            }catch (e){
-                throw new Error()
+                const body = {
+                    name: newUser.name,
+                    username: newUser.login,
+                    password: newUser.password,
+                    authorities: [{ authority: newUser.role }],
+                };
+                const response = await axios.post(
+                    `${import.meta.env.VITE_API_URL}/admin/users`,
+                    body
+                );
+                commit("ADD_USER", response.data);
+            } catch (error) {
+                console.error("Ошибка при добавлении пользователя:", error);
             }
         },
     },
-    getters:{
-        token(state){
-            return state.token
-        },
-        isAuntificated(state){
-            return !!state.token
-        },
-        getActiveModel(state){
-            return state.activeModel
-        }
-    }
-}
+    getters: {
+        users: (state) => state.users,
+        currentUser: (state) => state.currentUser,
+    },
+};
