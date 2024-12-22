@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   message: String,
@@ -17,21 +17,21 @@ const props = defineProps({
     type: Number,
     default: 3000,
   },
-});
+})
 
-const visible = ref(false);
+const visible = ref(false)
 
 watch(
-    () => props.message,
-    (newMessage) => {
-      if (newMessage) {
-        visible.value = true;
-        setTimeout(() => {
-          visible.value = false;
-        }, props.duration);
-      }
+  () => props.message,
+  (newMessage) => {
+    if (newMessage) {
+      visible.value = true
+      setTimeout(() => {
+        visible.value = false
+      }, props.duration)
     }
-);
+  },
+)
 </script>
 
 <style scoped>

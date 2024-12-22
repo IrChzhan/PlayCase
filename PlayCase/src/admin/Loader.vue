@@ -2,8 +2,7 @@
   <span class="loader"></span>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
 .loader {

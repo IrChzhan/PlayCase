@@ -1,52 +1,49 @@
 <template>
-    <div class="rules-block">
-      <h1 class="title">Правила игры</h1>
-      <p class="intro">
-        Вас ждут 7 раундов с небольшими перерывами после 3 и 6 раундов.
-      </p>
-      <p class="description">
-        Почти во всех раундах, за редким исключением, будет по 6 вопросов.
-        После каждого вопроса вам в команде надо будет посовещаться и написать
-        ответ на бланках, которые будут лежать где-то рядом. После каждого
-        раунда надо сдать бланк.
-      </p>
-  
-      <ul class="rounds-list">
-        <li><span class="round-number">1 раунд.</span> Разминка.</li>
-        <li><span class="round-number">2 раунд.</span> На логику.</li>
-        <li><span class="round-number">3 раунд.</span> Музыкальный.</li>
-        <li><span class="round-number">4 раунд.</span> Интерактивный.</li>
-        <li><span class="round-number">5 раунд.</span> Сюрприз.</li>
-        <li><span class="round-number">6 раунд.</span> Тематический.</li>
-        <li><span class="round-number">7 раунд.</span> Решающий.</li>
-      </ul>
-  
-      <p class="additional-info">
-        Если у вас будут появляться вопросы перед игрой или в течение нее, не
-        стесняйтесь задавать их нашим помощникам.
-      </p>
-  
-      <p class="note">
-        Ни в коем случае <span class="highlight">нельзя забывать вкусно есть</span> и <span class="highlight">пить во время игры</span>!
-        За этот пункт вашего досуга отвечают наши партнерские крутые бары.
-      </p>
-      <img src="@/assets/house_light.png" class="house_button" @click="goToMenuApp">
-    </div>
-  </template>
-  
-  <script>
-  import { useRoute } from 'vue-router';
-import { useRouter } from 'vue-router';
+  <div class="rules-block">
+    <h1 class="title">Правила игры</h1>
+    <p class="intro">Вас ждут 7 раундов с небольшими перерывами после 3 и 6 раундов.</p>
+    <p class="description">
+      Почти во всех раундах, за редким исключением, будет по 6 вопросов. После каждого вопроса вам в
+      команде надо будет посовещаться и написать ответ на бланках, которые будут лежать где-то
+      рядом. После каждого раунда надо сдать бланк.
+    </p>
 
-const route = useRoute();
-const router = useRouter();
+    <ul class="rounds-list">
+      <li><span class="round-number">1 раунд.</span> Разминка.</li>
+      <li><span class="round-number">2 раунд.</span> На логику.</li>
+      <li><span class="round-number">3 раунд.</span> Музыкальный.</li>
+      <li><span class="round-number">4 раунд.</span> Интерактивный.</li>
+      <li><span class="round-number">5 раунд.</span> Сюрприз.</li>
+      <li><span class="round-number">6 раунд.</span> Тематический.</li>
+      <li><span class="round-number">7 раунд.</span> Решающий.</li>
+    </ul>
+
+    <p class="additional-info">
+      Если у вас будут появляться вопросы перед игрой или в течение нее, не стесняйтесь задавать их
+      нашим помощникам.
+    </p>
+
+    <p class="note">
+      Ни в коем случае <span class="highlight">нельзя забывать вкусно есть</span> и
+      <span class="highlight">пить во время игры</span>! За этот пункт вашего досуга отвечают наши
+      партнерские крутые бары.
+    </p>
+    <img src="@/assets/house_light.png" class="house_button" @click="goToMenuApp" />
+  </div>
+</template>
+
+<script>
+import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp' });
-};
-  </script>
-  
-  <style scoped>
+  router.push({ name: 'MenuApp' })
+}
+</script>
 
+<style scoped>
 .rules-block {
   background: #ffffff;
   border-radius: 16px;
@@ -57,14 +54,14 @@ const goToMenuApp = () => {
   width: calc(100% - 40px);
   font-family: 'Mulish', sans-serif;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  text-align: left; 
-  box-sizing: border-box; 
+  text-align: left;
+  box-sizing: border-box;
 }
 
 .title {
   font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 24px; 
+  margin-bottom: 24px;
   margin-left: 0px;
   color: #333;
 }
@@ -74,8 +71,8 @@ const goToMenuApp = () => {
 .additional-info,
 .note {
   font-size: 1.1rem;
-  line-height: 1.8; 
-  margin-bottom: 28px; 
+  line-height: 1.8;
+  margin-bottom: 28px;
   color: #333;
 }
 
@@ -92,7 +89,7 @@ const goToMenuApp = () => {
 
 .round-number {
   font-weight: 600;
-  color: #CC9F33;
+  color: #cc9f33;
 }
 
 .additional-info {
@@ -106,14 +103,14 @@ const goToMenuApp = () => {
 }
 
 .highlight {
-  color: #CC9F33;
+  color: #cc9f33;
 }
 
 .house_button {
-    width: 50px;
-    height: 50px;
-    margin-top: -20px;
-    margin-left: 530px;
+  width: 50px;
+  height: 50px;
+  margin-top: -20px;
+  margin-left: 530px;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {

@@ -1,60 +1,52 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useStore } from "vuex";
-import Notification from "@/admin/Notification.vue";
+import { ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import Notification from '@/admin/Notification.vue'
 
-const store = useStore();
+const store = useStore()
 
-const toastMessage = ref('');
-const toastType = ref('success');
+const toastMessage = ref('')
+const toastType = ref('success')
 
 const newUser = ref({
-  name: "",
-  login: "",
-  password: "",
-  role: "user",
-});
+  name: '',
+  login: '',
+  password: '',
+  role: 'user',
+})
 
-const roles = ["user", "admin", "moderator"];
+const roles = ['user', 'admin', 'moderator']
 
 const addUser = async () => {
-  if (
-      newUser.value.name.trim() &&
-      newUser.value.login.trim() &&
-      newUser.value.password.trim()
-  ) {
+  if (newUser.value.name.trim() && newUser.value.login.trim() && newUser.value.password.trim()) {
     try {
-      await store.dispatch("profile/addUser", newUser.value);
-      newUser.value = { name: "", login: "", password: "", role: "user" };
-      toastMessage.value = 'Произошла ошибка при добавление пользователя!';
-      toastType.value = 'error';
+      await store.dispatch('profile/addUser', newUser.value)
+      newUser.value = { name: '', login: '', password: '', role: 'user' }
+      toastMessage.value = 'Произошла ошибка при добавление пользователя!'
+      toastType.value = 'error'
       setTimeout(() => {
-        toastMessage.value = '';
-      }, 3000);
+        toastMessage.value = ''
+      }, 3000)
     } catch (error) {
-      console.error("Ошибка при добавлении пользователя:", error);
-      toastMessage.value = 'Пользоветель успешно добавлен!';
-      toastType.value = 'success';
+      console.error('Ошибка при добавлении пользователя:', error)
+      toastMessage.value = 'Пользоветель успешно добавлен!'
+      toastType.value = 'success'
       setTimeout(() => {
-        toastMessage.value = '';
-      }, 3000);
+        toastMessage.value = ''
+      }, 3000)
     }
   }
-};
+}
 
 onMounted(() => {
-  store.dispatch("profile/fetchUsers");
-});
+  store.dispatch('profile/fetchUsers')
+})
 </script>
 
 <template>
   <div class="container">
     <div class="user-list">
-      <div
-          v-for="user in store.getters['profile/users']"
-          :key="user.id"
-          class="place-card"
-      >
+      <div v-for="user in store.getters['profile/users']" :key="user.id" class="place-card">
         <p>Имя: {{ user.name }}</p>
         <p>Логин: {{ user.username }}</p>
         <p>Роль: {{ user.authorities[0]?.authority || 'N/A' }}</p>
@@ -72,12 +64,7 @@ onMounted(() => {
       <button class="place-card" @click="addUser">Добавить</button>
     </div>
   </div>
-  <Notification
-      v-if="toastMessage"
-      :message="toastMessage"
-      :type="toastType"
-      :duration="3000"
-  />
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <style scoped>
@@ -128,7 +115,9 @@ input::placeholder {
   color: #ffffff;
   font-size: 16px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   text-align: center;
 }
 

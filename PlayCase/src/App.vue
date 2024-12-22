@@ -5,21 +5,21 @@
 </template>
 
 <script>
-import { RouterView } from 'vue-router';
+import { RouterView } from 'vue-router'
 
 export default {
   name: 'App',
   components: {
     RouterView,
   },
-};
+}
 </script>
 
 <style>
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
-  background-color: #1B2A46; 
+  background-color: #1b2a46;
 }
-
 </style>

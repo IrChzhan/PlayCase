@@ -5,13 +5,11 @@
       <div class="modal-body">
         <div class="form-section">
           <div class="team-title">Название команды</div>
-          <h1 class="main-heading">
-            Оставьте свой комментарий
-          </h1>
+          <h1 class="main-heading">Оставьте свой комментарий</h1>
           <textarea
-              v-model="formData.comment"
-              placeholder="Ваш комментарий"
-              class="textarea"
+            v-model="formData.comment"
+            placeholder="Ваш комментарий"
+            class="textarea"
           ></textarea>
           <div class="checkbox-groups">
             <div class="checkbox-column">
@@ -21,7 +19,12 @@
                 Легкие
               </label>
               <label class="checkbox-container">
-                <input type="radio" name="questions" v-model="formData.questionType" value="normal" />
+                <input
+                  type="radio"
+                  name="questions"
+                  v-model="formData.questionType"
+                  value="normal"
+                />
                 Нормальные
               </label>
               <label class="checkbox-container">
@@ -45,9 +48,7 @@
               </label>
             </div>
           </div>
-          <button type="button" class="submit-button" @click="submitForm">
-            Отправить данные
-          </button>
+          <button type="button" class="submit-button" @click="submitForm">Отправить данные</button>
         </div>
       </div>
     </div>
@@ -55,26 +56,26 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue'
 
 defineProps({
   show: Boolean,
-  closeModal: Function
-});
+  closeModal: Function,
+})
 
 const formData = ref({
-  comment: "",
-  questionType: "",
-  hostType: ""
-});
+  comment: '',
+  questionType: '',
+  hostType: '',
+})
 
 const submitForm = () => {
-  console.log("Форма отправлена:", formData.value);
-  alert("Спасибо за ваш комментарий!");
-  formData.value.comment = "";
-  formData.value.questionType = "";
-  formData.value.hostType = "";
-};
+  console.log('Форма отправлена:', formData.value)
+  alert('Спасибо за ваш комментарий!')
+  formData.value.comment = ''
+  formData.value.questionType = ''
+  formData.value.hostType = ''
+}
 </script>
 
 <style scoped>
@@ -98,7 +99,7 @@ const submitForm = () => {
   width: 70vw;
   max-width: 900px;
   position: relative;
-  font-family: "Mulish", sans-serif;
+  font-family: 'Mulish', sans-serif;
 }
 
 .close-button {
@@ -109,13 +110,13 @@ const submitForm = () => {
   border: none;
   font-size: clamp(16px, 2vw, 24px);
   font-weight: bold;
-  color: #0F1921;
+  color: #0f1921;
   cursor: pointer;
 }
 
 .main-heading {
   font-size: clamp(24px, 4vw, 36px);
-  color: #0F1921;
+  color: #0f1921;
   margin-bottom: 2vw;
   line-height: 1.2;
   font-weight: 700;
@@ -125,7 +126,7 @@ const submitForm = () => {
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
   font-weight: bold;
-  color: #CC9F33;
+  color: #cc9f33;
   padding: 1vw 2vw;
   border: 1px solid rgba(15, 25, 33, 0.4);
   border-radius: 12px;
@@ -157,7 +158,7 @@ const submitForm = () => {
 
 .checkbox-title {
   font-size: clamp(14px, 1.5vw, 18px);
-  color: #CC9F33;
+  color: #cc9f33;
   margin-bottom: 0.5vw;
 }
 
@@ -165,10 +166,10 @@ const submitForm = () => {
   display: flex;
   align-items: center;
   font-size: clamp(12px, 1.5vw, 14px);
-  color: #0F1921;
+  color: #0f1921;
 }
 
-.checkbox-container input[type="radio"] {
+.checkbox-container input[type='radio'] {
   margin-right: 0.5vw;
   width: 16px;
   height: 16px;
@@ -176,8 +177,8 @@ const submitForm = () => {
 
 .submit-button {
   width: 100%;
-  background-color: #CC9F33;
-  color: #FFFFFC;
+  background-color: #cc9f33;
+  color: #fffffc;
   border: none;
   border-radius: 1.5vw;
   padding: 1vw 2vw;
@@ -191,34 +192,34 @@ const submitForm = () => {
 
 @media (max-width: 768px) {
   @media (max-width: 768px) {
-  .modal-content {
-    width: 90vw;
-    padding: 15px;
+    .modal-content {
+      width: 90vw;
+      padding: 15px;
+    }
+    .main-heading {
+      font-size: clamp(18px, 3vw, 24px);
+    }
+    .team-title {
+      font-size: clamp(10px, 1.5vw, 14px);
+      padding: 0.5vw 1vw;
+    }
+    .textarea {
+      height: 100px;
+      font-size: clamp(10px, 1.5vw, 12px);
+    }
+    .checkbox-title {
+      font-size: clamp(10px, 1.5vw, 14px);
+    }
+    .checkbox-container {
+      font-size: clamp(10px, 1.5vw, 12px);
+    }
+    .submit-button {
+      font-size: clamp(10px, 1.5vw, 12px);
+      padding: 0.8vw 1.5vw;
+    }
+    .checkbox-groups {
+      flex-direction: column;
+    }
   }
-  .main-heading {
-    font-size: clamp(18px, 3vw, 24px);
-  }
-  .team-title {
-    font-size: clamp(10px, 1.5vw, 14px);
-    padding: 0.5vw 1vw;
-  }
-  .textarea {
-    height: 100px;
-    font-size: clamp(10px, 1.5vw, 12px);
-  }
-  .checkbox-title {
-    font-size: clamp(10px, 1.5vw, 14px);
-  }
-  .checkbox-container {
-    font-size: clamp(10px, 1.5vw, 12px);
-  }
-  .submit-button {
-    font-size: clamp(10px, 1.5vw, 12px);
-    padding: 0.8vw 1.5vw;
-  }
-  .checkbox-groups {
-    flex-direction: column;
-  }
-}
 }
 </style>

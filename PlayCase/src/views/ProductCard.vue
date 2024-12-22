@@ -1,11 +1,11 @@
 <template>
-    <div class="product-card">
-      <img :src=image class="product-image" />
-      <p class="product-price">{{ price }}</p>
-      <h3 class="product-name">{{ name }}</h3>
-      <p class="product-description">{{ description }}</p>
-    </div>
-  </template>
+  <div class="product-card">
+    <img :src="image" class="product-image" />
+    <p class="product-price">{{ price }}</p>
+    <h3 class="product-name">{{ name }}</h3>
+    <p class="product-description">{{ description }}</p>
+  </div>
+</template>
 
 <script>
 export default {
@@ -27,14 +27,14 @@ export default {
       required: true,
     },
   },
-};
+}
 </script>
 
 <style scoped>
 .product-card {
   padding: 10px;
   text-align: center;
-  font-family: "Mulish", sans-serif;
+  font-family: 'Mulish', sans-serif;
 }
 
 .product-image {
@@ -44,7 +44,7 @@ export default {
 
 .product-price {
   font-weight: bold;
-  color: #FFFFFC;
+  color: #fffffc;
   margin-top: 8px;
   font-size: 25px;
   margin-right: 90px;
@@ -53,12 +53,11 @@ export default {
 .product-name {
   margin-right: 105px;
   margin-top: 5px;
-  color: #FFFFFC;
+  color: #fffffc;
 }
 
 .product-description {
-  color: #FFFFFC;
+  color: #fffffc;
   margin-right: 90px;
 }
 </style>
-  

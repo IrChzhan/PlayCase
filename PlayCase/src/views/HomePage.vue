@@ -8,16 +8,16 @@
 </template>
 
 <script setup>
-import {useRouter} from 'vue-router';
-const router = useRouter();
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const goToTeamNameDisplay = () => {
-  router.push({name: 'TeamNameInput'});
-};
+  router.push({ name: 'TeamNameInput' })
+}
 
 const goToAuthPage = () => {
-  router.push({name: 'AdminAuthPage'});
-};
+  router.push({ name: 'AdminAuthPage' })
+}
 </script>
 
 <style scoped>
@@ -43,7 +43,9 @@ const goToAuthPage = () => {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .custom-button:hover {

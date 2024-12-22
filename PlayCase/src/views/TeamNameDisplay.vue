@@ -4,7 +4,7 @@
       <h1 class="team-name">{{ teamName }}</h1>
     </div>
     <div class="container_down_menu">
-      <img src="../assets/House_01.png" class="house-image" width="80" @click="goToMenuApp">
+      <img src="../assets/House_01.png" class="house-image" width="80" @click="goToMenuApp" />
       <div class="right-corner">
         <h1 class="team-table">{{ teamTable }}</h1>
         <p class="table-label">стол</p>
@@ -14,17 +14,15 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
-const route = useRoute();
-const router = useRouter();
-const teamName = 'Cats';
-const teamTable = '12';
+const router = useRouter()
+const teamName = 'Cats'
+const teamTable = '12'
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName, teamTable } });
-};
+  router.push({ name: 'MenuApp', params: { teamName, teamTable } })
+}
 </script>
 
 <style scoped>
@@ -33,20 +31,20 @@ const goToMenuApp = () => {
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  justify-content: center; 
+  justify-content: center;
   position: relative;
 }
 
 .team-name {
   text-align: center;
-  font-size: 9em; 
-  margin: 0; 
+  font-size: 9em;
+  margin: 0;
   color: var(--c-white);
-  font-family: "Mulish", sans-serif;
+  font-family: 'Mulish', sans-serif;
 }
 
 .container_down_menu {
-  position: relative; 
+  position: relative;
   margin-top: 60px;
 }
 
@@ -60,29 +58,29 @@ const goToMenuApp = () => {
   right: 10px;
   left: 400px;
   bottom: 20px;
-  text-align: right; 
+  text-align: right;
 }
 
 .team-table {
-  margin: 0; 
-  font-family: "Mulish", sans-serif;
-  color: #CC9F33;
+  margin: 0;
+  font-family: 'Mulish', sans-serif;
+  color: #cc9f33;
 }
 
 .table-label {
-  margin: 0; 
-  font-family: "Mulish", sans-serif;
-  color: #CC9F33;
+  margin: 0;
+  font-family: 'Mulish', sans-serif;
+  color: #cc9f33;
 }
 
 @media (max-width: 768px) {
   .team-name {
-    font-size: 5em; 
+    font-size: 5em;
   }
-  
+
   .right-corner {
     right: 10px;
-    bottom: 10px; 
+    bottom: 10px;
   }
 }
 </style>

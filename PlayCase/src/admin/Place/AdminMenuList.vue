@@ -4,16 +4,24 @@
       <div class="category-header">
         <h3>{{ category.name }}</h3>
         <div class="actions">
-          <button @click="$emit('edit-category', category)" class="button small">Редактировать</button>
-          <button @click="$emit('delete-category', category.id)" class="button small danger">Удалить</button>
-          <button @click="$emit('add-dish', category.id)" class="button small primary">Добавить блюдо</button>
+          <button @click="$emit('edit-category', category)" class="button small">
+            Редактировать
+          </button>
+          <button @click="$emit('delete-category', category.id)" class="button small danger">
+            Удалить
+          </button>
+          <button @click="$emit('add-dish', category.id)" class="button small primary">
+            Добавить блюдо
+          </button>
         </div>
       </div>
       <ul class="dishes">
         <li v-for="dish in category.dishes" :key="dish.id">
           {{ dish.name }} - {{ dish.price }} руб.
           <button @click="$emit('edit-dish', dish)" class="button small">Редактировать</button>
-          <button @click="$emit('delete-dish', dish.id)" class="button small danger">Удалить</button>
+          <button @click="$emit('delete-dish', dish.id)" class="button small danger">
+            Удалить
+          </button>
         </li>
       </ul>
     </div>
@@ -21,7 +29,7 @@
 </template>
 
 <script setup>
-defineProps(['categories']);
+defineProps(['categories'])
 </script>
 
 <style scoped>
@@ -30,7 +38,7 @@ defineProps(['categories']);
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background: #2C3E50;
+  background: #2c3e50;
 }
 .category-header {
   display: flex;

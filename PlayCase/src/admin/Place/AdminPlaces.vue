@@ -3,12 +3,7 @@
     <h1>Управление заведениями</h1>
 
     <div class="places-list">
-      <div
-          v-for="place in places"
-          :key="place.id"
-          class="place-card"
-          @click="goToEdit(place.id)"
-      >
+      <div v-for="place in places" :key="place.id" class="place-card" @click="goToEdit(place.id)">
         <h2>{{ place.name }}</h2>
         <p>{{ place.address }}</p>
       </div>
@@ -20,108 +15,103 @@
         <div class="form-group">
           <label for="name">Название:</label>
           <input
-              id="name"
-              v-model="name"
-              type="text"
-              placeholder="Введите название"
-              class="input"
-              required
+            id="name"
+            v-model="name"
+            type="text"
+            placeholder="Введите название"
+            class="input"
+            required
           />
         </div>
         <div class="form-group">
           <label for="address">Адрес:</label>
           <input
-              id="address"
-              v-model="address"
-              type="text"
-              placeholder="Введите адрес"
-              class="input"
-              required
+            id="address"
+            v-model="address"
+            type="text"
+            placeholder="Введите адрес"
+            class="input"
+            required
           />
         </div>
         <button
-            class="button primary"
-            type="submit"
-            :disabled="!isFormValid || loading"
-            :class="{ disabled: !isFormValid || loading }"
+          class="button primary"
+          type="submit"
+          :disabled="!isFormValid || loading"
+          :class="{ disabled: !isFormValid || loading }"
         >
           <Loader v-if="loading" /> Добавить заведения
         </button>
       </form>
     </div>
 
-    <Notification
-        v-if="toastMessage"
-        :message="toastMessage"
-        :type="toastType"
-        :duration="3000"
-    />
+    <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import Loader from '../Loader.vue';
-import Notification from '../Notification.vue';
+import { useStore } from 'vuex'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import Loader from '../Loader.vue'
+import Notification from '../Notification.vue'
 
-const store = useStore();
-const router = useRouter();
+const store = useStore()
+const router = useRouter()
 
-const places = ref([]);
-const name = ref('');
-const address = ref('');
-const loading = ref(false);
-const toastMessage = ref('');
-const toastType = ref('success');
+const places = ref([])
+const name = ref('')
+const address = ref('')
+const loading = ref(false)
+const toastMessage = ref('')
+const toastType = ref('success')
 
-const isFormValid = computed(() => name.value.trim() !== '' && address.value.trim() !== '');
+const isFormValid = computed(() => name.value.trim() !== '' && address.value.trim() !== '')
 
 const fetchPlaces = async () => {
-  await store.dispatch('places/fetchPlaces');
-  places.value = store.getters['places/allPlaces'];
-};
+  await store.dispatch('places/fetchPlaces')
+  places.value = store.getters['places/allPlaces']
+}
 
 const goToEdit = (id) => {
-  router.push(`/admin/place/${id}`);
-};
+  router.push(`/admin/place/${id}`)
+}
 
 const addPlace = async () => {
   if (isFormValid.value) {
     try {
-      loading.value = true;
+      loading.value = true
       await store.dispatch('places/createPlace', {
         name: name.value,
         address: address.value,
-      });
+      })
 
-      name.value = '';
-      address.value = '';
+      name.value = ''
+      address.value = ''
 
-      toastMessage.value = 'Место успешно добавлено!';
-      toastType.value = 'success';
-      await fetchPlaces();
+      toastMessage.value = 'Место успешно добавлено!'
+      toastType.value = 'success'
+      await fetchPlaces()
 
       setTimeout(() => {
-        toastMessage.value = '';
-      }, 3000);
+        toastMessage.value = ''
+      }, 3000)
     } catch (error) {
-      console.error('Ошибка добавления места:', error);
+      console.error('Ошибка добавления места:', error)
 
-      toastMessage.value = 'Ошибка при добавлении места.';
-      toastType.value = 'error';
+      toastMessage.value = 'Ошибка при добавлении места.'
+      toastType.value = 'error'
 
       setTimeout(() => {
-        toastMessage.value = '';
-      }, 3000);
+        toastMessage.value = ''
+      }, 3000)
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
-};
+}
 
-onMounted(fetchPlaces);
+onMounted(fetchPlaces)
 </script>
 
 <style scoped>
@@ -133,7 +123,8 @@ onMounted(fetchPlaces);
   font-family: Arial, sans-serif;
 }
 
-h1, h2 {
+h1,
+h2 {
   margin-bottom: 20px;
   color: #ffffff;
   text-align: center;
@@ -152,7 +143,9 @@ h1, h2 {
   border-radius: 8px;
   padding: 20px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .place-card:hover {

@@ -12,23 +12,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const props = defineProps({
   visible: Boolean,
   title: String,
   message: String,
-});
+})
 
-const emit = defineEmits(['confirm', 'cancel']);
+const emit = defineEmits(['confirm', 'cancel'])
 
 const onConfirm = () => {
-  emit('confirm');
-};
+  emit('confirm')
+}
 
 const onCancel = () => {
-  emit('cancel');
-};
+  emit('cancel')
+}
 </script>
 
 <style scoped>

@@ -1,13 +1,13 @@
 <script setup>
-import router from "@/router/index.js";
+import router from '@/router/index.js'
 
 const goToPlaces = () => {
-  router.push({ name: "AdminPlaces" });
-};
+  router.push({ name: 'AdminPlaces' })
+}
 
 const goToUsers = () => {
-  router.push({ name: "AdminUsers" });
-};
+  router.push({ name: 'AdminUsers' })
+}
 </script>
 
 <template>
@@ -35,7 +35,9 @@ const goToUsers = () => {
   color: #ffffff;
   font-size: 16px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   text-align: center;
 }
 

@@ -5,82 +5,69 @@
       <form @submit.prevent="handleAddCategory" class="form">
         <div class="form-group">
           <label for="categoryName">Название категории:</label>
-          <input
-              id="categoryName"
-              v-model="categoryName"
-              type="text"
-              class="input"
-              required
-          />
+          <input id="categoryName" v-model="categoryName" type="text" class="input" required />
         </div>
         <button
-            type="submit"
-            class="button primary"
-            :disabled="loading || !categoryName"
-            :class="{ 'disabled': loading || !categoryName }"
+          type="submit"
+          class="button primary"
+          :disabled="loading || !categoryName"
+          :class="{ disabled: loading || !categoryName }"
         >
           <Loader v-if="loading" /> Добавить
         </button>
       </form>
     </div>
 
-    <Notification
-        v-if="toastMessage"
-        :message="toastMessage"
-        :type="toastType"
-        :duration="3000"
-    />
+    <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
 
-
 <script setup>
-import {useRoute} from "vue-router";
+import { useRoute } from 'vue-router'
 
 defineProps({
   show: Boolean,
   closeModal: Function,
-});
+})
 
-import { ref } from "vue";
-import { useStore } from "vuex";
-import Loader from "../Loader.vue";
-import Notification from "@/admin/Notification.vue";
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import Loader from '../Loader.vue'
+import Notification from '@/admin/Notification.vue'
 
-const store = useStore();
-const route = useRoute();
+const store = useStore()
+const route = useRoute()
 
-const categoryName = ref("");
-const loading = ref(false);
-const toastMessage = ref("");
-const toastType = ref("success");
+const categoryName = ref('')
+const loading = ref(false)
+const toastMessage = ref('')
+const toastType = ref('success')
 
 const handleAddCategory = async () => {
   try {
-    loading.value = true;
-    await store.dispatch("places/addCategory", {
+    loading.value = true
+    await store.dispatch('places/addCategory', {
       placeId: route.params.id,
       categoryData: { name: categoryName.value },
-    });
-    toastMessage.value = "Категория успешно добавлена!";
-    toastType.value = "success";
-    categoryName.value = "";
+    })
+    toastMessage.value = 'Категория успешно добавлена!'
+    toastType.value = 'success'
+    categoryName.value = ''
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } catch (error) {
-    console.error("Ошибка при добавлении категории:", error);
-    toastMessage.value = "Ошибка при добавлении категории.";
-    toastType.value = "error";
+    console.error('Ошибка при добавлении категории:', error)
+    toastMessage.value = 'Ошибка при добавлении категории.'
+    toastType.value = 'error'
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
-
 
 <style scoped>
 .place-page-modal {

@@ -4,16 +4,16 @@ import { defineProps, defineEmits } from 'vue'
 const props = defineProps({
   text: {
     type: String,
-    required: true
+    required: true,
   },
   width: {
     type: String,
-    required: true
+    required: true,
   },
   content: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const emit = defineEmits(['update:content'])
@@ -25,25 +25,25 @@ const updateContent = (event) => {
 
 <template>
   <input
-      class="input"
-      type="text"
-      :placeholder="text"
-      :value="content"
-      @input="updateContent"
-      :style="{ width: width }"
+    class="input"
+    type="text"
+    :placeholder="text"
+    :value="content"
+    @input="updateContent"
+    :style="{ width: width }"
   />
 </template>
 
 <style scoped>
 .input {
   outline: none;
-  border: 1px solid #D9D9D9;
+  border: 1px solid #d9d9d9;
   border-radius: 20px;
   background: var(--c-white, #fff);
   padding: 14px 16px;
   font-size: 16px;
-  font-family: "Mulish", sans-serif;
-  color: #0F1921;
+  font-family: 'Mulish', sans-serif;
+  color: #0f1921;
   line-height: 22px;
 }
 

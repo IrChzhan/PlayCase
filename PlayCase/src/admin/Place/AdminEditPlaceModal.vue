@@ -16,165 +16,160 @@
         </div>
 
         <button
-            type="button"
-            class="button primary"
-            :disabled="!hasChanges || loading"
-            :class="{ 'disabled': !hasChanges || loading }"
-            @click="showUpdateDialog"
+          type="button"
+          class="button primary"
+          :disabled="!hasChanges || loading"
+          :class="{ disabled: !hasChanges || loading }"
+          @click="showUpdateDialog"
         >
           <Loader v-if="loading" /> Сохранить изменения
         </button>
       </form>
 
       <button
-          @click="showDeleteDialog"
-          class="button danger"
-          :disabled="loading"
-          :class="{ 'disabled': loading }"
+        @click="showDeleteDialog"
+        class="button danger"
+        :disabled="loading"
+        :class="{ disabled: loading }"
       >
         <Loader v-if="loading" /> Удалить место
       </button>
     </div>
 
     <ConfirmDialog
-        v-if="showDialog"
-        :visible="showDialog"
-        :title="dialogTitle"
-        :message="dialogMessage"
-        @confirm="handleConfirm"
-        @cancel="handleCancel"
+      v-if="showDialog"
+      :visible="showDialog"
+      :title="dialogTitle"
+      :message="dialogMessage"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
     />
 
-    <Notification
-        v-if="toastMessage"
-        :message="toastMessage"
-        :type="toastType"
-        :duration="3000"
-    />
+    <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
 
 <script setup>
-import Notification from "@/admin/Notification.vue";
+import Notification from '@/admin/Notification.vue'
 
 defineProps({
   show: Boolean,
-  closeModal: Function
-});
+  closeModal: Function,
+})
 
-import { useStore } from 'vuex';
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import Loader from '../Loader.vue';
-import ConfirmDialog from '../ConfirmDialog.vue';
-import Toast from '../Toast.vue';
+import { useStore } from 'vuex'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import Loader from '../Loader.vue'
+import ConfirmDialog from '../ConfirmDialog.vue'
+import Toast from '../Toast.vue'
 
-const store = useStore();
-const route = useRoute();
+const store = useStore()
+const route = useRoute()
 
-const loading = ref(false);
-const placeId = route.params.id;
-const placeName = ref('');
-const placeAddress = ref('');
-const oldName = ref('');
-const oldAddress = ref('');
-const showDialog = ref(false);
-const dialogTitle = ref('');
-const dialogMessage = ref('');
-const toastMessage = ref('');
-const toastType = ref('success');
-let dialogAction = null;
+const loading = ref(false)
+const placeId = route.params.id
+const placeName = ref('')
+const placeAddress = ref('')
+const oldName = ref('')
+const oldAddress = ref('')
+const showDialog = ref(false)
+const dialogTitle = ref('')
+const dialogMessage = ref('')
+const toastMessage = ref('')
+const toastType = ref('success')
+let dialogAction = null
 
 const fetchPlace = () => {
-  const place = store.state.places.places.find((place) => place.id === placeId);
+  const place = store.state.places.places.find((place) => place.id === placeId)
   if (place) {
-    placeName.value = place.name;
-    placeAddress.value = place.address;
-    oldName.value = place.name;
-    oldAddress.value = place.address;
+    placeName.value = place.name
+    placeAddress.value = place.address
+    oldName.value = place.name
+    oldAddress.value = place.address
   } else {
-    console.error('Место не найдено');
+    console.error('Место не найдено')
   }
-};
+}
 
 const hasChanges = computed(() => {
-  return placeName.value !== oldName.value || placeAddress.value !== oldAddress.value;
-});
+  return placeName.value !== oldName.value || placeAddress.value !== oldAddress.value
+})
 
 const showUpdateDialog = () => {
-  dialogTitle.value = 'Подтверждение обновления';
-  dialogMessage.value = 'Вы уверены, что хотите сохранить изменения?';
-  dialogAction = updatePlace;
-  showDialog.value = true;
-};
+  dialogTitle.value = 'Подтверждение обновления'
+  dialogMessage.value = 'Вы уверены, что хотите сохранить изменения?'
+  dialogAction = updatePlace
+  showDialog.value = true
+}
 
 const showDeleteDialog = () => {
-  dialogTitle.value = 'Подтверждение удаления';
-  dialogMessage.value = 'Вы уверены, что хотите удалить это место?';
-  dialogAction = deletePlace;
-  showDialog.value = true;
-};
+  dialogTitle.value = 'Подтверждение удаления'
+  dialogMessage.value = 'Вы уверены, что хотите удалить это место?'
+  dialogAction = deletePlace
+  showDialog.value = true
+}
 
 const handleConfirm = async () => {
-  showDialog.value = false;
+  showDialog.value = false
   if (dialogAction) {
-    await dialogAction();
+    await dialogAction()
   }
-};
+}
 
 const handleCancel = () => {
-  showDialog.value = false;
-};
+  showDialog.value = false
+}
 
 const updatePlace = async () => {
   try {
-    loading.value = true;
+    loading.value = true
     await store.dispatch('places/updatePlace', {
       id: placeId,
       name: placeName.value,
       address: placeAddress.value,
-    });
-    toastMessage.value = 'Место успешно обновлено!';
-    toastType.value = 'success';
-    this.props.closeModal();
+    })
+    toastMessage.value = 'Место успешно обновлено!'
+    toastType.value = 'success'
+    this.props.closeModal()
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } catch (error) {
-    console.error('Ошибка обновления места:', error);
-    toastMessage.value = 'Ошибка при обновлении места.';
-    toastType.value = 'error';
+    console.error('Ошибка обновления места:', error)
+    toastMessage.value = 'Ошибка при обновлении места.'
+    toastType.value = 'error'
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 const deletePlace = async () => {
   try {
-    loading.value = true;
-    await store.dispatch('places/deletePlace', placeId);
-    toastMessage.value = 'Место удалено!';
-    toastType.value = 'success';
-    this.props.closeModal();
+    loading.value = true
+    await store.dispatch('places/deletePlace', placeId)
+    toastMessage.value = 'Место удалено!'
+    toastType.value = 'success'
+    this.props.closeModal()
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } catch (error) {
-    console.error('Ошибка удаления места:', error);
-    toastMessage.value = 'Ошибка при удалении места.';
-    toastType.value = 'error';
+    console.error('Ошибка удаления места:', error)
+    toastMessage.value = 'Ошибка при удалении места.'
+    toastType.value = 'error'
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
-onMounted(fetchPlace);
+onMounted(fetchPlace)
 </script>
 
 <style scoped>

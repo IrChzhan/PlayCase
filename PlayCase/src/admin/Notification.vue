@@ -1,11 +1,11 @@
 <template>
   <transition name="fade">
     <div
-        v-if="visible"
-        class="notification"
-        :class="type"
-        @mouseenter="pauseAutoHide"
-        @mouseleave="resumeAutoHide"
+      v-if="visible"
+      class="notification"
+      :class="type"
+      @mouseenter="pauseAutoHide"
+      @mouseleave="resumeAutoHide"
     >
       <p>{{ message }}</p>
     </div>
@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps({
   message: {
@@ -28,47 +28,49 @@ const props = defineProps({
     type: Number,
     default: 3000,
   },
-});
+})
 
-const visible = ref(false);
-let timeout = null;
+const visible = ref(false)
+let timeout = null
 
 const showNotification = () => {
-  visible.value = true;
-  autoHide();
-};
+  visible.value = true
+  autoHide()
+}
 
 const hideNotification = () => {
-  visible.value = false;
-};
+  visible.value = false
+}
 
 const autoHide = () => {
   timeout = setTimeout(() => {
-    hideNotification();
-  }, props.duration);
-};
+    hideNotification()
+  }, props.duration)
+}
 
 const pauseAutoHide = () => {
-  clearTimeout(timeout);
-};
+  clearTimeout(timeout)
+}
 
 const resumeAutoHide = () => {
-  autoHide();
-};
+  autoHide()
+}
 
-watch(() => props.message, (newMessage) => {
-  if (newMessage) {
-    showNotification();
-  }
-});
+watch(
+  () => props.message,
+  (newMessage) => {
+    if (newMessage) {
+      showNotification()
+    }
+  },
+)
 
 onMounted(() => {
   if (props.message) {
-    showNotification();
+    showNotification()
   }
-});
+})
 </script>
-
 
 <style scoped>
 .notification {

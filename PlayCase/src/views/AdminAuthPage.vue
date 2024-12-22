@@ -1,55 +1,45 @@
 <script setup>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
-import Notification from "@/admin/Notification.vue";
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import Notification from '@/admin/Notification.vue'
 
-const login = ref('');
-const toastMessage = ref('');
-const toastType = ref('success');
+const login = ref('')
+const toastMessage = ref('')
+const toastType = ref('success')
 
-const store = useStore();
-const router = useRouter();
+const store = useStore()
+const router = useRouter()
 
 const handleLogin = async () => {
-  await store.dispatch('profile/fetchUsers');
+  await store.dispatch('profile/fetchUsers')
 
-  const success = await store.dispatch('profile/login', login.value);
+  const success = await store.dispatch('profile/login', login.value)
   if (success) {
-    toastMessage.value = 'Пользователь успешно найден!';
-    toastType.value = 'success';
-    router.push({name: 'AdminHome'});
+    toastMessage.value = 'Пользователь успешно найден!'
+    toastType.value = 'success'
+    router.push({ name: 'AdminHome' })
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } else {
-    toastMessage.value = 'Такой пользователь не найден!';
-    toastType.value = 'error';
+    toastMessage.value = 'Такой пользователь не найден!'
+    toastType.value = 'error'
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   }
-};
+}
 </script>
 
 <template>
   <div class="container">
     <h1>Войти</h1>
     <label for="login">Введите ваш логин</label>
-    <input
-        id="login"
-        v-model="login"
-        type="text"
-        placeholder="Ваш логин"
-    />
+    <input id="login" v-model="login" type="text" placeholder="Ваш логин" />
     <button @click="handleLogin">Отправить</button>
   </div>
-  <Notification
-      v-if="toastMessage"
-      :message="toastMessage"
-      :type="toastType"
-      :duration="3000"
-  />
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <style scoped>
@@ -91,7 +81,7 @@ button {
   padding: 15px 30px;
   font-size: 18px;
   border: none;
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
   border-radius: 5px;
   cursor: pointer;

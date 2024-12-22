@@ -5,38 +5,17 @@
       <div class="modal-body">
         <div class="form-section">
           <div class="team-title">Название команды</div>
-          <h1 class="main-heading">
-            Примите участие<br>в нашей лотерее
-          </h1>
+          <h1 class="main-heading">Примите участие<br />в нашей лотерее</h1>
           <form @submit.prevent="submitForm">
-            <Input
-                v-model:content="formData.name"
-                text="Ваше имя"
-                width="auto"
-            />
-            <Input
-                v-model:content="formData.email"
-                text="Ваша электронная почта"
-                width="auto"
-            />
-            <Input
-                v-model:content="formData.phone"
-                text="Телефон"
-                width="auto"
-            />
+            <Input v-model:content="formData.name" text="Ваше имя" width="auto" />
+            <Input v-model:content="formData.email" text="Ваша электронная почта" width="auto" />
+            <Input v-model:content="formData.phone" text="Телефон" width="auto" />
 
-            <button type="submit" class="submit-button">
-              Участвовать в лотерее
-            </button>
+            <button type="submit" class="submit-button">Участвовать в лотерее</button>
 
             <div class="checkbox-section">
               <label class="checkbox-container">
-                <input
-                    type="checkbox"
-                    id="agree"
-                    v-model="formData.agree"
-                    required
-                />
+                <input type="checkbox" id="agree" v-model="formData.agree" required />
                 <span>
                   Нажмите кнопку, что вы соглашаетесь с политикой обработки персональных данных.
                 </span>
@@ -61,45 +40,43 @@
             Полные правила лотереи вы можете посмотреть тут: <a href="#" target="_blank">ссылка</a>.
           </p>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import Input from "@/components/shared/forms/Input.vue";
-import { ref} from "vue";
+import Input from '@/components/shared/forms/Input.vue'
+import { ref } from 'vue'
 
 defineProps({
   show: Boolean,
-  closeModal: Function
-});
+  closeModal: Function,
+})
 
 const formData = ref({
-  name: "",
-  email: "",
-  phone: "",
-  agree: false
-});
+  name: '',
+  email: '',
+  phone: '',
+  agree: false,
+})
 
-
-const emit = defineEmits(['registerUser']);
+const emit = defineEmits(['registerUser'])
 
 const submitForm = () => {
   if (!formData.value.agree) {
-    alert("Вы должны согласиться с политикой обработки персональных данных.");
-    return;
+    alert('Вы должны согласиться с политикой обработки персональных данных.')
+    return
   }
 
-  emit('registerUser', formData.value);
-  console.log("Форма отправлена:", formData.value);
-  formData.value.name = '';
-  formData.value.email = '';
-  formData.value.phone = '';
-  formData.value.agree = false;
-  alert("Спасибо за участие в лотерее!");
-};
+  emit('registerUser', formData.value)
+  console.log('Форма отправлена:', formData.value)
+  formData.value.name = ''
+  formData.value.email = ''
+  formData.value.phone = ''
+  formData.value.agree = false
+  alert('Спасибо за участие в лотерее!')
+}
 </script>
 
 <style scoped>
@@ -123,7 +100,7 @@ const submitForm = () => {
   width: 70vw;
   max-width: 900px;
   position: relative;
-  font-family: "Mulish", sans-serif;
+  font-family: 'Mulish', sans-serif;
 }
 
 .close-button {
@@ -134,7 +111,7 @@ const submitForm = () => {
   border: none;
   font-size: clamp(16px, 2vw, 24px);
   font-weight: bold;
-  color: #0F1921;
+  color: #0f1921;
   cursor: pointer;
 }
 
@@ -145,7 +122,8 @@ const submitForm = () => {
   gap: 5vw;
 }
 
-.form-section, .rules-section {
+.form-section,
+.rules-section {
   flex: 1;
 }
 
@@ -159,7 +137,7 @@ const submitForm = () => {
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
   font-weight: bold;
-  color: #CC9F33;
+  color: #cc9f33;
   padding: 1vw 2vw;
   border: 1px solid rgba(15, 25, 33, 0.4);
   border-radius: 12px;
@@ -168,13 +146,13 @@ const submitForm = () => {
 
 .main-heading {
   font-size: clamp(24px, 4vw, 36px);
-  color: #0F1921;
+  color: #0f1921;
   margin-bottom: 2vw;
   line-height: 1.2;
   font-weight: 700;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   margin-right: 0.5vw;
 }
 
@@ -188,13 +166,13 @@ input[type="checkbox"] {
   display: flex;
   align-items: center;
   font-size: clamp(12px, 1.5vw, 14px);
-  color: #0F1921;
+  color: #0f1921;
 }
 
 .submit-button {
   width: 100%;
-  background-color: #CC9F33;
-  color: #FFFFFC;
+  background-color: #cc9f33;
+  color: #fffffc;
   border: none;
   border-radius: 1.5vw;
   padding: 1vw 2vw;
@@ -202,20 +180,19 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-
 .submit-button:hover {
   background-color: #b68d2f;
 }
 .rules-section h2 {
   font-size: clamp(18px, 2vw, 22px);
-  color: #CC9F33;
+  color: #cc9f33;
   margin-bottom: 1vw;
 }
 
 .rules-section ul {
   list-style-type: disc;
   padding-left: 2vw;
-  color: #0F1921;
+  color: #0f1921;
   font-size: clamp(12px, 1.5vw, 14px);
   line-height: 1.6;
 }
@@ -227,22 +204,21 @@ input[type="checkbox"] {
 .rules-section p {
   margin-top: 1vw;
   font-size: clamp(12px, 1.5vw, 14px);
-  color: #0F1921;
+  color: #0f1921;
 }
 
 .rules-section a {
-  color: #CC9F33;
+  color: #cc9f33;
   text-decoration: underline;
 }
 
 .lottery-greeting {
-  color: #CC9F33;
+  color: #cc9f33;
   font-size: clamp(12px, 1.5vw, 14px);
   margin-top: 1vw;
   margin-bottom: 1vw;
   text-align: center;
 }
-
 
 @media (max-width: 768px) {
   .modal-content {
@@ -254,14 +230,14 @@ input[type="checkbox"] {
   .modal-body {
     flex-direction: column;
     gap: 15px;
-    width: 100%; 
-    box-sizing: border-box; 
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .form-section,
   .rules-section {
-    width: 100%; 
-    min-width: 0; 
+    width: 100%;
+    min-width: 0;
     box-sizing: border-box;
   }
 
@@ -271,7 +247,7 @@ input[type="checkbox"] {
   }
 
   .team-title {
-    margin-top:50px;
+    margin-top: 50px;
   }
 
   .checkbox-container {
