@@ -6,7 +6,6 @@ const store = useStore();
 const  goToPaces = () => {
   router.push({name: 'AdminPlaces'});
 };
-
 </script>
 
 <template>

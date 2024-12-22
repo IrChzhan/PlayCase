@@ -4,14 +4,14 @@ import TeamNameDisplay from '@/views/TeamNameDisplay.vue';
 import MenuApp from '@/views/MenuApp.vue';
 import MenuRestourant from '@/views/MenuRestourant.vue'
 import AdminHome from "@/admin/AdminHome.vue";
-import AdminPlaces from "@/admin/AdminPlaces.vue";
-import AdminPlace from "@/admin/AdminPlace.vue";
+import AdminPlaces from "@/admin/Place/AdminPlaces.vue";
+import AdminPlace from "@/admin/Place/AdminPlace.vue";
 import Rules from '@/components/widgets/Rules.vue';
 import WinnerPage from '@/views/WinnerPage.vue';
 import ModalTypePay from '@/components/widgets/ModalTypePay.vue';
 
 const routes = [{
-        path: '/',
+        path: `${import.meta.env.VITE_Path_App}`,
         name: 'TeamNameInput',
         component: TeamNameInput,
     },
