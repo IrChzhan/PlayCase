@@ -1,5 +1,5 @@
 <template>
-  <div class="place-page">
+  <div class="place-page-modal" v-if="show" @click.self="closeModal">
     <div class="container">
       <h1>Редактировать место</h1>
       <form @submit.prevent="showUpdateDialog" class="form">
@@ -50,16 +50,20 @@
 </template>
 
 <script setup>
+defineProps({
+  show: Boolean,
+  closeModal: Function
+});
+
 import { useStore } from 'vuex';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Loader from './Loader.vue';
-import ConfirmDialog from './ConfirmDialog.vue';
-import Toast from './Toast.vue';
+import Loader from '../Loader.vue';
+import ConfirmDialog from '../ConfirmDialog.vue';
+import Toast from '../Toast.vue';
 
 const store = useStore();
 const route = useRoute();
-const router = useRouter();
 
 const loading = ref(false);
 const placeId = route.params.id;
@@ -125,7 +129,7 @@ const updatePlace = async () => {
     });
     toastMessage.value = 'Место успешно обновлено!';
     toastType.value = 'success';
-    router.back();
+    this.props.closeModal();
   } catch (error) {
     console.error('Ошибка обновления места:', error);
     toastMessage.value = 'Ошибка при обновлении места.';
@@ -141,7 +145,7 @@ const deletePlace = async () => {
     await store.dispatch('places/deletePlace', placeId);
     toastMessage.value = 'Место удалено!';
     toastType.value = 'success';
-    router.back();
+    this.props.closeModal();
   } catch (error) {
     console.error('Ошибка удаления места:', error);
     toastMessage.value = 'Ошибка при удалении места.';
@@ -155,16 +159,24 @@ onMounted(fetchPlace);
 </script>
 
 <style scoped>
-.place-page {
-  background-color: #1B2A46;
-  min-height: 100vh;
+.place-page-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .container {
+  display: flex;
+  justify-content: center;
   background: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -176,7 +188,8 @@ onMounted(fetchPlace);
 h1 {
   text-align: center;
   color: #333;
-  margin-bottom: 20px;
+  font-size: 30px;
+  margin: 0 auto 20px auto;
 }
 
 .form {

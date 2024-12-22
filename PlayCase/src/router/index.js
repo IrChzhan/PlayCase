@@ -3,8 +3,8 @@ import TeamNameDisplay from '@/views/TeamNameDisplay.vue';
 import MenuApp from '@/views/MenuApp.vue';
 import MenuRestourant from '@/views/MenuRestourant.vue'
 import AdminHome from "@/admin/AdminHome.vue";
-import AdminPlaces from "@/admin/AdminPlaces.vue";
-import AdminPlace from "@/admin/AdminPlace.vue";
+import AdminPlaces from "@/admin/Place/AdminPlaces.vue";
+import AdminPlace from "@/admin/Place/AdminPlace.vue";
 import Rules from '@/components/widgets/Rules.vue';
 import WinnerPage from '@/views/WinnerPage.vue';
 import ModalTypePay from '@/components/widgets/ModalTypePay.vue';
@@ -12,6 +12,11 @@ import RegistrateUsers from '@/views/RegistrateUsers.vue';
 
 const routes = [{
         path: '/',
+        name: 'TeamNameInput',
+        component: TeamNameInput,
+    },
+    {
+        path: '/display/:teamName/:teamTable',
         name: 'TeamNameDisplay',
         component: TeamNameDisplay,
         props: true,
