@@ -9,6 +9,7 @@ import AdminPlace from "@/admin/Place/AdminPlace.vue";
 import Rules from '@/components/widgets/Rules.vue';
 import WinnerPage from '@/views/WinnerPage.vue';
 import ModalTypePay from '@/components/widgets/ModalTypePay.vue';
+import RegistrateUsers from '@/views/RegistrateUsers.vue';
 import HomePage from "@/views/HomePage.vue";
 import AdminAuthPage from "@/views/AdminAuthPage.vue";
 import AdminUsers from "@/admin/Place/AdminUsers.vue";
@@ -88,6 +89,12 @@ const routes = [
         path: '/typepay',
         name: 'ModalTypePay',
         component: ModalTypePay,
+        props: true
+    },
+    {
+        path: '/registrateusers',
+        name: 'RegistrateUsers',
+        component: RegistrateUsers,
         props: true
     }
 ];

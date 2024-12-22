@@ -240,6 +240,12 @@ export default {
     gap: 16px;  
 }
 
+.house-image {
+    margin-left: 585px;
+    width: 50px;
+    margin-bottom: 5px;
+}
+
 @media (min-width: 768px) and (max-width: 1024px) {
     .menu {
         flex-direction: row; 
