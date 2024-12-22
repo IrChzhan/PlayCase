@@ -11,7 +11,7 @@ import WinnerPage from '@/views/WinnerPage.vue';
 import ModalTypePay from '@/components/widgets/ModalTypePay.vue';
 
 const routes = [{
-        path: '/',
+        path: `${import.meta.env.VITE_Path_App}`,
         name: 'TeamNameInput',
         component: TeamNameInput,
     },

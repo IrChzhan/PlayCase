@@ -30,7 +30,7 @@
   </div>
   <AdminAddCategoryModal
       :show="showModalAdminAddCategory"
-      :close="closeModalAdminAddCategory"
+      :closeModal="closeModalAdminAddCategory"
   />
   <EditPlaceModal
       :name="placeName"
@@ -81,14 +81,20 @@ const closeModalAdminAddCategory = () => {
   showModalAdminAddCategory.value = false;
 };
 
-const fetchPlace = () => {
+const fetchPlace = async () => {
   const place = store.state.places.places.find((place) => place.id === placeId);
   if (place) {
     placeName.value = place.name;
     placeAddress.value = place.address;
-    categories.value = place.categories || [];
+    await fetchCategories();
   }
 };
+
+
+const fetchCategories = async () => {
+  await store.dispatch('places/fetchCategories', placeId);
+  categories.value = store.getters['places/categoriesByPlace'](placeId);
+}
 
 
 const editCategory = (category) => {

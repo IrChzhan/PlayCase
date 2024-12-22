@@ -2,95 +2,74 @@
   <div class="place-page-modal" v-if="show" @click.self="closeModal">
     <div class="container">
       <h1>Добавить Категорию</h1>
-      <form @submit.prevent="showUpdateDialog" class="form">
+      <form @submit.prevent="handleAddCategory" class="form">
         <div class="form-group">
-          <label for="name">Название:</label>
-          <input id="name" v-model="placeName" type="text" class="input" required />
+          <label for="categoryName">Название категории:</label>
+          <input
+              id="categoryName"
+              v-model="categoryName"
+              type="text"
+              class="input"
+              required
+          />
         </div>
-
         <button
-            type="button"
+            type="submit"
             class="button primary"
-            :disabled="!hasChanges || loading"
-            :class="{ 'disabled': !hasChanges || loading }"
-            @click="showUpdateDialog"
+            :disabled="loading || !categoryName"
+            :class="{ 'disabled': loading || !categoryName }"
         >
           <Loader v-if="loading" /> Добавить
         </button>
       </form>
     </div>
 
-    <ConfirmDialog
-        v-if="showDialog"
-        :visible="showDialog"
-        :title="dialogTitle"
-        :message="dialogMessage"
-        @confirm="handleConfirm"
-        @cancel="handleCancel"
-    />
-
     <Toast :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
 
+
 <script setup>
+import {useRoute} from "vue-router";
+
 defineProps({
   show: Boolean,
-  closeModal: Function
+  closeModal: Function,
 });
 
-import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
-import Loader from '../Loader.vue';
-import ConfirmDialog from '../ConfirmDialog.vue';
-import Toast from '../Toast.vue';
+import { ref } from "vue";
+import { useStore } from "vuex";
+import Loader from "../Loader.vue";
+import Toast from "../Toast.vue";
 
+const store = useStore();
 const route = useRoute();
 
+const categoryName = ref("");
 const loading = ref(false);
-const placeId = route.params.id;
-const placeName = ref('');
-const placeAddress = ref('');
-const oldName = ref('');
-const oldAddress = ref('');
-const showDialog = ref(false);
-const dialogTitle = ref('');
-const dialogMessage = ref('');
-const toastMessage = ref('');
-const toastType = ref('success');
-let dialogAction = null;
+const toastMessage = ref("");
+const toastType = ref("success");
 
-const hasChanges = computed(() => {
-  return placeName.value !== oldName.value || placeAddress.value !== oldAddress.value;
-});
-
-const showUpdateDialog = () => {
-  dialogTitle.value = 'Подтверждение обновления';
-  dialogMessage.value = 'Вы уверены, что хотите сохранить изменения?';
-  dialogAction = updatePlace;
-  showDialog.value = true;
-};
-
-const showDeleteDialog = () => {
-  dialogTitle.value = 'Подтверждение удаления';
-  dialogMessage.value = 'Вы уверены, что хотите удалить это место?';
-  dialogAction = deletePlace;
-  showDialog.value = true;
-};
-
-const handleConfirm = async () => {
-  showDialog.value = false;
-  if (dialogAction) {
-    await dialogAction();
+const handleAddCategory = async () => {
+  try {
+    loading.value = true;
+    await store.dispatch("places/addCategory", {
+      placeId: route.params.id,
+      categoryData: { name: categoryName.value },
+    });
+    toastMessage.value = "Категория успешно добавлена!";
+    toastType.value = "success";
+    categoryName.value = "";
+  } catch (error) {
+    console.error("Ошибка при добавлении категории:", error);
+    toastMessage.value = "Ошибка при добавлении категории.";
+    toastType.value = "error";
+  } finally {
+    loading.value = false;
   }
 };
-
-const handleCancel = () => {
-  showDialog.value = false;
-};
-
-
 </script>
+
 
 <style scoped>
 .place-page-modal {
