@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
 import Notification from '@/admin/Notification.vue'
 
 const login = ref('')

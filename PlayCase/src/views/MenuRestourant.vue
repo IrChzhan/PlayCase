@@ -89,8 +89,9 @@
 
 <script>
 import meal from '@/assets/meal.png'
-import ProductCard from './ProductCard.vue'
 import router from '@/router/index.js'
+
+import ProductCard from './ProductCard.vue'
 export default {
   components: {
     ProductCard,

@@ -46,8 +46,9 @@
 </template>
 
 <script setup>
-import Input from '@/components/shared/forms/Input.vue'
 import { ref } from 'vue'
+
+import Input from '@/components/shared/forms/Input.vue'
 
 defineProps({
   show: Boolean,

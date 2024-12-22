@@ -43,14 +43,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import MenuList from './AdminMenuList.vue'
-import EditPlaceModal from './AdminEditPlaceModal.vue'
-import Toast from '../Toast.vue'
-import AdminAddCategoryModal from '@/admin/Place/AdminAddCategoryModal.vue'
+
 import Notification from '@/admin/Notification.vue'
+import AdminAddCategoryModal from '@/admin/Place/AdminAddCategoryModal.vue'
+
+import Toast from '../Toast.vue'
+import EditPlaceModal from './AdminEditPlaceModal.vue'
+import MenuList from './AdminMenuList.vue'
 
 const route = useRoute()
 const store = useStore()

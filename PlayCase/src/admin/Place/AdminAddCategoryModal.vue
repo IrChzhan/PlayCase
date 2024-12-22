@@ -32,8 +32,10 @@ defineProps({
 
 import { ref } from 'vue'
 import { useStore } from 'vuex'
-import Loader from '../Loader.vue'
+
 import Notification from '@/admin/Notification.vue'
+
+import Loader from '../Loader.vue'
 
 const store = useStore()
 const route = useRoute()

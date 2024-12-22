@@ -29,17 +29,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+import cashImage from '@/assets/cash.png'
+import contactsImage from '@/assets/contacts.png'
+import helpImage from '@/assets/help.png'
 import info from '@/assets/info.png'
+import lotteryImage from '@/assets/lotery.png'
+import manImage from '@/assets/man.png'
+import menuImage from '@/assets/menu.png'
 import prizeImage from '@/assets/prize.png'
 import ratingImage from '@/assets/rating.png'
-import menuImage from '@/assets/menu.png'
-import lotteryImage from '@/assets/lotery.png'
-import cashImage from '@/assets/cash.png'
-import helpImage from '@/assets/help.png'
-import manImage from '@/assets/man.png'
-import contactsImage from '@/assets/contacts.png'
-import ModalLottery from '@/components/widgets/ModalLottery.vue'
 import ModalContacts from '@/components/widgets/ModalContacts.vue'
+import ModalLottery from '@/components/widgets/ModalLottery.vue'
 import ModalPay from '@/components/widgets/ModalPay.vue'
 
 const route = useRoute()
@@ -169,6 +170,7 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 }
 
 .menu-image {
@@ -233,6 +235,7 @@ p {
   .menu-image {
     width: 60px;
     height: 60px;
+    cursor: pointer;
   }
   .play-button {
     margin-left: 450px;

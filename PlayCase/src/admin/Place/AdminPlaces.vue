@@ -50,9 +50,10 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
 import Loader from '../Loader.vue'
 import Notification from '../Notification.vue'
 

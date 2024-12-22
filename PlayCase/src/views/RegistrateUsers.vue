@@ -17,9 +17,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import router from '@/router'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+
+import router from '@/router'
 
 const registeredUsers = ref([])
 const route = useRoute()

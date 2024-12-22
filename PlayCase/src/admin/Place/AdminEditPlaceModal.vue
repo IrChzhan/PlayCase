@@ -57,11 +57,12 @@ defineProps({
   closeModal: Function,
 })
 
-import { useStore } from 'vuex'
-import { ref, onMounted, computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Loader from '../Loader.vue'
+import { useStore } from 'vuex'
+
 import ConfirmDialog from '../ConfirmDialog.vue'
+import Loader from '../Loader.vue'
 import Toast from '../Toast.vue'
 
 const store = useStore()
