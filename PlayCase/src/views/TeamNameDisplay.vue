@@ -19,11 +19,11 @@ import { useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
-const teamName = route.params.teamName;
-const teamTable = route.params.teamTable;
+const teamName = 'Cats';
+const teamTable = '12';
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: teamName.value, teamTable: teamTable.value } });
+  router.push({ name: 'MenuApp', params: { teamName, teamTable } });
 };
 </script>
 

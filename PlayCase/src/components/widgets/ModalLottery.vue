@@ -69,7 +69,7 @@
 
 <script setup>
 import Input from "@/components/shared/forms/Input.vue";
-import { ref } from "vue";
+import { ref} from "vue";
 
 defineProps({
   show: Boolean,
@@ -83,11 +83,16 @@ const formData = ref({
   agree: false
 });
 
+
+const emit = defineEmits(['registerUser']);
+
 const submitForm = () => {
   if (!formData.value.agree) {
     alert("Вы должны согласиться с политикой обработки персональных данных.");
     return;
   }
+
+  emit('registerUser', formData.value);
   console.log("Форма отправлена:", formData.value);
   formData.value.name = '';
   formData.value.email = '';
