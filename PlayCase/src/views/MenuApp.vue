@@ -2,10 +2,6 @@
   <div class="container">
     <div class="header">
       <h1 class="team-name">{{ teamName }}</h1>
-      <div class="table-number">
-        <h2>{{ teamTable }}</h2>
-        <p>стол</p>
-      </div>
     </div>
 
     <div class="menu">
@@ -111,7 +107,7 @@ const menuItems = ref([
   { name: 'Оплата', image: cashImage, function: openModalPay },
   { name: 'Хелп', image: helpImage, function: () => {} },
   { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
-  { name: 'Регистрация лотереи', image: manImage, function: () => {} },
+  { name: 'Регистрация лотереи', image: manImage, function: () => {router.push({name: 'RegistrateUsers'})} },
 ])
 </script>
 
@@ -141,13 +137,7 @@ const menuItems = ref([
   color: white;
   font-family: 'Mulish', sans-serif;
   font-weight: bold;
-}
-
-.table-number {
-  font-size: 20px;
-  margin-right: 40px;
-  color: #cc9f33;
-  font-family: 'Mulish', sans-serif;
+  margin-left: 515px;
 }
 
 h2 {
@@ -171,6 +161,8 @@ p {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  color: white;
+  font-family: 'Mulish', sans-serif;
 }
 
 .menu-image {
@@ -205,7 +197,7 @@ p {
   font-weight: bold;
   font-size: 35px;
   cursor: pointer;
-  margin-left: 730px;
+  margin-left: 800px;
   padding: 10px;
   margin-bottom: 80px;
 }
@@ -222,11 +214,6 @@ p {
     font-size: 48px;
   }
 
-  .table-number {
-    font-size: 30px;
-    margin-right: 20px;
-  }
-
   .menu {
     width: 80%;
     margin-left: 45px;
@@ -238,8 +225,12 @@ p {
     cursor: pointer;
   }
   .play-button {
-    margin-left: 450px;
+    margin-left: 490px;
     width: 40px;
+    margin-top: -22px;
+  }
+  .back-button {
+    margin-top: -12px;
   }
   .footer {
     margin-top: 3px;

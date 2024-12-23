@@ -1,38 +1,70 @@
+<template>
+  <div class="input-container">
+    <label v-if="text" :for="inputId" class="input-label">{{ text }}</label>
+    <input
+      :id="inputId"
+      :type="type"
+      :placeholder="placeholder"
+      :value="modelValue"
+      @input="onInput"
+      @blur="onBlur"
+      class="input-field"
+      :style="{ width: width }"
+      :disabled="disabled"
+    />
+    <span v-if="errorMessage" class="input-error">{{ errorMessage }}</span>
+  </div>
+</template>
+
 <script setup>
-import { defineEmits, defineProps } from 'vue'
+import { ref, computed, onMounted } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
+  modelValue: {
+    type: [String, Number],
+    default: '',
+  },
   text: {
     type: String,
-    required: true,
+    default: '',
+  },
+  type: {
+    type: String,
+    default: 'text',
+  },
+  placeholder: {
+    type: String,
+    default: '',
   },
   width: {
     type: String,
-    required: true,
+    default: "auto"
   },
-  content: {
-    type: String,
-    required: true,
+  disabled: {
+      type: Boolean,
+      default: false,
   },
-})
+  errorMessage: {
+      type: String,
+      default: '',
+  }
+});
 
-const emit = defineEmits(['update:content'])
 
-const updateContent = (event) => {
-  emit('update:content', event.target.value)
+const emit = defineEmits(['update:modelValue', 'blur']);
+
+const inputId = computed(() => `input-${Math.random().toString(36).substring(2, 15)}`);
+
+const onInput = (event) => {
+  emit('update:modelValue', event.target.value);
+};
+
+const onBlur = () => {
+    emit('blur');
 }
-</script>
 
-<template>
-  <input
-    class="input"
-    type="text"
-    :placeholder="text"
-    :value="content"
-    @input="updateContent"
-    :style="{ width: width }"
-  />
-</template>
+</script>
 
 <style scoped>
 .input {

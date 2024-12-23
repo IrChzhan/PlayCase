@@ -7,9 +7,13 @@
           <div class="team-title">Название команды</div>
           <h1 class="main-heading">Примите участие<br />в нашей лотерее</h1>
           <form @submit.prevent="submitForm">
-            <Input v-model:content="formData.name" text="Ваше имя" width="auto" />
-            <Input v-model:content="formData.email" text="Ваша электронная почта" width="auto" />
-            <Input v-model:content="formData.phone" text="Телефон" width="auto" />
+            <div v-if="emailError || phoneError" class="error-section">
+                <p v-if="emailError" class="error-message">{{ emailError }}</p>
+                <p v-if="phoneError" class="error-message">{{ phoneError }}</p>
+            </div>
+            <Input v-model:modelValue="formData.name" text="Ваше имя" width="auto" />
+            <Input v-model:modelValue="formData.email" text="Ваша электронная почта" width="auto" />
+            <Input v-model:modelValue="formData.phone" text="Телефон" width="auto" />
 
             <button type="submit" class="submit-button">Участвовать в лотерее</button>
 
@@ -46,39 +50,62 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-import Input from '@/components/shared/forms/Input.vue'
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import Input from '@/components/shared/forms/Input.vue';
 
 defineProps({
   show: Boolean,
   closeModal: Function,
-})
+});
+
+const store = useStore();
 
 const formData = ref({
   name: '',
   email: '',
   phone: '',
   agree: false,
-})
+});
 
-const emit = defineEmits(['registerUser'])
+const emailError = ref('');
+const phoneError = ref('');
 
-const submitForm = () => {
+const submitForm = async () => {
+  emailError.value = '';
+  phoneError.value = '';
+
   if (!formData.value.agree) {
-    alert('Вы должны согласиться с политикой обработки персональных данных.')
-    return
+    alert('Вы должны согласиться с политикой обработки персональных данных.');
+    return;
   }
 
-  emit('registerUser', formData.value)
-  console.log('Форма отправлена:', formData.value)
-  formData.value.name = ''
-  formData.value.email = ''
-  formData.value.phone = ''
-  formData.value.agree = false
-  alert('Спасибо за участие в лотерее!')
-}
+  const newUser = {
+    name: formData.value.name.trim(),
+    email: formData.value.email.trim(),
+    phone: formData.value.phone.trim(),
+  };
+
+  try {
+    await store.dispatch('lottery/addUser', newUser);
+
+    formData.value.name = '';
+    formData.value.email = '';
+    formData.value.phone = '';
+    formData.value.agree = false;
+    alert('Спасибо за участие в лотерее!');
+    closeModal();
+  } catch (error) {
+    if (error === "User with this email or phone number already exists") {
+      emailError.value = "Пользователь с таким email уже существует";
+      phoneError.value = "Пользователь с таким номером телефона уже существует";
+    } else {
+      alert('Произошла ошибка во время регистрации');
+    }
+  }
+};
 </script>
+
 
 <style scoped>
 .modal-overlay {
@@ -92,6 +119,20 @@ const submitForm = () => {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+
+.error-section {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 1.5vw;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: clamp(12px, 1.5vw, 14px);
+  margin: 0;
 }
 
 .modal-content {

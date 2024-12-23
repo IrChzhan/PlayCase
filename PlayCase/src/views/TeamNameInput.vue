@@ -1,8 +1,7 @@
 <template>
   <div class="container input-container">
-    <h1>Введите название команды</h1>
-    <input v-model="teamName" type="text" placeholder="Название команды" />
     <h1>Введите номер стола</h1>
+    <br>
     <input v-model="teamTable" type="text" placeholder="Номер стола" />
     <button @click="submitTeamName">Подтвердить</button>
   </div>
@@ -12,14 +11,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const teamName = ref('')
 const teamTable = ref('')
 const router = useRouter()
 
 const submitTeamName = () => {
   router.push({
     name: 'TeamNameDisplay',
-    params: { teamName: teamName.value, teamTable: teamTable.value },
+    params: { teamTable: teamTable.value },
   })
 }
 </script>
@@ -54,5 +52,6 @@ button {
 h1 {
   color: white;
   font-family: 'Mulish', sans-serif;
+  margin-left: 20px;
 }
 </style>

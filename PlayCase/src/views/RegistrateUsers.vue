@@ -1,15 +1,17 @@
 <template>
   <div class="register-users-page">
     <div class="close-button" @click="goToMenuApp">✖️</div>
-    <h1>Registered Users</h1>
-    <div v-if="registeredUsers.length === 0">
-      <p>No users have registered for the lottery yet.</p>
+    <h1>Зарегистрированные пользователи</h1>
+    <br>
+    <div v-if="!registeredUsers || registeredUsers.length === 0">
+      <p>Пока никто не зарегистрировался в лотерее.</p>
     </div>
     <div v-else>
       <div v-for="(user, index) in registeredUsers" :key="index" class="user-item">
-        <p><strong>Name:</strong> {{ user.name }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Phone:</strong> {{ user.phone }}</p>
+        <p><strong>Имя:</strong> {{ user.name }}</p>
+        <p><strong>Почта:</strong> {{ user.email }}</p>
+        <p><strong>Телефон:</strong> {{ user.phone }}</p>
+        <p><strong>Номер игрока:</strong> {{ user.playerNumber }}</p>
       </div>
     </div>
     <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
@@ -17,25 +19,21 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, onMounted } from 'vue';
+import router from '@/router';
+import { useStore } from 'vuex';
 
-import router from '@/router'
-
-const registeredUsers = ref([])
-const route = useRoute()
+const store = useStore();
+const registeredUsers = computed(() => store.getters['lottery/registeredUsers']);
 
 onMounted(() => {
-  if (route.params && route.params.registeredUsers) {
-    registeredUsers.value = route.params.registeredUsers
-  }
-})
+     console.log('RegisterUsers - Initial Registered Users:', registeredUsers.value);
+});
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
-}
+  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } });
+};
 </script>
-
 <style scoped>
 .register-users-page {
   display: flex;
@@ -72,8 +70,7 @@ const goToMenuApp = () => {
   cursor: pointer;
 }
 
-.register-users-page::before,
-.register-users-page::after {
+.register-users-page::before {
   content: '';
   position: absolute;
   background-image: url('@/assets/lines.png');
@@ -84,14 +81,22 @@ const goToMenuApp = () => {
 .register-users-page::before {
   top: 0;
   left: 0;
-  width: 150px;
-  height: 150px;
+  width: 1300px;
+  height: 1300px;
 }
 
-.register-users-page::after {
-  bottom: 0;
-  right: 0;
-  width: 150px;
-  height: 150px;
+.user-item p {
+  margin: 5px 0;
+}
+
+.user-item strong {
+  color: #ffd700;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .register-users-page::before {
+  width: 1050px;
+  height: 1050px;
+  }
 }
 </style>
