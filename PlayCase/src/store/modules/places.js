@@ -42,31 +42,34 @@ export default {
   },
   actions: {
     async fetchPlaces({ commit }) {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/places`)
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/places/`)
       commit('setPlaces', response.data)
     },
     async fetchCategories({ commit }, placeId) {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories`,
+        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/`,
       )
       commit('setCategories', { placeId, categories: response.data })
     },
 
     async fetchMeals({ commit }, { placeId, categoryId }) {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals`,
+        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals/`,
       )
       commit('setMeals', { categoryId, meals: response.data })
     },
     async createPlace({ commit }, newPlace) {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/admin/places`, newPlace)
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/admin/places/`, newPlace)
       commit('addPlace', response.data)
     },
     async updatePlace({ commit }, updatedPlace) {
       try {
         const response = await axios.put(
-          `${import.meta.env.VITE_API_URL}/admin/places/${updatedPlace.id}`,
-          updatedPlace,
+          `${import.meta.env.VITE_API_URL}/admin/places/${updatedPlace.id}/`,
+          {
+            name: updatedPlace.name,
+            address: updatedPlace.address,
+          },
         )
         commit('updatePlace', response.data)
       } catch (error) {
@@ -76,7 +79,7 @@ export default {
 
     async deletePlace({ commit }, placeId) {
       try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/admin/places/${placeId}`)
+        await axios.delete(`${import.meta.env.VITE_API_URL}/admin/places/${placeId}/`)
         commit('deletePlace', placeId)
       } catch (error) {
         console.error('Ошибка удаления места:', error)
@@ -86,7 +89,7 @@ export default {
     async addCategory({ commit }, { placeId, categoryData }) {
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories`,
+          `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/`,
           categoryData,
         )
         console.log(response, categoryData)
@@ -99,7 +102,7 @@ export default {
 
     async updateCategory({ dispatch }, { placeId, categoryId, categoryData }) {
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}`,
+        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/`,
         categoryData,
       )
       await dispatch('fetchCategories', placeId)
@@ -107,14 +110,14 @@ export default {
 
     async deleteCategory({ dispatch }, { placeId, categoryId }) {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}`,
+        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/`,
       )
       await dispatch('fetchCategories', placeId)
     },
 
     async addMeal({ dispatch }, { placeId, categoryId, mealData }) {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals`,
+        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals/`,
         mealData,
       )
       await dispatch('fetchMeals', { placeId, categoryId })
@@ -122,7 +125,7 @@ export default {
 
     async updateMeal({ dispatch }, { placeId, categoryId, mealId, mealData }) {
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals/${mealId}`,
+        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals/${mealId}/`,
         mealData,
       )
       await dispatch('fetchMeals', { placeId, categoryId })
@@ -130,7 +133,7 @@ export default {
 
     async deleteMeal({ dispatch }, { placeId, categoryId, mealId }) {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals/${mealId}`,
+        `${import.meta.env.VITE_API_URL}/admin/places/${placeId}/categories/${categoryId}/meals/${mealId}/`,
       )
       await dispatch('fetchMeals', { placeId, categoryId })
     },
