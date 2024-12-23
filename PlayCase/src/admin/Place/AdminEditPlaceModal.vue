@@ -132,7 +132,6 @@ const updatePlace = async () => {
     })
     toastMessage.value = 'Место успешно обновлено!'
     toastType.value = 'success'
-    this.props.closeModal()
     setTimeout(() => {
       toastMessage.value = ''
     }, 3000)
@@ -154,7 +153,6 @@ const deletePlace = async () => {
     await store.dispatch('places/deletePlace', placeId)
     toastMessage.value = 'Место удалено!'
     toastType.value = 'success'
-    this.props.closeModal()
     setTimeout(() => {
       toastMessage.value = ''
     }, 3000)

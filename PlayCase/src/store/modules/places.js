@@ -66,7 +66,10 @@ export default {
       try {
         const response = await axios.put(
           `${import.meta.env.VITE_API_URL}/admin/places/${updatedPlace.id}`,
-          updatedPlace,
+          {
+            name: updatedPlace.name,
+            address: updatedPlace.address,
+          },
         )
         commit('updatePlace', response.data)
       } catch (error) {

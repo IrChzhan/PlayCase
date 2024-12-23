@@ -1,43 +1,43 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import Notification from '@/admin/Notification.vue'
+const login = ref({ username: '', password: '' });
+const toastMessage = ref('');
+const toastType = ref('success');
 
-const login = ref('')
-const toastMessage = ref('')
-const toastType = ref('success')
-
-const store = useStore()
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
 
 const handleLogin = async () => {
-  await store.dispatch('profile/fetchUsers')
-
-  const success = await store.dispatch('profile/login', login.value)
+  const success = await store.dispatch('profile/login', login.value);
   if (success) {
-    toastMessage.value = 'Пользователь успешно найден!'
-    toastType.value = 'success'
-    router.push({ name: 'AdminHome' })
+    toastMessage.value = 'Авторизация успешна!';
+    toastType.value = 'success';
+    router.push({ name: 'AdminHome' });
     setTimeout(() => {
-      toastMessage.value = ''
-    }, 3000)
+      toastMessage.value = '';
+    }, 3000);
   } else {
-    toastMessage.value = 'Такой пользователь не найден!'
-    toastType.value = 'error'
+    toastMessage.value = 'Ошибка авторизации. Проверьте логин и пароль.';
+    toastType.value = 'error';
     setTimeout(() => {
-      toastMessage.value = ''
-    }, 3000)
+      toastMessage.value = '';
+    }, 3000);
   }
-}
+};
 </script>
 
 <template>
   <div class="container">
     <h1>Войти</h1>
-    <label for="login">Введите ваш логин</label>
-    <input id="login" v-model="login" type="text" placeholder="Ваш логин" />
+    <label for="username">Логин</label>
+    <input id="username" v-model="login.username" type="text" placeholder="Ваш логин" />
+
+    <label for="password">Пароль</label>
+    <input id="password" v-model="login.password" type="password" placeholder="Ваш пароль" />
+
     <button @click="handleLogin">Отправить</button>
   </div>
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
