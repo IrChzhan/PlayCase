@@ -29,7 +29,7 @@ export default {
   actions: {
     async fetchUsers({ commit }) {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/users/`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/users`);
         commit('SET_USERS', response.data);
       } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error);
@@ -37,7 +37,7 @@ export default {
     },
     async login({ commit }, loginPayload) {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/authorization/`, loginPayload);
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/authorization`, loginPayload);
         const { accessToken } = response.data;
 
         commit('SET_TOKEN', accessToken);
