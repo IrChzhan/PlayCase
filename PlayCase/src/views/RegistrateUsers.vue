@@ -31,7 +31,7 @@ onMounted(() => {
 });
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: 'Cats', teamTable: 'dadasd' } });
+  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } });
 };
 </script>
 <style scoped>

@@ -29,7 +29,7 @@ export default {
   actions: {
     async fetchUsers({ commit }) {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users/`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/users/`);
         commit('SET_USERS', response.data);
       } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error);

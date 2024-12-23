@@ -200,7 +200,7 @@ export default {
       this.selectedCategory = category
     },
     goToMenuApp() {
-      router.push({ name: 'MenuApp', params: { teamName: 'Cats', teamTable: 'dadasd' } })
+      router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
     },
   },
 }
