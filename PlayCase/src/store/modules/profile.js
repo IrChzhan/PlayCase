@@ -29,7 +29,7 @@ export default {
   actions: {
     async fetchUsers({ commit }) {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/users`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users`);
         commit('SET_USERS', response.data);
       } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error);
@@ -51,6 +51,16 @@ export default {
         return false;
       }
     },
+    async addUser({ dispatch }, userPayload) {
+      try {
+        await axios.post(`${import.meta.env.VITE_API_URL}/admin/v1/users`, userPayload);
+        await dispatch('fetchUsers');
+      } catch (error) {
+        console.error('Ошибка при добавлении пользователя:', error);
+        throw error;
+      }
+    },
+
     logout({ commit }) {
       commit('LOGOUT');
     },

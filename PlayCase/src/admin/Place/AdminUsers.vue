@@ -21,24 +21,29 @@ const roles = ['user', 'admin', 'moderator']
 const addUser = async () => {
   if (newUser.value.name.trim() && newUser.value.login.trim() && newUser.value.password.trim()) {
     try {
-      await store.dispatch('profile/addUser', newUser.value)
-      newUser.value = { name: '', login: '', password: '', role: 'user' }
-      toastMessage.value = 'Произошла ошибка при добавление пользователя!'
-      toastType.value = 'error'
+      const payload = {
+        name: newUser.value.name,
+        username: newUser.value.login,
+        password: newUser.value.password,
+        authorities: [{ authority: newUser.value.role }],
+      };
+      await store.dispatch('profile/addUser', payload);
+      newUser.value = { name: '', login: '', password: '', role: 'user' };
+      toastMessage.value = 'Пользователь успешно добавлен!';
+      toastType.value = 'success';
       setTimeout(() => {
-        toastMessage.value = ''
-      }, 3000)
+        toastMessage.value = '';
+      }, 3000);
     } catch (error) {
-      console.error('Ошибка при добавлении пользователя:', error)
-      toastMessage.value = 'Пользоветель успешно добавлен!'
-      toastType.value = 'success'
+      console.error('Ошибка при добавлении пользователя:', error);
+      toastMessage.value = 'Произошла ошибка при добавлении пользователя!';
+      toastType.value = 'error';
       setTimeout(() => {
-        toastMessage.value = ''
-      }, 3000)
+        toastMessage.value = '';
+      }, 3000);
     }
   }
-}
-
+};
 onMounted(() => {
   store.dispatch('profile/fetchUsers')
 })
@@ -50,7 +55,7 @@ onMounted(() => {
       <div v-for="user in store.getters['profile/users']" :key="user.id" class="place-card">
         <p>Имя: {{ user.name }}</p>
         <p>Логин: {{ user.username }}</p>
-        <p>Роль: {{ user.authorities[0]?.authority || 'N/A' }}</p>
+        <p>Роль: {{ user.authorities[0] || 'N/A' }}</p>
       </div>
     </div>
     <div class="add-user">

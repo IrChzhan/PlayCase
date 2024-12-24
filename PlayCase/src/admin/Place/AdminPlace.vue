@@ -35,31 +35,29 @@
     :closeModal="closeModalAdminAddCategory"
   />
   <EditPlaceModal
-    :name="placeName"
-    :address="placeAddress"
     :show="showModalAdminPlace"
     :closeModal="closeModalAdminPlace"
   />
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 import Notification from '@/admin/Notification.vue'
 import AdminAddCategoryModal from '@/admin/Place/AdminAddCategoryModal.vue'
 
-import Toast from '../Toast.vue'
 import EditPlaceModal from './AdminEditPlaceModal.vue'
 import MenuList from './AdminMenuList.vue'
 
 const route = useRoute()
 const store = useStore()
 
+const place = computed(() => store.getters['places/findPlace'](placeId))
+const placeName = computed(() => place.value?.name || '')
+const placeAddress = computed(() => place.value?.address || '')
 const placeId = route.params.id
-const placeName = ref('')
-const placeAddress = ref('')
 const categories = ref([])
 const showModalAdminPlace = ref(false)
 const showModalAdminAddCategory = ref(false)
@@ -84,8 +82,14 @@ const closeModalAdminAddCategory = () => {
 }
 
 const fetchPlace = async () => {
-  const place = store.state.places.places.find((place) => place.id === placeId)
+  const place = store.getters['places/findPlace'](placeId)
   if (place) {
+    placeName.value = place.name
+    placeAddress.value = place.address
+    await fetchCategories()
+  } else {
+    await store.dispatch('places/fetchPlace', placeId)
+    const place = store.getters['places/findPlace'](placeId)
     placeName.value = place.name
     placeAddress.value = place.address
     await fetchCategories()
@@ -138,6 +142,7 @@ const showToast = (message, type) => {
   toastMessage.value = message
   toastType.value = type
 }
+
 
 onMounted(fetchPlace)
 </script>

@@ -57,13 +57,12 @@ defineProps({
   closeModal: Function,
 })
 
-import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import {computed, onMounted, ref} from 'vue'
+import {useRoute} from 'vue-router'
+import {useStore} from 'vuex'
 
 import ConfirmDialog from '../ConfirmDialog.vue'
 import Loader from '../Loader.vue'
-import Toast from '../Toast.vue'
 
 const store = useStore()
 const route = useRoute()
@@ -81,7 +80,7 @@ const toastMessage = ref('')
 const toastType = ref('success')
 let dialogAction = null
 
-const fetchPlace = () => {
+const fetchPlace = async () => {
   const place = store.state.places.places.find((place) => place.id === placeId)
   if (place) {
     placeName.value = place.name
@@ -89,7 +88,7 @@ const fetchPlace = () => {
     oldName.value = place.name
     oldAddress.value = place.address
   } else {
-    console.error('Место не найдено')
+    await store.dispatch('places/fetchPlace', placeId)
   }
 }
 
