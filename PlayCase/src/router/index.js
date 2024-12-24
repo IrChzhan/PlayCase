@@ -14,6 +14,7 @@ import RegistrateUsers from '@/views/RegistrateUsers.vue'
 import TeamNameDisplay from '@/views/TeamNameDisplay.vue'
 import TeamNameInput from '@/views/TeamNameInput.vue'
 import WinnerPage from '@/views/WinnerPage.vue'
+import AdminResults from '@/admin/Place/AdminResults.vue'
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -73,6 +74,14 @@ const routes = [{
         component: AdminHome,
         props: true,
     },
+
+    {
+        path: '/admin/results',
+        name: 'AdminResults',
+        component: AdminResults,
+        props: true
+    },
+
     {
         path: '/admin/places',
         name: 'AdminPlaces',

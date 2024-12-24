@@ -8,12 +8,18 @@ const goToPlaces = () => {
 const goToUsers = () => {
   router.push({ name: 'AdminUsers' })
 }
+
+const goToResults = () => {
+  console.log("Переход на AdminResults");
+  router.push({ name: 'AdminResults' });
+};
 </script>
 
 <template>
   <div class="container">
     <button class="place-card" @click="goToPlaces">Заведения</button>
     <button class="place-card" @click="goToUsers">Пользователи</button>
+    <button class="place-card" @click="goToResults">Рейтинг</button>
   </div>
 </template>
 
