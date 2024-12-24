@@ -1,103 +1,137 @@
 <template>
-    <div class="admin-results">
-      <h1 class="name_download">Загрузка Excel файла</h1>
-  
-      <input type="file" @change="onFileChange" accept=".xlsx, .xls" />
-      <button @click="uploadFile" :disabled="!selectedFile">Загрузить файл</button>
-  
-      <div v-if="isLoading">Загрузка...</div>
-      <div v-if="uploadMessage" class="choice_file">{{ uploadMessage }}</div>
+  <div class="admin-results-page">
+      <div class="close-button" @click="goToMenuApp">✖️</div>
+    <h1>Загрузка файла</h1>
+      <div v-if="!uploadSuccess">
+        <input type="file" @change="handleFileUpload" accept=".xls,.xlsx" />
+        <button @click="uploadFile" :disabled="!selectedFile">Загрузить файл</button>
+      </div>
+      <div v-else class="success-message">
+         Файл успешно загружен
     </div>
-  </template>
-  
-  <script>
-  import axios from "axios";
-  
-  export default {
-    name: "AdminResults",
-    data() {
-      return {
-        selectedFile: null,
-        isLoading: false,
-        uploadMessage: "",
-      };
-    },
-    methods: {
-      onFileChange(event) {
-        this.selectedFile = event.target.files[0];
-      },
-      async uploadFile() {
-        if (!this.selectedFile) return;
-  
-        this.isLoading = true;
-        this.uploadMessage = "";
-  
+
+    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
+
+
+const router = useRouter();
+const route = useRoute();
+const gameId = route.params.gameId;
+const selectedFile = ref(null);
+const uploadSuccess = ref(false);
+
+const handleFileUpload = (event) => {
+      console.log("file selected:", event.target.files[0]);
+      selectedFile.value = event.target.files[0];
+    };
+
+
+const uploadFile = async () => {
+  if (!selectedFile.value) {
+    alert('Пожалуйста, выберите файл.');
+    return;
+  }
+  try {
         const formData = new FormData();
-        formData.append("file", this.selectedFile);
-  
-        try {
-          const response = await axios.post("/admin/v1/files/upload", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
-  
-          if (response.data && response.data.url) {
-            this.uploadMessage = "Файл успешно загружен.";
-          } else {
-            this.uploadMessage = "Не удалось загрузить файл.";
-          }
-        } catch (error) {
-          console.error("Ошибка загрузки файла:", error);
-          this.uploadMessage = "Ошибка загрузки файла.";
-        } finally {
-          this.isLoading = false;
-        }
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .admin-results {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-  }
-  
-  .name_download {
-    color: aliceblue;
-  }
+        formData.append('file', selectedFile.value);
 
-  .file {
-    color: white;
+        await axios.post(
+        `http://localhost:8080/admin/v1/games/${gameId}/teams/replace`,
+        formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+        );
+         uploadSuccess.value = true;
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    alert('Ошибка при загрузке файла.');
   }
+};
 
-  .choice_file {
-    color: white;
-  }
-  input {
-    margin-bottom: 10px;
-  }
-  
-  button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
+const goToMenuApp = () => {
+  router.push({ name: 'MenuApp', params: { teamName: "dada", teamTable: "dadasd"} });
+};
+</script>
+
+<style scoped>
+.admin-results-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+    background-color: #001845;
+  color: #ffd700;
+  height: 100vh;
+  position: relative;
+    font-family: 'Mulish', sans-serif;
+    overflow: hidden;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffd700;
     cursor: pointer;
   }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  div {
+.success-message {
+  font-size: 1.2em;
+  margin-top: 20px;
+}
+
+button {
+    background-color: #CC9F33;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #a58027;
+    cursor: not-allowed;
+}
+  .home-button {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 20px;
+    cursor: pointer;
   }
-  </style>
-  
-  
-  
+
+.admin-results-page::before,
+.admin-results-page::after {
+  content: '';
+  position: absolute;
+  background-image: url('@/assets/lines.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.admin-results-page::before {
+  top: 0;
+  left: 0;
+  width: 1300px;
+  height: 1300px;
+}
+
+.admin-results-page::after {
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+}
+</style>

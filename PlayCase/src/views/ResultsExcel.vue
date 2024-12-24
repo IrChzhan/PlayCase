@@ -1,106 +1,135 @@
 <template>
-    <div class="results-excel">
-      <h1>Данные из Excel файла с рейтингом команд</h1>
-  
-      <div v-if="isLoading">Загрузка файла...</div>
-  
-      <div v-if="fileData.length">
-        <h2>Данные файла:</h2>
-        <table>
-          <thead>
-            <tr>
-              <th v-for="(header, index) in fileHeaders" :key="index">{{ header }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, rowIndex) in fileData" :key="rowIndex">
-              <td v-for="(cell, cellIndex) in row" :key="cellIndex">{{ cell }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-  
-      <div v-else-if="!isLoading">
-        <p>Нет данных для отображения.</p>
-      </div>
+  <div class="results-excel-page">
+    <div class="close-button" @click="goToMenuApp">✖️</div>
+    <h1>Результаты</h1>
+
+    <div v-if="teams.length === 0">
+      <p>Нет данных для отображения.</p>
     </div>
-  </template>
-  
-  <script>
-  import axios from "axios";
-  import * as XLSX from "xlsx";
-  
-  export default {
-    name: "ResultsExcel",
-    data() {
-      return {
-        isLoading: true,
-        fileHeaders: [],
-        fileData: []
-      };
-    },
-    mounted() {
-      this.fetchExcelFile();
-    },
-    methods: {
-      async fetchExcelFile() {
-        try {
-          const response = await axios.post("/admin/v1/files/upload", {
-            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            url: "string",
-            extension: "xlsx",
-            size: 0,
-            originalName: "example_team_1.xlsx"
-          });
-  
-          const fileUrl = response.data.url;
-          const fileResponse = await axios.get(fileUrl, { responseType: "arraybuffer" });
-  
-          // Парсинг Excel файла
-          const data = new Uint8Array(fileResponse.data);
-          const workbook = XLSX.read(data, { type: "array" });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-  
-          this.fileHeaders = json[0] || [];
-          this.fileData = json.slice(1);
-          this.isLoading = false;
-        } catch (error) {
-          console.error("Ошибка при загрузке файла", error);
-          this.isLoading = false;
-        }
-      }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .results-excel {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    <div v-else>
+      <table>
+          <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Название</th>
+                  <th>Номер стола</th>
+                  <th>Игровая отметка</th>
+                  <th>Количество участников</th>
+              </tr>
+          </thead>
+        <tbody>
+          <tr v-for="team in teams" :key="team.id">
+            <td>{{ team.id }}</td>
+            <td>{{ team.name }}</td>
+            <td>{{ team.tableNumber }}</td>
+              <td>{{ team.gameMark }}</td>
+            <td>{{ team.participantsCount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
+
+const router = useRouter();
+const route = useRoute();
+const gameId = route.params.gameId;
+const teams = ref([]);
+
+
+onMounted(async () => {
+  try {
+    const response = await axios.put(
+      `http://localhost:8080/admin/v1/games/${gameId}/teams/results`
+    );
+      console.log(response.data);
+      teams.value = response.data;
+
+  } catch (error) {
+    console.error('Error fetching teams:', error);
   }
-  
-  h2 {
-    margin-top: 20px;
-  }
-  
-  table {
+});
+
+const goToMenuApp = () => {
+  router.push({ name: 'MenuApp', params: { teamName: "dada", teamTable: "dadasd"} });
+};
+</script>
+
+<style scoped>
+.results-excel-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #001845;
+  color: #ffd700;
+  height: 100vh;
+  position: relative;
+  font-family: 'Mulish', sans-serif;
+  overflow: hidden;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffd700;
+  cursor: pointer;
+}
+
+table {
     border-collapse: collapse;
-    width: 100%;
-    margin-top: 10px;
-  }
-  
-  table, th, td {
-    border: 1px solid #ddd;
-  }
-  
-  th, td {
+    width: 90%;
+    margin: 20px 0;
+    font-family: 'Mulish', sans-serif;
+}
+
+th, td {
+    border: 1px solid #ffd700;
     padding: 8px;
     text-align: left;
+}
+
+th {
+    background-color: #3A4C6E;
+    color: white;
+}
+  .home-button {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 20px;
+    cursor: pointer;
   }
-  
-  th {
-    background-color: #f4f4f4;
-  }
-  </style>
+
+.results-excel-page::before,
+.results-excel-page::after {
+  content: '';
+  position: absolute;
+  background-image: url('@/assets/lines.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.results-excel-page::before {
+  top: 0;
+  left: 0;
+  width: 1300px;
+  height: 1300px;
+}
+
+.results-excel-page::after {
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+}
+</style>
