@@ -10,15 +10,24 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const teamTable = ref('')
 const router = useRouter()
 
-const submitTeamName = () => {
-  router.push({
-    name: 'TeamNameDisplay',
-    params: { teamTable: teamTable.value },
-  })
+const submitTeamName = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/teams?tableNumber=${teamTable.value}`)
+    router.push({
+      name: 'TeamNameDisplay',
+      params: {
+        teamTable: teamTable.value,
+        teamName: response.data.name,
+      },
+    })
+  } catch (error) {
+    console.error('Ошибка загрузки команды:', error)
+  }
 }
 </script>
 

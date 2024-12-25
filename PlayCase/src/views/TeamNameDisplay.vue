@@ -14,15 +14,12 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-const router = useRouter()
-const teamName = 'Cats'
-const teamTable = '12'
-
-const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName, teamTable } })
-}
+const route = useRoute()
+const teamTable = route.params.teamTable
+const teamName = route.params.teamName || 'Команда не найдена'
 </script>
 
 <style scoped>
