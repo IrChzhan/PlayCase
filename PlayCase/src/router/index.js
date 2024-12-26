@@ -17,6 +17,7 @@ import WinnerPage from '@/views/WinnerPage.vue'
 import AdminResults from '@/admin/Place/AdminResults.vue'
 import AdminGames from '@/admin/Place/AdminGames.vue'
 import AdminTeams from '@/admin/Place/AdminTeams.vue'
+import AdminMenuPlace from "@/admin/Place/AdminMenuPlace.vue";
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -122,6 +123,12 @@ const routes = [{
         component: RegistrateUsers,
         props: true,
     },
+  {
+    path: '/admin/place/:id/category/:categoryId',
+    name: 'AdminMenuPlace',
+    component:AdminMenuPlace,
+    props: true,
+  }
 ]
 
 const router = createRouter({

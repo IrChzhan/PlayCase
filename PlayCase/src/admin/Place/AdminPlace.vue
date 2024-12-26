@@ -11,12 +11,9 @@
         </button>
       </div>
     </div>
-    <div class="container">
+    <div class="container-menu">
       <div class="menu-section">
         <h2>Меню заведения</h2>
-        <button @click="openModalAdminAddCategory" class="button primary">
-          Добавить категорию
-        </button>
         <MenuList
           :categories="categories"
           @edit-category="editCategory"
@@ -25,6 +22,9 @@
           @edit-dish="editDish"
           @delete-dish="deleteDish"
         />
+        <button @click="openModalAdminAddCategory" class="button primary">
+          Добавить категорию
+        </button>
       </div>
     </div>
 
@@ -165,6 +165,13 @@ onMounted(fetchPlace)
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.container-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .header {

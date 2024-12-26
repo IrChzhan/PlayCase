@@ -1,60 +1,126 @@
 <template>
-  <div>
-    <div v-for="category in categories" :key="category.id" class="category">
-      <div class="category-header">
-        <h3>{{ category.name }}</h3>
-        <div class="actions">
-          <button @click="$emit('edit-category', category)" class="button small">
-            Редактировать
-          </button>
-          <button @click="$emit('delete-category', category.id)" class="button small danger">
-            Удалить
-          </button>
-          <button @click="$emit('add-dish', category.id)" class="button small primary">
-            Добавить блюдо
-          </button>
-        </div>
+  <div class="admin-places">
+    <h1>Categories</h1>
+    <div class="places-list">
+      <div @click="goToMenu(category.id)"
+        class="place-card"
+        v-for="category in categories"
+        :key="category.id"
+      >
+        <h2>{{ category.name }}</h2>
+        <button class="button" @click="openModalEditCategory(category.id, placeId)">Edit</button>
       </div>
-      <ul class="dishes">
-        <li v-for="dish in category.dishes" :key="dish.id">
-          {{ dish.name }} - {{ dish.price }} руб.
-          <button @click="$emit('edit-dish', dish)" class="button small">Редактировать</button>
-          <button @click="$emit('delete-dish', dish.id)" class="button small danger">
-            Удалить
-          </button>
-        </li>
-      </ul>
     </div>
   </div>
+  <AdminEditCategoryModal
+    :show="showModalAdminEditCategory"
+    :closeModal="closeModalEditCategory"
+    :categoryId="categoryId"
+    :placeIdF = "placeIdForEdit"
+  />
 </template>
 
 <script setup>
-defineProps(['categories'])
+import { useStore } from "vuex";
+import {onMounted, computed, ref} from "vue";
+import { useRoute } from "vue-router";
+import router from "@/router/index.js";
+import AdminEditCategoryModal from "@/admin/Place/AdminEditCategoryModal.vue";
+
+const route = useRoute();
+const store = useStore();
+const placeId = route.params.id;
+const showModalAdminEditCategory = ref(false)
+const categoryId = ref('')
+const placeIdForEdit = ref('')
+
+const openModalEditCategory = (id, placeId) => {
+  showModalAdminEditCategory.value = true
+  categoryId.value = id
+  placeIdForEdit.value = placeId
+}
+
+const closeModalEditCategory = () => {
+  showModalAdminEditCategory.value = false
+  categoryId.value = ''
+}
+
+const categories = computed(() => store.getters["places/categoriesByPlace"](placeId));
+
+const fetchCategories = () => {
+  store.dispatch("places/fetchCategories", placeId);
+};
+
+const goToMenu = (category) => {
+  router.push(`/admin/place/${placeId}/category/${category}`);
+}
+onMounted(() => {
+  fetchCategories();
+});
 </script>
 
 <style scoped>
-.category {
+.admin-places {
+  background-color: #1b2a46;
+  color: white;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1,
+h2 {
   margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background: #2c3e50;
+  color: #ffffff;
+  text-align: center;
 }
-.category-header {
+
+.places-list {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
 }
-.actions {
-  display: flex;
-  gap: 10px;
+
+.place-card {
+  min-width: 200px;
+  background: #27364f;
+  border: 1px solid #394a6a;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
-.dishes {
-  margin-top: 10px;
-  padding-left: 20px;
+
+.place-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+
+.place-card h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #ffffff;
+  text-align: center;
+}
+
 .button {
+  display: block;
+  width: 100px;
+  margin: 10px auto 0;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: white;
   font-size: 14px;
-  margin-left: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.button:hover {
+  background: #45a049;
 }
 </style>

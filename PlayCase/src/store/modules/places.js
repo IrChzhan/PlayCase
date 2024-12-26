@@ -1,11 +1,12 @@
 import axios from 'axios'
+import {createRouterMatcher as Promise} from "vue-router";
 
 export default {
   namespaced: true,
   state() {
     return {
       places: [],
-      categories: {},
+      categories: [],
       meals: {},
     }
   },
@@ -27,12 +28,12 @@ export default {
       state.places = state.places.filter((place) => place.id !== placeId)
     },
     setCategories(state, { placeId, categories }) {
-      state.categories = {
-        ...state.categories,
-        [placeId]: categories,
-      }
+      const updatedCategories = state.categories.filter(category => category.placeId !== placeId);
+      state.categories = [...updatedCategories, ...categories.map(category => ({ ...category, placeId }))];
     },
-
+    addCategory(state, { placeId, category }) {
+      state.categories.push({ ...category, placeId });
+    },
     setMeals(state, { categoryId, meals }) {
       state.meals = {
         ...state.meals,
@@ -50,16 +51,23 @@ export default {
       commit('addPlace', response.data)
     },
     async fetchCategories({ commit }, placeId) {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories`,
-      )
-      commit('setCategories', { placeId, categories: response.data })
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories`
+        );
+        commit('setCategories', { placeId, categories: response.data });
+      } catch (error) {
+        console.error('Ошибка при загрузке категорий:', error);
+      }
     },
+
+
 
     async fetchMeals({ commit }, { placeId, categoryId }) {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories/${categoryId}/meals`,
       )
+
       commit('setMeals', { categoryId, meals: response.data })
     },
     async createPlace({ commit }, newPlace) {
@@ -80,7 +88,24 @@ export default {
         console.error('Ошибка обновления места:', error)
       }
     },
+    async uploadImage(_, file) {
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        console.log(file)
 
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/files/upload`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log(response)
+        return response.data.id;
+      } catch (error) {
+        console.error('Ошибка при загрузке изображения:', error);
+        throw error;
+      }
+    },
     async deletePlace({ commit }, placeId) {
       try {
         await axios.delete(`${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}`)
@@ -94,15 +119,15 @@ export default {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories`,
-          categoryData,
-        )
-        console.log(response, categoryData)
-        commit('setCategories', { placeId, categories: response.data })
+          categoryData
+        );
+        commit('addCategory', { placeId, category: response.data });
       } catch (error) {
-        console.error('Ошибка при добавлении категории:', error)
-        throw error
+        console.error('Ошибка при добавлении категории:', error);
+        throw error;
       }
     },
+
 
     async updateCategory({ dispatch }, { placeId, categoryId, categoryData }) {
       await axios.put(
@@ -120,11 +145,18 @@ export default {
     },
 
     async addMeal({ dispatch }, { placeId, categoryId, mealData }) {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories/${categoryId}/meals`,
-        mealData,
-      )
-      await dispatch('fetchMeals', { placeId, categoryId })
+      try {
+        const mealPayload = { ...mealData };
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories/${categoryId}/meals`,
+          mealPayload
+        );
+
+        await dispatch('fetchMeals', { placeId, categoryId });
+      } catch (error) {
+        console.error('Ошибка при добавлении блюда:', error);
+        throw error;
+      }
     },
 
     async updateMeal({ dispatch }, { placeId, categoryId, mealId, mealData }) {
@@ -154,7 +186,8 @@ export default {
   },
   getters: {
     allPlaces: (state) => state.places,
-    categoriesByPlace: (state) => (placeId) => state.categories[placeId] || [],
+    categoriesByPlace: (state) => (placeId) =>
+      state.categories.filter((category) => category.placeId === placeId),
     findPlace: (state) => (placeId) => state.places.find((place) => place.id === placeId) || {},
     mealsByCategory: (state) => (categoryId) => state.meals[categoryId] || [],
   },
