@@ -3,6 +3,10 @@
     <h1>Добавление команд в игру</h1>
     <p>ID игры: {{ gameId }}</p>
 
+    <button class="button activate" @click="activateGame">
+      {{ isActiveGame ? 'Игра активирована' : 'Активировать игру' }}
+    </button>
+
     <div class="add-team">
       <h2>Добавить новую команду</h2>
       <form @submit.prevent="addTeam" class="form">
@@ -17,17 +21,6 @@
             required
           />
         </div>
-        <div class="form-group">
-          <label for="tableNumber">Номер стола:</label>
-          <input
-            id="tableNumber"
-            v-model="tableNumber"
-            type="number"
-            placeholder="Введите номер стола"
-            class="input"
-            required
-          />
-        </div>
         <button class="button primary" type="submit">
           Добавить команду
         </button>
@@ -38,7 +31,7 @@
       <h2>Список команд</h2>
       <ul>
         <li v-for="team in teams" :key="team.id">
-          {{ team.name }} (Стол: {{ team.tableNumber }})
+          {{ team.name }}
         </li>
       </ul>
     </div>
@@ -46,7 +39,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 
@@ -54,7 +47,23 @@ const store = useStore()
 const route = useRoute()
 const gameId = route.params.gameId
 const teams = ref([])
+const teamName = ref('')
+const tableNumber = ref('')
 const loading = ref(false)
+
+const isActiveGame = ref(false)
+
+const activateGame = () => {
+  localStorage.setItem('activeGameId', gameId)
+  isActiveGame.value = true
+}
+
+onMounted(() => {
+  if (localStorage.getItem('activeGameId') === gameId) {
+    isActiveGame.value = true
+  }
+  fetchTeams()
+})
 
 const fetchTeams = async () => {
   try {
@@ -90,9 +99,8 @@ const addTeam = async () => {
     console.error('Ошибка добавления команды:', error)
   }
 }
-
-onMounted(fetchTeams)
 </script>
+
 
 <style scoped>
 .admin-teams {
@@ -184,5 +192,13 @@ p {
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 10px;
+}
+
+.button.activate {
+  background-color: #ffa500;
+  margin-bottom: 20px;
+}
+.button.activate:hover {
+  background-color: #ff8c00;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div class="admin-games">
     <h1>Управление играми</h1>
-
     <div class="games-list">
       <div 
         v-for="game in games" 
@@ -11,7 +10,7 @@
       >
         <h2>Игра на {{ game.plannedDate }}</h2>
         <p>ID игры: {{ game.id }}</p>
-        <p>Место: {{ findPlaceName(game.placeId) }}</p>
+        <p>Место: {{ findPlaceName(game.place.id) }}</p>
         <p>Статус: {{ game.status }}</p>
       </div>
     </div>
@@ -54,129 +53,95 @@
       </form>
     </div>
 
-    <div class="find-game">
-      <h2>Найти игру по ID</h2>
-      <form @submit.prevent="findGameById" class="form">
-        <div class="form-group">
-          <label for="gameId">ID игры:</label>
-          <input
-            id="gameId"
-            v-model="searchGameId"
-            type="text"
-            placeholder="Введите ID игры"
-            class="input"
-            required
-          />
-        </div>
-        <button
-          class="button secondary"
-          type="submit"
-          :disabled="!searchGameId"
-        >
-          Перейти к игре
-        </button>
-      </form>
-    </div>
-
     <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import Loader from '../Loader.vue';
+import Notification from '../Notification.vue';
 
-import Loader from '../Loader.vue'
-import Notification from '../Notification.vue'
+const store = useStore();
+const router = useRouter();
+const games = ref([]);
+const plannedDate = ref('');
+const selectedPlaceId = ref('');
+const places = ref([]);
+const loading = ref(false);
+const toastMessage = ref('');
+const toastType = ref('success');
 
-const store = useStore()
-const router = useRouter()
-
-const games = ref([]) 
-const plannedDate = ref('')
-const selectedPlaceId = ref('') 
-const searchGameId = ref('')
-const loading = ref(false)
-const toastMessage = ref('')
-const toastType = ref('success')
-
-const places = ref([]) 
-const isFormValid = computed(() => plannedDate.value && selectedPlaceId.value)
-
-const fetchPlaces = async () => {
-  await store.dispatch('places/fetchPlaces')
-  places.value = store.getters['places/allPlaces']
-}
+const isFormValid = computed(() => plannedDate.value && selectedPlaceId.value);
 
 const fetchGames = async () => {
   try {
-    await store.dispatch('games/fetchGames')
-    games.value = store.getters['games/allGames']
+    const response = await store.dispatch('games/fetchAllGames');
+    games.value = response;
   } catch (error) {
-    console.error('Ошибка загрузки игр:', error)
+    console.error('Ошибка загрузки игр:', error);
+    toastMessage.value = 'Ошибка загрузки игр.';
+    toastType.value = 'error';
   }
-}
+};
+
+const fetchPlaces = async () => {
+  await store.dispatch('places/fetchPlaces');
+  places.value = store.getters['places/allPlaces'];
+};
 
 const findPlaceName = (id) => {
-  const place = places.value.find((place) => place.id === id)
-  return place ? place.name : 'Неизвестное место'
-}
+  const place = places.value.find((place) => place.id === id);
+  return place ? place.name : 'Неизвестное место';
+};
 
 const addGame = async () => {
   if (isFormValid.value) {
     try {
-      loading.value = true
-      const newGame = await store.dispatch('games/createGame', {
+      loading.value = true;
+      const place = places.value.find((place) => place.id === selectedPlaceId.value);
+      const newGameRequest = {
+        id: crypto.randomUUID(),
         plannedDate: plannedDate.value,
-        placeId: selectedPlaceId.value,
-      })
+        place: {
+          id: place.id,
+          name: place.name,
+          address: place.address,
+        },
+        status: 'PLANNED',
+        teams: [], 
+      };
 
-      plannedDate.value = ''
-      selectedPlaceId.value = ''
+      const newGame = await store.dispatch('games/createGame', newGameRequest);
 
-      games.value.push(newGame)
+      plannedDate.value = '';
+      selectedPlaceId.value = '';
+      toastMessage.value = `Игра успешно добавлена! ID: ${newGame.id}`;
+      toastType.value = 'success';
 
-      toastMessage.value = `Игра успешно добавлена! ID: ${newGame.id}`
-      toastType.value = 'success'
-
-      setTimeout(() => {
-        toastMessage.value = ''
-      }, 3000)
+      await fetchGames();
     } catch (error) {
-      console.error('Ошибка добавления игры:', error)
-
-      toastMessage.value = 'Ошибка при добавлении игры.'
-      toastType.value = 'error'
-
-      setTimeout(() => {
-        toastMessage.value = ''
-      }, 3000)
+      console.error('Ошибка добавления игры:', error);
+      toastMessage.value = 'Ошибка при добавлении игры.';
+      toastType.value = 'error';
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   }
-}
+};
 
-const findGameById = async () => {
-  try {
-    loading.value = true
-    const response = await store.dispatch('games/fetchGameById', searchGameId.value) 
-    router.push({ name: 'AdminTeams', params: { gameId: response.id } })
-  } catch (error) {
-    console.error('Ошибка поиска игры:', error)
-    toastMessage.value = 'Ошибка: игра не найдена.'
-    toastType.value = 'error'
-  } finally {
-    loading.value = false
-  }
-}
+const goToGameTeams = (gameId) => {
+  router.push({ name: 'AdminTeams', params: { gameId }  });
+};
 
 onMounted(() => {
-  fetchPlaces()
-  fetchGames()
-})
+  fetchPlaces();
+  fetchGames();
+});
 </script>
+
 
 
 <style scoped>
