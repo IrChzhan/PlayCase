@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
   visible: Boolean,
   title: String,

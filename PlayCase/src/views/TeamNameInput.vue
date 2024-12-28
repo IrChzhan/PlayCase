@@ -1,28 +1,28 @@
 <template>
   <div class="container input-container">
     <h1>Введите номер стола</h1>
-    <br>
+    <br />
     <input v-model="teamTable" type="text" placeholder="Номер стола" />
     <button @click="submitTeamName">Подтвердить</button>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const store = useStore();
-const router = useRouter();
-const teamTable = ref('');
+const store = useStore()
+const router = useRouter()
+const teamTable = ref('')
 
 const submitTeamName = async () => {
   try {
-    const gameId = localStorage.getItem('activeGameId');
+    const gameId = localStorage.getItem('activeGameId')
     const response = await store.dispatch('games/getTeamByTable', {
       gameId,
       tableNumber: parseInt(teamTable.value, 10),
-    });
+    })
 
     router.push({
       name: 'TeamNameDisplay',
@@ -30,13 +30,12 @@ const submitTeamName = async () => {
         teamTable: teamTable.value,
         teamName: response?.name || 'Команда не найдена',
       },
-    });
+    })
   } catch (error) {
-    console.error('Ошибка загрузки команды:', error);
+    console.error('Ошибка загрузки команды:', error)
   }
-};
+}
 </script>
-
 
 <style scoped>
 .input-container {

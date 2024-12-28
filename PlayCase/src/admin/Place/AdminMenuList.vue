@@ -1,6 +1,6 @@
 <template>
   <div class="admin-places">
-    <h1>Categories</h1>
+    <h1>Категории</h1>
     <div class="places-list">
       <div
         @click.stop="goToMenu(category.id)"
@@ -9,7 +9,9 @@
         :key="category.id"
       >
         <h2>{{ category.name }}</h2>
-        <button class="button" @click.stop="openModalEditCategory(category.id, placeId)">Edit</button>
+        <button class="button" @click.stop="openModalEditCategory(category.id, placeId)">
+          Редактировать
+        </button>
       </div>
     </div>
   </div>
@@ -111,7 +113,6 @@ h2 {
 
 .button {
   display: block;
-  width: 100px;
   margin: 10px auto 0;
   padding: 10px;
   border: none;

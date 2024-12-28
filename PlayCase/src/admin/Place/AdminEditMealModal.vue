@@ -11,7 +11,7 @@
 
         <div class="form-group">
           <label for="price">Цена:</label>
-          <input id="price" v-model="dishPrice"  class="input" required />
+          <input id="price" v-model="dishPrice" class="input" required />
         </div>
 
         <div class="form-group">

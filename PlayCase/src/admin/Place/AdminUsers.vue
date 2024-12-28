@@ -3,20 +3,36 @@ import { onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 
 import Notification from '@/admin/Notification.vue'
+import AdminEditUser from "@/admin/Place/AdminEditUser.vue";
 
 const store = useStore()
 
 const toastMessage = ref('')
 const toastType = ref('success')
+const showModalEditUser = ref(false)
+const userId = ref('')
+const oldName = ref('')
+const oldRole = ref('')
 
 const newUser = ref({
   name: '',
   login: '',
   password: '',
-  role: 'user',
+  role: 'PLAYER',
 })
 
-const roles = ['user', 'admin', 'moderator']
+const roles = ['PLAYER', 'ADMIN', 'MANAGER']
+
+const openModalAdminUser = (userId, name, role) => {
+  showModalEditUser.value = true
+  userId.value = userId
+  oldName.value = name
+  oldRole.value = role
+}
+
+const closeModalAdminUser = () => {
+  showModalEditUser.value = false
+}
 
 const addUser = async () => {
   if (newUser.value.name.trim() && newUser.value.login.trim() && newUser.value.password.trim()) {
@@ -56,6 +72,9 @@ onMounted(() => {
         <p>Имя: {{ user.name }}</p>
         <p>Логин: {{ user.username }}</p>
         <p>Роль: {{ user.authorities[0] || 'N/A' }}</p>
+        <button @click.stop="openModalAdminUser(user.id, user.name, user.authorities[0])">
+          изменить
+        </button>
       </div>
     </div>
     <div class="add-user">
@@ -70,6 +89,13 @@ onMounted(() => {
       <button class="place-card" @click="addUser">Добавить</button>
     </div>
   </div>
+  <AdminEditUser
+    :show="showModalEditUser"
+    :closeModal="closeModalAdminUser"
+    :userId="userId"
+    :oldName="oldName"
+    :oldRole="oldRole"
+  />
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
@@ -85,6 +111,7 @@ onMounted(() => {
 .user-list {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 10px;
   width: 100%;
   max-width: 400px;
