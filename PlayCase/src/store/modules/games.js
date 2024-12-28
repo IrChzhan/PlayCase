@@ -43,6 +43,29 @@ export default {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams`, teamData)
             return response.data
         },
+
+        async updateTeamInGame({ commit }, { gameId, teamId, teamData }) {
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}`, teamData)
+            return response.data
+        },
+
+        async deleteTeamFromGame({ commit }, { gameId, teamId }) {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}`)
+        },
+
+        async setTableForTeam({ commit }, { gameId, teamId, tableNumber }) {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/team/${teamId}/setTable`, {
+                tableNumber,
+            });
+            return response.data;
+        },
+
+        async getTeamByTable({ commit }, { gameId, tableNumber }) {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/team/setTable/${tableNumber}`
+            );
+            return response.data;
+        },
     },
     getters: {
         allGames: (state) => state.games,

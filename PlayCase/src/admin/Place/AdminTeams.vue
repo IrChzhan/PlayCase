@@ -7,7 +7,7 @@
       {{ isActiveGame ? 'Игра активирована' : 'Активировать игру' }}
     </button>
 
-    <div class="add-team">
+    <div class="add-team" v-if="!editingTeam">
       <h2>Добавить новую команду</h2>
       <form @submit.prevent="addTeam" class="form">
         <div class="form-group">
@@ -27,11 +27,37 @@
       </form>
     </div>
 
+    <div class="edit-team" v-if="editingTeam">
+      <h2>Редактировать команду</h2>
+      <form @submit.prevent="updateTeam" class="form">
+        <div class="form-group">
+          <label for="editTeamName">Название команды:</label>
+          <input
+            id="editTeamName"
+            v-model="editingTeam.name"
+            type="text"
+            placeholder="Введите название команды"
+            class="input"
+            required
+          />
+        </div>
+        <button class="button primary" type="submit">
+          Сохранить изменения
+        </button>
+        <button class="button" type="button" @click="cancelEditing">
+          Отмена
+        </button>
+      </form>
+    </div>
+
     <div class="team-list">
       <h2>Список команд</h2>
       <ul>
         <li v-for="team in teams" :key="team.id">
-          {{ team.name }}
+            {{ team.name }} - Стол: {{ team.tableNumber || 'Не указан' }}
+            <button class="button" @click="startEditing(team)">Изменить</button>
+            <button class="button" @click="deleteTeam(team.id)">Удалить</button>
+            <button class="button" @click="assignTable(team)">Назначить стол</button>
         </li>
       </ul>
     </div>
@@ -39,43 +65,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
-const store = useStore()
-const route = useRoute()
-const gameId = route.params.gameId
-const teams = ref([])
-const teamName = ref('')
-const tableNumber = ref('')
-const loading = ref(false)
+const store = useStore();
+const route = useRoute();
+const gameId = route.params.gameId;
+const teams = ref([]);
+const teamName = ref('');
+const editingTeam = ref(null); // Переменная для редактирования команды
+const loading = ref(false);
 
-const isActiveGame = ref(false)
+const isActiveGame = ref(false);
 
 const activateGame = () => {
-  localStorage.setItem('activeGameId', gameId)
-  isActiveGame.value = true
-}
+  localStorage.setItem('activeGameId', gameId);
+  isActiveGame.value = true;
+};
 
 onMounted(() => {
   if (localStorage.getItem('activeGameId') === gameId) {
-    isActiveGame.value = true
+    isActiveGame.value = true;
   }
-  fetchTeams()
-})
+  fetchTeams();
+});
 
 const fetchTeams = async () => {
   try {
-    loading.value = true
-    const response = await store.dispatch('games/fetchGameTeams', gameId)
-    teams.value = response
+    loading.value = true;
+    const response = await store.dispatch('games/fetchGameTeams', gameId);
+    teams.value = response;
   } catch (error) {
-    console.error('Ошибка загрузки команд:', error)
+    console.error('Ошибка загрузки команд:', error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const addTeam = async () => {
   try {
@@ -83,7 +109,6 @@ const addTeam = async () => {
       gameId,
       teamData: {
         name: teamName.value,
-        tableNumber: parseInt(tableNumber.value, 10),
         participantsCount: 0,
         isFirstTime: true,
         isPrepaid: true,
@@ -91,16 +116,61 @@ const addTeam = async () => {
         promocode: '',
         markComment: '',
       },
-    })
-    teams.value.push(newTeam)
-    teamName.value = ''
-    tableNumber.value = ''
+    });
+    teams.value.push(newTeam);
+    teamName.value = '';
   } catch (error) {
-    console.error('Ошибка добавления команды:', error)
+    console.error('Ошибка добавления команды:', error);
   }
-}
-</script>
+};
 
+const startEditing = (team) => {
+  editingTeam.value = { ...team }; // Копируем объект для редактирования
+};
+
+const cancelEditing = () => {
+  editingTeam.value = null; // Сбросить режим редактирования
+};
+
+const updateTeam = async () => {
+  try {
+    await store.dispatch('games/updateTeamInGame', {
+      gameId,
+      teamId: editingTeam.value.id,
+      teamData: editingTeam.value,
+    });
+    await fetchTeams(); // Обновляем список команд
+    editingTeam.value = null; // Завершаем редактирование
+  } catch (error) {
+    console.error('Ошибка обновления команды:', error);
+  }
+};
+
+const deleteTeam = async (teamId) => {
+  try {
+    await store.dispatch('games/deleteTeamFromGame', { gameId, teamId });
+    teams.value = teams.value.filter((team) => team.id !== teamId);
+  } catch (error) {
+    console.error('Ошибка удаления команды:', error);
+  }
+};
+
+const assignTable = async (team) => {
+  const tableNumber = prompt('Введите номер стола:', team.tableNumber || '');
+  if (!tableNumber) return;
+
+  try {
+    await store.dispatch('games/setTableForTeam', {
+      gameId,
+      teamId: team.id,
+      tableNumber: parseInt(tableNumber, 10), // Приводим к числу
+    });
+    team.tableNumber = tableNumber; // Локально обновляем данные
+  } catch (error) {
+    console.error('Ошибка установки стола:', error);
+  }
+};
+</script>
 
 <style scoped>
 .admin-teams {
@@ -123,7 +193,8 @@ p {
     margin-bottom: 15px;
 }
 
-.add-team {
+.add-team,
+.edit-team {
     max-width: 400px;
     margin: 0 auto 20px;
 }
@@ -192,6 +263,9 @@ p {
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .button.activate {

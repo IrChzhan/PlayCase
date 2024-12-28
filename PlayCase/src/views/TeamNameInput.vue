@@ -8,28 +8,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-const teamTable = ref('')
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
+const teamTable = ref('');
 
 const submitTeamName = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/teams?tableNumber=${teamTable.value}`)
+    const gameId = localStorage.getItem('activeGameId');
+    const response = await store.dispatch('games/getTeamByTable', {
+      gameId,
+      tableNumber: parseInt(teamTable.value, 10),
+    });
+
     router.push({
       name: 'TeamNameDisplay',
       params: {
         teamTable: teamTable.value,
-        teamName: response.data.name,
+        teamName: response?.name || 'Команда не найдена',
       },
-    })
+    });
   } catch (error) {
-    console.error('Ошибка загрузки команды:', error)
+    console.error('Ошибка загрузки команды:', error);
   }
-}
+};
 </script>
+
 
 <style scoped>
 .input-container {
