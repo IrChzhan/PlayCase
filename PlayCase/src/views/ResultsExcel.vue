@@ -8,21 +8,21 @@
     </div>
     <div v-else>
       <table>
-          <thead>
-              <tr>
-                  <th>ID</th>
-                  <th>Название</th>
-                  <th>Номер стола</th>
-                  <th>Игровая отметка</th>
-                  <th>Количество участников</th>
-              </tr>
-          </thead>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Номер стола</th>
+            <th>Игровая отметка</th>
+            <th>Количество участников</th>
+          </tr>
+        </thead>
         <tbody>
           <tr v-for="team in teams" :key="team.id">
             <td>{{ team.id }}</td>
             <td>{{ team.name }}</td>
             <td>{{ team.tableNumber }}</td>
-              <td>{{ team.gameMark }}</td>
+            <td>{{ team.gameMark }}</td>
             <td>{{ team.participantsCount }}</td>
           </tr>
         </tbody>
@@ -33,32 +33,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import axios from 'axios'
+import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-const router = useRouter();
-const route = useRoute();
-const gameId = route.params.gameId;
-const teams = ref([]);
-
+const router = useRouter()
+const route = useRoute()
+const gameId = route.params.gameId
+const teams = ref([])
 
 onMounted(async () => {
   try {
-    const response = await axios.put(
-      `http://localhost:8080/admin/v1/games/${gameId}/teams/results`
-    );
-      console.log(response.data);
-      teams.value = response.data;
-
+    const response = await axios.put(`http://localhost:8080/admin/v1/games/${gameId}/teams/results`)
+    console.log(response.data)
+    teams.value = response.data
   } catch (error) {
-    console.error('Error fetching teams:', error);
+    console.error('Error fetching teams:', error)
   }
-});
+})
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: "dada", teamTable: "dadasd"} });
-};
+  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
+}
 </script>
 
 <style scoped>
@@ -86,29 +82,30 @@ const goToMenuApp = () => {
 }
 
 table {
-    border-collapse: collapse;
-    width: 90%;
-    margin: 20px 0;
-    font-family: 'Mulish', sans-serif;
+  border-collapse: collapse;
+  width: 90%;
+  margin: 20px 0;
+  font-family: 'Mulish', sans-serif;
 }
 
-th, td {
-    border: 1px solid #ffd700;
-    padding: 8px;
-    text-align: left;
+th,
+td {
+  border: 1px solid #ffd700;
+  padding: 8px;
+  text-align: left;
 }
 
 th {
-    background-color: #3A4C6E;
-    color: white;
+  background-color: #3a4c6e;
+  color: white;
 }
-  .home-button {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    bottom: 20px;
-    cursor: pointer;
-  }
+.home-button {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  bottom: 20px;
+  cursor: pointer;
+}
 
 .results-excel-page::before,
 .results-excel-page::after {

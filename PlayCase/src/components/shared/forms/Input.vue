@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { defineProps, defineEmits } from 'vue';
+import { computed, onMounted, ref } from 'vue'
+import { defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -39,31 +39,29 @@ const props = defineProps({
   },
   width: {
     type: String,
-    default: "auto"
+    default: 'auto',
   },
   disabled: {
-      type: Boolean,
-      default: false,
+    type: Boolean,
+    default: false,
   },
   errorMessage: {
-      type: String,
-      default: '',
-  }
-});
+    type: String,
+    default: '',
+  },
+})
 
+const emit = defineEmits(['update:modelValue', 'blur'])
 
-const emit = defineEmits(['update:modelValue', 'blur']);
-
-const inputId = computed(() => `input-${Math.random().toString(36).substring(2, 15)}`);
+const inputId = computed(() => `input-${Math.random().toString(36).substring(2, 15)}`)
 
 const onInput = (event) => {
-  emit('update:modelValue', event.target.value);
-};
-
-const onBlur = () => {
-    emit('blur');
+  emit('update:modelValue', event.target.value)
 }
 
+const onBlur = () => {
+  emit('blur')
+}
 </script>
 
 <style scoped>

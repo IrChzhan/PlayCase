@@ -107,7 +107,13 @@ const menuItems = ref([
   { name: 'Оплата', image: cashImage, function: openModalPay },
   { name: 'Хелп', image: helpImage, function: () => {} },
   { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
-  { name: 'Регистрация лотереи', image: manImage, function: () => {router.push({name: 'RegistrateUsers'})} },
+  {
+    name: 'Регистрация лотереи',
+    image: manImage,
+    function: () => {
+      router.push({ name: 'RegistrateUsers' })
+    },
+  },
 ])
 </script>
 

@@ -2,7 +2,7 @@
   <div class="register-users-page">
     <div class="close-button" @click="goToMenuApp">✖️</div>
     <h1>Зарегистрированные пользователи</h1>
-    <br>
+    <br />
     <div v-if="!registeredUsers || registeredUsers.length === 0">
       <p>Пока никто не зарегистрировался в лотерее.</p>
     </div>
@@ -19,20 +19,21 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
-import router from '@/router';
-import { useStore } from 'vuex';
+import { computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
-const store = useStore();
-const registeredUsers = computed(() => store.getters['lottery/registeredUsers']);
+import router from '@/router'
+
+const store = useStore()
+const registeredUsers = computed(() => store.getters['lottery/registeredUsers'])
 
 onMounted(() => {
-     console.log('RegisterUsers - Initial Registered Users:', registeredUsers.value);
-});
+  console.log('RegisterUsers - Initial Registered Users:', registeredUsers.value)
+})
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } });
-};
+  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
+}
 </script>
 <style scoped>
 .register-users-page {
@@ -95,8 +96,8 @@ const goToMenuApp = () => {
 
 @media (min-width: 768px) and (max-width: 1024px) {
   .register-users-page::before {
-  width: 1050px;
-  height: 1050px;
+    width: 1050px;
+    height: 1050px;
   }
 }
 </style>

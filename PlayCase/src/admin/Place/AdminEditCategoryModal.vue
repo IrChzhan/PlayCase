@@ -43,11 +43,11 @@
 </template>
 
 <script setup>
-import Notification from '@/admin/Notification.vue'
-
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+
+import Notification from '@/admin/Notification.vue'
 
 import ConfirmDialog from '../ConfirmDialog.vue'
 import Loader from '../Loader.vue'
@@ -56,7 +56,7 @@ defineProps({
   show: Boolean,
   closeModal: Function,
   categoryId: String,
-  placeIdF: String
+  placeIdF: String,
 })
 
 const store = useStore()
@@ -85,7 +85,7 @@ const showUpdateDialog = (categoryId, placeIdF) => () => {
   showDialog.value = true
 }
 
-const showDeleteDialog = (categoryId, placeIdF) => ()  => {
+const showDeleteDialog = (categoryId, placeIdF) => () => {
   dialogTitle.value = 'Подтверждение удаления'
   dialogMessage.value = 'Вы уверены, что хотите удалить эту категорию?'
   categoryIdR.value = categoryId
@@ -125,10 +125,13 @@ const updateCategory = async () => {
   }
 }
 
-const deleteCategory =  async () => {
+const deleteCategory = async () => {
   try {
     loading.value = true
-      await store.dispatch('places/deleteCategory', { placeId: placeId.value, categoryId: categoryIdR.value })
+    await store.dispatch('places/deleteCategory', {
+      placeId: placeId.value,
+      categoryId: categoryIdR.value,
+    })
     toastMessage.value = 'Категория удалена!'
     toastType.value = 'success'
   } catch (error) {
@@ -140,7 +143,6 @@ const deleteCategory =  async () => {
     setTimeout(() => (toastMessage.value = ''), 3000)
   }
 }
-
 </script>
 
 <style scoped>
@@ -161,6 +163,8 @@ const deleteCategory =  async () => {
 
 .container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   background: #ffffff;
   padding: 20px;

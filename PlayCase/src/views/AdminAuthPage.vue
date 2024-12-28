@@ -1,33 +1,34 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import Notification from "@/admin/Notification.vue";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const login = ref({ username: '', password: '' });
-const toastMessage = ref('');
-const toastType = ref('success');
+import Notification from '@/admin/Notification.vue'
 
-const store = useStore();
-const router = useRouter();
+const login = ref({ username: '', password: '' })
+const toastMessage = ref('')
+const toastType = ref('success')
+
+const store = useStore()
+const router = useRouter()
 
 const handleLogin = async () => {
-  const success = await store.dispatch('profile/login', login.value);
+  const success = await store.dispatch('profile/login', login.value)
   if (success) {
-    toastMessage.value = 'Авторизация успешна!';
-    toastType.value = 'success';
-    router.push({ name: 'AdminHome' });
+    toastMessage.value = 'Авторизация успешна!'
+    toastType.value = 'success'
+    router.push({ name: 'AdminHome' })
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   } else {
-    toastMessage.value = 'Ошибка авторизации. Проверьте логин и пароль.';
-    toastType.value = 'error';
+    toastMessage.value = 'Ошибка авторизации. Проверьте логин и пароль.'
+    toastType.value = 'error'
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   }
-};
+}
 </script>
 
 <template>

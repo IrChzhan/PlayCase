@@ -8,8 +8,8 @@
           <h1 class="main-heading">Примите участие<br />в нашей лотерее</h1>
           <form @submit.prevent="submitForm">
             <div v-if="emailError || phoneError" class="error-section">
-                <p v-if="emailError" class="error-message">{{ emailError }}</p>
-                <p v-if="phoneError" class="error-message">{{ phoneError }}</p>
+              <p v-if="emailError" class="error-message">{{ emailError }}</p>
+              <p v-if="phoneError" class="error-message">{{ phoneError }}</p>
             </div>
             <Input v-model:modelValue="formData.name" text="Ваше имя" width="auto" />
             <Input v-model:modelValue="formData.email" text="Ваша электронная почта" width="auto" />
@@ -50,62 +50,62 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
-import Input from '@/components/shared/forms/Input.vue';
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+
+import Input from '@/components/shared/forms/Input.vue'
 
 defineProps({
   show: Boolean,
   closeModal: Function,
-});
+})
 
-const store = useStore();
+const store = useStore()
 
 const formData = ref({
   name: '',
   email: '',
   phone: '',
   agree: false,
-});
+})
 
-const emailError = ref('');
-const phoneError = ref('');
+const emailError = ref('')
+const phoneError = ref('')
 
 const submitForm = async () => {
-  emailError.value = '';
-  phoneError.value = '';
+  emailError.value = ''
+  phoneError.value = ''
 
   if (!formData.value.agree) {
-    alert('Вы должны согласиться с политикой обработки персональных данных.');
-    return;
+    alert('Вы должны согласиться с политикой обработки персональных данных.')
+    return
   }
 
   const newUser = {
     name: formData.value.name.trim(),
     email: formData.value.email.trim(),
     phone: formData.value.phone.trim(),
-  };
+  }
 
   try {
-    await store.dispatch('lottery/addUser', newUser);
+    await store.dispatch('lottery/addUser', newUser)
 
-    formData.value.name = '';
-    formData.value.email = '';
-    formData.value.phone = '';
-    formData.value.agree = false;
-    alert('Спасибо за участие в лотерее!');
-    closeModal();
+    formData.value.name = ''
+    formData.value.email = ''
+    formData.value.phone = ''
+    formData.value.agree = false
+    alert('Спасибо за участие в лотерее!')
+    closeModal()
   } catch (error) {
-    if (error === "User with this email or phone number already exists") {
-      emailError.value = "Пользователь с таким email уже существует";
-      phoneError.value = "Пользователь с таким номером телефона уже существует";
+    if (error === 'User with this email or phone number already exists') {
+      emailError.value = 'Пользователь с таким email уже существует'
+      phoneError.value = 'Пользователь с таким номером телефона уже существует'
     } else {
-      alert('Произошла ошибка во время регистрации');
+      alert('Произошла ошибка во время регистрации')
     }
   }
-};
+}
 </script>
-
 
 <style scoped>
 .modal-overlay {

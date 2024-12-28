@@ -2,12 +2,7 @@
   <div class="admin-games">
     <h1>Управление играми</h1>
     <div class="games-list">
-      <div 
-        v-for="game in games" 
-        :key="game.id" 
-        class="game-card" 
-        @click="goToGameTeams(game.id)"
-      >
+      <div v-for="game in games" :key="game.id" class="game-card" @click="goToGameTeams(game.id)">
         <h2>Игра на {{ game.plannedDate }}</h2>
         <p>ID игры: {{ game.id }}</p>
         <p>Место: {{ findPlaceName(game.place.id) }}</p>
@@ -20,22 +15,11 @@
       <form @submit.prevent="addGame" class="form">
         <div class="form-group">
           <label for="plannedDate">Дата проведения:</label>
-          <input
-            id="plannedDate"
-            v-model="plannedDate"
-            type="date"
-            class="input"
-            required
-          />
+          <input id="plannedDate" v-model="plannedDate" type="date" class="input" required />
         </div>
         <div class="form-group">
           <label for="placeId">Выберите место:</label>
-          <select
-            id="placeId"
-            v-model="selectedPlaceId"
-            class="input"
-            required
-          >
+          <select id="placeId" v-model="selectedPlaceId" class="input" required>
             <option value="" disabled>Выберите место</option>
             <option v-for="place in places" :key="place.id" :value="place.id">
               {{ place.name }}
@@ -58,50 +42,51 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import Loader from '../Loader.vue';
-import Notification from '../Notification.vue';
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const store = useStore();
-const router = useRouter();
-const games = ref([]);
-const plannedDate = ref('');
-const selectedPlaceId = ref('');
-const places = ref([]);
-const loading = ref(false);
-const toastMessage = ref('');
-const toastType = ref('success');
+import Loader from '../Loader.vue'
+import Notification from '../Notification.vue'
 
-const isFormValid = computed(() => plannedDate.value && selectedPlaceId.value);
+const store = useStore()
+const router = useRouter()
+const games = ref([])
+const plannedDate = ref('')
+const selectedPlaceId = ref('')
+const places = ref([])
+const loading = ref(false)
+const toastMessage = ref('')
+const toastType = ref('success')
+
+const isFormValid = computed(() => plannedDate.value && selectedPlaceId.value)
 
 const fetchGames = async () => {
   try {
-    const response = await store.dispatch('games/fetchAllGames');
-    games.value = response;
+    const response = await store.dispatch('games/fetchAllGames')
+    games.value = response
   } catch (error) {
-    console.error('Ошибка загрузки игр:', error);
-    toastMessage.value = 'Ошибка загрузки игр.';
-    toastType.value = 'error';
+    console.error('Ошибка загрузки игр:', error)
+    toastMessage.value = 'Ошибка загрузки игр.'
+    toastType.value = 'error'
   }
-};
+}
 
 const fetchPlaces = async () => {
-  await store.dispatch('places/fetchPlaces');
-  places.value = store.getters['places/allPlaces'];
-};
+  await store.dispatch('places/fetchPlaces')
+  places.value = store.getters['places/allPlaces']
+}
 
 const findPlaceName = (id) => {
-  const place = places.value.find((place) => place.id === id);
-  return place ? place.name : 'Неизвестное место';
-};
+  const place = places.value.find((place) => place.id === id)
+  return place ? place.name : 'Неизвестное место'
+}
 
 const addGame = async () => {
   if (isFormValid.value) {
     try {
-      loading.value = true;
-      const place = places.value.find((place) => place.id === selectedPlaceId.value);
+      loading.value = true
+      const place = places.value.find((place) => place.id === selectedPlaceId.value)
       const newGameRequest = {
         id: crypto.randomUUID(),
         plannedDate: plannedDate.value,
@@ -111,38 +96,36 @@ const addGame = async () => {
           address: place.address,
         },
         status: 'PLANNED',
-        teams: [], 
-      };
+        teams: [],
+      }
 
-      const newGame = await store.dispatch('games/createGame', newGameRequest);
+      const newGame = await store.dispatch('games/createGame', newGameRequest)
 
-      plannedDate.value = '';
-      selectedPlaceId.value = '';
-      toastMessage.value = `Игра успешно добавлена! ID: ${newGame.id}`;
-      toastType.value = 'success';
+      plannedDate.value = ''
+      selectedPlaceId.value = ''
+      toastMessage.value = `Игра успешно добавлена! ID: ${newGame.id}`
+      toastType.value = 'success'
 
-      await fetchGames();
+      await fetchGames()
     } catch (error) {
-      console.error('Ошибка добавления игры:', error);
-      toastMessage.value = 'Ошибка при добавлении игры.';
-      toastType.value = 'error';
+      console.error('Ошибка добавления игры:', error)
+      toastMessage.value = 'Ошибка при добавлении игры.'
+      toastType.value = 'error'
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
-};
+}
 
 const goToGameTeams = (gameId) => {
-  router.push({ name: 'AdminTeams', params: { gameId }  });
-};
+  router.push({ name: 'AdminTeams', params: { gameId } })
+}
 
 onMounted(() => {
-  fetchPlaces();
-  fetchGames();
-});
+  fetchPlaces()
+  fetchGames()
+})
 </script>
-
-
 
 <style scoped>
 .admin-games {
@@ -173,7 +156,9 @@ h2 {
   border-radius: 8px;
   padding: 20px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .game-card:hover {

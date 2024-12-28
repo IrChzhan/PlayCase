@@ -10,12 +10,12 @@ const goToUsers = () => {
 }
 
 const goToResults = () => {
-  router.push({ name: 'AdminResults' });
-};
+  router.push({ name: 'AdminResults' })
+}
 
 const goToGames = () => {
-  router.push({ name: 'AdminGames' });
-};
+  router.push({ name: 'AdminGames' })
+}
 </script>
 
 <template>

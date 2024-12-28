@@ -1,23 +1,25 @@
 <template>
   <div class="container input-container">
     <h1>Введите номер стола</h1>
-    <br>
+    <br />
     <input v-model="teamTable" type="text" placeholder="Номер стола" />
     <button @click="submitTeamName">Подтвердить</button>
   </div>
 </template>
 
 <script setup>
+import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 
 const teamTable = ref('')
 const router = useRouter()
 
 const submitTeamName = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/teams?tableNumber=${teamTable.value}`)
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/teams?tableNumber=${teamTable.value}`,
+    )
     router.push({
       name: 'TeamNameDisplay',
       params: {

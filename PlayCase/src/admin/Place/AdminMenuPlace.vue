@@ -3,13 +3,10 @@
     <h1>Меню заведений</h1>
 
     <div class="meals-list">
-      <div
-        class="meal-card"
-        v-for="meal in meals"
-        :key="meal.id"
-      >
-        <img :src="meal.image" alt="Фото блюда" class="meal-image" />
+      <div class="meal-card" v-for="meal in meals" :key="meal.id">
+        <img :src="meal.fileUrl" alt="Фото блюда" class="meal-image" />
         <h2>{{ meal.name }}</h2>
+        <p>{{ meal.price }}</p>
         <p>{{ meal.description }}</p>
         <button class="button" @click="openEditModal(meal.id)">Редактировать</button>
       </div>
@@ -19,66 +16,63 @@
 
     <AdminEditMealModal
       :show="showEditModal"
-      :mealId="editingMealId"
+      :dishId="editingMealId"
       :closeModal="closeEditModal"
     />
 
-    <AdminAddMealModal
-      :show="showAddModal"
-      :closeModal="closeAddModal"
-    />
+    <AdminAddMealModal :show="showAddModal" :closeModal="closeAddModal" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useStore } from "vuex";
-import AdminEditMealModal from "./AdminEditMealModal.vue";
-import AdminAddMealModal from "./AdminAddMealModal.vue";
-import {useRoute} from "vue-router";
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
+import AdminAddMealModal from './AdminAddMealModal.vue'
+import AdminEditMealModal from './AdminEditMealModal.vue'
 
-const route = useRoute();
-const store = useStore();
-const showEditModal = ref(false);
-const showAddModal = ref(false);
-const editingMealId = ref(null);
+const route = useRoute()
+const store = useStore()
+const showEditModal = ref(false)
+const showAddModal = ref(false)
+const editingMealId = ref(null)
 const placeId = route.params.id
 const categoryId = route.params.categoryId
 
-const meals = computed(() => store.getters["places/mealsByCategory"](categoryId));
+const meals = computed(() => store.getters['places/mealsByCategory'](categoryId))
 
 const fetchMeals = async () => {
-  await store.dispatch("places/fetchMeals", {placeId: placeId, categoryId: categoryId});
-};
+  await store.dispatch('places/fetchMeals', { placeId: placeId, categoryId: categoryId })
+}
 
 const openEditModal = (mealId) => {
-  editingMealId.value = mealId;
-  showEditModal.value = true;
-};
+  editingMealId.value = mealId
+  showEditModal.value = true
+}
 
 const closeEditModal = () => {
-  showEditModal.value = false;
-  editingMealId.value = null;
-};
+  showEditModal.value = false
+  editingMealId.value = null
+}
 
 const openAddModal = () => {
-  showAddModal.value = true;
-};
+  showAddModal.value = true
+}
 
 const closeAddModal = () => {
-  showAddModal.value = false;
-};
+  showAddModal.value = false
+}
 
 onMounted(() => {
-  fetchMeals();
-});
+  fetchMeals()
+})
 </script>
 
 <style scoped>
 .menu {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   background-color: #1b2a46;
   color: white;
   padding: 20px;
@@ -95,6 +89,7 @@ h1 {
 
 .meals-list {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
@@ -107,7 +102,9 @@ h1 {
   padding: 20px;
   width: 300px;
   text-align: center;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .meal-card:hover {
@@ -150,6 +147,8 @@ h1 {
 }
 
 .add-button {
+  margin: 0 auto;
+  max-width: 300px;
   margin-top: 50px;
   background-color: #008cba;
 }

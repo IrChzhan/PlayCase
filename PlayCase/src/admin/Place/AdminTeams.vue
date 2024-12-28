@@ -21,9 +21,7 @@
             required
           />
         </div>
-        <button class="button primary" type="submit">
-          Добавить команду
-        </button>
+        <button class="button primary" type="submit">Добавить команду</button>
       </form>
     </div>
 
@@ -39,9 +37,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 const store = useStore()
 const route = useRoute()
@@ -101,97 +99,96 @@ const addTeam = async () => {
 }
 </script>
 
-
 <style scoped>
 .admin-teams {
-    background-color: #1b2a46;
-    color: white;
-    padding: 20px;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
+  background-color: #1b2a46;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
 }
 
 h1,
 h2 {
-    margin-bottom: 20px;
-    color: #ffffff;
-    text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-align: center;
 }
 
 p {
-    text-align: center;
-    margin-bottom: 15px;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .add-team {
-    max-width: 400px;
-    margin: 0 auto 20px;
+  max-width: 400px;
+  margin: 0 auto 20px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .label {
-    display: block;
-    margin-bottom: 5px;
-    color: #c5c5c5;
+  display: block;
+  margin-bottom: 5px;
+  color: #c5c5c5;
 }
 
 .input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #394a6a;
-    border-radius: 5px;
-    background: #27364f;
-    color: white;
-    font-size: 14px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #394a6a;
+  border-radius: 5px;
+  background: #27364f;
+  color: white;
+  font-size: 14px;
 }
 
 .input:focus {
-    border-color: #4caf50;
-    outline: none;
+  border-color: #4caf50;
+  outline: none;
 }
 
 .button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background: #4caf50;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 .button:hover {
-    background: #45a049;
+  background: #45a049;
 }
 .button:disabled {
-    background: #666;
-    cursor: not-allowed;
+  background: #666;
+  cursor: not-allowed;
 }
 
 .button.disabled {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 .team-list {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .team-list ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 .team-list li {
-    background: #27364f;
-    border: 1px solid #394a6a;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 10px;
+  background: #27364f;
+  border: 1px solid #394a6a;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
 }
 
 .button.activate {

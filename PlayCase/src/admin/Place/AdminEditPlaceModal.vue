@@ -57,9 +57,9 @@ defineProps({
   closeModal: Function,
 })
 
-import {computed, onMounted, ref} from 'vue'
-import {useRoute} from 'vue-router'
-import {useStore} from 'vuex'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 import ConfirmDialog from '../ConfirmDialog.vue'
 import Loader from '../Loader.vue'
@@ -188,6 +188,8 @@ onMounted(fetchPlace)
 
 .container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   background: #ffffff;
   padding: 20px;
@@ -205,6 +207,8 @@ h1 {
 }
 
 .form {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 20px;
 }
 

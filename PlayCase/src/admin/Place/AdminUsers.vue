@@ -26,24 +26,24 @@ const addUser = async () => {
         username: newUser.value.login,
         password: newUser.value.password,
         authorities: [{ authority: newUser.value.role }],
-      };
-      await store.dispatch('profile/addUser', payload);
-      newUser.value = { name: '', login: '', password: '', role: 'user' };
-      toastMessage.value = 'Пользователь успешно добавлен!';
-      toastType.value = 'success';
+      }
+      await store.dispatch('profile/addUser', payload)
+      newUser.value = { name: '', login: '', password: '', role: 'user' }
+      toastMessage.value = 'Пользователь успешно добавлен!'
+      toastType.value = 'success'
       setTimeout(() => {
-        toastMessage.value = '';
-      }, 3000);
+        toastMessage.value = ''
+      }, 3000)
     } catch (error) {
-      console.error('Ошибка при добавлении пользователя:', error);
-      toastMessage.value = 'Произошла ошибка при добавлении пользователя!';
-      toastType.value = 'error';
+      console.error('Ошибка при добавлении пользователя:', error)
+      toastMessage.value = 'Произошла ошибка при добавлении пользователя!'
+      toastType.value = 'error'
       setTimeout(() => {
-        toastMessage.value = '';
-      }, 3000);
+        toastMessage.value = ''
+      }, 3000)
     }
   }
-};
+}
 onMounted(() => {
   store.dispatch('profile/fetchUsers')
 })

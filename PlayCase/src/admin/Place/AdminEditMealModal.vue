@@ -11,17 +11,23 @@
 
         <div class="form-group">
           <label for="price">Цена:</label>
-          <input id="price" v-model="dishPrice" type="number" class="input" required />
+          <input id="price" v-model="dishPrice"  class="input" required />
         </div>
 
         <div class="form-group">
           <label for="description">Описание:</label>
-          <textarea id="description" v-model="dishDescription" class="input" rows="3" required></textarea>
+          <textarea
+            id="description"
+            v-model="dishDescription"
+            class="input"
+            rows="3"
+            required
+          ></textarea>
         </div>
 
         <div class="form-group">
           <label for="file">Изображение:</label>
-          <input id="file" type="file" @change="onFileChange" class="input" />
+          <input id="file" type="file" @change="handleFileUpload" class="input" />
         </div>
 
         <button
@@ -59,11 +65,11 @@
 </template>
 
 <script setup>
-import Notification from '@/admin/Notification.vue'
-
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+
+import Notification from '@/admin/Notification.vue'
 
 import ConfirmDialog from '../ConfirmDialog.vue'
 import Loader from '../Loader.vue'
@@ -72,11 +78,11 @@ defineProps({
   show: Boolean,
   closeModal: Function,
   dishId: String,
-  restaurantIdF: String
+  restaurantIdF: String,
 })
 
-const store = useStore()
 const route = useRoute()
+const store = useStore()
 
 const loading = ref(false)
 const dishName = ref('')
@@ -92,15 +98,13 @@ const toastType = ref('success')
 let dialogAction = null
 const restaurantId = ref('')
 const dishIdR = ref('')
+const mealFile = ref(null)
+const imageId = ref(null)
 
-const hasChanges = computed(() => dishName.value !== oldName.value || dishPrice.value || dishDescription.value || dishImage.value)
-
-const onFileChange = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    dishImage.value = file
-  }
-}
+const hasChanges = computed(
+  () =>
+    dishName.value !== oldName.value || dishPrice.value || dishDescription.value || dishImage.value,
+)
 
 const showUpdateDialog = (dishId, restaurantIdF) => () => {
   dialogTitle.value = 'Подтверждение обновления'
@@ -111,7 +115,7 @@ const showUpdateDialog = (dishId, restaurantIdF) => () => {
   showDialog.value = true
 }
 
-const showDeleteDialog = (dishId, restaurantIdF) => ()  => {
+const showDeleteDialog = (dishId, restaurantIdF) => () => {
   dialogTitle.value = 'Подтверждение удаления'
   dialogMessage.value = 'Вы уверены, что хотите удалить это блюдо?'
   dishIdR.value = dishId
@@ -131,22 +135,45 @@ const handleCancel = () => {
   showDialog.value = false
 }
 
-const updateDish = async () => {
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  mealFile.value = file
   try {
     loading.value = true
-    const formData = new FormData()
-    formData.append('name', dishName.value)
-    formData.append('price', dishPrice.value)
-    formData.append('description', dishDescription.value)
-    if (dishImage.value) {
-      formData.append('image', dishImage.value)
-    }
+    const response = await store.dispatch('places/uploadImage', file)
+    imageId.value = response
+    console.log(response, imageId.value)
+    toastMessage.value = 'Изображение успешно загружено!'
+    toastType.value = 'success'
+  } catch (error) {
+    console.error('Ошибка загрузки изображения:', error)
+    toastMessage.value = 'Ошибка загрузки изображения.'
+    toastType.value = 'error'
+  } finally {
+    loading.value = false
+    setTimeout(() => {
+      toastMessage.value = ''
+    }, 3000)
+  }
+}
 
-    await store.dispatch('dishes/updateDish', {
-      restaurantId: restaurantId.value,
-      dishId: dishIdR.value,
-      dishData: formData
+const updateDish = async () => {
+  try {
+    console.log(dishIdR, dishIdR.value)
+    loading.value = true
+    await store.dispatch('places/updateMeal', {
+      placeId: route.params.id,
+      categoryId: route.params.categoryId,
+      mealId: dishIdR.value,
+      mealData: {
+        name: dishName.value,
+        price: dishPrice.value,
+        description: dishDescription.value,
+        fileId: imageId.value,
+      },
     })
+
     toastMessage.value = 'Блюдо успешно обновлено!'
     toastType.value = 'success'
   } catch (error) {
@@ -162,7 +189,11 @@ const updateDish = async () => {
 const deleteDish = async () => {
   try {
     loading.value = true
-    await store.dispatch('dishes/deleteDish', { restaurantId: restaurantId.value, dishId: dishIdR.value })
+    await store.dispatch('places/deleteMeal', {
+      placeId: route.params.id,
+      categoryId: route.params.categoryId,
+      mealId: dishIdR.value,
+    })
     toastMessage.value = 'Блюдо удалено!'
     toastType.value = 'success'
   } catch (error) {
@@ -194,6 +225,8 @@ const deleteDish = async () => {
 
 .container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   background: #ffffff;
   padding: 20px;

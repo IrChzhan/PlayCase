@@ -2,13 +2,14 @@
   <div class="admin-places">
     <h1>Categories</h1>
     <div class="places-list">
-      <div @click="goToMenu(category.id)"
+      <div
+        @click.stop="goToMenu(category.id)"
         class="place-card"
         v-for="category in categories"
         :key="category.id"
       >
         <h2>{{ category.name }}</h2>
-        <button class="button" @click="openModalEditCategory(category.id, placeId)">Edit</button>
+        <button class="button" @click.stop="openModalEditCategory(category.id, placeId)">Edit</button>
       </div>
     </div>
   </div>
@@ -16,20 +17,21 @@
     :show="showModalAdminEditCategory"
     :closeModal="closeModalEditCategory"
     :categoryId="categoryId"
-    :placeIdF = "placeIdForEdit"
+    :placeIdF="placeIdForEdit"
   />
 </template>
 
 <script setup>
-import { useStore } from "vuex";
-import {onMounted, computed, ref} from "vue";
-import { useRoute } from "vue-router";
-import router from "@/router/index.js";
-import AdminEditCategoryModal from "@/admin/Place/AdminEditCategoryModal.vue";
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
-const route = useRoute();
-const store = useStore();
-const placeId = route.params.id;
+import AdminEditCategoryModal from '@/admin/Place/AdminEditCategoryModal.vue'
+import router from '@/router/index.js'
+
+const route = useRoute()
+const store = useStore()
+const placeId = route.params.id
 const showModalAdminEditCategory = ref(false)
 const categoryId = ref('')
 const placeIdForEdit = ref('')
@@ -45,18 +47,18 @@ const closeModalEditCategory = () => {
   categoryId.value = ''
 }
 
-const categories = computed(() => store.getters["places/categoriesByPlace"](placeId));
+const categories = computed(() => store.getters['places/categoriesByPlace'](placeId))
 
 const fetchCategories = () => {
-  store.dispatch("places/fetchCategories", placeId);
-};
+  store.dispatch('places/fetchCategories', placeId)
+}
 
 const goToMenu = (category) => {
-  router.push(`/admin/place/${placeId}/category/${category}`);
+  router.push(`/admin/place/${placeId}/category/${category}`)
 }
 onMounted(() => {
-  fetchCategories();
-});
+  fetchCategories()
+})
 </script>
 
 <style scoped>
@@ -90,7 +92,9 @@ h2 {
   border-radius: 8px;
   padding: 20px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .place-card:hover {

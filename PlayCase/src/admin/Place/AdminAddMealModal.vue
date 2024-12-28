@@ -13,7 +13,12 @@
         </div>
         <div class="form-group">
           <label for="mealDescription">Описание блюда:</label>
-          <textarea id="mealDescription" v-model="mealDescription" class="input textarea-readonly" rows="4"></textarea>
+          <textarea
+            id="mealDescription"
+            v-model="mealDescription"
+            class="input textarea-readonly"
+            rows="4"
+          ></textarea>
         </div>
         <div class="form-group">
           <label for="mealImage">Загрузить изображение:</label>
@@ -21,7 +26,7 @@
         </div>
         <button
           type="submit"
-          class="button primary"
+          class="button primary btn-add"
           :disabled="loading || !mealName || !mealPrice || !mealFile"
           :class="{ disabled: loading || !mealName || !mealPrice || !mealFile }"
         >
@@ -68,7 +73,7 @@ const handleFileUpload = async (event) => {
   try {
     loading.value = true
     const response = await store.dispatch('places/uploadImage', file)
-    imageId.value = response;
+    imageId.value = response
     console.log(response, imageId.value)
     toastMessage.value = 'Изображение успешно загружено!'
     toastType.value = 'success'
@@ -100,7 +105,7 @@ const handleAddMeal = async () => {
         name: mealName.value,
         price: mealPrice.value,
         description: mealDescription.value,
-        fileId:  imageId.value
+        fileId: imageId.value,
       },
     })
 
@@ -180,7 +185,9 @@ label {
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
-  transition: box-shadow 0.3s, border-color 0.3s;
+  transition:
+    box-shadow 0.3s,
+    border-color 0.3s;
 }
 
 .input:focus {
@@ -202,7 +209,9 @@ label {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .button.primary {

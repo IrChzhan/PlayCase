@@ -34,14 +34,11 @@
     :show="showModalAdminAddCategory"
     :closeModal="closeModalAdminAddCategory"
   />
-  <EditPlaceModal
-    :show="showModalAdminPlace"
-    :closeModal="closeModalAdminPlace"
-  />
+  <EditPlaceModal :show="showModalAdminPlace" :closeModal="closeModalAdminPlace" />
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -142,7 +139,6 @@ const showToast = (message, type) => {
   toastMessage.value = message
   toastType.value = type
 }
-
 
 onMounted(fetchPlace)
 </script>
