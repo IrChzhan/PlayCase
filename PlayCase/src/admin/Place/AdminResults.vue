@@ -1,129 +1,132 @@
 <template>
-  <div class="admin-results-page">
-    <div class="close-button" @click="goToMenuApp">✖️</div>
-    <h1>Загрузка файла</h1>
-    <div v-if="!uploadSuccess">
-      <input type="file" @change="handleFileUpload" accept=".xls,.xlsx" />
-      <button @click="uploadFile" :disabled="!selectedFile">Загрузить файл</button>
+  <div class="admin-results">
+    <h1>Загрузить результаты для игры</h1>
+    <div class="upload-container">
+      <input 
+        class="file-input" 
+        type="file" 
+        @change="e => selectedFile = e.target.files[0]" 
+      />
+      <button 
+        class="upload-button" 
+        @click="uploadFile" 
+        :disabled="loading"
+      >
+        {{ loading ? 'Загрузка...' : 'Загрузить файл' }}
+      </button>
     </div>
-    <div v-else class="success-message">Файл успешно загружен</div>
-
-    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
+    <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
   </div>
 </template>
 
-<script setup>
-import axios from 'axios'
+<script>
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const router = useRouter()
-const route = useRoute()
-const gameId = route.params.gameId
-const selectedFile = ref(null)
-const uploadSuccess = ref(false)
+export default {
+  name: 'AdminResults',
+  props: {
+    gameId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const store = useStore();
+    const selectedFile = ref(null);
+    const loading = ref(false);
+    const uploadSuccess = ref(false);
 
-const handleFileUpload = (event) => {
-  console.log('file selected:', event.target.files[0])
-  selectedFile.value = event.target.files[0]
-}
+    const uploadFile = async () => {
+      if (!selectedFile.value) {
+        alert('Пожалуйста, выберите файл.');
+        return;
+      }
 
-const uploadFile = async () => {
-  if (!selectedFile.value) {
-    alert('Пожалуйста, выберите файл.')
-    return
-  }
-  try {
-    const formData = new FormData()
-    formData.append('file', selectedFile.value)
+      loading.value = true;
+      try {
+        await store.dispatch('games/uploadResultsFile', {
+          gameId: props.gameId,
+          file: selectedFile.value,
+        });
+        uploadSuccess.value = true;
+      } catch (error) {
+        console.error('Ошибка при загрузке файла:', error);
+        alert('Ошибка при загрузке файла. Попробуйте снова.');
+      } finally {
+        loading.value = false;
+      }
+    };
 
-    await axios.post(`http://localhost:8080/admin/v1/games/${gameId}/teams/replace`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-    uploadSuccess.value = true
-  } catch (error) {
-    console.error('Error uploading file:', error)
-    alert('Ошибка при загрузке файла.')
-  }
-}
-
-const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
-}
+    return {
+      selectedFile,
+      loading,
+      uploadSuccess,
+      uploadFile,
+    };
+  },
+};
 </script>
 
 <style scoped>
-.admin-results-page {
+.admin-results {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 30px;
+  background: #2c3e50;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.admin-results h1 {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 25px;
+}
+
+.upload-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background-color: #001845;
-  color: #ffd700;
-  height: 100vh;
-  position: relative;
-  font-family: 'Mulish', sans-serif;
-  overflow: hidden;
+  gap: 20px;
 }
 
-.close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #ffd700;
-  cursor: pointer;
-}
-.success-message {
-  font-size: 1.2em;
-  margin-top: 20px;
+.file-input {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  border: 2px solid #27ae60;
+  border-radius: 8px;
+  background-color: #ecf0f1;
+  text-align: center;
 }
 
-button {
-  background-color: #cc9f33;
+.upload-button {
+  padding: 15px 30px;
+  background-color: #27ae60;
   color: white;
+  font-size: 20px;
+  font-weight: bold;
   border: none;
-  padding: 10px 20px;
-  margin-top: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:disabled {
-  background-color: #a58027;
+.upload-button:hover {
+  background-color: #2ecc71;
+  transform: scale(1.05);
+}
+
+.upload-button:disabled {
+  background-color: #7f8c8d;
   cursor: not-allowed;
 }
-.home-button {
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  bottom: 20px;
-  cursor: pointer;
-}
 
-.admin-results-page::before,
-.admin-results-page::after {
-  content: '';
-  position: absolute;
-  background-image: url('@/assets/lines.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.admin-results-page::before {
-  top: 0;
-  left: 0;
-  width: 1300px;
-  height: 1300px;
-}
-
-.admin-results-page::after {
-  bottom: 0;
-  right: 0;
-  width: 150px;
-  height: 150px;
+.success-message {
+  margin-top: 20px;
+  color: #2ecc71;
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>

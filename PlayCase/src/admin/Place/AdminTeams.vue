@@ -7,6 +7,7 @@
       {{ isActiveGame ? 'Игра активирована' : 'Активировать игру' }}
     </button>
 
+
     <div class="add-team" v-if="!editingTeam">
       <h2>Добавить новую команду</h2>
       <form @submit.prevent="addTeam" class="form">
@@ -74,16 +75,20 @@
         </li>
       </ul>
     </div>
+
+    <button class="button" @click="goToUploadResults">Загрузить рейтинг</button>
+
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 const store = useStore()
 const route = useRoute()
+const router = useRouter()
 const gameId = route.params.gameId
 const teams = ref([])
 const teamName = ref('')
@@ -99,6 +104,10 @@ const isActiveGame = ref(false)
 const activateGame = () => {
   localStorage.setItem('activeGameId', gameId)
   isActiveGame.value = true
+}
+
+const goToUploadResults = () => {
+  router.push({ name: 'AdminResults', params: { gameId } })
 }
 
 onMounted(() => {
