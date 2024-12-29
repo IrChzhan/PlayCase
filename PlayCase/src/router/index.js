@@ -18,6 +18,8 @@ import RegistrateUsers from '@/views/RegistrateUsers.vue'
 import TeamNameDisplay from '@/views/TeamNameDisplay.vue'
 import TeamNameInput from '@/views/TeamNameInput.vue'
 import WinnerPage from '@/views/WinnerPage.vue'
+import { compile } from 'vue'
+import ResultsExcel from '@/views/ResultsExcel.vue'
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -129,6 +131,12 @@ const routes = [{
         component: AdminMenuPlace,
         props: true,
     },
+    {
+        path: '/resultsExcel',
+        name: 'ResultsExcel',
+        component: ResultsExcel,
+        props: true
+    }
 ]
 
 const router = createRouter({

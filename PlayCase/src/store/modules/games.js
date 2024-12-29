@@ -5,6 +5,7 @@ export default {
     state() {
         return {
             games: [],
+            currentGame: null
         }
     },
     mutations: {
@@ -19,6 +20,28 @@ export default {
         SET_PLAYER_TEAM(state, name) {
             localStorage.setItem('team', name)
         },
+
+        SET_CURRENT_GAME(state, currentGame) {
+            state.currentGame = {
+                id: currentGame.id,
+                plannedDate: currentGame.plannedDate,
+                place: currentGame.place,
+                gameNumber: currentGame.gameNumber,
+                comment: currentGame.comment,
+                status: currentGame.status,
+                teams: currentGame.teams
+            }
+        },
+
+        SET_GAME_RESULTS(state, results) {
+            if (!Array.isArray(results)) {
+                console.error('Попытка сохранить некорректные результаты:', results)
+                return
+            }
+
+            state.gameResults = results
+            console.log('Результаты игры успешно сохранены в state:', state.gameResults)
+        }
     },
     actions: {
         async createGame({ commit }, newGame) {
@@ -108,6 +131,34 @@ export default {
             );
 
             return response.data;
+        },
+
+        async fetchGameResults({ commit }, gameId) {
+            try {
+                const response = await axios.get(`/v1/game/${gameId}/results`)
+                console.log('Результаты игры из API:', response.data)
+
+                if (Array.isArray(response.data)) {
+                    commit('SET_GAME_RESULTS', response.data)
+                    return response.data
+                } else {
+                    throw new Error('Некорректный формат данных из API')
+                }
+            } catch (error) {
+                console.error(`Ошибка при получении результатов игры с ID ${gameId}:`, error.message)
+                throw error
+            }
+        },
+
+        async fetchCurrentGame({ commit }) {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current`)
+                commit('SET_CURRENT_GAME', response.data)
+                return response.data
+            } catch (error) {
+                console.error('Ошибка при запросе текущей игры:', error)
+                throw error
+            }
         },
 
     },

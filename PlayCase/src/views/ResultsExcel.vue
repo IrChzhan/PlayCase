@@ -33,27 +33,45 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 
+const { teamName } = useAuthCheck()
+const store = useStore()
 const router = useRouter()
-const route = useRoute()
-const gameId = route.params.gameId
+
 const teams = ref([])
 
-onMounted(async () => {
+const fetchResults = async () => {
   try {
-    const response = await axios.put(`http://localhost:8080/admin/v1/games/${gameId}/teams/results`)
-    console.log(response.data)
-    teams.value = response.data
+    const currentGame = await store.dispatch('games/fetchCurrentGame')
+    console.log('Полученная текущая игра:', currentGame)
+
+    if (!currentGame?.id) {
+      console.error('Не удалось получить ID текущей игры')
+      return
+    }
+
+    const gameId = currentGame.id
+    const results = await store.dispatch('games/fetchGameResults', gameId)
+    console.log('Полученные результаты игры:', results)
+
+    teams.value = results.map(result => ({
+      scoreByRounds: result.scoreByRounds || [],
+      currentPlace: result.currentPlace || 0,
+      totalScore: result.totalScore || 0
+    }))
   } catch (error) {
-    console.error('Error fetching teams:', error)
+    console.error('Ошибка при получении данных:', error.message)
   }
-})
+}
+
+fetchResults()
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
+  router.push({ name: 'MenuApp' })
 }
 </script>
 

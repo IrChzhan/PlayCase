@@ -98,7 +98,9 @@ const menuItems = ref([
   //     router.push({ name: 'WinnerPage' })
   //   },
   // },
-  { name: 'Рейтинг команд', image: ratingImage, function: () => {} },
+  { name: 'Рейтинг команд', image: ratingImage, function: () => {
+    router.push({name: 'ResultsExcel'})
+  } },
   {
     name: 'Меню ресторана',
     image: menuImage,
