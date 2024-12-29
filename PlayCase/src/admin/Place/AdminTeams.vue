@@ -48,10 +48,29 @@
       <h2>Список команд</h2>
       <ul>
         <li v-for="team in teams" :key="team.id">
-          {{ team.name }} - Стол: {{ team.tableNumber || 'Не указан' }}
+          {{ team.name }} - Пользователь: {{ team.tableNumber || 'Не указан' }}
           <button class="button" @click="startEditing(team)">Изменить</button>
           <button class="button" @click="deleteTeam(team.id)">Удалить</button>
-          <button class="button" @click="assignTable(team)">Назначить стол</button>
+          <button class="button" @click="openAssignTableModal(team)">Привязать пользователя</button>
+          <div v-if="isModalOpen" class="modal" @click.self="closeModal">
+            <div class="modal-content">
+              <h2>Выберите пользователя для команды</h2>
+              <div class="user-list">
+                <ul>
+                  <li v-for="user in users" :key="user.id">
+                    <input
+                      type="radio"
+                      :id="'user-' + user.id"
+                      v-model="selectedUserId"
+                      :value="user.id"
+                    />
+                    <label :for="'user-' + user.id">{{ user.name }}</label>
+                  </li>
+                </ul>
+              </div>
+              <button class="button" @click="assignTable(team.id)">Сохранить</button>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -68,8 +87,12 @@ const route = useRoute()
 const gameId = route.params.gameId
 const teams = ref([])
 const teamName = ref('')
-const editingTeam = ref(null) // Переменная для редактирования команды
+const editingTeam = ref(null)
 const loading = ref(false)
+
+const users = ref([])
+const isModalOpen = ref(false)
+const selectedUserId = ref(null)
 
 const isActiveGame = ref(false)
 
@@ -79,11 +102,26 @@ const activateGame = () => {
 }
 
 onMounted(() => {
+  getUsers()
   if (localStorage.getItem('activeGameId') === gameId) {
     isActiveGame.value = true
   }
   fetchTeams()
 })
+
+const openAssignTableModal = (team) => {
+  selectedUserId.value = team.tableNumber || null
+  isModalOpen.value = true
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+}
+
+const getUsers = async () => {
+  const user = await store.dispatch('profile/fetchUsers')
+  users.value = user
+}
 
 const fetchTeams = async () => {
   try {
@@ -119,11 +157,11 @@ const addTeam = async () => {
 }
 
 const startEditing = (team) => {
-  editingTeam.value = { ...team } // Копируем объект для редактирования
+  editingTeam.value = { ...team }
 }
 
 const cancelEditing = () => {
-  editingTeam.value = null // Сбросить режим редактирования
+  editingTeam.value = null
 }
 
 const updateTeam = async () => {
@@ -133,8 +171,8 @@ const updateTeam = async () => {
       teamId: editingTeam.value.id,
       teamData: editingTeam.value,
     })
-    await fetchTeams() // Обновляем список команд
-    editingTeam.value = null // Завершаем редактирование
+    await fetchTeams()
+    editingTeam.value = null
   } catch (error) {
     console.error('Ошибка обновления команды:', error)
   }
@@ -150,16 +188,12 @@ const deleteTeam = async (teamId) => {
 }
 
 const assignTable = async (team) => {
-  const tableNumber = prompt('Введите номер стола:', team.tableNumber || '')
-  if (!tableNumber) return
-
   try {
-    await store.dispatch('games/setTableForTeam', {
-      gameId,
-      teamId: team.id,
-      tableNumber: parseInt(tableNumber, 10), // Приводим к числу
+    await store.dispatch('games/setUserForTeam', {
+      gameId: gameId,
+      teamId: team,
+      userId: selectedUserId.value,
     })
-    team.tableNumber = tableNumber // Локально обновляем данные
   } catch (error) {
     console.error('Ошибка установки стола:', error)
   }
@@ -258,6 +292,7 @@ p {
   padding: 15px;
   margin-bottom: 10px;
   display: flex;
+  gap: 20px;
   justify-content: space-between;
   align-items: center;
 }
@@ -268,5 +303,58 @@ p {
 }
 .button.activate:hover {
   background-color: #ff8c00;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1b2a46;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.user-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-list li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+button {
+  margin-top: 15px;
+  width: 100%;
+}
+
+button:focus {
+  outline: none;
 }
 </style>

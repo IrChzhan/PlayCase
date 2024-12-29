@@ -1,25 +1,31 @@
 <template>
   <div class="container">
     <div class="container_name_team">
-      <h1 class="team-name">{{ teamName }}</h1>
+      <h1 class="team-name">{{ teamName || 'Загрузка...' }}</h1>
     </div>
     <div class="container_down_menu">
-      <img src="../assets/House_01.png" class="house-image" width="80" @click="goToMenuApp" />
-      <div class="right-corner">
-        <h1 class="team-table">{{ teamTable }}</h1>
-        <p class="table-label">стол</p>
-      </div>
+      <img
+        src="../assets/House_01.png"
+        class="house-image"
+        width="80"
+        @click="goToMenuApp"
+        alt="home"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-const route = useRoute()
-const teamTable = route.params.teamTable
-const teamName = route.params.teamName || 'Команда не найдена'
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+
+const { teamName } = useAuthCheck()
+const router = useRouter()
+
+const goToMenuApp = () => {
+  router.push({ name: 'MenuApp' })
+}
 </script>
 
 <style scoped>
@@ -46,6 +52,7 @@ const teamName = route.params.teamName || 'Команда не найдена'
 }
 
 .house-image {
+  cursor: pointer;
   display: block;
   margin: 20px auto;
 }

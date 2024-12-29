@@ -15,10 +15,14 @@ export default {
     setGames(state, games) {
       state.games = games
     },
+
+    SET_PLAYER_TEAM(state, name) {
+      localStorage.setItem('team', name)
+    },
   },
   actions: {
     async createGame({ commit }, newGame) {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/`, newGame)
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game`, newGame)
       commit('addGame', response.data)
       return response.data
     },
@@ -69,10 +73,25 @@ export default {
       return response.data
     },
 
+    async setUserForTeam({ commit }, { gameId, teamId, userId }) {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/team/${teamId}/setUser?userId=${userId}`,
+      )
+
+      return response.data
+    },
+
     async getTeamByTable({ commit }, { gameId, tableNumber }) {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/team/setTable/${tableNumber}`,
       )
+      return response.data
+    },
+    async getCurrentTeam({ commit }) {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/team`)
+
+      commit('SET_PLAYER_TEAM', response.data.name)
+
       return response.data
     },
   },

@@ -22,7 +22,7 @@ const goToGames = () => {
   <div class="container">
     <button class="place-card" @click="goToPlaces">Заведения</button>
     <button class="place-card" @click="goToUsers">Пользователи</button>
-    <button class="place-card" @click="goToResults">Рейтинг</button>
+    <!--    <button class="place-card" @click="goToResults">Рейтинг</button>               УБРАНО              -->
     <button class="place-card" @click="goToGames">Игры</button>
   </div>
 </template>

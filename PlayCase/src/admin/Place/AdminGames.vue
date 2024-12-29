@@ -88,15 +88,9 @@ const addGame = async () => {
       loading.value = true
       const place = places.value.find((place) => place.id === selectedPlaceId.value)
       const newGameRequest = {
-        id: crypto.randomUUID(),
         plannedDate: plannedDate.value,
-        place: {
-          id: place.id,
-          name: place.name,
-          address: place.address,
-        },
-        status: 'PLANNED',
-        teams: [],
+        placeId: place.id,
+        comment: 'dadadadad',
       }
 
       const newGame = await store.dispatch('games/createGame', newGameRequest)

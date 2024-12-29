@@ -40,7 +40,7 @@
           :disabled="!isFormValid || loading"
           :class="{ disabled: !isFormValid || loading }"
         >
-          <Loader v-if="loading" /> Добавить заведения
+          <Loader v-if="loading" /> Добавить заведение
         </button>
       </form>
     </div>

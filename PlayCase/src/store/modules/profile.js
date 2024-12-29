@@ -20,10 +20,19 @@ export default {
       state.token = token
       localStorage.setItem('authToken', token)
     },
+    SET_PLAYER_TOKEN(state, token) {
+      localStorage.setItem('token', token)
+    },
+    SET_PLAYER_TEAM(state, name) {
+      localStorage.setItem('team', name)
+    },
     LOGOUT(state) {
       state.currentUser = null
       state.token = null
       localStorage.removeItem('authToken')
+    },
+    DEL_NAME_TEAM(state) {
+      localStorage.removeItem('team')
     },
   },
   actions: {
@@ -31,6 +40,7 @@ export default {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users`)
         commit('SET_USERS', response.data)
+        return response.data
       } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error)
       }
@@ -44,10 +54,10 @@ export default {
         const { accessToken } = response.data
 
         commit('SET_TOKEN', accessToken)
-
+        commit('SET_PLAYER_TOKEN', accessToken)
         const user = { username: loginPayload.username }
         commit('SET_CURRENT_USER', user)
-
+        commit('DEL_NAME_TEAM')
         return true
       } catch (error) {
         console.error('Ошибка при авторизации:', error)

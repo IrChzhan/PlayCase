@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import { defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
@@ -39,7 +39,7 @@ const props = defineProps({
   },
   width: {
     type: String,
-    default: 'auto',
+    default: '100%',
   },
   disabled: {
     type: Boolean,
@@ -65,19 +65,43 @@ const onBlur = () => {
 </script>
 
 <style scoped>
-.input {
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-label {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Mulish', sans-serif;
+  color: #333;
+}
+
+.input-field {
   outline: none;
   border: 1px solid #d9d9d9;
-  border-radius: 20px;
+  border-radius: 8px;
   background: var(--c-white, #fff);
-  padding: 14px 16px;
+  padding: 12px 14px;
   font-size: 16px;
   font-family: 'Mulish', sans-serif;
   color: #0f1921;
-  line-height: 22px;
+  transition: border-color 0.2s;
 }
 
-.input:hover {
-  border: 1px solid #d7d4d4;
+.input-field:hover {
+  border: 1px solid #b3b3b3;
+}
+
+.input-field:focus {
+  border: 1px solid #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.input-error {
+  font-size: 12px;
+  color: #ff4d4f;
+  margin-top: 4px;
 }
 </style>

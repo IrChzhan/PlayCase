@@ -41,13 +41,13 @@ const routes = [
     component: AdminUsers,
   },
   {
-    path: '/display/:teamTable',
+    path: '/display',
     name: 'TeamNameDisplay',
     component: TeamNameDisplay,
     props: true,
   },
   {
-    path: '/menu-app/:teamName/:teamTable',
+    path: '/menu-app',
     name: 'MenuApp',
     component: MenuApp,
     props: true,

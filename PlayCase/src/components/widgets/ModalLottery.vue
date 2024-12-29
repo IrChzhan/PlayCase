@@ -4,7 +4,7 @@
       <button class="close-button" @click="closeModal">×</button>
       <div class="modal-body">
         <div class="form-section">
-          <div class="team-title">Название команды</div>
+          <div class="team-title">{{ teamName }}</div>
           <h1 class="main-heading">Примите участие<br />в нашей лотерее</h1>
           <form @submit.prevent="submitForm">
             <div v-if="emailError || phoneError" class="error-section">
@@ -31,18 +31,16 @@
         <div class="rules-section">
           <h2>Правила проведения лотереи</h2>
           <ul>
-            <li>Лотерея проводится в рамках квиз-игры и доступна всем участникам.</li>
-            <li>Для участия необходимо зарегистрироваться, отправив ФИО и телефон.</li>
-            <li>Каждый участник может зарегистрироваться только один раз.</li>
-            <li>Розыгрыш проводится в перерывах между раундами или по завершении игры.</li>
-            <li>Победителя определяет программа случайных чисел.</li>
-            <li>Призы выдаются лично в руки победителям сразу после объявления результатов.</li>
+            <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
+            <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
+            <li>
+              Каждый участник может зарегистрироваться
+              <span class="special-el">только один раз</span>.
+            </li>
+            <li>Победителя определяет генератор случайных чисел.</li>
             <li>Призы не подлежат обмену на деньги и возврату.</li>
           </ul>
           <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
-          <p>
-            Полные правила лотереи вы можете посмотреть тут: <a href="#" target="_blank">ссылка</a>.
-          </p>
         </div>
       </div>
     </div>
@@ -54,11 +52,14 @@ import { ref } from 'vue'
 import { useStore } from 'vuex'
 
 import Input from '@/components/shared/forms/Input.vue'
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 
 defineProps({
   show: Boolean,
   closeModal: Function,
 })
+
+const { teamName } = useAuthCheck()
 
 const store = useStore()
 
@@ -126,7 +127,7 @@ const submitForm = async () => {
   border: 1px solid rgba(255, 0, 0, 0.5);
   border-radius: 8px;
   padding: 10px;
-  margin-bottom: 1.5vw;
+  margin-bottom: 1vw;
 }
 
 .error-message {
@@ -172,7 +173,7 @@ const submitForm = async () => {
 .form-section form {
   display: flex;
   flex-direction: column;
-  gap: 1.5vw;
+  gap: 1.2vw;
 }
 
 .team-title {
@@ -260,6 +261,10 @@ input[type='checkbox'] {
   margin-top: 1vw;
   margin-bottom: 1vw;
   text-align: center;
+}
+
+.special-el {
+  font-weight: 900;
 }
 
 @media (max-width: 768px) {

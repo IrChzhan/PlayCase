@@ -1,10 +1,15 @@
 <template>
-  <div class="container input-container">
-    <h1>Введите номер стола</h1>
-    <br />
-    <input v-model="teamTable" type="text" placeholder="Номер стола" />
-    <button @click="submitTeamName">Подтвердить</button>
+  <div class="container">
+    <h1>Войти</h1>
+    <label for="username">Логин</label>
+    <input id="username" v-model="login.username" type="text" placeholder="Ваш логин" />
+
+    <label for="password">Пароль</label>
+    <input id="password" v-model="login.password" type="password" placeholder="Ваш пароль" />
+
+    <button @click="handleLogin">Отправить</button>
   </div>
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <script setup>
@@ -12,61 +17,94 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
+import Notification from '@/admin/Notification.vue'
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+
 const store = useStore()
 const router = useRouter()
-const teamTable = ref('')
 
-const submitTeamName = async () => {
-  try {
-    const gameId = localStorage.getItem('activeGameId')
-    const response = await store.dispatch('games/getTeamByTable', {
-      gameId,
-      tableNumber: parseInt(teamTable.value, 10),
-    })
+const login = ref({ username: '', password: '' })
+const toastMessage = ref('')
+const toastType = ref('success')
 
-    router.push({
-      name: 'TeamNameDisplay',
-      params: {
-        teamTable: teamTable.value,
-        teamName: response?.name || 'Команда не найдена',
-      },
-    })
-  } catch (error) {
-    console.error('Ошибка загрузки команды:', error)
+useAuthCheck()
+
+const handleLogin = async () => {
+  const success = await store.dispatch(
+    'profile/login',
+    login.value,
+    //{ username: 'pass', password: '123321' }
+  )
+  if (success) {
+    toastMessage.value = 'Авторизация успешна!'
+    toastType.value = 'success'
+
+    try {
+      await router.push({
+        name: 'TeamNameDisplay',
+      })
+    } catch (error) {
+      console.error('Ошибка загрузки команды:', error)
+    }
+    setTimeout(() => {
+      toastMessage.value = ''
+    }, 3000)
+  } else {
+    toastMessage.value = 'Ошибка авторизации. Проверьте логин и пароль.'
+    toastType.value = 'error'
+    setTimeout(() => {
+      toastMessage.value = ''
+    }, 3000)
   }
 }
 </script>
-
 <style scoped>
-.input-container {
-  display: inline-block;
-  flex-direction: row;
+.container {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  margin: 20px;
-}
-
-input {
-  margin-bottom: 15px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-left: 15px;
-}
-
-button {
-  padding: 8px 16px;
-  background-color: #4caf50;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  text-align: center;
 }
 
 h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+label {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+input {
+  width: 350px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+input::placeholder {
+  color: #9ba9c3;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  background-color: #007bff;
   color: white;
-  font-family: 'Mulish', sans-serif;
-  margin-left: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 </style>

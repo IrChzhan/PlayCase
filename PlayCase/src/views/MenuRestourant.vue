@@ -3,74 +3,13 @@
     <h1 class="menu_name">Меню ресторана</h1>
     <div class="menu">
       <div
+        v-for="category in categories"
+        :key="category"
         class="category"
-        :class="{ active: selectedCategory === 'Все' }"
-        @click="selectCategory('Все')"
+        :class="{ active: selectedCategory === category }"
+        @click="selectCategory(category)"
       >
-        Все
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 1' }"
-        @click="selectCategory('Категория 1')"
-      >
-        Категория 1
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 2' }"
-        @click="selectCategory('Категория 2')"
-      >
-        Категория 2
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 3' }"
-        @click="selectCategory('Категория 3')"
-      >
-        Категория 3
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 4' }"
-        @click="selectCategory('Категория 4')"
-      >
-        Категория 4
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 5' }"
-        @click="selectCategory('Категория 5')"
-      >
-        Категория 5
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 6' }"
-        @click="selectCategory('Категория 6')"
-      >
-        Категория 6
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 7' }"
-        @click="selectCategory('Категория 7')"
-      >
-        Категория 7
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 8' }"
-        @click="selectCategory('Категория 8')"
-      >
-        Категория 8
-      </div>
-      <div
-        class="category"
-        :class="{ active: selectedCategory === 'Категория 9' }"
-        @click="selectCategory('Категория 9')"
-      >
-        Категория 9
+        {{ category }}
       </div>
     </div>
     <div class="products" ref="productList">
@@ -87,125 +26,64 @@
   </div>
 </template>
 
-<script>
-import meal from '@/assets/meal.png'
+<script setup>
+import axios from 'axios'
+import { computed, onMounted, ref } from 'vue'
+
 import router from '@/router/index.js'
 
 import ProductCard from './ProductCard.vue'
-export default {
-  components: {
-    ProductCard,
-  },
-  data() {
-    return {
-      selectedCategory: 'Все',
-      menuItems: [
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 1',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 2',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 3',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 1',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 1',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 2',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 2',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 3',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 1',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 1',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 3',
-        },
-        {
-          image: meal,
-          price: '500 ₽',
-          name: 'Пицца',
-          description: '2 строки',
-          category: 'Категория 3',
-        },
-      ],
-    }
-  },
-  computed: {
-    filteredMenuItems() {
-      if (this.selectedCategory === 'Все') {
-        return this.menuItems
-      }
-      return this.menuItems.filter((item) => item.category === this.selectedCategory)
-    },
-  },
-  methods: {
-    selectCategory(category) {
-      this.selectedCategory = category
-    },
-    goToMenuApp() {
-      router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
-    },
-  },
+
+const selectedCategory = ref('Все')
+const categories = ref([])
+const menuItems = ref([])
+const loading = ref(false)
+
+const fetchCategories = async () => {
+  loading.value = true
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/admin/v1/places/{placeId}/categories`,
+    )
+    categories.value = response.data
+  } catch (error) {
+    console.error('Error fetching categories:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+const fetchMenuItems = async () => {
+  loading.value = true
+  try {
+    const response = await axios.get(
+      `https://example.com/api/menu?category=${selectedCategory.value}`,
+    ) // Получаем блюда для выбранной категории
+    menuItems.value = response.data // Заполняем список блюд
+  } catch (error) {
+    console.error('Error fetching menu items:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+const filteredMenuItems = computed(() => {
+  return menuItems.value
+})
+
+const selectCategory = (category) => {
+  selectedCategory.value = category
+  fetchMenuItems()
+}
+
+onMounted(() => {
+  fetchCategories()
+})
+
+const goToMenuApp = () => {
+  router.push({ name: 'MenuApp' })
 }
 </script>
-
 <style>
 .container {
   display: flex;
@@ -215,7 +93,7 @@ export default {
 
 .menu {
   display: flex;
-  flex: wrap;
+  flex-wrap: wrap;
   margin-top: 20px;
   margin-left: 16px;
   width: 95%;

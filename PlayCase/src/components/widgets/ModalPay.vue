@@ -4,12 +4,12 @@
       <button class="close-button" @click="closeModal">&times;</button>
       <div class="modal-body">
         <div class="form-section">
-          <div class="team-title">Название команды</div>
+          <div class="team-title">{{ teamName }}</div>
           <h1 class="title">Выберите количество игроков, за которых будете оплачивать</h1>
 
           <div class="player-buttons">
             <button
-              v-for="number in 12"
+              v-for="number in 8"
               :key="number"
               :class="['player-button', { active: selectedPlayers === number }]"
               @click="selectPlayers(number)"
@@ -71,13 +71,16 @@
 <script setup>
 import { computed, ref } from 'vue'
 
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+
 defineProps({
   show: Boolean,
   closeModal: Function,
 })
 
+const { teamName } = useAuthCheck()
 const selectedPlayers = ref(1)
-const pricePerPlayer = ref(700)
+const pricePerPlayer = ref(1000)
 const isPaying = ref(false)
 const paymentMethod = ref(null)
 
@@ -221,7 +224,6 @@ function cancelPaymentMethod() {
 
 .player-buttons {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 30px;

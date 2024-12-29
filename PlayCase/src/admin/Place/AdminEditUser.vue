@@ -93,9 +93,7 @@ let dialogAction = null
 
 const roles = ['PLAYER', 'ADMIN', 'MANAGER']
 
-const hasChanges = computed(
-  () => userName.value !== oldName || userRole.value !== oldRole,
-)
+const hasChanges = computed(() => userName.value !== oldName || userRole.value !== oldRole)
 
 const showUpdateDialog = (userId) => () => {
   dialogTitle.value = 'Подтверждение обновления'

@@ -29,21 +29,24 @@ import { useRoute, useRouter } from 'vue-router'
 import cashImage from '@/assets/cash.png'
 import contactsImage from '@/assets/contacts.png'
 import helpImage from '@/assets/help.png'
+import manImage from '@/assets/img_3.png'
 import info from '@/assets/info.png'
 import lotteryImage from '@/assets/lotery.png'
-import manImage from '@/assets/man.png'
 import menuImage from '@/assets/menu.png'
 import prizeImage from '@/assets/prize.png'
 import ratingImage from '@/assets/rating.png'
 import ModalContacts from '@/components/widgets/ModalContacts.vue'
 import ModalLottery from '@/components/widgets/ModalLottery.vue'
 import ModalPay from '@/components/widgets/ModalPay.vue'
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+import { useUserInactivity } from '@/hooks/useUserInactivity.js'
 
 const route = useRoute()
 const router = useRouter()
 
-const teamName = ref(route.params.teamName)
-const teamTable = ref(route.params.teamTable)
+useUserInactivity(30000000)
+
+const { teamName } = useAuthCheck()
 const showModalLottery = ref(false)
 const showModalContacts = ref(false)
 const showModalPay = ref(false)
@@ -88,13 +91,13 @@ const menuItems = ref([
       router.push({ name: 'Rules' })
     },
   },
-  {
-    name: 'Результаты игры',
-    image: prizeImage,
-    function: () => {
-      router.push({ name: 'WinnerPage' })
-    },
-  },
+  // {
+  //   name: 'Результаты игры',
+  //   image: prizeImage,                              'УБРАНО'
+  //   function: () => {
+  //     router.push({ name: 'WinnerPage' })
+  //   },
+  // },
   { name: 'Рейтинг команд', image: ratingImage, function: () => {} },
   {
     name: 'Меню ресторана',
@@ -104,16 +107,16 @@ const menuItems = ref([
     },
   },
   { name: 'Лотерея', image: lotteryImage, function: openModalLottery },
-  { name: 'Оплата', image: cashImage, function: openModalPay },
-  { name: 'Хелп', image: helpImage, function: () => {} },
-  { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
   {
-    name: 'Регистрация лотереи',
+    name: 'Участники лотереи',
     image: manImage,
     function: () => {
       router.push({ name: 'RegistrateUsers' })
     },
   },
+  { name: 'Оплата', image: cashImage, function: openModalPay },
+  { name: 'Хелп', image: helpImage, function: () => {} },
+  { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
 ])
 </script>
 

@@ -28,16 +28,17 @@
       <span class="highlight">пить во время игры</span>! За этот пункт вашего досуга отвечают наши
       партнерские крутые бары.
     </p>
-    <img src="@/assets/house_light.png" class="house_button" @click="goToMenuApp" />
+    <img src="@/assets/house_light.png" class="house_button" @click="goToMenuApp" alt="home" />
   </div>
 </template>
 
-<script>
-import { useRoute } from 'vue-router'
+<script setup>
 import { useRouter } from 'vue-router'
 
-const route = useRoute()
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+useAuthCheck()
 const router = useRouter()
+
 const goToMenuApp = () => {
   router.push({ name: 'MenuApp' })
 }
@@ -111,6 +112,7 @@ const goToMenuApp = () => {
   height: 50px;
   margin-top: -20px;
   margin-left: 530px;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
@@ -122,7 +124,7 @@ const goToMenuApp = () => {
 
   .title {
     font-size: 1.5rem;
-    margin-bottom: 16px; /* Меньше отступ между текстами */
+    margin-bottom: 16px;
   }
 
   .intro,
@@ -130,12 +132,12 @@ const goToMenuApp = () => {
   .additional-info,
   .note {
     font-size: 0.9rem;
-    margin-bottom: 20px; /* Уменьшаем отступы между текстом */
+    margin-bottom: 20px;
   }
 
   .rounds-list li {
     font-size: 1rem;
-    margin-bottom: 10px; /* Чуть меньше отступы внутри списка */
+    margin-bottom: 10px;
   }
 
   .house_button {
@@ -144,6 +146,7 @@ const goToMenuApp = () => {
     margin-top: -50px;
     right: 10px;
     margin-left: 400px;
+    cursor: pointer;
   }
   .note {
     margin-bottom: 10px;
