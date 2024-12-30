@@ -10,20 +10,18 @@
       <table>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Место</th>
             <th>Название</th>
-            <th>Номер стола</th>
-            <th>Игровая отметка</th>
-            <th>Количество участников</th>
+            <th>Очки за раунды</th>
+            <th>Общий счёт</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="team in teams" :key="team.id">
-            <td>{{ team.id }}</td>
+            <td>{{ team.currentPlace }}</td>
             <td>{{ team.name }}</td>
-            <td>{{ team.tableNumber }}</td>
-            <td>{{ team.gameMark }}</td>
-            <td>{{ team.participantsCount }}</td>
+            <td>{{ team.scoreByRounds.join(', ') }}</td>
+            <td>{{ team.totalScore }}</td>
           </tr>
         </tbody>
       </table>
@@ -33,42 +31,44 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 
-const { teamName } = useAuthCheck()
 const store = useStore()
 const router = useRouter()
 
 const teams = ref([])
+const currentGameId = computed(() => store.state.games.currentGame?.id) 
 
 const fetchResults = async () => {
   try {
-    const currentGame = await store.dispatch('games/fetchCurrentGame')
-    console.log('Полученная текущая игра:', currentGame)
-
-    if (!currentGame?.id) {
-      console.error('Не удалось получить ID текущей игры')
-      return
+    if (!currentGameId.value) {
+      console.error('Не удалось получить ID текущей игры');
+      return;
     }
 
-    const gameId = currentGame.id
-    const results = await store.dispatch('games/fetchGameResults', gameId)
-    console.log('Полученные результаты игры:', results)
+    const results = await store.dispatch('games/fetchGameResults', currentGameId.value);
+    console.log('Полученные результаты игры:', results);
 
-    teams.value = results.map(result => ({
+    teams.value = results.map((result, index) => ({
       scoreByRounds: result.scoreByRounds || [],
       currentPlace: result.currentPlace || 0,
-      totalScore: result.totalScore || 0
-    }))
+      totalScore: result.totalScore || 0,
+    }));
   } catch (error) {
-    console.error('Ошибка при получении данных:', error.message)
+    console.error('Ошибка при получении данных:', error.message);
   }
-}
+};
 
-fetchResults()
+onMounted(async () => {
+  try {
+    await store.dispatch('games/fetchCurrentGame')
+    await fetchResults()
+  } catch (error) {
+    console.error('Ошибка при инициализации:', error)
+  }
+})
 
 const goToMenuApp = () => {
   router.push({ name: 'MenuApp' })

@@ -5,6 +5,7 @@ export default {
     state() {
         return {
             games: [],
+            gameId: null,
             currentGame: null
         }
     },
@@ -41,7 +42,11 @@ export default {
 
             state.gameResults = results
             console.log('Результаты игры успешно сохранены в state:', state.gameResults)
-        }
+        },
+
+        setGameId(state, gameId) {
+            state.gameId = gameId;
+        },
     },
     actions: {
         async createGame({ commit }, newGame) {
@@ -118,24 +123,46 @@ export default {
         },
 
         async uploadResultsFile({ commit }, { gameId, file }) {
+            console.log('uploadResultsFile: Начало загрузки файла результатов');
+            console.log('uploadResultsFile: ID игры:', gameId);
+            console.log('uploadResultsFile: Файл:', file);
+
             const formData = new FormData();
             formData.append('file', file);
+            console.log('uploadResultsFile: FormData:', formData);
+            try {
+                const response = await axios.put(
+                    `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/results`,
+                    formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                );
 
-            const response = await axios.put(
-                `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/results`,
-                formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
+                console.log('uploadResultsFile: Ответ сервера:', response);
+                console.log('uploadResultsFile: Данные ответа:', response.data);
+                console.log('uploadResultsFile: Загрузка файла результатов завершена');
+                return response.data;
+            } catch (error) {
+                console.error('uploadResultsFile: Ошибка при загрузке файла:', error);
+                if (error.response) {
+                    console.error('uploadResultsFile: Ошибка ответа сервера:', error.response);
+                    console.error('uploadResultsFile: Данные ошибки:', error.response.data);
+                    console.error('uploadResultsFile: Статус ошибки:', error.response.status);
+                    console.error('uploadResultsFile: Заголовки ошибки:', error.response.headers);
+                } else if (error.request) {
+                    console.error('uploadResultsFile: Ошибка запроса:', error.request);
+                } else {
+                    console.error('uploadResultsFile: Ошибка:', error.message);
                 }
-            );
-
-            return response.data;
+                throw error
+            }
         },
 
         async fetchGameResults({ commit }, gameId) {
             try {
-                const response = await axios.get(`/v1/game/${gameId}/results`)
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/results`)
                 console.log('Результаты игры из API:', response.data)
 
                 if (Array.isArray(response.data)) {
