@@ -18,7 +18,6 @@ import RegistrateUsers from '@/views/RegistrateUsers.vue'
 import TeamNameDisplay from '@/views/TeamNameDisplay.vue'
 import TeamNameInput from '@/views/TeamNameInput.vue'
 import WinnerPage from '@/views/WinnerPage.vue'
-import { compile } from 'vue'
 import ResultsExcel from '@/views/ResultsExcel.vue'
 
 const routes = [{
@@ -35,11 +34,6 @@ const routes = [{
         path: `/TeamNameInput`,
         name: 'TeamNameInput',
         component: TeamNameInput,
-    },
-    {
-        path: '/admin/users',
-        name: 'AdminUsers',
-        component: AdminUsers,
     },
     {
         path: '/display',
@@ -75,43 +69,50 @@ const routes = [{
 
     {
         path: '/admin',
-        name: 'AdminHome',
         component: AdminHome,
-        props: true,
-    },
-
-    {
-        path: '/admin/game/:gameId',
-        name: 'AdminTeams',
-        component: AdminTeams,
-        props: true,
-    },
-
-    {
-        path: '/admin/game/:gameId/teams/results',
-        name: 'AdminResults',
-        component: AdminResults,
-        props: true,
-    },
-
-    {
-        path: '/admin/games',
-        name: 'AdminGames',
-        component: AdminGames,
-        props: true,
-    },
-
-    {
-        path: '/admin/places',
-        name: 'AdminPlaces',
-        component: AdminPlaces,
-        props: true,
-    },
-    {
-        path: '/admin/place/:id',
-        name: 'Place',
-        component: AdminPlace,
-        props: true,
+        children: [
+          {
+            path: '',
+            name: 'AdminPlaces',
+            component: AdminPlaces,
+            props: true,
+          },
+          {
+            path: '/admin/game/:gameId',
+            name: 'AdminTeams',
+            component: AdminTeams,
+            props: true,
+          },
+          {
+            path: '/admin/game/:gameId/teams/results',
+            name: 'AdminResults',
+            component: AdminResults,
+            props: true,
+          },
+          {
+            path: '/admin/games',
+            name: 'AdminGames',
+            component: AdminGames,
+            props: true,
+          },
+          {
+            path: '/admin/place/:id',
+            name: 'Place',
+            component: AdminPlace,
+            props: true,
+          },
+          {
+            path: '/admin/place/:id/category/:categoryId',
+            name: 'AdminMenuPlace',
+            component: AdminMenuPlace,
+            props: true,
+          },
+          {
+            path: '/admin/users',
+            name: 'AdminUsers',
+            component: AdminUsers,
+          },
+        ]
     },
     {
         path: '/typepay',
@@ -123,12 +124,6 @@ const routes = [{
         path: '/registrateusers',
         name: 'RegistrateUsers',
         component: RegistrateUsers,
-        props: true,
-    },
-    {
-        path: '/admin/place/:id/category/:categoryId',
-        name: 'AdminMenuPlace',
-        component: AdminMenuPlace,
         props: true,
     },
     {

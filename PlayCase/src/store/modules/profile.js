@@ -34,6 +34,9 @@ export default {
     DEL_NAME_TEAM(state) {
       localStorage.removeItem('team')
     },
+    SET_ROLE(state, role) {
+      localStorage.setItem('role', role)
+    }
   },
   actions: {
     async fetchUsers({ commit }) {
@@ -58,6 +61,27 @@ export default {
         const user = { username: loginPayload.username }
         commit('SET_CURRENT_USER', user)
         commit('DEL_NAME_TEAM')
+        return true
+      } catch (error) {
+        console.error('Ошибка при авторизации:', error)
+        return false
+      }
+    },
+    async loginPersonal({commit}, loginPayload) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/v1/authorization`,
+          loginPayload,
+        )
+        const { accessToken } = response.data
+
+        commit('SET_TOKEN', accessToken)
+
+        const response_two = await axios.get(
+          `${import.meta.env.VITE_API_URL}/v1/users/me`,
+          {headers: {'Authorization': `Bearer ${accessToken}`}}
+        )
+        commit('SET_ROLE',response_two.data.authorities[0].authority)
         return true
       } catch (error) {
         console.error('Ошибка при авторизации:', error)

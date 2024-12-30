@@ -33,7 +33,6 @@ const handleLogin = async () => {
   const success = await store.dispatch(
     'profile/login',
     login.value,
-    //{ username: 'pass', password: '123321' }
   )
   if (success) {
     toastMessage.value = 'Авторизация успешна!'
