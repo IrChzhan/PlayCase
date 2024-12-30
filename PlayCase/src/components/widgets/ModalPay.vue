@@ -304,36 +304,127 @@ function cancelPaymentMethod() {
   color: white;
 }
 
-@media (max-width: 768px) {
-  @media (max-width: 768px) {
-    .modal-content {
-      width: 90vw;
-      padding: 15px;
-    }
-    .main-heading {
-      font-size: clamp(18px, 3vw, 24px);
-    }
-    .team-title {
-      font-size: clamp(10px, 1.5vw, 14px);
-      padding: 0.5vw 1vw;
-    }
-    .textarea {
-      height: 100px;
-      font-size: clamp(10px, 1.5vw, 12px);
-    }
-    .checkbox-title {
-      font-size: clamp(10px, 1.5vw, 14px);
-    }
-    .checkbox-container {
-      font-size: clamp(10px, 1.5vw, 12px);
-    }
-    .submit-button {
-      font-size: clamp(10px, 1.5vw, 12px);
-      padding: 0.8vw 1.5vw;
-    }
-    .checkbox-groups {
-      flex-direction: column;
-    }
+@media (min-width: 768px) and (max-width: 1024px) {
+  .modal-content {
+    width: 85vw; 
+    padding: 20px;
+  }
+
+  .main-heading {
+    font-size: clamp(18px, 3.5vw, 24px);
+    margin-bottom: 10px;
+  }
+
+  .team-title {
+    font-size: clamp(12px, 2.5vw, 16px);
+    padding: 1vw 2vw;
+  }
+
+  .title {
+    font-size: clamp(16px, 3vw, 20px);
+    margin-bottom: 20px;
+  }
+
+  .player-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+
+  .player-button {
+    width: 60px;
+    height: 60px;
+    font-size: 1.1rem;
+  }
+
+  .price-info {
+    margin-bottom: 20px;
+  }
+
+  .price-info .total-price,
+  .price-info .price-per-player {
+    font-size: 1.1rem;
+  }
+
+  .price-info span {
+    font-size: 0.9rem;
+  }
+
+  .form p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .email-input,
+  .promo-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  .pay-button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+  }
+
+  .policy {
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+
+  .payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .payment-option {
+    padding: 15px;
+    font-size: 1rem;
+  }
+
+  .card-payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-number,
+  .card-expiry,
+  .card-cvv {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .pay-now-button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+  }
+
+  .qr-code {
+    width: 150px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+  }
+
+  .back-button {
+    position: relative;
+    padding: 12px;
+    font-size: 1rem;
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .back-button:hover {
+    background-color: #b1882e;
   }
 }
 </style>

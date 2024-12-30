@@ -223,6 +223,7 @@ p {
 
   .team-name {
     font-size: 48px;
+    margin-left: 1px;
   }
 
   .menu {
@@ -236,12 +237,13 @@ p {
     cursor: pointer;
   }
   .play-button {
-    margin-left: 490px;
+    margin-left: 250px;
     width: 40px;
     margin-top: -22px;
   }
   .back-button {
     margin-top: -12px;
+    margin-left: -120px
   }
   .footer {
     margin-top: 3px;

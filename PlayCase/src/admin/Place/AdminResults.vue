@@ -5,7 +5,7 @@
       <input 
         class="file-input" 
         type="file" 
-        @change="e => selectedFile = e.target.files[0]" 
+        @change="handleFileChange" 
       />
       <button 
         class="upload-button" 
@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useStore } from 'vuex'
+import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'AdminResults',
@@ -36,6 +36,15 @@ export default {
     const selectedFile = ref(null);
     const loading = ref(false);
     const uploadSuccess = ref(false);
+
+        const handleFileChange = (event) => {
+          selectedFile.value = event.target.files[0];
+            if (selectedFile.value) {
+                 console.log('Имя файла:', selectedFile.value.name);
+                console.log('Размер файла:', selectedFile.value.size);
+               console.log('Тип файла:', selectedFile.value.type);
+            }
+        };
 
     const uploadFile = async () => {
       if (!selectedFile.value) {
@@ -62,6 +71,7 @@ export default {
       selectedFile,
       loading,
       uploadSuccess,
+       handleFileChange,
       uploadFile,
     };
   },
