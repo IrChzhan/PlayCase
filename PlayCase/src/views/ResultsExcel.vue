@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -39,27 +39,27 @@ const store = useStore()
 const router = useRouter()
 
 const teams = ref([])
-const currentGameId = computed(() => store.state.games.currentGame?.id) 
+const currentGameId = computed(() => store.state.games.currentGame?.id)
 
 const fetchResults = async () => {
   try {
     if (!currentGameId.value) {
-      console.error('Не удалось получить ID текущей игры');
-      return;
+      console.error('Не удалось получить ID текущей игры')
+      return
     }
 
-    const results = await store.dispatch('games/fetchGameResults', currentGameId.value);
-    console.log('Полученные результаты игры:', results);
+    const results = await store.dispatch('games/fetchGameResults', currentGameId.value)
+    console.log('Полученные результаты игры:', results)
 
     teams.value = results.map((result, index) => ({
       scoreByRounds: result.scoreByRounds || [],
       currentPlace: result.currentPlace || 0,
       totalScore: result.totalScore || 0,
-    }));
+    }))
   } catch (error) {
-    console.error('Ошибка при получении данных:', error.message);
+    console.error('Ошибка при получении данных:', error.message)
   }
-};
+}
 
 onMounted(async () => {
   try {

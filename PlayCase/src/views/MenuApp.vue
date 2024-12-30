@@ -98,9 +98,13 @@ const menuItems = ref([
   //     router.push({ name: 'WinnerPage' })
   //   },
   // },
-  { name: 'Рейтинг команд', image: ratingImage, function: () => {
-    router.push({name: 'ResultsExcel'})
-  } },
+  {
+    name: 'Рейтинг команд',
+    image: ratingImage,
+    function: () => {
+      router.push({ name: 'ResultsExcel' })
+    },
+  },
   {
     name: 'Меню ресторана',
     image: menuImage,
@@ -243,7 +247,7 @@ p {
   }
   .back-button {
     margin-top: -12px;
-    margin-left: -120px
+    margin-left: -120px;
   }
   .footer {
     margin-top: 3px;

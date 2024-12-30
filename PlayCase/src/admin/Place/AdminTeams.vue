@@ -7,7 +7,6 @@
       {{ isActiveGame ? 'Игра активирована' : 'Активировать игру' }}
     </button>
 
-
     <div class="add-team" v-if="!editingTeam">
       <h2>Добавить новую команду</h2>
       <form @submit.prevent="addTeam" class="form">
@@ -77,7 +76,6 @@
     </div>
 
     <button class="button" @click="goToUploadResults">Загрузить рейтинг</button>
-
   </div>
 </template>
 

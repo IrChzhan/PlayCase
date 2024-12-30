@@ -30,10 +30,7 @@ const toastType = ref('success')
 useAuthCheck()
 
 const handleLogin = async () => {
-  const success = await store.dispatch(
-    'profile/login',
-    login.value,
-  )
+  const success = await store.dispatch('profile/login', login.value)
   if (success) {
     toastMessage.value = 'Авторизация успешна!'
     toastType.value = 'success'

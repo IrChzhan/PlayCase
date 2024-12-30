@@ -1,161 +1,140 @@
-<script setup>
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
-
-const isMenuOpen = ref(false);
-const router = useRouter();
-const role = ref('');
-
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-};
-
-const checkAccess = () => {
-  const personalKey = localStorage.getItem('role');
-  role.value = personalKey
-  if (!personalKey) {
-    router.push('/auth');
-  }
-  if (role.value === "PLAYER") {
-    router.push('/auth');
-  }
-  if (role.value === "MANAGER") {
-    router.push({name: 'AdminGames'});
-  }
-};
-
-checkAccess();
-
-const goToPlaces = () => {
-  router.push({name: 'AdminPlaces'});
-};
-
-const goToUsers = () => {
-  router.push({name: 'AdminUsers'});
-};
-
-const goToGames = () => {
-  router.push({name: 'AdminGames'});
-};
-
-const logout = () => {
-  localStorage.removeItem('personal');
-  router.push('/auth');
-};
-</script>
-
 <template>
-  <div>
-    <div class="sidebar" :class="{ open: isMenuOpen }">
-      <button class="menu-toggle" @click="toggleMenu">
-        <span :class="{ 'arrow-right': !isMenuOpen, 'arrow-left': isMenuOpen }"></span>
-      </button>
-      <div class="menu-content">
-        <button class="menu-item" @click="goToPlaces" v-if="role === 'ADMIN'">Заведения</button>
-        <button class="menu-item" @click="goToUsers" v-if="role === 'ADMIN'">Пользователи</button>
-        <button class="menu-item" @click="goToGames">Игры</button>
-        <button class="menu-item logout" @click="logout">Выйти</button>
+  <div class="block">
+    <div class="topbar">
+      <div class="container">
+        <button
+          class="topbar-button"
+          :class="{ active: isRouteActive('games') }"
+          @click="goToGames"
+        >
+          Игры
+        </button>
+        <button
+          class="topbar-button"
+          :class="{ active: isRouteActive('places') }"
+          @click="goToPlaces"
+        >
+          Места
+        </button>
+        <button
+          class="topbar-button"
+          :class="{ active: isRouteActive('users') }"
+          @click="goToUsers"
+        >
+          Юзеры
+        </button>
       </div>
+      <button class="logout-button" @click="logout">Выйти</button>
     </div>
 
-    <div class="content" :class="{ 'menu-open': isMenuOpen }">
+    <div class="content">
       <router-view></router-view>
     </div>
   </div>
 </template>
 
+<script setup>
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+const role = ref('')
+
+const checkAccess = () => {
+  const personalKey = localStorage.getItem('role')
+  role.value = personalKey
+  if (!personalKey || role.value === 'PLAYER') {
+    router.push('/auth')
+  }
+}
+
+checkAccess()
+
+const isRouteActive = (routeName) => {
+  const temp = route.path.split('/')
+  return temp.find((el) => el === routeName) !== undefined
+}
+
+const goToPlaces = () => {
+  router.push({ name: 'AdminPlaces' })
+}
+
+const goToUsers = () => {
+  router.push({ name: 'AdminUsersPersonal' })
+}
+
+const goToGames = () => {
+  router.push({ name: 'AdminGames' })
+}
+
+const logout = () => {
+  localStorage.removeItem('personal')
+  router.push('/auth')
+}
+</script>
+
 <style scoped>
+.block {
+  height: 100%;
+}
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100vh;
-  background-color: #ffffff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
+.container {
   display: flex;
-  flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
+  flex-direction: row;
+  gap: 20px;
 }
 
-.sidebar.open {
-  transform: translateX(0);
-}
-
-.menu-content {
-  flex: 1;
+.topbar {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f8f8;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.menu-item {
-  background: #27364f;
+.topbar-button {
+  background: #4b6587;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-right: 10px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  text-align: center;
-  font-size: 16px;
+  transition: background 0.3s;
 }
 
-.menu-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+.topbar-button:hover {
+  background: #34495e;
 }
 
-.menu-item.logout {
+.topbar-button.active {
+  background: #1abc9c;
+}
+
+.logout-button {
   background: #d9534f;
   color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
 }
 
-.menu-item.logout:hover {
+.logout-button:hover {
   background: #c9302c;
 }
 
-.menu-toggle {
-  position: absolute;
-  top: 20px;
-  right: -30px;
-  width: 30px;
-  height: 30px;
-  background: #27364f;
-  color: #ffffff;
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.3s ease-in-out;
-}
-
-.menu-toggle .arrow-right::before {
-  content: '\25B6';
-  font-size: 16px;
-}
-
-.menu-toggle .arrow-left::before {
-  content: '\25C0';
-  font-size: 16px;
-}
-
 .content {
-  margin-left: 0;
-  transition: margin-left 0.3s ease-in-out;
-}
-
-.content.menu-open {
-  margin-left: 250px;
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1) inset;
 }
 </style>

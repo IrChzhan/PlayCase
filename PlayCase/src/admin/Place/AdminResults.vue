@@ -2,16 +2,8 @@
   <div class="admin-results">
     <h1>Загрузить результаты для игры</h1>
     <div class="upload-container">
-      <input 
-        class="file-input" 
-        type="file" 
-        @change="handleFileChange" 
-      />
-      <button 
-        class="upload-button" 
-        @click="uploadFile" 
-        :disabled="loading"
-      >
+      <input class="file-input" type="file" @change="handleFileChange" />
+      <button class="upload-button" @click="uploadFile" :disabled="loading">
         {{ loading ? 'Загрузка...' : 'Загрузить файл' }}
       </button>
     </div>
@@ -20,8 +12,8 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
+import { ref } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   name: 'AdminResults',
@@ -32,50 +24,50 @@ export default {
     },
   },
   setup(props) {
-    const store = useStore();
-    const selectedFile = ref(null);
-    const loading = ref(false);
-    const uploadSuccess = ref(false);
+    const store = useStore()
+    const selectedFile = ref(null)
+    const loading = ref(false)
+    const uploadSuccess = ref(false)
 
-        const handleFileChange = (event) => {
-          selectedFile.value = event.target.files[0];
-            if (selectedFile.value) {
-                 console.log('Имя файла:', selectedFile.value.name);
-                console.log('Размер файла:', selectedFile.value.size);
-               console.log('Тип файла:', selectedFile.value.type);
-            }
-        };
+    const handleFileChange = (event) => {
+      selectedFile.value = event.target.files[0]
+      if (selectedFile.value) {
+        console.log('Имя файла:', selectedFile.value.name)
+        console.log('Размер файла:', selectedFile.value.size)
+        console.log('Тип файла:', selectedFile.value.type)
+      }
+    }
 
     const uploadFile = async () => {
       if (!selectedFile.value) {
-        alert('Пожалуйста, выберите файл.');
-        return;
+        alert('Пожалуйста, выберите файл.')
+        return
       }
 
-      loading.value = true;
+      loading.value = true
       try {
         await store.dispatch('games/uploadResultsFile', {
           gameId: props.gameId,
           file: selectedFile.value,
-        });
-        uploadSuccess.value = true;
+        })
+        uploadSuccess.value = true
       } catch (error) {
-        console.error('Ошибка при загрузке файла:', error);
-        alert('Ошибка при загрузке файла. Попробуйте снова.');
+        console.error('Ошибка при загрузке файла:', error)
+        alert('Ошибка при загрузке файла. Попробуйте снова.')
       } finally {
-        loading.value = false;
+        loading.value = false
       }
-    };
+    }
 
     return {
       selectedFile,
       loading,
       uploadSuccess,
-       handleFileChange,
+      handleFileChange,
       uploadFile,
-    };
+    }
   },
-};
+}
 </script>
 
 <style scoped>
@@ -120,7 +112,9 @@ export default {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .upload-button:hover {

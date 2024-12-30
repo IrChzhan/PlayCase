@@ -36,7 +36,7 @@ export default {
     },
     SET_ROLE(state, role) {
       localStorage.setItem('role', role)
-    }
+    },
   },
   actions: {
     async fetchUsers({ commit }) {
@@ -46,6 +46,31 @@ export default {
         return response.data
       } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error)
+      }
+    },
+    async getUser({ commit }, id) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users/${id}`)
+        return response.data
+      } catch (error) {
+        console.error('Ошибка при загрузке пользователей:', error)
+      }
+    },
+    async updateUser({ commit }, { id, payload, payload_two }) {
+      try {
+        const response = await axios.put(
+          `${import.meta.env.VITE_API_URL}/admin/v1/users/${id}`,
+          payload,
+        )
+
+        const response_two = await axios.post(
+          `${import.meta.env.VITE_API_URL}/admin/v1/users/${id}/actions/changePassword`,
+          payload_two,
+        )
+
+        return true
+      } catch (e) {
+        return false
       }
     },
     async login({ commit }, loginPayload) {
@@ -67,7 +92,7 @@ export default {
         return false
       }
     },
-    async loginPersonal({commit}, loginPayload) {
+    async loginPersonal({ commit }, loginPayload) {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/v1/authorization`,
@@ -77,11 +102,10 @@ export default {
 
         commit('SET_TOKEN', accessToken)
 
-        const response_two = await axios.get(
-          `${import.meta.env.VITE_API_URL}/v1/users/me`,
-          {headers: {'Authorization': `Bearer ${accessToken}`}}
-        )
-        commit('SET_ROLE',response_two.data.authorities[0].authority)
+        const response_two = await axios.get(`${import.meta.env.VITE_API_URL}/v1/users/me`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        commit('SET_ROLE', response_two.data.authorities[0].authority)
         return true
       } catch (error) {
         console.error('Ошибка при авторизации:', error)

@@ -306,7 +306,7 @@ function cancelPaymentMethod() {
 
 @media (min-width: 768px) and (max-width: 1024px) {
   .modal-content {
-    width: 85vw; 
+    width: 85vw;
     padding: 20px;
   }
 
@@ -410,7 +410,7 @@ function cancelPaymentMethod() {
     margin-bottom: 20px;
     display: block;
     margin-left: auto;
-    margin-right: auto; 
+    margin-right: auto;
   }
 
   .back-button {
