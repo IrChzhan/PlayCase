@@ -154,7 +154,7 @@ const routes = [
         props: true,
       },
       {
-        path: '/admin/games',
+        path: '',
         name: 'AdminGames',
         component: AdminGames,
         props: true,
