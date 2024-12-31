@@ -3,10 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AdminHome from '@/admin/AdminHome.vue'
 import AdminGames from '@/admin/Place/AdminGames.vue'
 import AdminMenuPlace from '@/admin/Place/AdminMenuPlace.vue'
-import AdminPlace from '@/admin/Place/AdminPlace.vue'
 import AdminPlaces from '@/admin/Place/AdminPlaces.vue'
 import AdminResults from '@/admin/Place/AdminResults.vue'
 import AdminTeams from '@/admin/Place/AdminTeams.vue'
+import AdminPlacesCreatePlace from '@/admin/Places/AdminPlacesCreatePlace.vue'
+import AdminPlacesHome from '@/admin/Places/AdminPlacesHome.vue'
+import AdminPlace from '@/admin/Places/AdminPlacesPlace.vue'
+import AdminPlacesPlace from '@/admin/Places/AdminPlacesPlace.vue'
 import AdminUserChangePersonal from '@/admin/Users/AdminUserChangePersonal.vue'
 import AdminUserChangePlayer from '@/admin/Users/AdminUserChangePlayer.vue'
 import AdminUserCreatePersonal from '@/admin/Users/AdminUserCreatePersonal.vue'
@@ -32,134 +35,140 @@ const routes = [
     component: HomePage,
   },
   {
-    path: '/auth',
+    path: `${import.meta.env.VITE_Path_App}/auth`,
     name: 'AdminAuthPage',
     component: AdminAuthPage,
   },
   {
-    path: `/TeamNameInput`,
+    path: `${import.meta.env.VITE_Path_App}/TeamNameInput`,
     name: 'TeamNameInput',
     component: TeamNameInput,
   },
   {
-    path: '/display',
+    path: `${import.meta.env.VITE_Path_App}/display`,
     name: 'TeamNameDisplay',
     component: TeamNameDisplay,
     props: true,
   },
   {
-    path: '/menu-app',
+    path: `${import.meta.env.VITE_Path_App}/menu-app`,
     name: 'MenuApp',
     component: MenuApp,
     props: true,
   },
   {
-    path: '/restourant-menu',
+    path: `${import.meta.env.VITE_Path_App}/restourant-menu`,
     name: 'RestourantMenu',
     component: MenuRestourant,
     props: true,
   },
   {
-    path: '/rules',
+    path: `${import.meta.env.VITE_Path_App}/rules`,
     name: 'Rules',
     component: Rules,
     props: true,
   },
 
   {
-    path: '/winnerpage',
+    path: `${import.meta.env.VITE_Path_App}/winnerpage`,
     name: 'WinnerPage',
     component: WinnerPage,
     props: true,
   },
 
   {
-    path: '/admin',
+    path: `${import.meta.env.VITE_Path_App}/admin`,
     component: AdminHome,
     children: [
       {
-        path: '/admin/users',
+        path: `${import.meta.env.VITE_Path_App}/admin/users`,
         name: 'AdminUsersHome',
         component: AdminUsersHome,
         children: [
           {
-            path: '/admin/users/personal',
+            path: `${import.meta.env.VITE_Path_App}/admin/users/personal`,
             name: 'AdminUsersPersonal',
             component: AdminUsersPersonal,
           },
           {
-            path: '/admin/users/players',
+            path: `${import.meta.env.VITE_Path_App}/admin/users/players`,
             name: 'AdminUsersPlayers',
             component: AdminUsersPlayers,
           },
           {
-            path: '/admin/users/players/create',
+            path: `${import.meta.env.VITE_Path_App}/admin/users/players/create`,
             name: 'AdminUserCreatePlayers',
             component: AdminUserCreatePlayer,
           },
           {
-            path: '/admin/users/personal/create',
+            path: `${import.meta.env.VITE_Path_App}/admin/users/personal/create`,
             name: 'AdminUserCreatePersonal',
             component: AdminUserCreatePersonal,
           },
           {
-            path: '/admin/users/personal/change:id',
+            path: `${import.meta.env.VITE_Path_App}/admin/users/personal/change:id`,
             name: 'AdminUserChangePersonal',
             component: AdminUserChangePersonal,
           },
           {
-            path: '/admin/users/players/change:id',
+            path: `${import.meta.env.VITE_Path_App}/admin/users/players/change:id`,
             name: 'AdminUserChangePlayer',
             component: AdminUserChangePlayer,
           },
         ],
       },
       {
-        path: '',
-        name: 'AdminPlaces',
-        component: AdminPlaces,
-        props: true,
+        path: `${import.meta.env.VITE_Path_App}/admin/places`,
+        name: 'AdminPlacesHome',
+        component: AdminPlacesHome,
+        children: [
+          {
+            path: `${import.meta.env.VITE_Path_App}/admin/places/create`,
+            name: 'AdminPlacesCreatePlace',
+            component: AdminPlacesCreatePlace,
+          },
+          {
+            path: `${import.meta.env.VITE_Path_App}/admin/places/place/:id`,
+            name: 'AdminPlacesPlace',
+            component: AdminPlacesPlace,
+            props: true,
+          },
+          {
+            path: `${import.meta.env.VITE_Path_App}/admin/place/:id/category/:categoryId`,
+            name: 'AdminMenuPlace',
+            component: AdminMenuPlace,
+            props: true,
+          },
+        ],
       },
       {
-        path: '/admin/game/:gameId',
+        path: `${import.meta.env.VITE_Path_App}/admin/game/:gameId`,
         name: 'AdminTeams',
         component: AdminTeams,
         props: true,
       },
       {
-        path: '/admin/game/:gameId/teams/results',
+        path: `${import.meta.env.VITE_Path_App}/admin/game/:gameId/teams/results`,
         name: 'AdminResults',
         component: AdminResults,
         props: true,
       },
       {
-        path: '/admin/games',
+        path: `${import.meta.env.VITE_Path_App}/admin/games`,
         name: 'AdminGames',
         component: AdminGames,
-        props: true,
-      },
-      {
-        path: '/admin/place/:id',
-        name: 'Place',
-        component: AdminPlace,
-        props: true,
-      },
-      {
-        path: '/admin/place/:id/category/:categoryId',
-        name: 'AdminMenuPlace',
-        component: AdminMenuPlace,
         props: true,
       },
     ],
   },
   {
-    path: '/registrateusers',
+    path: `${import.meta.env.VITE_Path_App}/registrateusers`,
     name: 'RegistrateUsers',
     component: RegistrateUsers,
     props: true,
   },
   {
-    path: '/resultsExcel',
+    path: `${import.meta.env.VITE_Path_App}/resultsExcel`,
     name: 'ResultsExcel',
     component: ResultsExcel,
     props: true,

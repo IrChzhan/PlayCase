@@ -131,6 +131,7 @@ const menuItems = ref([
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: #1b2a46;
 }
 
 .header {

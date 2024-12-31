@@ -1,34 +1,36 @@
 <template>
-  <div class="rules-block">
-    <h1 class="title">Правила игры</h1>
-    <p class="intro">Вас ждут 7 раундов с небольшими перерывами после 3 и 6 раундов.</p>
-    <p class="description">
-      Почти во всех раундах, за редким исключением, будет по 6 вопросов. После каждого вопроса вам в
-      команде надо будет посовещаться и написать ответ на бланках, которые будут лежать где-то
-      рядом. После каждого раунда надо сдать бланк.
-    </p>
+  <div class="container">
+    <div class="rules-block">
+      <h1 class="title">Правила игры</h1>
+      <p class="intro">Вас ждут 7 раундов с небольшими перерывами после 3 и 6 раундов.</p>
+      <p class="description">
+        Почти во всех раундах, за редким исключением, будет по 6 вопросов. После каждого вопроса вам
+        в команде надо будет посовещаться и написать ответ на бланках, которые будут лежать где-то
+        рядом. После каждого раунда надо сдать бланк.
+      </p>
 
-    <ul class="rounds-list">
-      <li><span class="round-number">1 раунд.</span> Разминка.</li>
-      <li><span class="round-number">2 раунд.</span> На логику.</li>
-      <li><span class="round-number">3 раунд.</span> Музыкальный.</li>
-      <li><span class="round-number">4 раунд.</span> Интерактивный.</li>
-      <li><span class="round-number">5 раунд.</span> Сюрприз.</li>
-      <li><span class="round-number">6 раунд.</span> Тематический.</li>
-      <li><span class="round-number">7 раунд.</span> Решающий.</li>
-    </ul>
+      <ul class="rounds-list">
+        <li><span class="round-number">1 раунд.</span> Разминка.</li>
+        <li><span class="round-number">2 раунд.</span> На логику.</li>
+        <li><span class="round-number">3 раунд.</span> Музыкальный.</li>
+        <li><span class="round-number">4 раунд.</span> Интерактивный.</li>
+        <li><span class="round-number">5 раунд.</span> Сюрприз.</li>
+        <li><span class="round-number">6 раунд.</span> Тематический.</li>
+        <li><span class="round-number">7 раунд.</span> Решающий.</li>
+      </ul>
 
-    <p class="additional-info">
-      Если у вас будут появляться вопросы перед игрой или в течение нее, не стесняйтесь задавать их
-      нашим помощникам.
-    </p>
+      <p class="additional-info">
+        Если у вас будут появляться вопросы перед игрой или в течение нее, не стесняйтесь задавать
+        их нашим помощникам.
+      </p>
 
-    <p class="note">
-      Ни в коем случае <span class="highlight">нельзя забывать вкусно есть</span> и
-      <span class="highlight">пить во время игры</span>! За этот пункт вашего досуга отвечают наши
-      партнерские крутые бары.
-    </p>
-    <img src="@/assets/house_light.png" class="house_button" @click="goToMenuApp" alt="home" />
+      <p class="note">
+        Ни в коем случае <span class="highlight">нельзя забывать вкусно есть</span> и
+        <span class="highlight">пить во время игры</span>! За этот пункт вашего досуга отвечают наши
+        партнерские крутые бары.
+      </p>
+      <img src="@/assets/house_light.png" class="house_button" @click="goToMenuApp" alt="home" />
+    </div>
   </div>
 </template>
 
@@ -36,6 +38,7 @@
 import { useRouter } from 'vue-router'
 
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+
 useAuthCheck()
 const router = useRouter()
 
@@ -45,6 +48,16 @@ const goToMenuApp = () => {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background: #1b2a46;
+}
 .rules-block {
   background: #ffffff;
   border-radius: 16px;
@@ -148,6 +161,7 @@ const goToMenuApp = () => {
     margin-left: 400px;
     cursor: pointer;
   }
+
   .note {
     margin-bottom: 10px;
     margin-top: -25px;

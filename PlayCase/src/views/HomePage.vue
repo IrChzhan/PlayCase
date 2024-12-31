@@ -27,6 +27,7 @@ const goToAuthPage = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #1b2a46;
 }
 
 .button-container {

@@ -10,6 +10,7 @@
           Игры
         </button>
         <button
+          v-if="role === 'ADMIN'"
           class="topbar-button"
           :class="{ active: isRouteActive('places') }"
           @click="goToPlaces"
@@ -18,6 +19,7 @@
         </button>
         <button
           class="topbar-button"
+          v-if="role === 'ADMIN'"
           :class="{ active: isRouteActive('users') }"
           @click="goToUsers"
         >
@@ -34,7 +36,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -45,7 +47,9 @@ const checkAccess = () => {
   const personalKey = localStorage.getItem('role')
   role.value = personalKey
   if (!personalKey || role.value === 'PLAYER') {
-    router.push('/auth')
+    router.push('/')
+  } else {
+    router.push({ name: 'AdminGames' })
   }
 }
 
@@ -57,7 +61,7 @@ const isRouteActive = (routeName) => {
 }
 
 const goToPlaces = () => {
-  router.push({ name: 'AdminPlaces' })
+  router.push({ name: 'AdminPlacesHome' })
 }
 
 const goToUsers = () => {
@@ -70,7 +74,7 @@ const goToGames = () => {
 
 const logout = () => {
   localStorage.removeItem('personal')
-  router.push('/auth')
+  router.push('/')
 }
 </script>
 

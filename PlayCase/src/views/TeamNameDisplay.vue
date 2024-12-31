@@ -36,6 +36,7 @@ const goToMenuApp = () => {
   height: 100vh;
   justify-content: center;
   position: relative;
+  background: #1b2a46;
 }
 
 .team-name {

@@ -1,29 +1,31 @@
 <template>
-  <div class="menu-page">
-    <h1>Меню ресторана</h1>
-    <div class="category-filters">
-      <button
-        v-for="category in categories"
-        :key="category.id"
-        @click="filterByCategory(category.id)"
-        :class="{ active: selectedCategoryId === category.id }"
-      >
-        {{ category.name }}
-      </button>
-      <button @click="clearFilter" :class="{ active: selectedCategoryId === null }">Все</button>
-    </div>
+  <div class="container">
+    <div class="menu-page">
+      <h1>Меню ресторана</h1>
+      <div class="category-filters">
+        <button
+          v-for="category in categories"
+          :key="category.id"
+          @click="filterByCategory(category.id)"
+          :class="{ active: selectedCategoryId === category.id }"
+        >
+          {{ category.name }}
+        </button>
+        <button @click="clearFilter" :class="{ active: selectedCategoryId === null }">Все</button>
+      </div>
 
-    <div class="meals-grid">
-      <div class="meal-card" v-for="meal in filteredMenuItems" :key="meal.id">
-        <img
-          :src="meal.image || '/assets/default-image.png'"
-          alt="Изображение блюда"
-          class="meal-image"
-        />
-        <div class="meal-info">
-          <p class="meal-price">{{ meal.price }} ₽</p>
-          <h2 class="meal-name">{{ meal.name }}</h2>
-          <p class="meal-description">{{ meal.description }}</p>
+      <div class="meals-grid">
+        <div class="meal-card" v-for="meal in filteredMenuItems" :key="meal.id">
+          <img
+            :src="meal.image || '/assets/default-image.png'"
+            alt="Изображение блюда"
+            class="meal-image"
+          />
+          <div class="meal-info">
+            <p class="meal-price">{{ meal.price }} ₽</p>
+            <h2 class="meal-name">{{ meal.name }}</h2>
+            <p class="meal-description">{{ meal.description }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -103,6 +105,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.container {
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background: #1c2742;
+}
+
 .menu-page {
   padding: 20px;
   background-color: #1c2742;

@@ -45,8 +45,8 @@ import { useStore } from 'vuex'
 import Notification from '@/admin/Notification.vue'
 import AdminAddCategoryModal from '@/admin/Place/AdminAddCategoryModal.vue'
 
-import EditPlaceModal from './AdminEditPlaceModal.vue'
-import MenuList from './AdminMenuList.vue'
+import EditPlaceModal from '../Place/AdminEditPlaceModal.vue'
+import MenuList from '../Place/AdminMenuList.vue'
 
 const route = useRoute()
 const store = useStore()

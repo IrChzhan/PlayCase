@@ -64,6 +64,7 @@ const handleLogin = async () => {
   font-family: 'Arial', sans-serif;
   color: white;
   text-align: center;
+  background: #1b2a46;
 }
 
 h1 {
