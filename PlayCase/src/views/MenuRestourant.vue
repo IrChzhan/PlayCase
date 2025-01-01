@@ -6,12 +6,12 @@
         <button
           v-for="category in categories"
           :key="category.id"
-          @click="filterByCategory(category.id)"
-          :class="{ active: selectedCategoryId === category.id }"
+          @click="filterByCategory(category.name)"
+          :class="{ active: selectedCategoryName === category.name }"
         >
           {{ category.name }}
         </button>
-        <button @click="clearFilter" :class="{ active: selectedCategoryId === null }">Все</button>
+        <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">Все</button>
       </div>
 
       <div class="meals-grid">
@@ -33,75 +33,70 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { computed, onMounted, ref } from 'vue'
+import axios from 'axios';
+import { computed, onMounted, ref } from 'vue';
 
-const categories = ref([])
-const meals = ref([])
-const selectedCategoryId = ref(null)
+const categories = ref([]);
+const meals = ref([]);
+const selectedCategoryName = ref(null); 
 
+// Получение меню с сервера
 const fetchMenu = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/place/current/menu`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-    })
+    });
 
-    categories.value = response.data.mealCategories
-    console.log(
-      'Категории:',
-      categories.value.map((category) => ({
-        id: category.id,
-        name: category.name,
-      })),
-    )
+    categories.value = response.data.mealCategories.map((category) => ({
+      id: category.id,
+      name: category.name,
+    }));
 
     meals.value = response.data.mealCategories.flatMap((category) =>
       category.meals.map((meal) => {
-        const mealWithCategory = {
+        return {
           id: meal.id,
           name: meal.name,
           description: meal.description,
-          categoryId: meal.categoryId,
+          categoryName: category.name, 
           price: meal.price,
           image: meal.fileUrl,
-        }
-        console.log(`Блюдо: ${mealWithCategory.name}, Category ID: ${mealWithCategory.categoryId}`)
-        return mealWithCategory
-      }),
-    )
+        };
+      })
+    );
   } catch (error) {
-    console.error('Ошибка при получении меню:', error)
+    console.error('Ошибка при получении меню:', error);
     store.dispatch('notification/showNotification', {
       type: 'error',
       message: 'Ошибка при загрузке меню. Попробуйте позже.',
-    })
+    });
   }
-}
+};
 
 const filteredMenuItems = computed(() => {
-  if (selectedCategoryId.value !== null) {
-    console.log(`Фильтруем блюда по категории ID: ${selectedCategoryId.value}`)
-    return meals.value.filter((meal) => meal.categoryId === selectedCategoryId.value)
+  if (selectedCategoryName.value !== null) {
+    console.log(`Фильтруем блюда по категории: ${selectedCategoryName.value}`);
+    return meals.value.filter((meal) => meal.categoryName === selectedCategoryName.value);
   }
-  console.log('Показываем все блюда')
-  return meals.value
-})
+  console.log('Показываем все блюда');
+  return meals.value;
+});
 
-const filterByCategory = (categoryId) => {
-  selectedCategoryId.value = categoryId
-  console.log(`Выбрана категория ID: ${categoryId}`)
-}
+const filterByCategory = (categoryName) => {
+  selectedCategoryName.value = categoryName;
+  console.log(`Выбрана категория: ${categoryName}`);
+};
 
 const clearFilter = () => {
-  selectedCategoryId.value = null
-  console.log('Сброс фильтра, показываем все категории')
-}
+  selectedCategoryName.value = null;
+  console.log('Сброс фильтра, показываем все категории');
+};
 
 onMounted(() => {
-  fetchMenu()
-})
+  fetchMenu();
+});
 </script>
 
 <style scoped>
