@@ -1,11 +1,20 @@
 <template>
   <div class="admin-teams">
-    <h1>Добавление команд в игру</h1>
-    <p>ID игры: {{ gameId }}</p>
+    <h1>Управление командами и игрой</h1>
 
     <button class="button activate" @click="activateGame">
-      {{ isActiveGame ? 'Игра активирована' : 'Активировать игру' }}
+      {{ isGameActive ? 'Игра активирована' : 'Активировать игру' }}
     </button>
+      <p v-if="activationSuccess" class="success-message">Игра успешно активирована!</p>
+
+    <div class="upload-container">
+      <h2>Загрузить команды из файла</h2>
+      <input class="file-input" type="file" @change="handleFileChange" />
+      <button class="upload-button" @click="uploadFile" :disabled="loading">
+        {{ loading ? 'Загрузка...' : 'Загрузить файл' }}
+      </button>
+      <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
+    </div>
 
     <div class="add-team" v-if="!editingTeam">
       <h2>Добавить новую команду</h2>
@@ -79,131 +88,221 @@
   </div>
 </template>
 
-<script setup>
-import { onMounted, ref } from 'vue'
+<script>
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
-const store = useStore()
-const route = useRoute()
-const router = useRouter()
-const gameId = route.params.gameId
-const teams = ref([])
-const teamName = ref('')
-const editingTeam = ref(null)
-const loading = ref(false)
+export default {
+  name: 'AdminTeams',
+  props: {
+    gameId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const store = useStore()
+    const route = useRoute()
+    const router = useRouter()
+    const gameId = route.params.gameId
 
-const users = ref([])
-const isModalOpen = ref(false)
-const selectedUserId = ref(null)
+    const selectedFile = ref(null)
+    const loading = ref(false)
+    const uploadSuccess = ref(false)
+    const teams = ref([])
+    const teamName = ref('')
+    const editingTeam = ref(null)
 
-const isActiveGame = ref(false)
+    const users = ref([])
+    const isModalOpen = ref(false)
+    const selectedUserId = ref(null)
 
-const activateGame = () => {
-  localStorage.setItem('activeGameId', gameId)
-  isActiveGame.value = true
-}
+    const isGameActive = ref(false)
+    const activationSuccess = ref(false);
 
-const goToUploadResults = () => {
-  router.push({ name: 'AdminResults', params: { gameId } })
-}
 
-onMounted(() => {
-  getUsers()
-  if (localStorage.getItem('activeGameId') === gameId) {
-    isActiveGame.value = true
-  }
-  fetchTeams()
-})
-
-const openAssignTableModal = (team) => {
-  selectedUserId.value = team.tableNumber || null
-  isModalOpen.value = true
-}
-
-const closeModal = () => {
-  isModalOpen.value = false
-}
-
-const getUsers = async () => {
-  const user = await store.dispatch('profile/fetchUsers')
-  users.value = user
-}
-
-const fetchTeams = async () => {
-  try {
-    loading.value = true
-    const response = await store.dispatch('games/fetchGameTeams', gameId)
-    teams.value = response
-  } catch (error) {
-    console.error('Ошибка загрузки команд:', error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const addTeam = async () => {
-  try {
-    const newTeam = await store.dispatch('games/addTeamToGame', {
-      gameId,
-      teamData: {
-        name: teamName.value,
-        participantsCount: 0,
-        isFirstTime: true,
-        isPrepaid: true,
-        certificate: '',
-        promocode: '',
-        markComment: '',
-      },
+    onMounted(async () => {
+      await fetchTeams()
+      await fetchGameStatus()
+      getUsers()
     })
-    teams.value.push(newTeam)
-    teamName.value = ''
-  } catch (error) {
-    console.error('Ошибка добавления команды:', error)
-  }
-}
 
-const startEditing = (team) => {
-  editingTeam.value = { ...team }
-}
+    const fetchTeams = async () => {
+        try {
+            const response = await store.dispatch('games/fetchTeams', {
+                gameId: props.gameId,
+            })
+            teams.value = response.data
+        } catch (error) {
+            console.error('Ошибка при загрузке команд:', error)
+        }
+    }
 
-const cancelEditing = () => {
-  editingTeam.value = null
-}
+    const fetchGameStatus = async () => {
+        try {
+            const response = await store.dispatch('games/fetchGameStatus', {
+                gameId: props.gameId,
+            })
+            isGameActive.value = response.data.is_active
+          } catch (error) {
+            console.error('Ошибка при получении статуса игры:', error)
+        }
+    }
 
-const updateTeam = async () => {
-  try {
-    await store.dispatch('games/updateTeamInGame', {
-      gameId,
-      teamId: editingTeam.value.id,
-      teamData: editingTeam.value,
-    })
-    await fetchTeams()
-    editingTeam.value = null
-  } catch (error) {
-    console.error('Ошибка обновления команды:', error)
-  }
-}
+    const handleFileChange = (event) => {
+      selectedFile.value = event.target.files[0]
+      if (selectedFile.value) {
+        console.log('Имя файла:', selectedFile.value.name)
+        console.log('Размер файла:', selectedFile.value.size)
+        console.log('Тип файла:', selectedFile.value.type)
+      }
+    }
 
-const deleteTeam = async (teamId) => {
-  try {
-    await store.dispatch('games/deleteTeamFromGame', { gameId, teamId })
-    teams.value = teams.value.filter((team) => team.id !== teamId)
-  } catch (error) {
-    console.error('Ошибка удаления команды:', error)
-  }
-}
+    const uploadFile = async () => {
+      if (!selectedFile.value) {
+        alert('Пожалуйста, выберите файл.')
+        return
+      }
 
-const assignTable = async (team) => {
-  try {
-    await store.dispatch('games/setUserForTeam', {
-      gameId: gameId,
-      teamId: team,
-      userId: selectedUserId.value,
-    })
-  } catch (error) {
-    console.error('Ошибка установки стола:', error)
-  }
+      loading.value = true
+      try {
+          const updatedTeams = await store.dispatch('games/replaceTeams', {
+              gameId: props.gameId,
+              file: selectedFile.value,
+          })
+           teams.value = updatedTeams
+           uploadSuccess.value = true
+      } catch (error) {
+        console.error('Ошибка при загрузке файла:', error)
+        alert('Ошибка при загрузке файла. Попробуйте снова.')
+      } finally {
+        loading.value = false
+      }
+    }
+
+    const activateGame = async () => {
+      try {
+        await store.dispatch('games/activateGame', { gameId: props.gameId })
+          isGameActive.value = true;
+          activationSuccess.value = true;
+      } catch (error) {
+        console.error('Ошибка при активации игры:', error)
+        alert('Ошибка при активации игры. Попробуйте снова.')
+      }
+    }
+
+    const goToUploadResults = () => {
+      router.push({ name: 'AdminResults', params: { gameId } })
+    }
+
+
+    const openAssignTableModal = (team) => {
+        selectedUserId.value = team.tableNumber || null
+        isModalOpen.value = true
+    }
+
+    const closeModal = () => {
+        isModalOpen.value = false
+    }
+
+    const getUsers = async () => {
+        const user = await store.dispatch('profile/fetchUsers')
+        users.value = user
+    }
+
+    const addTeam = async () => {
+      try {
+        const newTeam = await store.dispatch('games/addTeamToGame', {
+          gameId,
+          teamData: {
+            name: teamName.value,
+            participantsCount: 0,
+            isFirstTime: true,
+            isPrepaid: true,
+            certificate: '',
+            promocode: '',
+            markComment: '',
+          },
+        })
+        teams.value.push(newTeam)
+        teamName.value = ''
+      } catch (error) {
+        console.error('Ошибка добавления команды:', error)
+      }
+    }
+
+    const startEditing = (team) => {
+      editingTeam.value = { ...team }
+    }
+
+    const cancelEditing = () => {
+      editingTeam.value = null
+    }
+
+    const updateTeam = async () => {
+      try {
+          await store.dispatch('games/updateTeamInGame', {
+              gameId,
+              teamId: editingTeam.value.id,
+              teamData: editingTeam.value,
+          })
+          await fetchTeams();
+        editingTeam.value = null
+      } catch (error) {
+        console.error('Ошибка обновления команды:', error)
+      }
+    }
+
+    const deleteTeam = async (teamId) => {
+      try {
+        await store.dispatch('games/deleteTeamFromGame', { gameId, teamId })
+        teams.value = teams.value.filter((team) => team.id !== teamId)
+      } catch (error) {
+        console.error('Ошибка удаления команды:', error)
+      }
+    }
+
+    const assignTable = async (team) => {
+      try {
+          await store.dispatch('games/setUserForTeam', {
+              gameId: gameId,
+              teamId: team,
+              userId: selectedUserId.value,
+          })
+          await fetchTeams()
+          closeModal()
+      } catch (error) {
+          console.error('Ошибка установки стола:', error)
+      }
+    }
+
+    return {
+      selectedFile,
+      loading,
+      uploadSuccess,
+      handleFileChange,
+      uploadFile,
+      teams,
+      isGameActive,
+      activateGame,
+      activationSuccess,
+      teamName,
+        editingTeam,
+      goToUploadResults,
+      addTeam,
+      startEditing,
+      cancelEditing,
+      updateTeam,
+      deleteTeam,
+      users,
+      isModalOpen,
+        selectedUserId,
+        openAssignTableModal,
+        closeModal,
+      assignTable
+    }
+  },
 }
 </script>
 
@@ -228,10 +327,55 @@ p {
   margin-bottom: 15px;
 }
 
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+.file-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #394a6a;
+  border-radius: 5px;
+  background: #27364f;
+  color: white;
+}
+
+.upload-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #4caf50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.upload-button:hover {
+  background: #45a049;
+}
+
+.upload-button:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+.success-message {
+  color: #4caf50;
+  text-align: center;
+  margin-top: 15px;
+}
+
 .add-team,
 .edit-team {
   max-width: 400px;
-  margin: 0 auto 20px;
+  margin: 20px auto;
 }
 
 .form-group {
@@ -269,6 +413,7 @@ p {
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
+  margin-top: 15px;
 }
 
 .button:hover {
@@ -282,9 +427,10 @@ p {
 .button.disabled {
   opacity: 0.5;
 }
+
 .team-list {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .team-list ul {
@@ -305,12 +451,13 @@ p {
 }
 
 .button.activate {
-  background-color: #ffa500;
-  margin-bottom: 20px;
+    background-color: #ffa500;
+    margin-bottom: 20px;
 }
 .button.activate:hover {
-  background-color: #ff8c00;
+    background-color: #ff8c00;
 }
+
 .form {
   display: flex;
   flex-direction: column;
@@ -354,14 +501,5 @@ p {
   margin-bottom: 10px;
   display: flex;
   align-items: center;
-}
-
-button {
-  margin-top: 15px;
-  width: 100%;
-}
-
-button:focus {
-  outline: none;
 }
 </style>
