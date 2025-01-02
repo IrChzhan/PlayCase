@@ -30,178 +30,172 @@ import AdminPlacesChangeCategory from "@/admin/Places/AdminPlacesChangeCategory.
 import AdminPlacesCreateMeal from "@/admin/Places/AdminPlacesCreateMeal.vue";
 import AdminPlacesChangeMeal from "@/admin/Places/AdminPlacesChangeMeal.vue";
 
-const routes = [
-  {
-    path: `${import.meta.env.VITE_Path_App}`,
-    name: 'HomePage',
-    component: HomePage,
-  },
-  {
-    path: `/auth`,
-    name: 'AdminAuthPage',
-    component: AdminAuthPage,
-  },
-  {
-    path: `/TeamNameInput`,
-    name: 'TeamNameInput',
-    component: TeamNameInput,
-  },
-  {
-    path: `/display`,
-    name: 'TeamNameDisplay',
-    component: TeamNameDisplay,
-    props: true,
-  },
-  {
-    path: `/menu-app`,
-    name: 'MenuApp',
-    component: MenuApp,
-    props: true,
-  },
-  {
-    path: `/restourant-menu`,
-    name: 'RestourantMenu',
-    component: MenuRestourant,
-    props: true,
-  },
-  {
-    path: '/rules',
-    name: 'Rules',
-    component: Rules,
-    props: true,
-  },
+const routes = [{
+        path: `${import.meta.env.VITE_Path_App}`,
+        name: 'HomePage',
+        component: HomePage,
+    },
+    {
+        path: `/auth`,
+        name: 'AdminAuthPage',
+        component: AdminAuthPage,
+    },
+    {
+        path: `/TeamNameInput`,
+        name: 'TeamNameInput',
+        component: TeamNameInput,
+    },
+    {
+        path: `/display`,
+        name: 'TeamNameDisplay',
+        component: TeamNameDisplay,
+        props: true,
+    },
+    {
+        path: `/menu-app`,
+        name: 'MenuApp',
+        component: MenuApp,
+        props: true,
+    },
+    {
+        path: `/restourant-menu`,
+        name: 'RestourantMenu',
+        component: MenuRestourant,
+        props: true,
+    },
+    {
+        path: '/rules',
+        name: 'Rules',
+        component: Rules,
+        props: true,
+    },
 
-  {
-    path: '/winnerpage',
-    name: 'WinnerPage',
-    component: WinnerPage,
-    props: true,
-  },
+    {
+        path: '/winnerpage',
+        name: 'WinnerPage',
+        component: WinnerPage,
+        props: true,
+    },
 
-  {
-    path: '/admin',
-    component: AdminHome,
-    children: [
-      {
-        path: '/admin/users',
-        name: 'AdminUsersHome',
-        component: AdminUsersHome,
-        children: [
-          {
-            path: '/admin/users/personal',
-            name: 'AdminUsersPersonal',
-            component: AdminUsersPersonal,
-          },
-          {
-            path: '/admin/users/players',
-            name: 'AdminUsersPlayers',
-            component: AdminUsersPlayers,
-          },
-          {
-            path: '/admin/users/players/create',
-            name: 'AdminUserCreatePlayers',
-            component: AdminUserCreatePlayer,
-          },
-          {
-            path: '/admin/users/personal/create',
-            name: 'AdminUserCreatePersonal',
-            component: AdminUserCreatePersonal,
-          },
-          {
-            path: '/admin/users/personal/change:id',
-            name: 'AdminUserChangePersonal',
-            component: AdminUserChangePersonal,
-          },
-          {
-            path: '/admin/users/players/change:id',
-            name: 'AdminUserChangePlayer',
-            component: AdminUserChangePlayer,
-          },
-        ],
-      },
-      {
-        path: '/admin/places',
-        name: 'AdminPlacesHome',
-        component: AdminPlacesHome,
-        children: [
-          {
-            path: '/admin/places/create',
-            name: 'AdminPlacesCreatePlace',
-            component: AdminPlacesCreatePlace
-          },
-          {
-            path: '/admin/places/changePlace/:id',
-            name: 'AdminPlaceChangePlace',
-            component: AdminPlacesChangePlace
-          },
-          {
-            path: '/admin/places/changeCategory/:id/:categoryId',
-            name: 'AdminPlacesChangeCategory',
-            component: AdminPlacesChangeCategory
-          },
-          {
-            path: '/admin/places/changeMeal/:id/:categoryId/:mealId',
-            name: 'AdminPlacesChangeMeal',
-            component: AdminPlacesChangeMeal
-          },
-          {
-            path: '/admin/places/createMeal/:id/:categoryId',
-            name: 'AdminPlacesCreateMeal',
-            component: AdminPlacesCreateMeal
-          },
-          {
-            path: '/admin/places/categories/:id',
-            name: 'AdminPlacesCategories',
-            component: AdminPlacesCategories,
-            children: [
-              {
-                path: '/admin/places/categories/:id/menu/:categoryId',
-                name: 'AdminPlacesMenu',
-                component: AdminPlacesMenu,
+    {
+        path: '/admin',
+        component: AdminHome,
+        children: [{
+                path: '/admin/users',
+                name: 'AdminUsersHome',
+                component: AdminUsersHome,
+                children: [{
+                        path: '/admin/users/personal',
+                        name: 'AdminUsersPersonal',
+                        component: AdminUsersPersonal,
+                    },
+                    {
+                        path: '/admin/users/players',
+                        name: 'AdminUsersPlayers',
+                        component: AdminUsersPlayers,
+                    },
+                    {
+                        path: '/admin/users/players/create',
+                        name: 'AdminUserCreatePlayers',
+                        component: AdminUserCreatePlayer,
+                    },
+                    {
+                        path: '/admin/users/personal/create',
+                        name: 'AdminUserCreatePersonal',
+                        component: AdminUserCreatePersonal,
+                    },
+                    {
+                        path: '/admin/users/personal/change:id',
+                        name: 'AdminUserChangePersonal',
+                        component: AdminUserChangePersonal,
+                    },
+                    {
+                        path: '/admin/users/players/change:id',
+                        name: 'AdminUserChangePlayer',
+                        component: AdminUserChangePlayer,
+                    },
+                ],
+            },
+            {
+                path: '/admin/places',
+                name: 'AdminPlacesHome',
+                component: AdminPlacesHome,
+                children: [{
+                        path: '/admin/places/create',
+                        name: 'AdminPlacesCreatePlace',
+                        component: AdminPlacesCreatePlace
+                    },
+                    {
+                        path: '/admin/places/changePlace/:id',
+                        name: 'AdminPlaceChangePlace',
+                        component: AdminPlacesChangePlace
+                    },
+                    {
+                        path: '/admin/places/changeCategory/:id/:categoryId',
+                        name: 'AdminPlacesChangeCategory',
+                        component: AdminPlacesChangeCategory
+                    },
+                    {
+                        path: '/admin/places/changeMeal/:id/:categoryId/:mealId',
+                        name: 'AdminPlacesChangeMeal',
+                        component: AdminPlacesChangeMeal
+                    },
+                    {
+                        path: '/admin/places/createMeal/:id/:categoryId',
+                        name: 'AdminPlacesCreateMeal',
+                        component: AdminPlacesCreateMeal
+                    },
+                    {
+                        path: '/admin/places/categories/:id',
+                        name: 'AdminPlacesCategories',
+                        component: AdminPlacesCategories,
+                        children: [{
+                            path: '/admin/places/categories/:id/menu/:categoryId',
+                            name: 'AdminPlacesMenu',
+                            component: AdminPlacesMenu,
+                            props: true,
+                        }, ]
+                    },
+                ]
+            },
+            {
+                path: '/admin/game/:gameId',
+                name: 'AdminTeams',
+                component: AdminTeams,
                 props: true,
-              },
-            ]
-          },
-        ]
-      },
-      {
-        path: '/admin/game/:gameId',
-        name: 'AdminTeams',
-        component: AdminTeams,
-        props: true,
-      },
-      {
-        path: '/admin/game/:gameId/teams/results',
-        name: 'AdminResults',
-        component: AdminResults,
-        props: true,
-      },
-      {
-        path: '',
-        name: 'AdminGames',
-        component: AdminGames,
-        props: true,
-      },
+            },
+            {
+                path: '/admin/game/:gameId/teams/results',
+                name: 'AdminResults',
+                component: AdminResults,
+                props: true,
+            },
+            {
+                path: '',
+                name: 'AdminGames',
+                component: AdminGames,
+                props: true,
+            },
 
-    ],
-  },
-  {
-    path: '/registrateusers',
-    name: 'RegistrateUsers',
-    component: RegistrateUsers,
-    props: true,
-  },
-  {
-    path: '/resultsExcel',
-    name: 'ResultsExcel',
-    component: ResultsExcel,
-    props: true,
-  },
+        ],
+    },
+    {
+        path: '/registrateusers',
+        name: 'RegistrateUsers',
+        component: RegistrateUsers,
+        props: true,
+    },
+    {
+        path: '/resultsExcel',
+        name: 'ResultsExcel',
+        component: ResultsExcel,
+        props: true,
+    },
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+    history: createWebHistory(),
+    routes,
 })
 
 export default router

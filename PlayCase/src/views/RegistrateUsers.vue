@@ -3,7 +3,10 @@
     <div class="close-button" @click="goToMenuApp">✖️</div>
     <h1>Зарегистрированные пользователи</h1>
     <br />
-    <div v-if="!registeredUsers || registeredUsers.length === 0">
+    <div v-if="error">
+      <p class="error-message">{{ error }}</p>
+    </div>
+    <div v-else-if="!registeredUsers || registeredUsers.length === 0">
       <p>Пока никто не зарегистрировался в лотерее.</p>
     </div>
     <div v-else>
@@ -11,7 +14,9 @@
         <p><strong>Имя:</strong> {{ user.name }}</p>
         <p><strong>Почта:</strong> {{ user.email }}</p>
         <p><strong>Телефон:</strong> {{ user.phone }}</p>
-        <p><strong>Номер игрока:</strong> {{ user.playerNumber }}</p>
+        <p><strong>Количество участников:</strong> {{ user.participantsCount }}</p>
+        <p><strong>Оплачено онлайн:</strong> {{ user.onlinePaid }}</p>
+        <p><strong>Оплачено оффлайн:</strong> {{ user.offlinePaid }}</p>
       </div>
     </div>
     <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
@@ -19,22 +24,36 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import { ref, computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
 
-import router from '@/router'
+const store = useStore();
+const route = useRoute();
+const router = useRouter();
 
-const store = useStore()
-const registeredUsers = computed(() => store.getters['lottery/registeredUsers'])
-
-onMounted(() => {
-  console.log('RegisterUsers - Initial Registered Users:', registeredUsers.value)
-})
+const registeredUsers = computed(() => store.getters['lottery/registeredUsers']);
+const error = ref('');
+const gameId = route.params.gameId;
+const teamId = route.params.teamId;
+if (!gameId || !teamId) {
+  error.value = 'Не удалось получить данные игры или команды. Проверьте маршрут.';
+} else {
+  onMounted(async () => {
+    try {
+      await store.dispatch('lottery/fetchRegisteredUsers', { gameId, teamId });
+    } catch (err) {
+      console.error('Ошибка при загрузке зарегистрированных пользователей:', err);
+      error.value = 'Произошла ошибка при загрузке данных.';
+    }
+  });
+}
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp', params: { teamName: 'dada', teamTable: 'dadasd' } })
-}
+  router.push({ name: 'MenuApp' });
+};
 </script>
+
 <style scoped>
 .register-users-page {
   display: flex;
@@ -70,7 +89,12 @@ const goToMenuApp = () => {
   bottom: 20px;
   cursor: pointer;
 }
-
+.error-message {
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
 .register-users-page::before {
   content: '';
   position: absolute;
