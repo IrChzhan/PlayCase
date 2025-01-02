@@ -91,13 +91,6 @@ const menuItems = ref([
       router.push({ name: 'Rules' })
     },
   },
-  // {
-  //   name: 'Результаты игры',
-  //   image: prizeImage,                              'УБРАНО'
-  //   function: () => {
-  //     router.push({ name: 'WinnerPage' })
-  //   },
-  // },
   {
     name: 'Рейтинг команд',
     image: ratingImage,

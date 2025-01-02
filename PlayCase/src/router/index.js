@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import AdminHome from '@/admin/AdminHome.vue'
-import AdminGames from '@/admin/Games/AdminGames.vue'
-import AdminResults from '@/admin/Games/AdminResults.vue'
-import AdminTeams from '@/admin/Games/AdminTeams.vue'
+import AdminGames from '@/admin/Place/AdminGames.vue'
+import AdminResults from '@/admin/Place/AdminResults.vue'
+import AdminTeams from '@/admin/Place/AdminTeams.vue'
 import AdminUserChangePersonal from '@/admin/Users/AdminUserChangePersonal.vue'
 import AdminUserChangePlayer from '@/admin/Users/AdminUserChangePlayer.vue'
 import AdminUserCreatePersonal from '@/admin/Users/AdminUserCreatePersonal.vue'
@@ -30,46 +30,45 @@ import AdminPlacesChangeCategory from "@/admin/Places/AdminPlacesChangeCategory.
 import AdminPlacesCreateMeal from "@/admin/Places/AdminPlacesCreateMeal.vue";
 import AdminPlacesChangeMeal from "@/admin/Places/AdminPlacesChangeMeal.vue";
 
-const routes = [
-  {
-    path: `${import.meta.env.VITE_Path_App}`,
-    name: 'HomePage',
-    component: HomePage,
-  },
-  {
-    path: `/auth`,
-    name: 'AdminAuthPage',
-    component: AdminAuthPage,
-  },
-  {
-    path: `/TeamNameInput`,
-    name: 'TeamNameInput',
-    component: TeamNameInput,
-  },
-  {
-    path: `/display`,
-    name: 'TeamNameDisplay',
-    component: TeamNameDisplay,
-    props: true,
-  },
-  {
-    path: `/menu-app`,
-    name: 'MenuApp',
-    component: MenuApp,
-    props: true,
-  },
-  {
-    path: `/restourant-menu`,
-    name: 'RestourantMenu',
-    component: MenuRestourant,
-    props: true,
-  },
-  {
-    path: '/rules',
-    name: 'Rules',
-    component: Rules,
-    props: true,
-  },
+const routes = [{
+        path: `${import.meta.env.VITE_Path_App}`,
+        name: 'HomePage',
+        component: HomePage,
+    },
+    {
+        path: `/auth`,
+        name: 'AdminAuthPage',
+        component: AdminAuthPage,
+    },
+    {
+        path: `/TeamNameInput`,
+        name: 'TeamNameInput',
+        component: TeamNameInput,
+    },
+    {
+        path: `/display`,
+        name: 'TeamNameDisplay',
+        component: TeamNameDisplay,
+        props: true,
+    },
+    {
+        path: `/menu-app`,
+        name: 'MenuApp',
+        component: MenuApp,
+        props: true,
+    },
+    {
+        path: `/restourant-menu`,
+        name: 'RestourantMenu',
+        component: MenuRestourant,
+        props: true,
+    },
+    {
+        path: '/rules',
+        name: 'Rules',
+        component: Rules,
+        props: true,
+    },
 
   {
     path: '/winnerpage',
@@ -198,8 +197,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+    history: createWebHistory(),
+    routes,
 })
 
 export default router
