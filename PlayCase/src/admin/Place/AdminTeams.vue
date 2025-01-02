@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -110,7 +110,6 @@ export default {
     const selectedFile = ref(null)
     const loading = ref(false)
     const uploadSuccess = ref(false)
-    const teams = ref([])
     const teamName = ref('')
     const editingTeam = ref(null)
 
@@ -121,23 +120,25 @@ export default {
     const isGameActive = ref(false)
     const activationSuccess = ref(false);
 
+    const teams = computed(() => store.state.games.teams[props.gameId] || []);
+
 
     onMounted(async () => {
-      await fetchTeams()
-      await fetchGameStatus()
+       await fetchGameStatus();
+        if (!teams.value.length) {
+            await fetchTeams();
+        }
       getUsers()
     })
 
     const fetchTeams = async () => {
-        try {
-            const response = await store.dispatch('games/fetchTeams', {
-                gameId: props.gameId,
-            })
-            teams.value = response.data
-        } catch (error) {
-            console.error('Ошибка при загрузке команд:', error)
-        }
+          try {
+                await store.dispatch('games/fetchTeams', { gameId: props.gameId });
+            } catch (error) {
+                console.error('Ошибка при загрузке команд:', error);
+            }
     }
+
 
     const fetchGameStatus = async () => {
         try {
@@ -145,7 +146,7 @@ export default {
                 gameId: props.gameId,
             })
             isGameActive.value = response.data.is_active
-          } catch (error) {
+        } catch (error) {
             console.error('Ошибка при получении статуса игры:', error)
         }
     }
@@ -167,12 +168,12 @@ export default {
 
       loading.value = true
       try {
-          const updatedTeams = await store.dispatch('games/replaceTeams', {
-              gameId: props.gameId,
-              file: selectedFile.value,
-          })
-           teams.value = updatedTeams
-           uploadSuccess.value = true
+        await store.dispatch('games/replaceTeams', {
+          gameId: props.gameId,
+          file: selectedFile.value,
+        })
+        uploadSuccess.value = true
+          await fetchTeams()
       } catch (error) {
         console.error('Ошибка при загрузке файла:', error)
         alert('Ошибка при загрузке файла. Попробуйте снова.')
@@ -192,7 +193,8 @@ export default {
       }
     }
 
-    const goToUploadResults = () => {
+    const goToUploadResults =
+    () => {
       router.push({ name: 'AdminResults', params: { gameId } })
     }
 
@@ -225,7 +227,7 @@ export default {
             markComment: '',
           },
         })
-        teams.value.push(newTeam)
+         await fetchTeams();
         teamName.value = ''
       } catch (error) {
         console.error('Ошибка добавления команды:', error)
@@ -247,7 +249,7 @@ export default {
               teamId: editingTeam.value.id,
               teamData: editingTeam.value,
           })
-          await fetchTeams();
+          await fetchTeams()
         editingTeam.value = null
       } catch (error) {
         console.error('Ошибка обновления команды:', error)
@@ -257,7 +259,7 @@ export default {
     const deleteTeam = async (teamId) => {
       try {
         await store.dispatch('games/deleteTeamFromGame', { gameId, teamId })
-        teams.value = teams.value.filter((team) => team.id !== teamId)
+          await fetchTeams()
       } catch (error) {
         console.error('Ошибка удаления команды:', error)
       }
@@ -283,7 +285,7 @@ export default {
       uploadSuccess,
       handleFileChange,
       uploadFile,
-      teams,
+        teams,
       isGameActive,
       activateGame,
       activationSuccess,

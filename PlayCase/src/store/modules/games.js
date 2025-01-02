@@ -4,14 +4,19 @@ export default {
     namespaced: true,
     state() {
         return {
-            games: [],
+            games: {},
             gameId: null,
             currentGame: null,
+            teams: {}
         };
     },
     mutations: {
         addGame(state, game) {
             state.games = [...state.games, game];
+        },
+
+        setTeams(state, { gameId, teams }) {
+            state.teams[gameId] = teams;
         },
 
         setGames(state, games) {
@@ -94,9 +99,15 @@ export default {
             return response.data;
         },
 
-        async fetchGameTeams({ commit }, gameId) {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams`);
-            return response.data;
+        async fetchTeams({ commit }, { gameId }) {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams`);
+                commit('setTeams', { gameId, teams: response.data });
+                return response.data;
+            } catch (error) {
+                console.error(`Ошибка получения списка команд для игры с ID ${gameId}`, error);
+                throw error
+            }
         },
 
         async uploadTeamsFile({ commit }, { gameId, file }) {
@@ -138,6 +149,20 @@ export default {
             }
         },
 
+        async addTeamToGame({ commit }, { gameId, teamData }) {
+            try {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams`,
+                    teamData,
+                );
+                return response.data;
+            } catch (error) {
+                console.error('Ошибка добавления команды:', error);
+                throw error;
+            }
+        },
+
+
         async addTeamsFromFile({ commit }, { gameId, fileId }) {
             try {
                 const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams`, {
@@ -150,8 +175,19 @@ export default {
             }
         },
 
+
         async deleteTeamFromGame({ commit }, { gameId, teamId }) {
             await axios.delete(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}`);
+        },
+
+        async updateTeamInGame({ commit }, { gameId, teamId, teamData }) {
+            try {
+                const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}`, teamData);
+                return response.data;
+            } catch (error) {
+                console.error(`Ошибка обновления данных команды с ID ${teamId} в игре с ID ${gameId}:`, error);
+                throw error;
+            }
         },
 
         async fetchGameResults({ commit }, gameId) {
@@ -178,15 +214,50 @@ export default {
                     }
                 )
                 console.log('Заменены команды:', response.data)
+                commit('setTeams', { gameId, teams: response.data })
                 return response.data
             } catch (error) {
                 console.error('Ошибка при замене команд:', error)
                 throw error
             }
-        }
+        },
 
+        async setUserForTeam({ commit }, { gameId, teamId, userId }) {
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/setUser`, {
+                    userId: userId, //  ключ userId
+                });
+                return response.data;
+            } catch (error) {
+                console.error(`Ошибка установки стола ${userId} для команды с ID ${teamId} в игре с ID ${gameId}:`, error);
+                if (error.response) {
+                    console.error('Ответ сервера:', error.response.data);
+                }
+                throw error;
+            }
+        },
+        async activateGame({ commit }, { gameId }) {
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/activate`)
+                return response.data;
+            } catch (error) {
+                console.error(`Ошибка при активации игры с ID ${gameId}:`, error)
+                throw error;
+            }
+        },
+
+        async fetchGameStatus({ commit }, { gameId }) {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/status`)
+                return response.data
+            } catch (error) {
+                console.error(`Ошибка при получении статуса игры с ID ${gameId}:`, error)
+                throw error;
+            }
+        }
     },
     getters: {
         allGames: (state) => state.games,
+        getGameTeams: (state) => (gameId) => state.teams[gameId] || [],
     },
 };
