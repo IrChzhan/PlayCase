@@ -17,9 +17,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="team in teams" :key="team.id">
+          <tr v-for="team in teams" :key="team.teamName">
             <td>{{ team.currentPlace }}</td>
-            <td>{{ team.name }}</td>
+            <td>{{ team.teamName }}</td>
             <td>{{ team.scoreByRounds.join(', ') }}</td>
             <td>{{ team.totalScore }}</td>
           </tr>
@@ -31,48 +31,31 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-const store = useStore()
-const router = useRouter()
-
-const teams = ref([])
-const currentGameId = computed(() => store.state.games.currentGame?.id)
+const store = useStore();
+const router = useRouter();
+const teams = ref([]);
 
 const fetchResults = async () => {
   try {
-    if (!currentGameId.value) {
-      console.error('Не удалось получить ID текущей игры')
-      return
-    }
-
-    const results = await store.dispatch('games/fetchGameResults', currentGameId.value)
-    console.log('Полученные результаты игры:', results)
-
-    teams.value = results.map((result, index) => ({
-      scoreByRounds: result.scoreByRounds || [],
-      currentPlace: result.currentPlace || 0,
-      totalScore: result.totalScore || 0,
-    }))
+    const currentGame = await store.dispatch('games/fetchCurrentGame');
+    const results = await store.dispatch('games/fetchGameResults', currentGame.id);
+    teams.value = results; 
   } catch (error) {
-    console.error('Ошибка при получении данных:', error.message)
+    console.error('Ошибка при получении данных:', error.message);
   }
-}
+};
 
 onMounted(async () => {
-  try {
-    await store.dispatch('games/fetchCurrentGame')
-    await fetchResults()
-  } catch (error) {
-    console.error('Ошибка при инициализации:', error)
-  }
-})
+  await fetchResults();
+});
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp' })
-}
+  router.push({ name: 'MenuApp' });
+};
 </script>
 
 <style scoped>
@@ -117,34 +100,12 @@ th {
   background-color: #3a4c6e;
   color: white;
 }
+
 .home-button {
   width: 50px;
   height: 50px;
   position: absolute;
   bottom: 20px;
   cursor: pointer;
-}
-
-.results-excel-page::before,
-.results-excel-page::after {
-  content: '';
-  position: absolute;
-  background-image: url('@/assets/lines.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.results-excel-page::before {
-  top: 0;
-  left: 0;
-  width: 1300px;
-  height: 1300px;
-}
-
-.results-excel-page::after {
-  bottom: 0;
-  right: 0;
-  width: 150px;
-  height: 150px;
 }
 </style>

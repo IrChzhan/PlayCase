@@ -99,6 +99,17 @@ export default {
             return response.data;
         },
 
+        async fetchCurrentGame({ commit }) {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current`);
+                commit('SET_CURRENT_GAME', response.data);
+                return response.data;
+            } catch (error) {
+                console.error('Ошибка при получении текущей игры:', error);
+                throw error;
+            }
+        },
+
         async fetchTeams({ commit }, { gameId }) {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams`);
