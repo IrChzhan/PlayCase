@@ -121,7 +121,15 @@ export default {
         throw error
       }
     },
-
+    async deleteUser({ dispatch }, id) {
+      try {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/admin/v1/users/${id}/actions/delete`)
+        await dispatch('fetchUsers')
+      } catch (error) {
+        console.error('Ошибка при добавлении пользователя:', error)
+        throw error
+      }
+    },
     logout({ commit }) {
       commit('LOGOUT')
     },

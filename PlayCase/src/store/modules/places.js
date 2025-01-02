@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state() {
     return {
+      currentCategories: null,
       places: [],
       categories: [],
       meals: {},
@@ -22,7 +23,9 @@ export default {
         state.places[index] = updatedPlace
       }
     },
-
+    setCurrentCattegories(state, placeId) {
+      state.currentCategories = placeId;
+    },
     deletePlace(state, placeId) {
       state.places = state.places.filter((place) => place.id !== placeId)
     },
@@ -163,7 +166,7 @@ export default {
     },
 
     async updateMeal({ dispatch }, { placeId, categoryId, mealId, mealData }) {
-      await axios.post(
+      await axios.put(
         `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories/${categoryId}/meals/${mealId}`,
         mealData,
       )

@@ -2,9 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import AdminHome from '@/admin/AdminHome.vue'
 import AdminGames from '@/admin/Place/AdminGames.vue'
-import AdminMenuPlace from '@/admin/Place/AdminMenuPlace.vue'
-import AdminPlace from '@/admin/Places/AdminPlacesPlace.vue'
-import AdminPlaces from '@/admin/Place/AdminPlaces.vue'
 import AdminResults from '@/admin/Place/AdminResults.vue'
 import AdminTeams from '@/admin/Place/AdminTeams.vue'
 import AdminUserChangePersonal from '@/admin/Users/AdminUserChangePersonal.vue'
@@ -26,7 +23,12 @@ import TeamNameInput from '@/views/TeamNameInput.vue'
 import WinnerPage from '@/views/WinnerPage.vue'
 import AdminPlacesHome from "@/admin/Places/AdminPlacesHome.vue";
 import AdminPlacesCreatePlace from "@/admin/Places/AdminPlacesCreatePlace.vue";
-import AdminPlacesPlace from "@/admin/Places/AdminPlacesPlace.vue";
+import AdminPlacesCategories from "@/admin/Places/AdminPlacesCategories.vue";
+import AdminPlacesChangePlace from "@/admin/Places/AdminPlacesChangePlace.vue";
+import AdminPlacesMenu from "@/admin/Places/AdminPlacesMenu.vue";
+import AdminPlacesChangeCategory from "@/admin/Places/AdminPlacesChangeCategory.vue";
+import AdminPlacesCreateMeal from "@/admin/Places/AdminPlacesCreateMeal.vue";
+import AdminPlacesChangeMeal from "@/admin/Places/AdminPlacesChangeMeal.vue";
 
 const routes = [
   {
@@ -128,16 +130,37 @@ const routes = [
             component: AdminPlacesCreatePlace
           },
           {
-            path: '/admin/places/place/:id',
-            name: 'AdminPlacesPlace',
-            component: AdminPlacesPlace,
-            props: true,
+            path: '/admin/places/changePlace/:id',
+            name: 'AdminPlaceChangePlace',
+            component: AdminPlacesChangePlace
           },
           {
-            path: '/admin/place/:id/category/:categoryId',
-            name: 'AdminMenuPlace',
-            component: AdminMenuPlace,
-            props: true,
+            path: '/admin/places/changeCategory/:id/:categoryId',
+            name: 'AdminPlacesChangeCategory',
+            component: AdminPlacesChangeCategory
+          },
+          {
+            path: '/admin/places/changeMeal/:id/:categoryId/:mealId',
+            name: 'AdminPlacesChangeMeal',
+            component: AdminPlacesChangeMeal
+          },
+          {
+            path: '/admin/places/createMeal/:id/:categoryId',
+            name: 'AdminPlacesCreateMeal',
+            component: AdminPlacesCreateMeal
+          },
+          {
+            path: '/admin/places/categories/:id',
+            name: 'AdminPlacesCategories',
+            component: AdminPlacesCategories,
+            children: [
+              {
+                path: '/admin/places/categories/:id/menu/:categoryId',
+                name: 'AdminPlacesMenu',
+                component: AdminPlacesMenu,
+                props: true,
+              },
+            ]
           },
         ]
       },

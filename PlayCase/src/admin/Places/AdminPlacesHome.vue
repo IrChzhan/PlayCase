@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 
 import router from '@/router/index.js'
@@ -53,12 +53,12 @@ const goToCreatePlace = () => {
 
 const selectPlace = (id) => {
   selectedPlaceId.value = id
-  router.push({ name: 'PlaceDetails', params: { id } })
+  router.push(`/admin/places/categories/${id}`)
 }
 
 watch(selectedPlaceId, (newId) => {
   if (newId) {
-    router.push(`/admin/places/place/${newId}`)
+    router.push(`/admin/places/categories/${newId}`)
   }
 })
 
@@ -107,7 +107,7 @@ h1 {
 
 .content {
   flex: 1;
-  padding: 20px;
+  margin-left: 20px;
   background-color: #ffffff;
   height: 100%;
 }

@@ -224,9 +224,7 @@ export default {
 
         async setUserForTeam({ commit }, { gameId, teamId, userId }) {
             try {
-                const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/setUser`, {
-                    userId: userId, //  ключ userId
-                });
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/setUser?userId=${userId}`);
                 return response.data;
             } catch (error) {
                 console.error(`Ошибка установки стола ${userId} для команды с ID ${teamId} в игре с ID ${gameId}:`, error);

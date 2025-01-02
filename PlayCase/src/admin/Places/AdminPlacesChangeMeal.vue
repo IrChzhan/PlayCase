@@ -1,5 +1,4 @@
 <template>
-  <div class="dish-modal" v-if="show" @click.self="closeModal">
     <div class="container">
       <h1>Редактировать блюдо</h1>
       <form @submit.prevent="showUpdateDialog" class="form">
@@ -30,6 +29,9 @@
           <input id="file" type="file" @change="handleFileUpload" class="input" />
         </div>
 
+      </form>
+
+      <div class="form-actions">
         <button
           type="button"
           class="button primary"
@@ -39,16 +41,15 @@
         >
           <Loader v-if="loading" /> Сохранить изменения
         </button>
-      </form>
-
-      <button
-        @click="showDeleteDialog(dishId, restaurantIdF)()"
-        class="button danger"
-        :disabled="loading"
-        :class="{ disabled: loading }"
-      >
-        <Loader v-if="loading" /> Удалить блюдо
-      </button>
+        <button
+          @click="showDeleteDialog(dishId, restaurantIdF)()"
+          class="button danger"
+          :disabled="loading"
+          :class="{ disabled: loading }"
+        >
+          <Loader v-if="loading" /> Удалить блюдо
+        </button>
+      </div>
     </div>
 
     <ConfirmDialog
@@ -61,7 +62,6 @@
     />
 
     <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
-  </div>
 </template>
 
 <script setup>
@@ -73,6 +73,7 @@ import Notification from '@/admin/Notification.vue'
 
 import ConfirmDialog from '../ConfirmDialog.vue'
 import Loader from '../Loader.vue'
+import router from "@/router/index.js";
 
 defineProps({
   show: Boolean,
@@ -165,7 +166,7 @@ const updateDish = async () => {
     await store.dispatch('places/updateMeal', {
       placeId: route.params.id,
       categoryId: route.params.categoryId,
-      mealId: dishIdR.value,
+      mealId: route.params.mealId,
       mealData: {
         name: dishName.value,
         price: dishPrice.value,
@@ -182,7 +183,10 @@ const updateDish = async () => {
     toastType.value = 'error'
   } finally {
     loading.value = false
-    setTimeout(() => (toastMessage.value = ''), 3000)
+    setTimeout(() => {
+      router.push(`/admin/places/categories/${route.params.id}`)
+      toastMessage.value = ''
+    }, 3000)
   }
 }
 
@@ -192,7 +196,7 @@ const deleteDish = async () => {
     await store.dispatch('places/deleteMeal', {
       placeId: route.params.id,
       categoryId: route.params.categoryId,
-      mealId: dishIdR.value,
+      mealId: route.params.mealId,
     })
     toastMessage.value = 'Блюдо удалено!'
     toastType.value = 'success'
@@ -202,53 +206,24 @@ const deleteDish = async () => {
     toastType.value = 'error'
   } finally {
     loading.value = false
-    setTimeout(() => (toastMessage.value = ''), 3000)
+    setTimeout(() => {
+      router.push(`/admin/places/categories/${route.params.id}`)
+      toastMessage.value = ''
+    }, 3000)
   }
 }
 </script>
 
 <style scoped>
-.dish-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
 h1 {
-  text-align: center;
-  color: #333;
-  font-size: 30px;
-  margin: 0 auto 20px auto;
-}
-
-.form {
   margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .hint {
@@ -261,53 +236,62 @@ label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #333;
+  font-size: 1rem;
+  color: #555;
 }
 
-.input {
+input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.input:focus {
+input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   outline: none;
-  border-color: #4285f4;
 }
 
-.button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.button.primary {
-  background-color: #4285f4;
+button {
   color: white;
-  margin-bottom: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.button.primary:hover:not(.disabled) {
+button.primary {
+  background-color: #4285f4;
+}
+
+button.primary:hover:not([disabled]) {
   background-color: #357ae8;
 }
 
-.button.danger {
-  background-color: #f44336;
-  color: white;
+button.danger {
+  background-color: #dc3545;
 }
 
-.button.danger:hover:not(.disabled) {
-  background-color: #d32f2f;
+button.danger:hover:not([disabled]) {
+  background-color: #c82333;
 }
 
-.button:disabled,
-.button.disabled {
-  opacity: 0.5;
+button:disabled {
+  background-color: #ccc;
   cursor: not-allowed;
 }
+.form-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 </style>
