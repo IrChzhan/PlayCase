@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import AdminHome from '@/admin/AdminHome.vue'
-import AdminGames from '@/admin/Place/AdminGames.vue'
-import AdminResults from '@/admin/Place/AdminResults.vue'
-import AdminTeams from '@/admin/Place/AdminTeams.vue'
+import AdminGames from '@/admin/Games/AdminGames.vue'
+import AdminResults from '@/admin/Games/AdminResults.vue'
+import AdminTeams from '@/admin/Games/AdminTeams.vue'
 import AdminUserChangePersonal from '@/admin/Users/AdminUserChangePersonal.vue'
 import AdminUserChangePlayer from '@/admin/Users/AdminUserChangePlayer.vue'
 import AdminUserCreatePersonal from '@/admin/Users/AdminUserCreatePersonal.vue'
@@ -165,6 +165,11 @@ const routes = [
         ]
       },
       {
+        path: '/admin/games',
+        name: 'AdminGames',
+        component: AdminGames
+      },
+      {
         path: '/admin/game/:gameId',
         name: 'AdminTeams',
         component: AdminTeams,
@@ -176,13 +181,6 @@ const routes = [
         component: AdminResults,
         props: true,
       },
-      {
-        path: '',
-        name: 'AdminGames',
-        component: AdminGames,
-        props: true,
-      },
-
     ],
   },
   {
