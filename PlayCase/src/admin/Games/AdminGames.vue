@@ -26,6 +26,7 @@
             <th>Комментарий</th>
             <th>Статус</th>
             <th>Изменения</th>
+            <th>Изменения статуса</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +42,7 @@
             <td>{{ game.comment }}</td>
             <td>{{ game.status }}</td>
             <td><button @click.stop="changeGame(game.id)">Редактировать</button></td>
+            <td><button @click.stop="changeStatus(game.id)">Сменить статус</button></td>
           </tr>
         </tbody>
       </table>
@@ -83,6 +85,10 @@ const totalPages = computed(() => Math.ceil(filteredGames.value.length / itemsPe
 
 const changeGame = (gameId) => {
   router.push(`/admin/games/game/${gameId}/change`)
+}
+
+const changeStatus = (gameId) => {
+  router.push(`/admin/games/game/${gameId}/changeStatus`)
 }
 
 const filteredGames = computed(() => {

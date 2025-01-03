@@ -37,6 +37,7 @@ import ResultsExcel from '@/views/ResultsExcel.vue'
 import TeamNameDisplay from '@/views/TeamNameDisplay.vue'
 import TeamNameInput from '@/views/TeamNameInput.vue'
 import WinnerPage from '@/views/WinnerPage.vue'
+import AdminGamesGameChangeStatus from "@/admin/Games/AdminGamesGameChangeStatus.vue";
 
 const routes = [
   {
@@ -191,6 +192,11 @@ const routes = [
         path: '/admin/games/game/:gameId/change',
         name: 'AdminGamesGameChange',
         component: AdminGamesGameChange,
+      },
+      {
+        path: '/admin/games/game/:gameId/changeStatus',
+        name: 'AdminGamesGameChangeStatus',
+        component: AdminGamesGameChangeStatus
       },
       {
         path: '/admin/games/game:gameId',

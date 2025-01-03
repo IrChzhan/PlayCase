@@ -108,6 +108,8 @@ export default {
       }
     },
 
+
+
     async fetchCurrentGame({ commit }) {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current`)
@@ -324,6 +326,15 @@ export default {
       } catch (error) {
         console.error(`Ошибка при получении статуса игры с ID ${gameId}:`, error)
         throw error
+      }
+    },
+    async switchStatus ({commit}, {gameId, newStatus}) {
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}`,newStatus)
+        return response.data
+      } catch (e) {
+        console.error('Ошибка при получении текущей игры:', e)
+        throw e
       }
     },
   },
