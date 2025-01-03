@@ -53,7 +53,7 @@ const winner = ref(null)
 
 const fetchRegistrations = async () => {
   try {
-    const res = await store.dispatch('lottery/fetchRegistrations', route.params.gameId)
+    const res = await store.dispatch('lottery/fetchRegistrationsAdmin', route.params.gameId)
     registrations.value = res
   } catch (error) {
     console.error('Ошибка при получении данных регистраций:', error)

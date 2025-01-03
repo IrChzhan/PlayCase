@@ -14,9 +14,8 @@
         <p><strong>Имя:</strong> {{ user.name }}</p>
         <p><strong>Почта:</strong> {{ user.email }}</p>
         <p><strong>Телефон:</strong> {{ user.phone }}</p>
-        <p><strong>Количество участников:</strong> {{ user.participantsCount }}</p>
-        <p><strong>Оплачено онлайн:</strong> {{ user.onlinePaid }}</p>
-        <p><strong>Оплачено оффлайн:</strong> {{ user.offlinePaid }}</p>
+        <p><strong>Название команды:</strong> {{ user.teamName }}</p>
+        <p><strong>Номер:</strong> {{ user.sequenceNumber }}</p>
       </div>
     </div>
     <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
@@ -24,34 +23,28 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-const store = useStore()
-const route = useRoute()
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
 
-const registeredUsers = computed(() => store.getters['lottery/registeredUsers'])
-const error = ref('')
-const gameId = route.params.gameId
-const teamId = route.params.teamId
-if (!gameId || !teamId) {
-  error.value = 'Не удалось получить данные игры или команды. Проверьте маршрут.'
-} else {
-  onMounted(async () => {
-    try {
-      await store.dispatch('lottery/fetchRegisteredUsers', { gameId, teamId })
-    } catch (err) {
-      console.error('Ошибка при загрузке зарегистрированных пользователей:', err)
-      error.value = 'Произошла ошибка при загрузке данных.'
-    }
-  })
-}
+const registeredUsers = computed(() => store.state.lottery.registrations);
+const error = ref('');
+
+onMounted(async () => {
+  try {
+    await store.dispatch('lottery/fetchRegistrations');
+  } catch (err) {
+    console.error('Ошибка при загрузке зарегистрированных пользователей:', err);
+    error.value = 'Произошла ошибка при загрузке данных.';
+  }
+});
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp' })
-}
+  router.push({ name: 'MenuApp' });
+};
 </script>
 
 <style scoped>
@@ -77,11 +70,13 @@ const goToMenuApp = () => {
   color: #ffd700;
   cursor: pointer;
 }
+
 .user-item {
   margin-bottom: 20px;
   padding: 15px;
   border: 1px solid #ffd700;
 }
+
 .home-button {
   width: 50px;
   height: 50px;
@@ -89,12 +84,14 @@ const goToMenuApp = () => {
   bottom: 20px;
   cursor: pointer;
 }
+
 .error-message {
   color: red;
   font-size: 16px;
   font-weight: bold;
   text-align: center;
 }
+
 .register-users-page::before {
   content: '';
   position: absolute;
