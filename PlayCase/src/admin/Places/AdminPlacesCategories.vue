@@ -20,7 +20,7 @@
           <p class="no-categories-message">Пока категорий нет</p>
         </template>
       </div>
-      <button class="add-category-button" @click="openModalAdminAddCategory">Создать категорию</button>
+      <button class="add-category-button" @click="createCategory">Создать категорию</button>
     </div>
     <div class="content">
       <router-view :key="selectedCategoryId"></router-view>
@@ -54,6 +54,10 @@ const selectCategory = (id) => {
 
 const openModalAdminAddCategory = () => {
   router.push(`/admin/places/changePlace/${route.params.id}`)
+}
+
+const createCategory = () => {
+  router.push(`/admin/places/createCategories/${route.params.id}`)
 }
 
 watch(selectedCategoryId, (newId) => {

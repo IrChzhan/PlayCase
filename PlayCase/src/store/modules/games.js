@@ -95,8 +95,13 @@ export default {
         },
 
         async fetchGameById({ commit }, gameId) {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}`);
-            return response.data;
+            try {
+              const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}`);
+              return response.data;
+            } catch (e) {
+              console.error('Ошибка при получении текущей игры:', e);
+              throw e;
+            }
         },
 
         async fetchCurrentGame({ commit }) {

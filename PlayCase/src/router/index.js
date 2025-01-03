@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import AdminHome from '@/admin/AdminHome.vue'
-import AdminGames from '@/admin/Place/AdminGames.vue'
-import AdminResults from '@/admin/Place/AdminResults.vue'
-import AdminTeams from '@/admin/Place/AdminTeams.vue'
+import AdminGames from '@/admin/Games/AdminGames.vue'
+import AdminResults from '@/admin/Games/AdminResults.vue'
+import AdminTeams from '@/admin/Games/AdminTeams.vue'
 import AdminUserChangePersonal from '@/admin/Users/AdminUserChangePersonal.vue'
 import AdminUserChangePlayer from '@/admin/Users/AdminUserChangePlayer.vue'
 import AdminUserCreatePersonal from '@/admin/Users/AdminUserCreatePersonal.vue'
@@ -29,6 +29,10 @@ import AdminPlacesMenu from "@/admin/Places/AdminPlacesMenu.vue";
 import AdminPlacesChangeCategory from "@/admin/Places/AdminPlacesChangeCategory.vue";
 import AdminPlacesCreateMeal from "@/admin/Places/AdminPlacesCreateMeal.vue";
 import AdminPlacesChangeMeal from "@/admin/Places/AdminPlacesChangeMeal.vue";
+import AdminGamesCreate from "@/admin/Games/AdminGamesCreate.vue";
+import AdminGamesGame from "@/admin/Games/AdminGamesGame.vue";
+import AdminGamesGameTeams from "@/admin/Games/AdminGamesGameTeams.vue";
+import AdminPlacesCreateCategories from "@/admin/Places/AdminPlacesCreateCategories.vue";
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -149,6 +153,11 @@ const routes = [{
             component: AdminPlacesCreateMeal
           },
           {
+            path: '/admin/places/createCategories/:id',
+            name: 'AdminPlacesCreateCategories',
+            component: AdminPlacesCreateCategories
+          },
+          {
             path: '/admin/places/categories/:id',
             name: 'AdminPlacesCategories',
             component: AdminPlacesCategories,
@@ -167,6 +176,23 @@ const routes = [{
         path: '/admin/games',
         name: 'AdminGames',
         component: AdminGames
+      },
+      {
+        path: '/admin/games/create',
+        name: 'AdminGamesCreate',
+        component: AdminGamesCreate
+      },
+      {
+        path: '/admin/games/game:gameId',
+        name: 'AdminGamesGame',
+        component: AdminGamesGame,
+        children: [
+          {
+            path: '/admin/games/:gameId/team',
+            name: 'AdminGamesGameTeams',
+            component:  AdminGamesGameTeams,
+          }
+        ]
       },
       {
         path: '/admin/game/:gameId',

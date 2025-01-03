@@ -69,8 +69,8 @@ const handleCreateUser = async () => {
   if (newUser.value.name.trim() && newUser.value.login.trim() && newUser.value.password.trim()) {
     try {
       const payload = {
-        name: newUser.value.name,
-        username: newUser.value.login,
+        name: newUser.value.login,
+        username: newUser.value.name,
         password: newUser.value.password,
         authorities: [{ authority: 'PLAYER' }],
       }
