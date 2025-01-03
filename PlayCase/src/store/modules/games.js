@@ -182,7 +182,29 @@ export default {
         throw error
       }
     },
-
+    async updateTeamToGame({ commit }, { gameId, teamId, teamData }) {
+      try {
+        const response = await axios.put(
+          `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}`,
+          teamData,
+        )
+        return response.data
+      } catch (error) {
+        console.error('Ошибка добавления команды:', error)
+        throw error
+      }
+    },
+    async deleteTeamToGame({ commit }, { gameId, teamId }) {
+      try {
+        const response = await axios.delete(
+          `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}`,
+        )
+        return response.data
+      } catch (error) {
+        console.error('Ошибка добавления команды:', error)
+        throw error
+      }
+    },
     async addTeamsFromFile({ commit }, { gameId, fileId }) {
       try {
         const response = await axios.post(

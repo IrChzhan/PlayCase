@@ -6,6 +6,7 @@ import AdminGamesCreate from '@/admin/Games/AdminGamesCreate.vue'
 import AdminGamesGame from '@/admin/Games/AdminGamesGame.vue'
 import AdminGamesGameChange from '@/admin/Games/AdminGamesGameChange.vue'
 import AdminGamesGameTeams from '@/admin/Games/AdminGamesGameTeams.vue'
+import AdminGamesGameTeamsChange from '@/admin/Games/AdminGamesGameTeamsChange.vue'
 import AdminGamesGameTeamsCreate from '@/admin/Games/AdminGamesGameTeamsCreate.vue'
 import AdminGamesSetUser from '@/admin/Games/AdminGamesSetUser.vue'
 import AdminLotoRegistrate from '@/admin/Games/AdminLotoRegistrate.vue'
@@ -222,6 +223,11 @@ const routes = [
             path: '/admin/games/:gameId/team/create',
             name: 'AdminGamesGameTeamsCreate',
             component: AdminGamesGameTeamsCreate,
+          },
+          {
+            path: '/admin/games/:gameId/team/:teamId/changeTeam',
+            name: 'AdminGamesGameTeamsChange',
+            component: AdminGamesGameTeamsChange,
           },
         ],
       },

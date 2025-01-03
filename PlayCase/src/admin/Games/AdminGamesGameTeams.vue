@@ -6,6 +6,7 @@
           <th>Номер команды</th>
           <th>Имя команды</th>
           <th>Привязать юзера</th>
+          <th>Редактировать</th>
         </tr>
       </thead>
       <tbody>
@@ -13,6 +14,7 @@
           <td>{{ team?.tableNumber || 'нету номера стола' }}</td>
           <td>{{ team?.name }}</td>
           <td><button @click="setUser(team.id)">Привязать юзера</button></td>
+          <td><button @click="changeTeam(team.id)">Редактировать</button></td>
         </tr>
       </tbody>
     </table>
@@ -120,6 +122,10 @@ const createTeam = () => {
 
 const setUser = (teamId) => {
   router.push(`/admin/games/${route.params.gameId}/team/${teamId}/setUser`)
+}
+
+const changeTeam = (teamId) => {
+  router.push(`/admin/games/${route.params.gameId}/team/${teamId}/changeTeam`)
 }
 
 onMounted(() => {
