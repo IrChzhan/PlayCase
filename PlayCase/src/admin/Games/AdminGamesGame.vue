@@ -5,7 +5,8 @@
         v-for="item in menuItems"
         :key="item.name"
         :class="{ active: isActive(item) }"
-        @click="item.route">
+        @click="item.route"
+      >
         {{ item.label }}
       </button>
     </div>
@@ -18,87 +19,86 @@
         <div>{{ game?.status || 'Бар не указан' }}</div>
       </div>
 
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
 
-
 <script setup>
-import {ref, onMounted, watch} from "vue";
-import {useStore} from "vuex";
-import {useRoute, useRouter} from "vue-router";
+import { onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const store = useStore();
-const router = useRouter();
-const route = useRoute();
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
 
-const game = ref(null);
+const game = ref(null)
 const selectedMenu = ref(0)
 
 const menuItems = [
   {
-    label: "Команды", route: () => {
-      router.push(`/admin/games/${route.params.gameId}/team`);
+    label: 'Команды',
+    route: () => {
+      router.push(`/admin/games/${route.params.gameId}/team`)
       selectedMenu.value = 0
     },
-    name: 'team'
+    name: 'team',
   },
   {
-    label: "Оплаты",
+    label: 'Оплаты',
     route: () => {
       selectedMenu.value = 1
     },
-    name: 'payment'
+    name: 'payment',
   },
   {
-    label: "Результаты",
+    label: 'Результаты',
     route: () => {
-      router.push(`/admin/games/${route.params.gameId}/teams/results`);
-      selectedMenu.value = 2;
+      router.push(`/admin/games/${route.params.gameId}/teams/results`)
+      selectedMenu.value = 2
     },
-    name: 'results'
+    name: 'results',
   },
   {
-    label: "Реги Лото",
+    label: 'Реги Лото',
     route: () => {
-      router.push(`/admin/games/${route.params.gameId}/teams/loto`);
+      router.push(`/admin/games/${route.params.gameId}/teams/loto`)
       selectedMenu.value = 3
     },
-    name: 'loto'
+    name: 'loto',
   },
-];
+]
 
 const fetchGameById = async () => {
   try {
-    const res = await store.dispatch("games/fetchGameById", route.params.gameId);
-    game.value = res;
+    const res = await store.dispatch('games/fetchGameById', route.params.gameId)
+    game.value = res
   } catch (error) {
-    console.error("Ошибка при загрузке данных об игре:", error);
+    console.error('Ошибка при загрузке данных об игре:', error)
   }
-};
+}
 
 const isActive = (routeName) => {
   const temp = route.path.split('/')
   return temp.find((el) => el === routeName.name) !== undefined
-};
+}
 
 onMounted(() => {
-  fetchGameById();
-  selectedMenu.value=0
-  router.push(`/admin/games/${route.params.gameId}/team`);
-});
+  fetchGameById()
+  selectedMenu.value = 0
+  router.push(`/admin/games/${route.params.gameId}/team`)
+})
 
 watch(
   () => route.params.gameId,
   async () => {
-    await fetchGameById();
+    await fetchGameById()
     selectedMenu.value = 0
-    router.push(`/admin/games/${route.params.gameId}/team`);
-  }
-);
+    router.push(`/admin/games/${route.params.gameId}/team`)
+  },
+)
 </script>
-
 
 <style scoped>
 .container {

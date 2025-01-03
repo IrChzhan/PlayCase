@@ -1,67 +1,66 @@
 <template>
-    <div class="container">
-      <h1>Редактировать блюдо</h1>
-      <form @submit.prevent="showUpdateDialog" class="form">
-        <div class="form-group">
-          <label for="name">Название блюда:</label>
-          <div class="hint">Старое название: {{ oldName }}</div>
-          <input id="name" v-model="dishName" type="text" class="input" required />
-        </div>
-
-        <div class="form-group">
-          <label for="price">Цена:</label>
-          <input id="price" v-model="dishPrice" class="input" required />
-        </div>
-
-        <div class="form-group">
-          <label for="description">Описание:</label>
-          <textarea
-            id="description"
-            v-model="dishDescription"
-            class="input"
-            rows="3"
-            required
-          ></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="file">Изображение:</label>
-          <input id="file" type="file" @change="handleFileUpload" class="input" />
-        </div>
-
-      </form>
-
-      <div class="form-actions">
-        <button
-          type="button"
-          class="button primary"
-          :disabled="!hasChanges || loading"
-          :class="{ disabled: !hasChanges || loading }"
-          @click="showUpdateDialog(dishId, restaurantIdF)()"
-        >
-          <Loader v-if="loading" /> Сохранить изменения
-        </button>
-        <button
-          @click="showDeleteDialog(dishId, restaurantIdF)()"
-          class="button danger"
-          :disabled="loading"
-          :class="{ disabled: loading }"
-        >
-          <Loader v-if="loading" /> Удалить блюдо
-        </button>
+  <div class="container">
+    <h1>Редактировать блюдо</h1>
+    <form @submit.prevent="showUpdateDialog" class="form">
+      <div class="form-group">
+        <label for="name">Название блюда:</label>
+        <div class="hint">Старое название: {{ oldName }}</div>
+        <input id="name" v-model="dishName" type="text" class="input" required />
       </div>
+
+      <div class="form-group">
+        <label for="price">Цена:</label>
+        <input id="price" v-model="dishPrice" class="input" required />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Описание:</label>
+        <textarea
+          id="description"
+          v-model="dishDescription"
+          class="input"
+          rows="3"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="file">Изображение:</label>
+        <input id="file" type="file" @change="handleFileUpload" class="input" />
+      </div>
+    </form>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="button primary"
+        :disabled="!hasChanges || loading"
+        :class="{ disabled: !hasChanges || loading }"
+        @click="showUpdateDialog(dishId, restaurantIdF)()"
+      >
+        <Loader v-if="loading" /> Сохранить изменения
+      </button>
+      <button
+        @click="showDeleteDialog(dishId, restaurantIdF)()"
+        class="button danger"
+        :disabled="loading"
+        :class="{ disabled: loading }"
+      >
+        <Loader v-if="loading" /> Удалить блюдо
+      </button>
     </div>
+  </div>
 
-    <ConfirmDialog
-      v-if="showDialog"
-      :visible="showDialog"
-      :title="dialogTitle"
-      :message="dialogMessage"
-      @confirm="handleConfirm"
-      @cancel="handleCancel"
-    />
+  <ConfirmDialog
+    v-if="showDialog"
+    :visible="showDialog"
+    :title="dialogTitle"
+    :message="dialogMessage"
+    @confirm="handleConfirm"
+    @cancel="handleCancel"
+  />
 
-    <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <script setup>
@@ -70,10 +69,10 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 import Notification from '@/admin/Notification.vue'
+import router from '@/router/index.js'
 
 import ConfirmDialog from '../ConfirmDialog.vue'
 import Loader from '../Loader.vue'
-import router from "@/router/index.js";
 
 defineProps({
   show: Boolean,
@@ -293,5 +292,4 @@ button:disabled {
   flex-direction: row;
   justify-content: space-between;
 }
-
 </style>

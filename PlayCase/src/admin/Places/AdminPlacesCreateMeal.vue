@@ -59,56 +59,57 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
-import { ref } from 'vue';
-import { useStore } from 'vuex';
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-import Loader from '../Loader.vue';
-import Notification from '@/admin/Notification.vue';
+import Notification from '@/admin/Notification.vue'
 
-const store = useStore();
-const router = useRouter();
-const route = useRoute();
+import Loader from '../Loader.vue'
 
-const mealName = ref('');
-const mealPrice = ref('');
-const mealDescription = ref('');
-const mealFile = ref(null);
-const imageId = ref(null);
-const loading = ref(false);
-const toastMessage = ref('');
-const toastType = ref('success');
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
+
+const mealName = ref('')
+const mealPrice = ref('')
+const mealDescription = ref('')
+const mealFile = ref(null)
+const imageId = ref(null)
+const loading = ref(false)
+const toastMessage = ref('')
+const toastType = ref('success')
 
 const handleFileUpload = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  mealFile.value = file;
+  const file = event.target.files[0]
+  if (!file) return
+  mealFile.value = file
   try {
-    loading.value = true;
-    const response = await store.dispatch('places/uploadImage', file);
-    imageId.value = response;
-    toastMessage.value = 'Изображение успешно загружено!';
-    toastType.value = 'success';
+    loading.value = true
+    const response = await store.dispatch('places/uploadImage', file)
+    imageId.value = response
+    toastMessage.value = 'Изображение успешно загружено!'
+    toastType.value = 'success'
   } catch (error) {
-    console.error('Ошибка загрузки изображения:', error);
-    toastMessage.value = 'Ошибка загрузки изображения.';
-    toastType.value = 'error';
+    console.error('Ошибка загрузки изображения:', error)
+    toastMessage.value = 'Ошибка загрузки изображения.'
+    toastType.value = 'error'
   } finally {
-    loading.value = false;
+    loading.value = false
     setTimeout(() => {
-      toastMessage.value = '';
-    }, 3000);
+      toastMessage.value = ''
+    }, 3000)
   }
-};
+}
 
 const handleAddMeal = async () => {
   if (!imageId.value) {
-    toastMessage.value = 'Не удалось загрузить изображение.';
-    toastType.value = 'error';
-    return;
+    toastMessage.value = 'Не удалось загрузить изображение.'
+    toastType.value = 'error'
+    return
   }
   try {
-    loading.value = true;
+    loading.value = true
     await store.dispatch('places/addMeal', {
       placeId: route.params.id,
       categoryId: route.params.categoryId,
@@ -118,31 +119,31 @@ const handleAddMeal = async () => {
         description: mealDescription.value,
         fileId: imageId.value,
       },
-    });
+    })
 
-    toastMessage.value = 'Блюдо успешно добавлено!';
-    toastType.value = 'success';
-    mealName.value = '';
-    mealPrice.value = '';
-    mealDescription.value = '';
-    mealFile.value = null;
-    imageId.value = null;
+    toastMessage.value = 'Блюдо успешно добавлено!'
+    toastType.value = 'success'
+    mealName.value = ''
+    mealPrice.value = ''
+    mealDescription.value = ''
+    mealFile.value = null
+    imageId.value = null
   } catch (error) {
-    console.error('Ошибка при добавлении блюда:', error);
-    toastMessage.value = 'Ошибка при добавлении блюда.';
-    toastType.value = 'error';
+    console.error('Ошибка при добавлении блюда:', error)
+    toastMessage.value = 'Ошибка при добавлении блюда.'
+    toastType.value = 'error'
   } finally {
-    loading.value = false;
+    loading.value = false
     setTimeout(() => {
-      toastMessage.value = '';
+      toastMessage.value = ''
       router.push(`/admin/places/categories/${route.params.id}/menu/${route.params.categoryId}`)
-    }, 3000);
+    }, 3000)
   }
-};
+}
 
 const goBack = () => {
-  router.back();
-};
+  router.back()
+}
 </script>
 
 <style scoped>

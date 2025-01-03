@@ -33,12 +33,12 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import { computed, onMounted, ref } from 'vue';
+import axios from 'axios'
+import { computed, onMounted, ref } from 'vue'
 
-const categories = ref([]);
-const meals = ref([]);
-const selectedCategoryName = ref(null); 
+const categories = ref([])
+const meals = ref([])
+const selectedCategoryName = ref(null)
 
 // Получение меню с сервера
 const fetchMenu = async () => {
@@ -47,12 +47,12 @@ const fetchMenu = async () => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-    });
+    })
 
     categories.value = response.data.mealCategories.map((category) => ({
       id: category.id,
       name: category.name,
-    }));
+    }))
 
     meals.value = response.data.mealCategories.flatMap((category) =>
       category.meals.map((meal) => {
@@ -60,43 +60,43 @@ const fetchMenu = async () => {
           id: meal.id,
           name: meal.name,
           description: meal.description,
-          categoryName: category.name, 
+          categoryName: category.name,
           price: meal.price,
           image: meal.fileUrl,
-        };
-      })
-    );
+        }
+      }),
+    )
   } catch (error) {
-    console.error('Ошибка при получении меню:', error);
+    console.error('Ошибка при получении меню:', error)
     store.dispatch('notification/showNotification', {
       type: 'error',
       message: 'Ошибка при загрузке меню. Попробуйте позже.',
-    });
+    })
   }
-};
+}
 
 const filteredMenuItems = computed(() => {
   if (selectedCategoryName.value !== null) {
-    console.log(`Фильтруем блюда по категории: ${selectedCategoryName.value}`);
-    return meals.value.filter((meal) => meal.categoryName === selectedCategoryName.value);
+    console.log(`Фильтруем блюда по категории: ${selectedCategoryName.value}`)
+    return meals.value.filter((meal) => meal.categoryName === selectedCategoryName.value)
   }
-  console.log('Показываем все блюда');
-  return meals.value;
-});
+  console.log('Показываем все блюда')
+  return meals.value
+})
 
 const filterByCategory = (categoryName) => {
-  selectedCategoryName.value = categoryName;
-  console.log(`Выбрана категория: ${categoryName}`);
-};
+  selectedCategoryName.value = categoryName
+  console.log(`Выбрана категория: ${categoryName}`)
+}
 
 const clearFilter = () => {
-  selectedCategoryName.value = null;
-  console.log('Сброс фильтра, показываем все категории');
-};
+  selectedCategoryName.value = null
+  console.log('Сброс фильтра, показываем все категории')
+}
 
 onMounted(() => {
-  fetchMenu();
-});
+  fetchMenu()
+})
 </script>
 
 <style scoped>

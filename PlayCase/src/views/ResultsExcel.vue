@@ -31,31 +31,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const store = useStore();
-const router = useRouter();
-const teams = ref([]);
+const store = useStore()
+const router = useRouter()
+const teams = ref([])
 
 const fetchResults = async () => {
   try {
-    const currentGame = await store.dispatch('games/fetchCurrentGame');
-    const results = await store.dispatch('games/fetchGameResults', currentGame.id);
-    teams.value = results; 
+    const currentGame = await store.dispatch('games/fetchCurrentGame')
+    const results = await store.dispatch('games/fetchGameResults', currentGame.id)
+    teams.value = results
   } catch (error) {
-    console.error('Ошибка при получении данных:', error.message);
+    console.error('Ошибка при получении данных:', error.message)
   }
-};
+}
 
 onMounted(async () => {
-  await fetchResults();
-});
+  await fetchResults()
+})
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp' });
-};
+  router.push({ name: 'MenuApp' })
+}
 </script>
 
 <style scoped>
@@ -110,25 +110,26 @@ th {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-    .results-excel-page {
-        padding: 5px;
-    }
+  .results-excel-page {
+    padding: 5px;
+  }
 
-    .results {
-      display: none;
-    }
+  .results {
+    display: none;
+  }
 
-     table {
-        font-size: 0.9rem;
-        margin-top: -20px;
-     }
+  table {
+    font-size: 0.9rem;
+    margin-top: -20px;
+  }
 
-    th, td {
-        padding: 10px;
-    }
+  th,
+  td {
+    padding: 10px;
+  }
 
-    .table-container {
-        width: 95%;
-    }
+  .table-container {
+    width: 95%;
+  }
 }
 </style>

@@ -48,64 +48,65 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
-import Input from '@/components/shared/forms/Input.vue';
-import { useAuthCheck } from '@/hooks/useAuthCheck.js';
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+
+import Input from '@/components/shared/forms/Input.vue'
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 
 defineProps({
   show: Boolean,
   closeModal: Function,
-});
+})
 
-const { teamName } = useAuthCheck();
+const { teamName } = useAuthCheck()
 
-const store = useStore();
+const store = useStore()
 
 const formData = ref({
   name: '',
   email: '',
   phone: '',
   agree: false,
-});
+})
 
-const emailError = ref('');
-const phoneError = ref('');
+const emailError = ref('')
+const phoneError = ref('')
 
 const submitForm = async () => {
-  emailError.value = '';
-  phoneError.value = '';
+  emailError.value = ''
+  phoneError.value = ''
 
   if (!formData.value.agree) {
-    alert('Вы должны согласиться с политикой обработки персональных данных.');
-    return;
+    alert('Вы должны согласиться с политикой обработки персональных данных.')
+    return
   }
 
   const newUser = {
     name: formData.value.name.trim(),
     email: formData.value.email.trim(),
     phone: formData.value.phone.trim(),
-  };
+  }
 
   try {
-    const response = await store.dispatch('lottery/registerInLottery', newUser);
+    const response = await store.dispatch('lottery/registerInLottery', newUser)
 
-    formData.value.name = '';
-    formData.value.email = '';
-    formData.value.phone = '';
-    formData.value.agree = false;
-    alert(`Спасибо за участие в лотерее! Ваш номер: ${response.sequenceNumber}`);
-    closeModal();
+    formData.value.name = ''
+    formData.value.email = ''
+    formData.value.phone = ''
+    formData.value.agree = false
+    alert(`Спасибо за участие в лотерее! Ваш номер: ${response.sequenceNumber}`)
+    closeModal()
   } catch (error) {
     if (error.message.includes('email')) {
-      emailError.value = 'Пользователь с таким email уже существует';
+      emailError.value = 'Пользователь с таким email уже существует'
     }
     if (error.message.includes('phone')) {
-      phoneError.value = 'Пользователь с таким номером телефона уже существует';
+      phoneError.value = 'Пользователь с таким номером телефона уже существует'
     }
-    alert(error.message);
+    alert(error.message)
   }
-};
+}
 </script>
 
 <style scoped>

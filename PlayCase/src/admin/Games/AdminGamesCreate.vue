@@ -15,13 +15,7 @@
       </div>
       <div class="form-group">
         <label for="plannedDate">Дата проведения:</label>
-        <input
-          id="plannedDate"
-          v-model="plannedDate"
-          type="date"
-          class="input"
-          required
-        />
+        <input id="plannedDate" v-model="plannedDate" type="date" class="input" required />
       </div>
       <div class="form-group">
         <label for="placeId">Выберите место:</label>
@@ -44,85 +38,86 @@
 </template>
 
 <script setup>
-import Loader from "@/admin/Loader.vue";
-import Notification from "@/admin/Notification.vue";
-import { computed, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const router = useRouter();
-const store = useStore();
-const plannedDate = ref("");
-const loading = ref(false);
-const isFormValid = computed(() => plannedDate.value && selectedPlaceId.value);
-const selectedPlaceId = ref("");
-const games = ref([]);
-const nameGame = ref("");
-const places = ref([]);
-const toastMessage = ref('');
-const toastType = ref('success');
+import Loader from '@/admin/Loader.vue'
+import Notification from '@/admin/Notification.vue'
+
+const router = useRouter()
+const store = useStore()
+const plannedDate = ref('')
+const loading = ref(false)
+const isFormValid = computed(() => plannedDate.value && selectedPlaceId.value)
+const selectedPlaceId = ref('')
+const games = ref([])
+const nameGame = ref('')
+const places = ref([])
+const toastMessage = ref('')
+const toastType = ref('success')
 
 const addGame = async () => {
   if (isFormValid.value) {
     try {
-      loading.value = true;
+      loading.value = true
       const newGameRequest = {
         plannedDate: plannedDate.value,
         placeId: selectedPlaceId.value,
         name: nameGame.value,
-      };
+      }
 
-      const newGame = await store.dispatch("games/createGame", newGameRequest);
+      const newGame = await store.dispatch('games/createGame', newGameRequest)
 
-      plannedDate.value = "";
-      selectedPlaceId.value = "";
+      plannedDate.value = ''
+      selectedPlaceId.value = ''
 
-      toastMessage.value = 'Игра успешно добавлена!';
-      toastType.value = 'success';
+      toastMessage.value = 'Игра успешно добавлена!'
+      toastType.value = 'success'
 
       nameGame.value = ''
       plannedDate.value = ''
       selectedPlaceId.value = ''
       setTimeout(() => {
-        toastMessage.value = '';
-        fetchGames();
-        router.push({ name: "AdminGames" });
-      }, 1000);
+        toastMessage.value = ''
+        fetchGames()
+        router.push({ name: 'AdminGames' })
+      }, 1000)
     } catch (error) {
-      console.error("Ошибка добавления игры:", error);
-      toastMessage.value = 'Ошибка при добавлении игры.';
-      toastType.value = 'error';
+      console.error('Ошибка добавления игры:', error)
+      toastMessage.value = 'Ошибка при добавлении игры.'
+      toastType.value = 'error'
       setTimeout(() => {
-        toastMessage.value = '';
-      }, 3000);
+        toastMessage.value = ''
+      }, 3000)
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
-};
+}
 
 const fetchPlaces = async () => {
-  await store.dispatch("places/fetchPlaces");
-  places.value = store.getters["places/allPlaces"];
-};
+  await store.dispatch('places/fetchPlaces')
+  places.value = store.getters['places/allPlaces']
+}
 
 const fetchGames = async () => {
   try {
-    const response = await store.dispatch("games/fetchAllGames");
-    games.value = response;
+    const response = await store.dispatch('games/fetchAllGames')
+    games.value = response
   } catch (error) {
-    console.error("Ошибка загрузки игр:", error);
+    console.error('Ошибка загрузки игр:', error)
   }
-};
+}
 
 const goBack = () => {
-  router.back();
-};
+  router.back()
+}
 
 onMounted(() => {
-  fetchPlaces();
-  fetchGames();
-});
+  fetchPlaces()
+  fetchGames()
+})
 </script>
 
 <style scoped>
@@ -152,7 +147,9 @@ label {
   border-radius: 8px;
   font-size: 1rem;
   background: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .input:focus {
@@ -178,19 +175,19 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button[type="submit"] {
+button[type='submit'] {
   background-color: #007bff;
 }
 
-button[type="submit"]:hover {
+button[type='submit']:hover {
   background-color: #0056b3;
 }
 
-button[type="button"] {
+button[type='button'] {
   background-color: #6c757d;
 }
 
-button[type="button"]:hover {
+button[type='button']:hover {
   background-color: #5a6268;
 }
 

@@ -25,9 +25,14 @@
         </button>
         <button
           type="button"
-          @click="() => {router.back()}"
+          @click="
+            () => {
+              router.back()
+            }
+          "
           class="button"
-        >Назад
+        >
+          Назад
         </button>
       </div>
     </form>
@@ -46,67 +51,67 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import ConfirmDialog from '../ConfirmDialog.vue';
-import Notification from '@/admin/Notification.vue';
-import Loader from '../Loader.vue';
-import { useStore } from 'vuex';
-import {useRoute} from "vue-router";
-import router from "@/router/index.js";
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
-const store = useStore();
+import Notification from '@/admin/Notification.vue'
+import router from '@/router/index.js'
+
+import ConfirmDialog from '../ConfirmDialog.vue'
+import Loader from '../Loader.vue'
+
+const store = useStore()
 const route = useRoute()
 
-const loading = ref(false);
-const categoryName = ref('');
-const oldName = ref('');
-const showDialog = ref(false);
-const dialogTitle = ref('');
-const dialogMessage = ref('');
-const toastMessage = ref('');
-const toastType = ref('success');
-const hasChanges = computed(() => categoryName.value !== oldName.value);
-let dialogAction = null;
+const loading = ref(false)
+const categoryName = ref('')
+const oldName = ref('')
+const showDialog = ref(false)
+const dialogTitle = ref('')
+const dialogMessage = ref('')
+const toastMessage = ref('')
+const toastType = ref('success')
+const hasChanges = computed(() => categoryName.value !== oldName.value)
+let dialogAction = null
 
-const showUpdateDialog = ()  => {
-  dialogTitle.value = 'Подтверждение обновления';
-  dialogMessage.value = 'Вы уверены, что хотите создать категорию?';
-  dialogAction = addCategory;
-  showDialog.value = true;
-};
-
+const showUpdateDialog = () => {
+  dialogTitle.value = 'Подтверждение обновления'
+  dialogMessage.value = 'Вы уверены, что хотите создать категорию?'
+  dialogAction = addCategory
+  showDialog.value = true
+}
 
 const handleConfirm = async () => {
-  showDialog.value = false;
-  if (dialogAction) await dialogAction();
-};
+  showDialog.value = false
+  if (dialogAction) await dialogAction()
+}
 
 const handleCancel = () => {
-  showDialog.value = false;
-};
+  showDialog.value = false
+}
 
 const addCategory = async () => {
   try {
-    loading.value = true;
-    await store.dispatch('places/addCategory',  {
+    loading.value = true
+    await store.dispatch('places/addCategory', {
       placeId: route.params.id,
       categoryData: { name: categoryName.value },
     })
-    toastMessage.value = 'Категория успешно создана';
-    toastType.value = 'success';
+    toastMessage.value = 'Категория успешно создана'
+    toastType.value = 'success'
   } catch (error) {
-    console.error('Ошибка обновления категории:', error);
-    toastMessage.value = 'Ошибка при создании категории';
-    toastType.value = 'error';
+    console.error('Ошибка обновления категории:', error)
+    toastMessage.value = 'Ошибка при создании категории'
+    toastType.value = 'error'
   } finally {
-    loading.value = false;
+    loading.value = false
     setTimeout(() => {
       toastMessage.value = ''
       router.push(`/admin/places`)
-    }, 3000);
+    }, 3000)
   }
-};
-
+}
 </script>
 
 <style scoped>
@@ -148,7 +153,9 @@ input {
   border-radius: 8px;
   font-size: 1rem;
   background: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 input:focus {

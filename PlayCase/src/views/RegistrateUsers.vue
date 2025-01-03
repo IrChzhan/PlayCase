@@ -24,34 +24,34 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const store = useStore();
-const route = useRoute();
-const router = useRouter();
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
 
-const registeredUsers = computed(() => store.getters['lottery/registeredUsers']);
-const error = ref('');
-const gameId = route.params.gameId;
-const teamId = route.params.teamId;
+const registeredUsers = computed(() => store.getters['lottery/registeredUsers'])
+const error = ref('')
+const gameId = route.params.gameId
+const teamId = route.params.teamId
 if (!gameId || !teamId) {
-  error.value = 'Не удалось получить данные игры или команды. Проверьте маршрут.';
+  error.value = 'Не удалось получить данные игры или команды. Проверьте маршрут.'
 } else {
   onMounted(async () => {
     try {
-      await store.dispatch('lottery/fetchRegisteredUsers', { gameId, teamId });
+      await store.dispatch('lottery/fetchRegisteredUsers', { gameId, teamId })
     } catch (err) {
-      console.error('Ошибка при загрузке зарегистрированных пользователей:', err);
-      error.value = 'Произошла ошибка при загрузке данных.';
+      console.error('Ошибка при загрузке зарегистрированных пользователей:', err)
+      error.value = 'Произошла ошибка при загрузке данных.'
     }
-  });
+  })
 }
 
 const goToMenuApp = () => {
-  router.push({ name: 'MenuApp' });
-};
+  router.push({ name: 'MenuApp' })
+}
 </script>
 
 <style scoped>

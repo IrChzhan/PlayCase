@@ -2,18 +2,18 @@
   <div class="container">
     <table border="1">
       <thead>
-      <tr>
-        <th>Номер команды</th>
-        <th>Имя команды</th>
-        <th>Привязать юзера</th>
-      </tr>
+        <tr>
+          <th>Номер команды</th>
+          <th>Имя команды</th>
+          <th>Привязать юзера</th>
+        </tr>
       </thead>
       <tbody>
-      <tr v-for="(team, index) in teams" :key="index">
-        <td>{{ team?.tableNumber || "нету номера стола"}}</td>
-        <td>{{ team?.name }}</td>
-        <td><button @click="">Привязать юзера</button></td>
-      </tr>
+        <tr v-for="(team, index) in teams" :key="index">
+          <td>{{ team?.tableNumber || 'нету номера стола' }}</td>
+          <td>{{ team?.name }}</td>
+          <td><button @click="setUser(team.id)">Привязать юзера</button></td>
+        </tr>
       </tbody>
     </table>
 
@@ -39,32 +39,33 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref, watch} from "vue";
-import {useRoute, useRouter} from "vue-router";
-import {useStore} from "vuex";
-import Notification from '../Notification.vue';
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
+import Notification from '../Notification.vue'
 
 const route = useRoute()
 const router = useRouter()
-const game = ref(null);
+const game = ref(null)
 const store = useStore()
 const selectedFile = ref(null)
 const loading = ref(false)
 const uploadSuccess = ref(false)
-const notificationMessage = ref('');
-const notificationType = ref('info');
+const notificationMessage = ref('')
+const notificationType = ref('info')
 const teamName = ref('')
 const editingTeam = ref(null)
-const teams = computed(() => store.state.games.teams[route.params.gameId] || []);
+const teams = computed(() => store.state.games.teams[route.params.gameId] || [])
 
 const fetchGameById = async () => {
   try {
-    const res = await store.dispatch("games/fetchGameById", route.params.gameId);
-    game.value = res;
+    const res = await store.dispatch('games/fetchGameById', route.params.gameId)
+    game.value = res
   } catch (error) {
-    console.error("Ошибка при загрузке данных об игре:", error);
+    console.error('Ошибка при загрузке данных об игре:', error)
   }
-};
+}
 
 const handleFileChange = (event) => {
   selectedFile.value = event.target.files[0]
@@ -77,60 +78,63 @@ const handleFileChange = (event) => {
 
 const fetchTeams = async () => {
   try {
-    await store.dispatch('games/fetchTeams', { gameId: route.params.gameId });
+    await store.dispatch('games/fetchTeams', { gameId: route.params.gameId })
   } catch (error) {
-    console.error('Ошибка при загрузке команд:', error);
+    console.error('Ошибка при загрузке команд:', error)
   }
 }
 
 const uploadFile = async () => {
   if (!selectedFile.value) {
-    alert('Пожалуйста, выберите файл.');
-    return;
+    alert('Пожалуйста, выберите файл.')
+    return
   }
 
-  loading.value = true;
-  notificationMessage.value = 'Загрузка файла...';
-  notificationType.value = 'info';
+  loading.value = true
+  notificationMessage.value = 'Загрузка файла...'
+  notificationType.value = 'info'
 
   try {
     await store.dispatch('games/replaceTeams', {
       gameId: route.params.gameId,
       file: selectedFile.value,
-    });
-    uploadSuccess.value = true;
-    await fetchTeams();
+    })
+    uploadSuccess.value = true
+    await fetchTeams()
 
-    notificationMessage.value = 'Файл успешно загружен!';
-    notificationType.value = 'success';
+    notificationMessage.value = 'Файл успешно загружен!'
+    notificationType.value = 'success'
   } catch (error) {
-    console.error('Ошибка при загрузке файла:', error);
+    console.error('Ошибка при загрузке файла:', error)
 
-    notificationMessage.value = 'Ошибка при загрузке файла.';
-    notificationType.value = 'error';
+    notificationMessage.value = 'Ошибка при загрузке файла.'
+    notificationType.value = 'error'
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 const createTeam = () => {
+  router.push(`/admin/games/${route.params.gameId}/team/create`)
+}
 
+const setUser = (teamId) => {
+  router.push(`/admin/games/${route.params.gameId}/team/${teamId}/setUser`)
 }
 
 onMounted(() => {
-  fetchGameById();
-  fetchTeams();
-});
+  fetchGameById()
+  fetchTeams()
+})
 
 watch(
   () => route.params.gameId,
   async () => {
-    await fetchGameById();
-    await fetchTeams();
-  }
-);
+    await fetchGameById()
+    await fetchTeams()
+  },
+)
 </script>
-
 
 <style scoped>
 .container {
@@ -143,7 +147,8 @@ table {
   width: 100%;
   border-collapse: collapse;
 }
-th, td {
+th,
+td {
   padding: 10px;
   text-align: left;
 }

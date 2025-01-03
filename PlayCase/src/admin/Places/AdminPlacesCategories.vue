@@ -2,7 +2,9 @@
   <div class="layout">
     <div class="navbar">
       <div class="add-category">
-        <button class="add-category-button" @click="openModalAdminAddCategory">Редактировать заведение</button>
+        <button class="add-category-button" @click="openModalAdminAddCategory">
+          Редактировать заведение
+        </button>
       </div>
       <div class="list" ref="listContainer">
         <template v-if="categories && categories.length > 0">
@@ -29,10 +31,11 @@
 </template>
 
 <script setup>
-import {ref, onMounted, watch} from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import {useRoute} from "vue-router";
-import router from "@/router/index.js";
+
+import router from '@/router/index.js'
 
 const route = useRoute()
 const store = useStore()
@@ -125,7 +128,9 @@ onMounted(fetchCategories)
   padding: 15px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s, transform 0.3s;
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s;
 }
 
 .category-card:hover {

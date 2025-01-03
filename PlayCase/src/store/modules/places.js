@@ -24,7 +24,7 @@ export default {
       }
     },
     setCurrentCattegories(state, placeId) {
-      state.currentCategories = placeId;
+      state.currentCategories = placeId
     },
     deletePlace(state, placeId) {
       state.places = state.places.filter((place) => place.id !== placeId)

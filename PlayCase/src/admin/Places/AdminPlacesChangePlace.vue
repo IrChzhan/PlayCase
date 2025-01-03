@@ -5,21 +5,29 @@
       <div class="form-group">
         <small>Старое название: {{ oldName }}</small>
         <label for="name">Название:</label>
-        <input id="name" v-model="placeName" type="text" placeholder="Введите новое название" required />
+        <input
+          id="name"
+          v-model="placeName"
+          type="text"
+          placeholder="Введите новое название"
+          required
+        />
       </div>
 
       <div class="form-group">
         <small>Старый адрес: {{ oldAddress }}</small>
         <label for="address">Адрес:</label>
-        <input id="address" v-model="placeAddress" type="text" placeholder="Введите новый адрес" required />
+        <input
+          id="address"
+          v-model="placeAddress"
+          type="text"
+          placeholder="Введите новый адрес"
+          required
+        />
       </div>
 
       <div class="form-actions">
-        <button
-          type="submit"
-          class="button primary"
-          :disabled="!hasChanges || loading"
-        >
+        <button type="submit" class="button primary" :disabled="!hasChanges || loading">
           <Loader v-if="loading" /> Сохранить изменения
         </button>
         <button type="button" @click="showDeleteDialog" class="button danger">
@@ -53,9 +61,10 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
+import router from '@/router/index.js'
+
 import ConfirmDialog from '../ConfirmDialog.vue'
 import Loader from '../Loader.vue'
-import router from "@/router/index.js";
 
 const store = useStore()
 const route = useRoute()

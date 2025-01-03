@@ -75,7 +75,6 @@ export default {
   max-width: 500px;
   margin: 0 auto;
   padding: 30px;
-  background: #2c3e50;
   border-radius: 10px;
   text-align: center;
 }
