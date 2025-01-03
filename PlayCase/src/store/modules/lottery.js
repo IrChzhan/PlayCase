@@ -22,18 +22,24 @@ export default {
             }
         },
 
-        async fetchRegisteredUsers({ commit }, { gameId, teamId }) {
+        async fetchRegistrations({ commit }, gameId) {
             try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/updatePaid`
-                );
-                commit('SET_REGISTERED_USERS', response.data);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/lottery/registrations`);
+                commit('SET_REGISTRATIONS', response.data);
                 return response.data;
             } catch (error) {
-                console.error(
-                    `Ошибка при получении зарегистрированных пользователей для команды ${teamId} в игре ${gameId}:`,
-                    error
-                );
+                console.error('Ошибка при получении списка регистраций:', error);
+                throw error;
+            }
+        },
+
+        async fetchWinner({ commit }, gameId) {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/lottery/winner`);
+                commit('SET_WINNER', response.data);
+                return response.data;
+            } catch (error) {
+                console.error('Ошибка при получении победителя:', error);
                 throw error;
             }
         },
@@ -44,7 +50,7 @@ export default {
                     await dispatch('fetchCurrentGame');
                 }
 
-                const gameId = state.currentGame && state.currentGame.id; // Классическая проверка
+                const gameId = state.currentGame && state.currentGame.id;
                 if (!gameId) {
                     throw new Error('Не удалось получить ID текущей игры.');
                 }

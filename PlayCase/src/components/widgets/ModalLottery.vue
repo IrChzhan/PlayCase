@@ -88,10 +88,8 @@ const submitForm = async () => {
   };
 
   try {
-    // Отправка данных на сервер
     const response = await store.dispatch('lottery/registerInLottery', newUser);
 
-    // Очистка формы и закрытие модального окна
     formData.value.name = '';
     formData.value.email = '';
     formData.value.phone = '';

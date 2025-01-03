@@ -1,7 +1,7 @@
 <template>
   <div class="results-excel-page">
     <div class="close-button" @click="goToMenuApp">✖️</div>
-    <h1>Результаты</h1>
+    <h1 class="results">Результаты</h1>
 
     <div v-if="teams.length === 0">
       <p>Нет данных для отображения.</p>
@@ -107,5 +107,28 @@ th {
   position: absolute;
   bottom: 20px;
   cursor: pointer;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .results-excel-page {
+        padding: 5px;
+    }
+
+    .results {
+      display: none;
+    }
+
+     table {
+        font-size: 0.9rem;
+        margin-top: -20px;
+     }
+
+    th, td {
+        padding: 10px;
+    }
+
+    .table-container {
+        width: 95%;
+    }
 }
 </style>

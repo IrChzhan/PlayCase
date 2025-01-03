@@ -54,13 +54,15 @@ const menuItems = [
   {
     label: "Результаты",
     route: () => {
-      selectedMenu.value = 2
+      router.push(`/admin/game/${route.params.gameId}/teams/results`);
+      selectedMenu.value = 2;
     },
     name: 'result'
   },
   {
     label: "Реги Лото",
     route: () => {
+      router.push(`/admin/game/${route.params.gameId}/teams/loto`);
       selectedMenu.value = 3
     },
     name: 'lottery'
