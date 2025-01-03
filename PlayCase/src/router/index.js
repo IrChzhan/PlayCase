@@ -188,11 +188,17 @@ const routes = [{
                         component: AdminGamesGameTeams,
                     },
                     {
-                        path: '/admin/game/:gameId/teams/results',
+                        path: '/admin/games/:gameId/teams/results',
                         name: 'AdminResults',
                         component: AdminResults,
                         props: true,
                     },
+                  {
+                    path: '/admin/games/:gameId/teams/loto',
+                    name: 'AdminLotoRegistrate',
+                    component: AdminLotoRegistrate,
+                    props: true
+                  },
                 ]
             },
             {
@@ -200,19 +206,7 @@ const routes = [{
                 name: 'AdminTeams',
                 component: AdminTeams,
                 props: true,
-            },
-            {
-                path: '/admin/game/:gameId/teams/results',
-                name: 'AdminResults',
-                component: AdminResults,
-                props: true,
-            },
-            {
-                path: '/admin/game/:gameId/teams/loto',
-                name: 'AdminLotoRegistrate',
-                component: AdminLotoRegistrate,
-                props: true
-            },
+            }
         ],
     },
     {
