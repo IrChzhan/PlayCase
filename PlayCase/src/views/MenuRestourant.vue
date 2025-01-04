@@ -28,6 +28,7 @@
           </div>
         </div>
       </div>
+      <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
     </div>
   </div>
 </template>
@@ -35,12 +36,15 @@
 <script setup>
 import axios from 'axios'
 import { computed, onMounted, ref } from 'vue'
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const categories = ref([])
 const meals = ref([])
 const selectedCategoryName = ref(null)
 
-// Получение меню с сервера
+const goToMenuApp = () => {
+  router.push({ name: 'MenuApp' });
+};
 const fetchMenu = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/place/current/menu`, {
@@ -145,7 +149,14 @@ h1 {
 .category-filters button:hover {
   background-color: #ffc107;
 }
-
+.home-button {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 20px;
+  cursor: pointer;
+}
 .meals-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

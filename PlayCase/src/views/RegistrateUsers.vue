@@ -1,6 +1,5 @@
 <template>
   <div class="register-users-page">
-    <div class="close-button" @click="goToMenuApp">✖️</div>
     <h1>Зарегистрированные пользователи</h1>
     <br />
     <div v-if="error">

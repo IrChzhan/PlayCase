@@ -98,6 +98,7 @@ const menuItems = ref([
       router.push({ name: 'ResultsExcel' })
     },
   },
+  { name: 'Оплата', image: cashImage, function: openModalPay },
   {
     name: 'Меню ресторана',
     image: menuImage,
@@ -106,6 +107,8 @@ const menuItems = ref([
     },
   },
   { name: 'Лотерея', image: lotteryImage, function: openModalLottery },
+  { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
+  { name: 'Хелп', image: helpImage, function: () => {} },
   {
     name: 'Участники лотереи',
     image: manImage,
@@ -113,9 +116,9 @@ const menuItems = ref([
       router.push({ name: 'RegistrateUsers' })
     },
   },
-  { name: 'Оплата', image: cashImage, function: openModalPay },
-  { name: 'Хелп', image: helpImage, function: () => {} },
-  { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
+
+
+
 ])
 </script>
 
@@ -213,21 +216,21 @@ p {
   .header {
     flex-direction: row;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
     width: 85%;
-    height: auto; 
-    margin: 12px auto; 
+    height: auto;
+    margin: 12px auto;
   }
 
   .team-name {
     font-size: 48px;
-    text-align: center; 
-    margin: 0 auto; 
+    text-align: center;
+    margin: 0 auto;
   }
 
   .menu {
     width: 80%;
-    margin: 0 auto; 
+    margin: 0 auto;
     margin-top: 20px;
   }
   .menu-image {
