@@ -282,7 +282,7 @@ const routes = [{
 ]
 
 const router = createRouter({
-    history: createWebHistory('/PlayCase'),
+    history: createWebHistory(),
     routes,
 })
 

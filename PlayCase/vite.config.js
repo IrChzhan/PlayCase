@@ -8,6 +8,7 @@ export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   return defineConfig({
+    base: mode === 'production' ? '/PlayCase' : '/',
     plugins: [
       vue(),
       mode === 'development' && vueDevTools(),
