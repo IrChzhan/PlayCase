@@ -1,9 +1,5 @@
 <template>
   <div class="container">
-    <div class="header">
-      <button @click="editCategory">Редактировать категорию</button>
-    </div>
-
     <div class="filters">
       <input type="text" placeholder="Поиск блюда..." v-model="searchQuery" @input="filterMeals" />
       <select v-model="mealsPerPage" @change="filterMeals">
@@ -21,7 +17,6 @@
           <th>Описание</th>
           <th>Цена</th>
           <th>Фото</th>
-          <th>Действие</th>
         </tr>
       </thead>
       <tbody>
@@ -31,9 +26,10 @@
           <td>{{ meal.description }}</td>
           <td>{{ meal.price }}</td>
           <td><img :src="meal.fileUrl" alt="Фото" class="thumbnail" /></td>
-          <td>
-            <button @click="editMeal(meal.id)">Изменить</button>
-          </td>
+          <div class="actions">
+            <button @click.stop="editMeal(meal.id)" class="icon-setting"><IconsSetting/></button>
+            <button @click.stop="showDeleteDialog(meal.id)" class="icon-setting"><IconDelete/></button>
+          </div>
         </tr>
       </tbody>
     </table>
@@ -50,17 +46,86 @@
       <button @click="addMeal">Добавить блюдо</button>
     </div>
   </div>
+  <ConfirmDialog
+    v-if="showDialog"
+    :visible="showDialog"
+    :title="dialogTitle"
+    :message="dialogMessage"
+    @confirm="handleConfirm"
+    @cancel="handleCancel"
+  />
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import IconDelete from "@/components/icons/IconDelete.vue";
+import IconsSetting from "@/components/icons/IconsSetting.vue";
+import ConfirmDialog from "@/admin/ConfirmDialog.vue";
+import Notification from "@/admin/Notification.vue";
 
 const router = useRouter()
 const route = useRoute()
 const store = useStore()
 const placeId = route.params.id
+
+const showDialog = ref(false)
+const dialogTitle = ref('')
+const dialogMessage = ref('')
+const toastMessage = ref('')
+const toastType = ref('success')
+const loading = ref(false)
+let dialogAction = null
+const handleConfirm = async () => {
+  showDialog.value = false
+  if (dialogAction) {
+    await dialogAction()
+  }
+}
+
+const deleteDish = (id) => async () => {
+  try {
+    loading.value = true
+    await store.dispatch('places/deleteMeal', {
+      placeId: route.params.id,
+      categoryId: route.params.categoryId,
+      mealId: id,
+    })
+    toastMessage.value = 'Блюдо удалено!'
+    toastType.value = 'success'
+  } catch (error) {
+    console.error('Ошибка удаления блюда:', error)
+    toastMessage.value = 'Ошибка при удалении блюда.'
+    toastType.value = 'error'
+  } finally {
+    loading.value = false
+    setTimeout(() => {
+      toastMessage.value = ''
+      store
+        .dispatch('places/fetchMeals', {
+          placeId: route.params.id,
+          categoryId: route.params.categoryId,
+        })
+        .then(() => {
+          filteredMeals.value = meals.value
+        })
+    }, 3000)
+  }
+}
+const goToChangeUser = (id) => {
+  router.push(`/admin/places/changeCategory/${route.params.id}/${id}`)
+}
+const handleCancel = () => {
+  showDialog.value = false
+}
+const showDeleteDialog = (id) => {
+  dialogTitle.value = 'Подтверждение удаления'
+  dialogMessage.value = 'Вы уверены, что хотите удалить это блюдо?'
+  dialogAction = deleteDish(id)
+  showDialog.value = true
+}
 
 const searchQuery = ref('')
 const currentPage = ref(1)
@@ -124,6 +189,21 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.icon-setting {
+  padding: 10px 0 ;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.icon-setting:hover {
+  background: none;
+}
 .container {
   display: flex;
   flex-direction: column;
@@ -195,10 +275,14 @@ onMounted(() => {
 button {
   padding: 10px 20px;
   border: none;
-  background-color: #007bff;
+  background-color: #CC9F33;
   color: white;
   border-radius: 4px;
   cursor: pointer;
+}
+
+button:hover {
+  background:#d1aa58 ;
 }
 
 button:disabled {

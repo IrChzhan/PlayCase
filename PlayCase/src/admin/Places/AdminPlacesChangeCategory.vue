@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="place-page">
     <h1>Редактировать категорию</h1>
     <form @submit.prevent="showUpdateDialog">
       <small>Старое название: {{ oldName }}</small>
@@ -23,15 +23,7 @@
         >
           <Loader v-if="loading" /> Сохранить изменения
         </button>
-        <button
-          type="button"
-          @click="showDeleteDialog"
-          class="delete-button"
-          :disabled="loading"
-          :style="{ opacity: loading ? '50%' : '100%' }"
-        >
-          <Loader v-if="loading" /> Удалить категорию
-        </button>
+        <button class="button secondary" type="button" @click="goBack">Назад</button>
       </div>
     </form>
 
@@ -140,9 +132,15 @@ const deleteCategory = async (categoryId, placeIdF) => {
     }, 3000)
   }
 }
+const goBack = () => {
+  router.back()
+}
 </script>
 
 <style scoped>
+.place-page {
+  padding: 20px;
+}
 h1 {
   margin-bottom: 20px;
   font-size: 2rem;
@@ -203,13 +201,19 @@ button {
 }
 
 button[type='button'] {
-  background-color: #6c757d;
+  background-color: #CC9F33;
 }
 
 button[type='button']:hover {
-  background-color: #5a6268;
+  background-color: #d1aa58;
+}
+.secondary {
+  background-color: #6c757d;
 }
 
+.secondary:hover {
+  background-color: #5a6268;
+}
 button.delete-button {
   background-color: #dc3545;
 }

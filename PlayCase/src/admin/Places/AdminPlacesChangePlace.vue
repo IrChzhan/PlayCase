@@ -30,9 +30,7 @@
         <button type="submit" class="button primary" :disabled="!hasChanges || loading">
           <Loader v-if="loading" /> Сохранить изменения
         </button>
-        <button type="button" @click="showDeleteDialog" class="button danger">
-          <Loader v-if="loading" /> Удалить место
-        </button>
+        <button class="button secondary" type="button" @click="goBack">Назад</button>
       </div>
     </form>
 
@@ -81,7 +79,9 @@ const dialogMessage = ref('')
 const toastMessage = ref('')
 const toastType = ref('success')
 let dialogAction = null
-
+const goBack = () => {
+  router.back()
+}
 const fetchPlace = async () => {
   const place = store.state.places.places.find((place) => place.id === placeId)
   if (place) {
@@ -175,6 +175,9 @@ onMounted(fetchPlace)
 </script>
 
 <style scoped>
+.place-page {
+  padding: 20px;
+}
 h1 {
   margin-bottom: 20px;
   font-size: 2rem;
@@ -235,11 +238,11 @@ button {
 }
 
 button.primary {
-  background-color: #4285f4;
+  background-color: #CC9F33;
 }
 
 button.primary:hover:not([disabled]) {
-  background-color: #357ae8;
+  background-color: #d1aa58;
 }
 
 button.danger {
@@ -249,7 +252,13 @@ button.danger {
 button.danger:hover:not([disabled]) {
   background-color: #c82333;
 }
+.secondary {
+  background-color: #6c757d;
+}
 
+.secondary:hover {
+  background-color: #5a6268;
+}
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;

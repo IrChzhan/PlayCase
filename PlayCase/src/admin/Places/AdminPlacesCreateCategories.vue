@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Создать категорию</h1>
     <form @submit.prevent="showUpdateDialog">
       <small>Старое название: {{ oldName }}</small>
@@ -30,7 +30,7 @@
               router.back()
             }
           "
-          class="button"
+          class="button btn-back"
         >
           Назад
         </button>
@@ -108,13 +108,15 @@ const addCategory = async () => {
     loading.value = false
     setTimeout(() => {
       toastMessage.value = ''
-      router.push(`/admin/places`)
     }, 3000)
   }
 }
 </script>
 
 <style scoped>
+.container {
+  padding: 20px;
+}
 h1 {
   margin-bottom: 20px;
   font-size: 2rem;
@@ -174,14 +176,22 @@ button {
   transition: background-color 0.3s ease;
 }
 
+
+
 button[type='button'] {
-  background-color: #6c757d;
+  background-color: #CC9F33;
 }
 
 button[type='button']:hover {
-  background-color: #5a6268;
+  background-color: #d1aa58;
+}
+.btn-back[type='button'] {
+  background: #6c757d;
 }
 
+.btn-back[type='button']:hover {
+  background: #5a6268;
+}
 button.delete-button {
   background-color: #dc3545;
 }

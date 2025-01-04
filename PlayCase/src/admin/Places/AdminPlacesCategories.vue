@@ -1,11 +1,6 @@
 <template>
   <div class="layout">
     <div class="navbar">
-      <div class="add-category">
-        <button class="add-category-button" @click="openModalAdminAddCategory">
-          Редактировать заведение
-        </button>
-      </div>
       <div class="list" ref="listContainer">
         <template v-if="categories && categories.length > 0">
           <div
@@ -16,6 +11,10 @@
             @click="selectCategory(category.id)"
           >
             <h2>{{ category.name }}</h2>
+            <div class="actions">
+              <button @click.stop="goToChangeUser(category.id)" class="icon-setting"><IconsSetting/></button>
+              <button @click.stop="showDeleteDialog(category.id)" class="icon-setting"><IconDelete/></button>
+            </div>
           </div>
         </template>
         <template v-else>
@@ -28,6 +27,15 @@
       <router-view :key="selectedCategoryId"></router-view>
     </div>
   </div>
+  <ConfirmDialog
+    v-if="showDialog"
+    :visible="showDialog"
+    :title="dialogTitle"
+    :message="dialogMessage"
+    @confirm="handleConfirm"
+    @cancel="handleCancel"
+  />
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <script setup>
@@ -36,12 +44,62 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 import router from '@/router/index.js'
+import IconDelete from "@/components/icons/IconDelete.vue";
+import IconsSetting from "@/components/icons/IconsSetting.vue";
+import ConfirmDialog from "@/admin/ConfirmDialog.vue";
+import Notification from "@/admin/Notification.vue";
 
 const route = useRoute()
 const store = useStore()
 const categories = ref([])
 const selectedCategoryId = ref(null)
 
+const showDialog = ref(false)
+const dialogTitle = ref('')
+const dialogMessage = ref('')
+const toastMessage = ref('')
+const toastType = ref('success')
+const loading = ref(false)
+let dialogAction = null
+const handleConfirm = async () => {
+  showDialog.value = false
+  if (dialogAction) {
+    await dialogAction()
+  }
+}
+const goToChangeUser = (id) => {
+  router.push(`/admin/places/changeCategory/${route.params.id}/${id}`)
+}
+const handleCancel = () => {
+  showDialog.value = false
+}
+const showDeleteDialog = (id) => {
+  dialogTitle.value = 'Подтверждение удаления'
+  dialogMessage.value = 'Вы уверены, что хотите удалить эту категорию?'
+  dialogAction = deleteCategory(id)
+  showDialog.value = true
+}
+const deleteCategory = (id) => async () => {
+  try {
+    loading.value = true
+    await store.dispatch('places/deleteCategory', {
+      placeId: route.params.id,
+      categoryId: id,
+    })
+    toastMessage.value = 'Категория удалена!'
+    toastType.value = 'success'
+  } catch (error) {
+    console.error('Ошибка удаления категории:', error)
+    toastMessage.value = 'Ошибка при удалении категории.'
+    toastType.value = 'error'
+  } finally {
+    loading.value = false
+    setTimeout(() => {
+      fetchCategories()
+      toastMessage.value = ''
+    }, 3000)
+  }
+}
 const fetchCategories = async () => {
   await store.dispatch('places/fetchCategories', route.params.id)
   categories.value = store.getters['places/categoriesByPlace'](route.params.id)
@@ -73,6 +131,21 @@ onMounted(fetchCategories)
 </script>
 
 <style scoped>
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.icon-setting {
+  padding: 10px 0 ;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.icon-setting:hover {
+  background: none;
+}
 .layout {
   display: flex;
   background-color: #ffffff;
@@ -80,7 +153,7 @@ onMounted(fetchCategories)
 }
 
 .navbar {
-  width: 220px;
+  min-width: 5%;
   background-color: #f9f9f9;
   border-right: 1px solid #e0e0e0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -97,9 +170,9 @@ onMounted(fetchCategories)
 }
 
 .add-category-button {
-  background-color: #1abc9c;
+  background-color: #CC9F33;
   color: #ffffff;
-  padding: 10px 20px;
+  padding: 10px 8px;
   margin-top: 10px;
   border: none;
   border-radius: 5px;
@@ -109,7 +182,7 @@ onMounted(fetchCategories)
 }
 
 .add-category-button:hover {
-  background-color: #16a085;
+  background-color: #d1aa58;
 }
 
 .list {
@@ -118,10 +191,10 @@ onMounted(fetchCategories)
   gap: 20px;
   max-height: 90vh;
   overflow-y: auto;
-  padding-right: 10px;
 }
 
 .category-card {
+  word-break: break-all;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -140,6 +213,7 @@ onMounted(fetchCategories)
 
 .category-card h2 {
   margin: 0;
+  word-break: break-all;
   font-size: 18px;
   color: #34495e;
 }

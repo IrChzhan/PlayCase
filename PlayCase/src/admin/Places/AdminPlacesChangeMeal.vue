@@ -40,14 +40,7 @@
       >
         <Loader v-if="loading" /> Сохранить изменения
       </button>
-      <button
-        @click="showDeleteDialog(dishId, restaurantIdF)()"
-        class="button danger"
-        :disabled="loading"
-        :class="{ disabled: loading }"
-      >
-        <Loader v-if="loading" /> Удалить блюдо
-      </button>
+      <button class="button secondary" type="button" @click="goBack">Назад</button>
     </div>
   </div>
 
@@ -83,7 +76,9 @@ defineProps({
 
 const route = useRoute()
 const store = useStore()
-
+const goBack = () => {
+  router.back()
+}
 const loading = ref(false)
 const dishName = ref('')
 const dishPrice = ref(0)
@@ -214,6 +209,10 @@ const deleteDish = async () => {
 </script>
 
 <style scoped>
+.container {
+  padding: 20px;
+}
+
 h1 {
   margin-bottom: 20px;
   font-size: 2rem;
@@ -268,11 +267,11 @@ button {
 }
 
 button.primary {
-  background-color: #4285f4;
+  background-color: #CC9F33;
 }
 
 button.primary:hover:not([disabled]) {
-  background-color: #357ae8;
+  background-color: #d1aa58;
 }
 
 button.danger {
@@ -291,5 +290,13 @@ button:disabled {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.secondary {
+  background-color: #6c757d;
+}
+
+.secondary:hover {
+  background-color: #5a6268;
 }
 </style>

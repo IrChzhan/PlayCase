@@ -136,7 +136,6 @@ const handleAddMeal = async () => {
     loading.value = false
     setTimeout(() => {
       toastMessage.value = ''
-      router.push(`/admin/places/categories/${route.params.id}/menu/${route.params.categoryId}`)
     }, 3000)
   }
 }
@@ -147,6 +146,9 @@ const goBack = () => {
 </script>
 
 <style scoped>
+.add-meal {
+  padding: 20px;
+}
 h1 {
   margin-bottom: 20px;
   font-size: 1.8rem;
@@ -208,11 +210,11 @@ button {
 }
 
 button[type='submit'] {
-  background-color: #007bff;
+  background-color: #CC9F33;
 }
 
 button[type='submit']:hover {
-  background-color: #0056b3;
+  background-color: #d1aa58;
 }
 
 button[type='button'] {
