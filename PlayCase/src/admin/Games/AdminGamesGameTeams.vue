@@ -1,34 +1,51 @@
 <template>
   <div class="container">
-    <table border="1">
+    <div class="upload-container">
+      <h2>Загрузить команды из файла</h2>
+
+      <div class="file-select">
+        <input class="file-input" type="file" @change="handleFileChange" v-if="!selectedFile" />
+        <button class="file-button" v-if="selectedFile" @click="uploadFile" :disabled="loading">
+          {{ loading ? 'Загрузка...' : 'Загрузить файл' }}
+        </button>
+      </div>
+
+      <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
+    </div>
+
+    <table border="1" class="teams-table">
       <thead>
-        <tr>
-          <th>Номер команды</th>
-          <th>Имя команды</th>
-          <th>Привязать юзера</th>
-          <th>Редактировать</th>
-        </tr>
+      <tr>
+        <th>Номер команды</th>
+        <th>Имя команды</th>
+        <th>Привязать планшет</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="(team, index) in teams" :key="index">
-          <td>{{ team?.tableNumber || 'нету номера стола' }}</td>
-          <td>{{ team?.name }}</td>
-          <td><button @click="setUser(team.id)">Привязать юзера</button></td>
-          <td><button @click="changeTeam(team.id)">Редактировать</button></td>
-        </tr>
+      <tr v-for="(team, index) in teams" :key="index" class="team-row">
+        <td>
+          <div class="change-tale">
+            <div class="change-input" v-if="selectTeamStol === team.id">
+              <input class="input-change" type="text" v-model="tableNum">
+              <button class="icon-setting" @click="assignTable"><IconArrow/></button>
+              <button class="icon-setting" @click="cancelTable"><IconClose/></button>
+            </div>
+            <span v-else>{{ team?.tableNumber || 'нету номера стола' }}</span>
+            <button @click="changeTable(team.id)" class="change-tale-btn"><IconPencil/></button>
+          </div>
+        </td>
+        <td>{{ team?.name }}</td>
+        <td><button @click="setUser(team.id)" class="button">Привязать планшет</button></td>
+        <div class="actions">
+          <button @click.stop="changeTeam(team.id)" class="icon-setting"><IconsSetting/></button>
+          <button @click.stop="showDeleteDialog(team.id)" class="icon-setting"><IconDelete/></button>
+        </div>
+      </tr>
       </tbody>
     </table>
 
     <div class="buttons">
-      <div class="upload-container">
-        <h2>Загрузить команды из файла</h2>
-        <input class="file-input" type="file" @change="handleFileChange" />
-        <button class="upload-button" @click="uploadFile" :disabled="loading">
-          {{ loading ? 'Загрузка...' : 'Загрузить файл' }}
-        </button>
-        <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
-      </div>
-      <button @click="createTeam">Создать команду</button>
+      <button class="button" @click="createTeam">Создать команду</button>
     </div>
   </div>
 
@@ -38,6 +55,14 @@
     :type="notificationType"
     :duration="3000"
   />
+  <ConfirmDialog
+    v-if="showDialog"
+    :visible="showDialog"
+    :title="dialogTitle"
+    :message="dialogMessage"
+    @confirm="handleConfirm"
+    @cancel="handleCancel"
+  />
 </template>
 
 <script setup>
@@ -46,7 +71,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 import Notification from '../Notification.vue'
-
+import IconsSetting from "@/components/icons/IconsSetting.vue";
+import IconDelete from "@/components/icons/IconDelete.vue";
+import ConfirmDialog from "@/admin/ConfirmDialog.vue";
+import IconPencil from "@/components/icons/IconPencil.vue";
+import IconArrow from "@/components/icons/IconArrow.vue";
+import IconClose from "@/components/icons/IconClose.vue";
+const tableNum = ref(0)
+const selectTeamStol = ref(null)
 const route = useRoute()
 const router = useRouter()
 const game = ref(null)
@@ -59,6 +91,75 @@ const notificationType = ref('info')
 const teamName = ref('')
 const editingTeam = ref(null)
 const teams = computed(() => store.state.games.teams[route.params.gameId] || [])
+const showDialog = ref(false);
+const dialogTitle = ref('');
+const dialogMessage = ref('');
+let dialogAction = null;
+
+const assignTable = async () => {
+  try {
+      await store.dispatch('games/setStolForTeam', {
+        gameId: route.params.gameId,
+        teamId: selectTeamStol.value,
+        num: tableNum.value,
+      })
+      notificationMessage.value = 'Команда успешна удалена!'
+      notificationType.value = 'success'
+      cancelTable()
+      setTimeout(() => {
+        notificationMessage.value = ''
+        fetchTeams()
+      }, 1000)
+  } catch (error) {
+    console.error('Ошибка при привязке пользователя:', error)
+    notificationMessage.value = 'Ошибка при удаление команды.'
+    notificationType.value = 'error'
+  }
+}
+
+const cancelTable = () => {
+  selectTeamStol.value = null
+  tableNum.value = 0
+}
+
+const changeTable = (id) => {
+  selectTeamStol.value = id
+}
+
+const showDeleteDialog = (id) => {
+  dialogTitle.value = 'Подтверждение удаления';
+  dialogMessage.value = 'Вы уверены, что хотите удалить эту команду?';
+  dialogAction = handleSubmitDelete(id);
+  showDialog.value = true;
+};
+
+const handleConfirm = async () => {
+  showDialog.value = false;
+  if (dialogAction) await dialogAction();
+};
+
+const handleCancel = () => {
+  showDialog.value = false;
+};
+
+const handleSubmitDelete = (id) => async () => {
+  try {
+    const response = await store.dispatch('games/deleteTeamToGame', {
+      gameId: route.params.gameId,
+      teamId: id,
+    })
+
+    notificationMessage.value = 'Команда успешна удалена!'
+    notificationType.value = 'success'
+    setTimeout(() => {
+      notificationMessage.value = ''
+      fetchTeams()
+    }, 1000)
+  } catch (error) {
+    notificationMessage.value = 'Ошибка при удаление команды.'
+    notificationType.value = 'error'
+  }
+}
 
 const fetchGameById = async () => {
   try {
@@ -106,6 +207,11 @@ const uploadFile = async () => {
 
     notificationMessage.value = 'Файл успешно загружен!'
     notificationType.value = 'success'
+
+    setTimeout(() => {
+      selectedFile.value = null
+      uploadSuccess.value = false
+    }, 1000)
   } catch (error) {
     console.error('Ошибка при загрузке файла:', error)
 
@@ -143,29 +249,175 @@ watch(
 </script>
 
 <style scoped>
-.container {
+.change-input {
   display: flex;
-  flex-direction: column;
-  margin-top: 20px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-th,
-td {
-  padding: 10px;
-  text-align: left;
-}
-button {
-  padding: 5px 10px;
-  margin: 5px;
-}
-.buttons {
+.change-tale{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+}
+
+.change-tale-btn {
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.upload-container {
+  margin: 20px 0;
+}
+
+.file-select {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.file-input {
+  display: block;
+}
+
+.file-button {
+  padding: 10px;
+  background-color: #CC9F33;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.file-button:hover {
+  background-color: #3A4C6E;
+  color: #CC9F33;
+}
+
+.file-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.success-message {
+  color: #CC9F33;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.teams-table-wrapper {
+  padding: 20px;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: Mulish, sans-serif;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 20px;
+  color: #000000;
+  text-align: center;
+}
+
+.teams-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.teams-table th,
+.teams-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.teams-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.team-row {
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.team-row:hover {
+  background-color: #f9f9f9;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-setting {
+  padding: 10px 0;
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+
+.icon-setting:hover {
+  background: none;
+}
+
+.input-change {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.input-change:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
 }
+
+.button {
+  padding: 10px;
+  background-color: #CC9F33;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.button:hover {
+  background-color: #3A4C6E;
+  color: #CC9F33;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.btn-add {
+  width: 200px;
+}
+
 </style>
+

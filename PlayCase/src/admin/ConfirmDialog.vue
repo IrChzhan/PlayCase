@@ -90,12 +90,12 @@ const onCancel = () => {
 }
 
 .button.confirm {
-  background: #4285f4;
+  background: #CC9F33;
   color: white;
   border: none;
 }
 
 .button.confirm:hover {
-  background: #357ae8;
+  background: #d1aa58;
 }
 </style>

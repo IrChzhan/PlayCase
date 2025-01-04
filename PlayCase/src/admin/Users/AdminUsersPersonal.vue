@@ -13,18 +13,20 @@
     <table class="user-table">
       <thead>
         <tr>
-          <th>Кто</th>
+          <th>Роль</th>
+          <th>Имя</th>
           <th>Логин</th>
-          <th>Пароль</th>
-          <th>Действие</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in paginatedUsers" :key="user.id">
-          <td>{{ user.authorities[0] }}</td>
+        <tr class="tr" v-for="user in paginatedUsers" :key="user.id">
+          <td>{{ roles[user.authorities[0]] }}</td>
+          <td>{{ user.name }}</td>
           <td>{{ user.username }}</td>
-          <td>********</td>
-          <td><button @click="goToChangeUser(user.id)()">Изменить</button></td>
+          <div class="actions">
+            <button @click="goToChangeUser(user.id)()" class="icon-setting"><IconsSetting/></button>
+            <button @click="showDeleteDialog(user.id)" class="icon-setting"><IconDelete/></button>
+          </div>
         </tr>
       </tbody>
     </table>
@@ -38,9 +40,16 @@
     </div>
 
     <div class="create-user">
-      <button @click="navigateToCreateUser">Создать пользователя</button>
+      <button class="btn-add" @click="navigateToCreateUser">Создать пользователя</button>
     </div>
-
+    <ConfirmDialog
+      v-if="showDialog"
+      :visible="showDialog"
+      :title="dialogTitle"
+      :message="dialogMessage"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
+    />
     <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
@@ -51,6 +60,9 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 import Notification from '@/admin/Notification.vue'
+import IconsSetting from "@/components/icons/IconsSetting.vue";
+import ConfirmDialog from "@/admin/ConfirmDialog.vue";
+import IconDelete from "@/components/icons/IconDelete.vue";
 
 const store = useStore()
 const router = useRouter()
@@ -65,9 +77,53 @@ const currentPage = ref(1)
 const usersPerPage = ref(5)
 const searchQuery = ref('')
 const filteredUsers = ref([])
+const showDialog = ref(false)
+const dialogTitle = ref('')
+const dialogMessage = ref('')
+let dialogAction = null
+
+const showDeleteDialog = (id) => {
+  dialogTitle.value = 'Подтверждение удаления'
+  dialogMessage.value = 'Вы уверены, что хотите удалить этого пользователя?'
+  dialogAction = handleDeleteUser(id)
+  showDialog.value = true
+}
+const handleConfirm = async () => {
+  showDialog.value = false
+  if (dialogAction) await dialogAction()
+}
+
+const handleCancel = () => {
+  showDialog.value = false
+}
 
 const changePage = (page) => {
   currentPage.value = page
+}
+
+const handleDeleteUser =  (id) => async () => {
+  try {
+    await store.dispatch('profile/deleteUser', id)
+    toastMessage.value = 'Пользователь успешно удалён!'
+    toastType.value = 'success'
+
+    setTimeout(() => {
+      toastMessage.value = ''
+      router.push({ name: 'AdminUsersPersonal' })
+      store.dispatch('profile/fetchUsers').then(() => {
+        filteredUsers.value = store.getters['profile/users'].filter(
+          (user) => user.authorities[0] !== 'PLAYER' && user.authorities.length !== 0,
+        )
+      })
+    }, 1000)
+  } catch (error) {
+    console.error('Ошибка при удалении пользователя:', error)
+    toastMessage.value = 'Ошибка при удалении пользователя'
+    toastType.value = 'error'
+    setTimeout(() => {
+      toastMessage.value = ''
+    }, 3000)
+  }
 }
 
 const goToChangeUser = (id) => () => {
@@ -89,6 +145,11 @@ const openModalAdminUser = (id, name, role) => {
   userId.value = id
   oldName.value = name
   oldRole.value = role
+}
+
+const roles = {
+  'ADMIN': 'Администратор',
+  'MANAGER': 'Менеджер',
 }
 
 const closeModalAdminUser = () => {
@@ -120,17 +181,27 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.tr {
+  width: 100%;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
+  padding: 10px;
 }
 
 .filters {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
 }
 
 .filters input {
@@ -179,14 +250,40 @@ onMounted(() => {
 button {
   padding: 10px 20px;
   border: none;
-  background-color: #007bff;
+  background-color: #CC9F33;
   color: white;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+button:hover {
+  background: #3A4C6E;
+  color: #CC9F33;
 }
 
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.icon-setting {
+  padding: 10px 0 ;
+  background: none;
+  cursor: pointer;
+}
+
+.btn-add {
+  background: #CC9F33;
+  color: white;
+  transition: all 0.5s ease-in-out;
+}
+.icon-setting:hover {
+  background: none;
+}
+.btn-add:hover {
+  background: #3A4C6E;
+  color: #CC9F33;
+}
+
 </style>

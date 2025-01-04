@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Редактировать пользователя</h1>
     <form @submit.prevent="handleEditUser">
       <small>Логин: {{ oldUserData.login }}</small>
@@ -23,14 +23,6 @@
           placeholder="Введите новый пароль"
         />
       </div>
-
-      <div class="form-group">
-        <label>Статус пользователя:</label>
-        <button type="button" @click="toggleUserStatus" :class="{ 'status-active': isUserActive }">
-          {{ isUserActive ? 'Отключить пользователя' : 'Включить пользователя' }}
-        </button>
-      </div>
-
       <div class="form-actions">
         <button
           type="submit"
@@ -40,7 +32,6 @@
           Сохранить
         </button>
         <button type="button" @click="goBack">Назад</button>
-        <button type="button" @click="handleDeleteUser" class="delete-button">Удалить</button>
       </div>
     </form>
 
@@ -132,25 +123,6 @@ const handleEditUser = async () => {
   }
 }
 
-const handleDeleteUser = async () => {
-  try {
-    await store.dispatch('profile/deleteUser', route.params.id)
-    toastMessage.value = 'Пользователь успешно удалён!'
-    toastType.value = 'success'
-
-    setTimeout(() => {
-      toastMessage.value = ''
-      router.push({ name: 'AdminUsersPersonal' })
-    }, 1000)
-  } catch (error) {
-    console.error('Ошибка при удалении пользователя:', error)
-    toastMessage.value = 'Ошибка при удалении пользователя'
-    toastType.value = 'error'
-    setTimeout(() => {
-      toastMessage.value = ''
-    }, 3000)
-  }
-}
 
 const toggleUserStatus = async () => {
   isUserActive.value = !isUserActive.value
@@ -162,6 +134,9 @@ const goBack = () => {
 </script>
 
 <style scoped>
+.container {
+  padding: 10px 20px;
+}
 h1 {
   margin-bottom: 20px;
   font-size: 2rem;
@@ -222,7 +197,7 @@ button {
 }
 
 button.status-active {
-  background-color: #28a745;
+  background-color: #CC9F33;
 }
 
 button:not(.status-active) {
@@ -230,11 +205,11 @@ button:not(.status-active) {
 }
 
 button[type='submit'] {
-  background-color: #28a745;
+  background-color: #CC9F33;
 }
 
 button[type='submit']:hover {
-  background-color: #218838;
+  background-color: #d1aa58;
 }
 
 button[type='button'] {

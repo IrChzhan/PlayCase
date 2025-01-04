@@ -64,7 +64,7 @@ body {
 }
 
 .navbar {
-  width: 200px;
+  min-width: 15%;
   background-color: #f9f9f9;
   border-right: 1px solid #e0e0e0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -75,8 +75,8 @@ body {
 }
 
 .navbar-item {
-  background: #f5f5f5;
-  color: #27364f;
+  background: #27364f;
+  color: #ffffff;
   border: none;
   border-radius: 4px;
   padding: 10px 15px;
@@ -84,21 +84,21 @@ body {
   width: 90%;
   text-align: center;
   cursor: pointer;
+  font-size: 16px;
   transition: background 0.3s;
 }
 
 .navbar-item:hover {
-  background: #e0e0e0;
+  background: #CC9F33;
 }
 
 .navbar-item.active {
-  background: #1abc9c;
+  background: #CC9F33;
   color: #ffffff;
 }
 
 .content {
   flex: 1;
-  padding: 20px;
   background-color: #ffffff;
   height: 100%;
 }

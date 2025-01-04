@@ -30,9 +30,6 @@
         <button class="button primary" type="submit" :disabled="!isFormValid || loading">
           <Loader v-if="loading" /> Сохранить изменения
         </button>
-        <button class="button danger" type="button" @click="deleteGame" :disabled="loading">
-          Удалить игру
-        </button>
         <button class="button secondary" type="button" @click="goBack">Назад</button>
       </div>
     </form>
@@ -153,4 +150,140 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.edit-game {
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #555;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type='submit'] {
+  background-color: #CC9F33;
+}
+
+button[type='submit']:hover {
+  background-color: #d1aa58;
+}
+
+button[type='button'] {
+  background-color: #6c757d;
+}
+
+button[type='button']:hover {
+  background-color: #5a6268;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.primary {
+  background-color: #007bff;
+}
+
+.primary:hover {
+  background-color: #0056b3;
+}
+
+.secondary {
+  background-color: #6c757d;
+}
+
+.secondary:hover {
+  background-color: #5a6268;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  color: white;
+  z-index: 1000;
+  animation: slide-in 0.3s ease-out;
+  background-color: #27364f;
+  border-left: 5px solid;
+}
+
+.notification.success {
+  border-left-color: #4caf50;
+}
+
+.notification.error {
+  border-left-color: #f44336;
+}
+
+.notification.warning {
+  border-left-color: #ff9800;
+}
+
+.notification.info {
+  border-left-color: #2196f3;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+</style>
+

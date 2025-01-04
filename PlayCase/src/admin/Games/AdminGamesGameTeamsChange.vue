@@ -1,54 +1,80 @@
 <template>
-  <div style="padding: 20px">
-    <h1>Редактирование команды</h1>
-    <div>
-      <label>
-        Название команды:
-        <input type="text" v-model="formData.name" />
-      </label>
-    </div>
-    <div>
-      <label>
-        Количество участников:
-        <input type="number" v-model.number="formData.participantsCount" />
-      </label>
-    </div>
-    <div>
-      <label>
-        Первый раз:
-        <input type="checkbox" v-model="formData.isFirstTime" />
-      </label>
-    </div>
-    <div>
-      <label>
-        Предоплата:
-        <input type="checkbox" v-model="formData.isPrepaid" />
-      </label>
-    </div>
-    <div>
-      <label>
-        Сертификат:
-        <input type="text" v-model="formData.certificate" />
-      </label>
-    </div>
-    <div>
-      <label>
-        Промокод:
-        <input type="text" v-model="formData.promocode" />
-      </label>
-    </div>
-    <div style="margin-top: 20px">
-      <button @click="handleSubmit">Сохранить</button>
-      <button @click="handleSubmitDelete">Удалить</button>
-      <button style="margin-left: 10px" @click="goBack">Назад</button>
-    </div>
+  <div class="edit-team">
+    <h1>Редактировать команду</h1>
+    <form @submit.prevent="handleSubmit" class="form">
+      <div class="form-group">
+        <label for="teamName">Название команды:</label>
+        <input
+          id="teamName"
+          v-model="formData.name"
+          type="text"
+          placeholder="Введите название команды"
+          class="input"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="participantsCount">Количество участников:</label>
+        <input
+          id="participantsCount"
+          v-model.number="formData.participantsCount"
+          type="number"
+          placeholder="Введите количество участников"
+          class="input"
+        />
+      </div>
+      <div class="form-group">
+        <label for="isFirstTime">
+          <input
+            id="isFirstTime"
+            type="checkbox"
+            v-model="formData.isFirstTime"
+          />
+          Первый раз
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="isPrepaid">
+          <input
+            id="isPrepaid"
+            type="checkbox"
+            v-model="formData.isPrepaid"
+          />
+          Предоплата
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="certificate">Сертификат:</label>
+        <input
+          id="certificate"
+          v-model="formData.certificate"
+          type="text"
+          placeholder="Введите сертификат"
+          class="input"
+        />
+      </div>
+      <div class="form-group">
+        <label for="promocode">Промокод:</label>
+        <input
+          id="promocode"
+          v-model="formData.promocode"
+          type="text"
+          placeholder="Введите промокод"
+          class="input"
+        />
+      </div>
+      <div class="form-actions">
+        <button class="button primary" type="submit">Сохранить</button>
+        <button class="button secondary" type="button" @click="goBack">Назад</button>
+      </div>
+    </form>
+    <Notification
+      v-if="notificationMessage"
+      :message="notificationMessage"
+      :type="notificationType"
+      :duration="3000"
+    />
   </div>
-  <Notification
-    v-if="notificationMessage"
-    :message="notificationMessage"
-    :type="notificationType"
-    :duration="3000"
-  />
 </template>
 
 <script setup>
@@ -57,6 +83,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 import Notification from '@/admin/Notification.vue'
+
 const notificationMessage = ref('')
 const notificationType = ref('info')
 const store = useStore()
@@ -74,33 +101,19 @@ const route = useRoute()
 
 const handleSubmit = async () => {
   try {
-    const response = await store.dispatch('games/updateTeamToGame', {
+    await store.dispatch('games/updateTeamToGame', {
       gameId: route.params.gameId,
       teamId: route.params.teamId,
       teamData: formData,
     })
 
-    notificationMessage.value = 'Команда успешна изменена!'
+    notificationMessage.value = 'Команда успешно изменена!'
     notificationType.value = 'success'
+    setTimeout(() => {
+      router.back()
+    }, 1000)
   } catch (error) {
-    notificationMessage.value = 'Ошибка при изменение команды.'
-    notificationType.value = 'error'
-  }
-}
-
-//deleteTeamToGame
-
-const handleSubmitDelete = async () => {
-  try {
-    const response = await store.dispatch('games/deleteTeamToGame', {
-      gameId: route.params.gameId,
-      teamId: route.params.teamId,
-    })
-
-    notificationMessage.value = 'Команда успешна удалена!'
-    notificationType.value = 'success'
-  } catch (error) {
-    notificationMessage.value = 'Ошибка при удаление команды.'
+    notificationMessage.value = 'Ошибка при изменении команды.'
     notificationType.value = 'error'
   }
 }
@@ -109,3 +122,77 @@ const goBack = () => {
   router.back()
 }
 </script>
+
+<style scoped>
+.edit-team {
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #555;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.primary {
+  background-color: #CC9F33;
+}
+
+button.primary:hover {
+  background-color: #d1aa58;
+}
+
+button.secondary {
+  background-color: #6c757d;
+}
+
+button.secondary:hover {
+  background-color: #5a6268;
+}
+</style>

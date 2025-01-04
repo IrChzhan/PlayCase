@@ -307,6 +307,21 @@ export default {
         throw error
       }
     },
+
+    async setStolForTeam({ commit }, { gameId, teamId, num }) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/setTable?table=${num}`,
+        )
+        return response.data
+      } catch (error) {
+        if (error.response) {
+          console.error('Ответ сервера:', error.response.data)
+        }
+        throw error
+      }
+    },
+
     async activateGame({ commit }, { gameId }) {
       try {
         const response = await axios.post(

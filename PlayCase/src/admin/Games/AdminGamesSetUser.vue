@@ -45,7 +45,12 @@ const assignUser = async () => {
 const getUsers = async () => {
   try {
     const fetchedUsers = await store.dispatch('profile/fetchUsers')
-    users.value = fetchedUsers
+    users.value = store.getters['profile/users'].filter(
+      (user) =>
+        user.authorities[0] !== 'ADMIN' &&
+        user.authorities[0] !== 'MANAGER' &&
+        user.authorities.length !== 0,
+    )
   } catch (error) {
     console.error('Ошибка при загрузке пользователей:', error)
     showNotification('Ошибка при загрузке пользователей.', 'error')
@@ -53,7 +58,14 @@ const getUsers = async () => {
 }
 
 onMounted(() => {
-  getUsers()
+  getUsers().then(() => {
+    users.value = store.getters['profile/users'].filter(
+      (user) =>
+        user.authorities[0] !== 'ADMIN' &&
+        user.authorities[0] !== 'MANAGER' &&
+        user.authorities.length !== 0,
+    )
+  })
 })
 
 const goBack = () => {
@@ -88,6 +100,10 @@ const goBack = () => {
 </template>
 
 <style scoped>
+h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
 .assign-user-component {
   padding: 20px;
   border: 1px solid #ccc;
@@ -121,14 +137,14 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
-  background-color: #007bff;
+  background-color: #CC9F33;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #d1aa58;
 }
 
 button:last-child {

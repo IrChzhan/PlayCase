@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Создать пользователя</h1>
     <form @submit.prevent="handleCreateUser">
       <div class="form-group">
@@ -111,6 +111,10 @@ const goBack = () => {
 </script>
 
 <style scoped>
+.container {
+  padding: 10px 20px;
+}
+
 h1 {
   margin-bottom: 20px;
   font-size: 1.8rem;
@@ -168,11 +172,11 @@ button {
 }
 
 button[type='submit'] {
-  background-color: #007bff;
+  background-color: #CC9F33;
 }
 
 button[type='submit']:hover {
-  background-color: #0056b3;
+  background-color: #d1aa58;
 }
 
 button[type='button'] {

@@ -105,7 +105,7 @@ body {
 }
 
 .topbar-button {
-  background: #4b6587;
+  background: #3A4C6E;
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -116,11 +116,11 @@ body {
 }
 
 .topbar-button:hover {
-  background: #34495e;
+  background: #CC9F33;
 }
 
 .topbar-button.active {
-  background: #1abc9c;
+  background: #CC9F33;
 }
 
 .logout-button {
@@ -139,6 +139,5 @@ body {
 .content {
   background-color: #ffffff;
   padding: 20px;
-  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1) inset;
 }
 </style>

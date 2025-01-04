@@ -13,10 +13,9 @@
 
     <div class="main-content">
       <div class="top-bar">
-        <div>Игра #{{ game?.gameNumber }}</div>
         <div>{{ game?.name || 'Имя не указано' }}</div>
         <div>{{ game?.place?.name || 'Место не указано' }}</div>
-        <div>{{ game?.status || 'Бар не указан' }}</div>
+        <div>{{ Statuses[game?.status] || 'Статус не указан' }}</div>
       </div>
 
       <router-view />
@@ -35,6 +34,12 @@ const route = useRoute()
 
 const game = ref(null)
 const selectedMenu = ref(0)
+
+const Statuses = {
+  PLANNED: 'Запланирована',
+  FINISHED: 'Завершена',
+  IN_PROGRESS: 'В процессе',
+};
 
 const menuItems = [
   {
@@ -107,7 +112,7 @@ watch(
 }
 
 .sidebar {
-  width: 200px;
+  min-width: 15%;
   background-color: #f9f9f9;
   border-right: 1px solid #e0e0e0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -118,8 +123,8 @@ watch(
 }
 
 .sidebar button {
-  background: #f5f5f5;
-  color: #27364f;
+  background: #27364f;
+  color: #ffffff;
   border: none;
   border-radius: 4px;
   padding: 10px 15px;
@@ -131,11 +136,11 @@ watch(
 }
 
 .sidebar button:hover {
-  background: #e0e0e0;
+  background: #CC9F33;
 }
 
 button.active {
-  background: #1abc9c;
+  background: #CC9F33;
   color: #ffffff;
 }
 
