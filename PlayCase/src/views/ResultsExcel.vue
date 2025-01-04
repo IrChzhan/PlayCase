@@ -66,7 +66,7 @@ const goToMenuApp = () => {
   justify-content: center;
   align-items: center;
   background-color: #001845;
-  color: #000; 
+  color: #ffd700;
   padding: 20px;
   font-family: 'Mulish', sans-serif;
   height: 100vh;
@@ -76,15 +76,13 @@ const goToMenuApp = () => {
 h1 {
   color: #ffd700;
   font-size: 2rem;
-  margin-bottom: 25px;
-  margin-top: -30px;
+  margin-bottom: 20px;
 }
 
 .results-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 1rem;
-  margin-top: -10px;
 }
 
 .results-table th,
@@ -92,24 +90,23 @@ h1 {
   border: 1px solid #ffd700;
   padding: 10px;
   text-align: center;
-  color: #000; 
 }
 
 .results-table th {
-  background-color: #b5651d; 
-  color: white; 
+  background-color: #3a4c6e;
+  color: white;
 }
 
 .results-table tr.even-row {
-  background-color: #ffe4b5; 
+  background-color: #ffd70020; /* Светло-жёлтый */
 }
 
 .results-table tr.odd-row {
-  background-color: #fff; 
+  background-color: #001845; /* Тёмно-синий */
 }
 
 .results-table tr:hover {
-  background-color: #ffd70040; 
+  background-color: #ffd70040; /* Подсветка строки */
 }
 
 .home-button {
@@ -120,5 +117,4 @@ h1 {
   cursor: pointer;
 }
 </style>
-
 
