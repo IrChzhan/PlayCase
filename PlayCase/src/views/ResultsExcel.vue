@@ -1,5 +1,6 @@
 <template>
   <div class="results-excel-page">
+    <div class="close-button" @click="goToMenuApp">✖️</div>
     <h1 class="results">Результаты</h1>
 
     <div v-if="teams.length === 0">
