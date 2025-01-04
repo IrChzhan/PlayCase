@@ -14,17 +14,19 @@ const client = new Client({
   reconnectDelay: 5000,
   onConnect: () => {
     console.log("STOMP подключен", userId.value, gameId.value);
-    client.subscribe(`/queue/user/${userId}/set-place`, (message) => {
-      const parsedMessage = JSON.parse(message.body);
-      console.log(2222, parsedMessage)
-      handleSetPlaceNotification(parsedMessage);
-    });
+
+
+
     client.subscribe(`/queue/game/${gameId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
       handleGameStatusChange(parsedMessage);
     });
 
-
+    client.subscribe(`/queue/user/${userId.value}/set-place`, (message) => {
+      const parsedMessage = JSON.parse(message.body);
+      console.log(2222, parsedMessage)
+      handleSetPlaceNotification(parsedMessage);
+    });
 
     client.subscribe(`/queue/user/${userId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
@@ -75,8 +77,10 @@ const getCurrentTeam = async () => {
   }
 }
 onMounted(() => {
-  getCurrentTeam()
-  client.activate();
+  getCurrentTeam().then(() => {
+    client.activate();
+  })
+
   router.push({name: 'TeamNameDisplay'})
 });
 
