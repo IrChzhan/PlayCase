@@ -48,6 +48,7 @@ const menuItems = [
   {
     label: 'Оплаты',
     route: () => {
+      router.push(`/admin/games/${route.params.gameId}/teams/pay`)
       selectedMenu.value = 1
     },
     name: 'payment',

@@ -62,6 +62,26 @@
             </div>
             <button @click="cancelPaymentMethod" class="back-button">Назад</button>
           </div>
+
+          <div class="additional-info">
+            <ul>
+              <li>
+                <a :href="pdfLink1" target="_blank" download="Договор-оферта.pdf">
+                  Договор-оферта
+                </a>
+              </li>
+              <li>
+                <a :href="pdfLink2" target="_blank" download="Политика_конфиденциальности.pdf">
+                  Политика конфиденциальности
+                </a>
+              </li>
+              <li>
+                <a :href="detailsPageLink" target="_blank">
+                  Открыть страницу с реквизитами
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -72,6 +92,7 @@
 import { computed, ref } from 'vue'
 
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+import router from '@/router'
 
 defineProps({
   show: Boolean,
@@ -85,6 +106,10 @@ const isPaying = ref(false)
 const paymentMethod = ref(null)
 
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value)
+
+const pdfLink1 = ref('/files/Договор-оферта.pdf')
+const pdfLink2 = ref('/files/Политика конфиденциальности.pdf')
+const detailsPageLink = ref('/inn')
 
 function selectPlayers(number) {
   selectedPlayers.value = number

@@ -127,26 +127,25 @@ const menuItems = ref([
   background: #1b2a46;
 }
 
+.team-name {
+  font-size: 64px;
+  color: white;
+  font-family: 'Mulish', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto; /* Для горизонтального центрирования */
+}
 .header {
+  display: flex;
+  justify-content: center; /* Центрирует содержимое горизонтально */
+  align-items: center; /* Центрирует содержимое вертикально */
+  flex-wrap: wrap; /* Позволяет текст переноситься при необходимости */
   width: 95%;
   background-color: #3a4c6e;
   border: 2px solid #cc9f33;
   border-radius: 10px;
   padding: 10px;
-  margin-left: 12px;
-  margin-top: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.team-name {
-  font-size: 64px;
-  margin-bottom: 20px;
-  margin-top: 20px;
-  color: white;
-  font-family: 'Mulish', sans-serif;
-  font-weight: bold;
-  margin-left: 515px;
+  margin: 12px auto; /* Центрирование самой секции */
 }
 
 h2 {
@@ -213,21 +212,23 @@ p {
 @media (min-width: 768px) and (max-width: 1024px) {
   .header {
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center; 
     width: 85%;
-    height: 85%;
-    margin-left: 50px;
+    height: auto; 
+    margin: 12px auto; 
   }
 
   .team-name {
     font-size: 48px;
-    margin-left: 1px;
+    text-align: center; 
+    margin: 0 auto; 
   }
 
   .menu {
     width: 80%;
-    margin-left: 45px;
-    margin-top: 5px;
+    margin: 0 auto; 
+    margin-top: 20px;
   }
   .menu-image {
     width: 60px;
