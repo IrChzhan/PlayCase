@@ -1,6 +1,8 @@
 <template>
   <div class="container">
+    <div class="wrapper">
     <div class="upload-container">
+
       <h2>Загрузить команды из файла</h2>
 
       <div class="file-select">
@@ -12,7 +14,8 @@
 
       <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
     </div>
-
+      <button @click="check" class="button">Отзывы</button>
+    </div>
     <table border="1" class="teams-table">
       <thead>
       <tr>
@@ -102,6 +105,10 @@ const dialogTitle = ref('');
 const dialogMessage = ref('');
 let dialogAction = null;
 const users = ref([])
+
+const check = () => {
+  router.push(`/admin/games/${route.params.gameId}/team/feedback`)
+}
 
 const changeUserSet = (id, teamId) => async () => {
   try {
@@ -297,6 +304,13 @@ watch(
 </script>
 
 <style scoped>
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .user-sets {
   display: flex;
   flex-direction: row;

@@ -56,7 +56,7 @@ const menuItems = [
       router.push(`/admin/games/${route.params.gameId}/teams/pay`)
       selectedMenu.value = 1
     },
-    name: 'payment',
+    name: 'pay',
   },
   {
     label: 'Результаты',
@@ -75,7 +75,7 @@ const menuItems = [
     name: 'loto',
   },
   {
-    label: 'Online',
+    label: 'Помощь',
     route: () => {
       router.push(`/admin/games/${route.params.gameId}/online`)
       selectedMenu.value = 4

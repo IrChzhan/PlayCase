@@ -13,7 +13,7 @@
 
     <div class="footer">
       <button @click="goToTeamNameDisplay" class="back-button">Вернуться к заставке</button>
-      <button @click="startGame" class="play-button">ИГРА</button>
+      <button @click="goToTeamNameDisplay" class="play-button">ИГРА</button>
     </div>
 
     <ModalLottery :show="showModalLottery" :closeModal="closeModalLottery" />

@@ -135,6 +135,15 @@ export default {
         throw error
       }
     },
+    async fetchReview({ commit }, gameId ) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/review`)
+        return response.data
+      } catch (error) {
+        console.error(`Ошибка получения списка команд для игры с ID ${gameId}`, error)
+        throw error
+      }
+    },
 
     async uploadTeamsFile({ commit }, { gameId, file }) {
       console.log('uploadTeamsFile: Начало загрузки файла команд')
