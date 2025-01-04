@@ -65,18 +65,18 @@
 
           <div class="additional-info">
             <ul>
-              <li>
-                <a :href="pdfLink1" target="_blank" download="Договор-оферта.pdf">
+              <li class="link-li">
+                <a class="link" :href="pdfLink1" target="_blank" download="Договор-оферта.pdf">
                   Договор-оферта
                 </a>
               </li>
-              <li>
-                <a :href="pdfLink2" target="_blank" download="Политика_конфиденциальности.pdf">
+              <li class="link-li">
+                <a class="link" :href="pdfLink2" target="_blank" download="Политика_конфиденциальности.pdf">
                   Политика конфиденциальности
                 </a>
               </li>
-              <li>
-                <a :href="detailsPageLink" target="_blank">
+              <li class="link-li">
+                <a class="link" @click="goToInn" target="_blank">
                   Открыть страницу с реквизитами
                 </a>
               </li>
@@ -92,13 +92,14 @@
 import { computed, ref } from 'vue'
 
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
-import router from '@/router'
+import {useRouter} from "vue-router";
 
 defineProps({
   show: Boolean,
   closeModal: Function,
 })
 
+const router = useRouter()
 const { teamName } = useAuthCheck()
 const selectedPlayers = ref(1)
 const pricePerPlayer = ref(1000)
@@ -110,6 +111,10 @@ const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value)
 const pdfLink1 = ref('/files/Договор-оферта.pdf')
 const pdfLink2 = ref('/files/Политика конфиденциальности.pdf')
 const detailsPageLink = ref('/inn')
+
+const goToInn = () => {
+  router.push('/inn')
+}
 
 function selectPlayers(number) {
   selectedPlayers.value = number
@@ -129,6 +134,16 @@ function cancelPaymentMethod() {
 </script>
 
 <style scoped>
+.link-li {
+  margin-top: 10px;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

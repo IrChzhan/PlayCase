@@ -307,7 +307,23 @@ export default {
         throw error
       }
     },
-
+    async unSetUserForTeam({ commit }, { gameId, teamId, userId }) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/removeUser?userId=${userId}`,
+        )
+        return response.data
+      } catch (error) {
+        console.error(
+          `Ошибка установки стола ${userId} для команды с ID ${teamId} в игре с ID ${gameId}:`,
+          error,
+        )
+        if (error.response) {
+          console.error('Ответ сервера:', error.response.data)
+        }
+        throw error
+      }
+    },
     async setStolForTeam({ commit }, { gameId, teamId, num }) {
       try {
         const response = await axios.post(
@@ -345,7 +361,7 @@ export default {
     },
     async switchStatus ({commit}, {gameId, newStatus}) {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}`,newStatus)
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/changeStatus?newStatus=${newStatus}`)
         return response.data
       } catch (e) {
         console.error('Ошибка при получении текущей игры:', e)

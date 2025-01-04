@@ -2,19 +2,32 @@
 import { ref } from 'vue';
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
+import Notification from "@/admin/Notification.vue";
 const router = useRouter()
 const store = useStore()
 const route = useRoute()
-
+const notificationMessage = ref('')
+const notificationType = ref('info')
 const statuses_ru = ['В процессе завершения', 'Проходит', 'Запланирована', 'Завершена'];
 const statuses_en = {'В процессе завершения':'RESULT_SUMMING',  'Проходит': 'IN_PROGRESS', 'Запланирована': 'PLANNED', 'Завершена': 'FINISHED'}
 const selectedStatus = ref('Запланирована');
 
 const saveStatus = async () => {
-  await store.dispatch('games/switchStatus', {
-    gameId: route.params.gameId,
-    newStatus: statuses_en[selectedStatus.value]
-  })
+  try {
+    await store.dispatch('games/switchStatus', {
+      gameId: route.params.gameId,
+      newStatus: statuses_en[selectedStatus.value]
+    })
+    notificationMessage.value = 'Статус успешно изменился!'
+    notificationType.value = 'success'
+    setTimeout(()=> {
+      router.push({ name: 'AdminGames' })
+    }, 1000)
+  }catch (e) {
+    notificationMessage.value = 'Ошибка'
+    notificationType.value = 'error'
+  }
+
 };
 
 const goBack = () => {
@@ -39,6 +52,12 @@ const goBack = () => {
       <button class="secondary" @click="goBack">Назад</button>
     </div>
   </div>
+  <Notification
+    v-if="notificationMessage"
+    :message="notificationMessage"
+    :type="notificationType"
+    :duration="3000"
+  />
 </template>
 
 <style scoped>

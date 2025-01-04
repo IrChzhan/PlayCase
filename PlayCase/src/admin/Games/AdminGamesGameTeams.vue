@@ -18,7 +18,7 @@
       <tr>
         <th>Номер команды</th>
         <th>Имя команды</th>
-        <th>Привязать планшет</th>
+        <th>Привязанный планшет</th>
       </tr>
       </thead>
       <tbody>
@@ -35,7 +35,13 @@
           </div>
         </td>
         <td>{{ team?.name }}</td>
-        <td><button @click="setUser(team.id)" class="button">Привязать планшет</button></td>
+        <td>
+          <div class="user-sets" v-if="team?.assignedUserId">
+            <span>{{users.filter((user) => user.id === team?.assignedUserId)[0]?.name}}</span>
+            <button @click="changeUserSet(team?.assignedUserId, team.id)()" class="button">отвязать</button>
+          </div>
+          <button v-else @click="setUser(team.id)" class="button">Привязать планшет</button>
+        </td>
         <div class="actions">
           <button @click.stop="changeTeam(team.id)" class="icon-setting"><IconsSetting/></button>
           <button @click.stop="showDeleteDialog(team.id)" class="icon-setting"><IconDelete/></button>
@@ -95,6 +101,27 @@ const showDialog = ref(false);
 const dialogTitle = ref('');
 const dialogMessage = ref('');
 let dialogAction = null;
+const users = ref([])
+
+const changeUserSet = (id, teamId) => async () => {
+  try {
+      await store.dispatch('games/unSetUserForTeam', {
+        gameId: route.params.gameId,
+        teamId: teamId,
+        userId: id,
+      })
+    notificationMessage.value = 'Планшет успешно отвязан!'
+    notificationType.value = 'success'
+    setTimeout(() => {
+      notificationMessage.value = ''
+      fetchTeams()
+    }, 1000)
+  } catch (error) {
+    console.error('Ошибка при привязке пользователя:', error)
+    notificationMessage.value = 'Ошибка '
+    notificationType.value = 'error'
+  }
+}
 
 const assignTable = async () => {
   try {
@@ -233,10 +260,31 @@ const setUser = (teamId) => {
 const changeTeam = (teamId) => {
   router.push(`/admin/games/${route.params.gameId}/team/${teamId}/changeTeam`)
 }
-
+const getUsers = async () => {
+  try {
+    const fetchedUsers = await store.dispatch('profile/fetchUsers')
+    users.value = store.getters['profile/users'].filter(
+      (user) =>
+        user.authorities[0] !== 'ADMIN' &&
+        user.authorities[0] !== 'MANAGER' &&
+        user.authorities.length !== 0,
+    )
+  } catch (error) {
+    console.error('Ошибка при загрузке пользователей:', error)
+    showNotification('Ошибка при загрузке пользователей.', 'error')
+  }
+}
 onMounted(() => {
   fetchGameById()
   fetchTeams()
+  getUsers().then(() => {
+    users.value = store.getters['profile/users'].filter(
+      (user) =>
+        user.authorities[0] !== 'ADMIN' &&
+        user.authorities[0] !== 'MANAGER' &&
+        user.authorities.length !== 0,
+    )
+  })
 })
 
 watch(
@@ -249,6 +297,12 @@ watch(
 </script>
 
 <style scoped>
+.user-sets {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 .change-input {
   display: flex;
   flex-direction: row;

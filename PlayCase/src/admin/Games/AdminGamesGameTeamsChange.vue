@@ -34,14 +34,13 @@
         </label>
       </div>
       <div class="form-group">
-        <label for="isPrepaid">
-          <input
-            id="isPrepaid"
-            type="checkbox"
-            v-model="formData.isPrepaid"
-          />
-          Предоплата
-        </label>
+        <label for="isPrepaid">Предоплата</label>
+        <input
+          id="isPrepaid"
+          type="number"
+          class="input"
+          v-model="formData.isPrepaid"
+        />
       </div>
       <div class="form-group">
         <label for="certificate">Сертификат:</label>
@@ -91,7 +90,7 @@ const formData = reactive({
   name: '',
   participantsCount: 0,
   isFirstTime: true,
-  isPrepaid: true,
+  isPrepaid: 0,
   certificate: '',
   promocode: '',
 })
