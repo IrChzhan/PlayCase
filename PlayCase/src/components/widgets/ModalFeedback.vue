@@ -4,7 +4,7 @@
       <button class="close-button" @click="closeModal">&times;</button>
       <div class="modal-body">
         <div class="form-section">
-          <div class="team-title">Название команды</div>
+          <div class="team-title">{{teamName}}</div>
           <h1 class="main-heading">Оставьте свой комментарий</h1>
           <textarea
             v-model="formData.comment"
@@ -13,38 +13,23 @@
           ></textarea>
           <div class="checkbox-groups">
             <div class="checkbox-column">
-              <h3 class="checkbox-title">Вопросы были:</h3>
+              <h3 class="checkbox-title">Оценка игры:</h3>
               <label class="checkbox-container">
-                <input type="radio" name="questions" v-model="formData.questionType" value="easy" />
-                Легкие
+                <input type="radio" name="questions" v-model="formData.questionType" value="BAD" />
+                Плохая
               </label>
               <label class="checkbox-container">
                 <input
                   type="radio"
                   name="questions"
                   v-model="formData.questionType"
-                  value="normal"
+                  value="NEUTRAL"
                 />
-                Нормальные
+                Нормальная
               </label>
               <label class="checkbox-container">
-                <input type="radio" name="questions" v-model="formData.questionType" value="hard" />
-                Сложные
-              </label>
-            </div>
-            <div class="checkbox-column">
-              <h3 class="checkbox-title">Ведущий был:</h3>
-              <label class="checkbox-container">
-                <input type="radio" name="host" v-model="formData.hostType" value="good" />
-                Хороший
-              </label>
-              <label class="checkbox-container">
-                <input type="radio" name="host" v-model="formData.hostType" value="bad" />
-                Плохой
-              </label>
-              <label class="checkbox-container">
-                <input type="radio" name="host" v-model="formData.hostType" value="beautiful" />
-                Красивый
+                <input type="radio" name="questions" v-model="formData.questionType" value="GOOD" />
+                Отличная
               </label>
             </div>
           </div>
@@ -53,15 +38,23 @@
       </div>
     </div>
   </div>
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import {useAuthCheck} from "@/hooks/useAuthCheck.js";
+import {useStore} from "vuex";
+import Notification from "@/admin/Notification.vue";
 
 defineProps({
   show: Boolean,
   closeModal: Function,
 })
+const toastMessage = ref('')
+const toastType = ref('success')
+const { teamName } = useAuthCheck()
+const store = useStore()
 
 const formData = ref({
   comment: '',
@@ -69,12 +62,25 @@ const formData = ref({
   hostType: '',
 })
 
-const submitForm = () => {
-  console.log('Форма отправлена:', formData.value)
-  alert('Спасибо за ваш комментарий!')
-  formData.value.comment = ''
-  formData.value.questionType = ''
-  formData.value.hostType = ''
+const submitForm = async () => {
+  try {
+    await store.dispatch('profile/addMark',
+      {
+        mark: formData.value.questionType,
+        comment: formData.value.comment
+      }
+    )
+    toastMessage.value = 'Оценка успешно отправлена!'
+    toastType.value = 'success'
+    setTimeout(() => {
+      toastMessage.value = ''
+      closeModal()
+    }, 1000)
+  }catch (e) {
+    toastMessage.value = 'Проищошла ошибка'
+    toastType.value = 'error'
+    console.log(e)
+  }
 }
 </script>
 

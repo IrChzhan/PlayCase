@@ -3,8 +3,19 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {Client} from "@stomp/stompjs";
 import {useStore} from "vuex";
+import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
 const router = useRouter()
 const store = useStore()
+
+const show = ref(false)
+
+const closeModal = () => {
+  show.value = false
+}
+
+const openModal = () => {
+  show.value = true
+}
 
 const userId = ref(null)
 const gameId = ref(null)
@@ -19,13 +30,11 @@ const client = new Client({
 
     client.subscribe(`/queue/game/${gameId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
-      handleGameStatusChange(parsedMessage);
     });
 
     client.subscribe(`/queue/user/${userId.value}/set-place`, (message) => {
       const parsedMessage = JSON.parse(message.body);
-      console.log(2222, parsedMessage)
-      handleSetPlaceNotification(parsedMessage);
+      openModal()
     });
 
     client.subscribe(`/queue/user/${userId.value}`, (message) => {
@@ -91,6 +100,9 @@ onBeforeUnmount(() => {
 
 <template>
   <router-view></router-view>
+  <ModalFeedback
+    :show="show" :closeModal="closeModal"
+  />
 </template>
 
 <style scoped>

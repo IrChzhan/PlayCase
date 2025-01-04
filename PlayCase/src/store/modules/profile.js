@@ -129,6 +129,19 @@ export default {
         throw error
       }
     },
+    async addMark({ dispatch }, {mark, comment}) {
+      try {
+        await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/current/mark`,
+          {
+            mark: mark,
+            comment: comment
+          }
+          )
+      } catch (error) {
+        console.error('Ошибка при добавлении пользователя:', error)
+        throw error
+      }
+    },
     async deleteUser({ dispatch }, id) {
       try {
         await axios.delete(`${import.meta.env.VITE_API_URL}/admin/v1/users/${id}/actions/delete`)
