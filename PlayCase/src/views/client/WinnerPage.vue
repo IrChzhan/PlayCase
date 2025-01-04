@@ -5,7 +5,7 @@
       <h1 class="title">ПОЗДРАВЛЯЕМ!!</h1>
       <p class="subtitle">Вы заняли 1 место!!</p>
     </div>
-    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
+    <img src="../../assets/house_light.png" class="home-button" @click="goToMenuApp" />
   </div>
 </template>
 

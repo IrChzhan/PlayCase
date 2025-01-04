@@ -155,6 +155,7 @@ const Statuses = {
   PLANNED: 'Запланирована',
   FINISHED: 'Завершена',
   IN_PROGRESS: 'В процессе',
+  RESULT_SUMMING: 'Подведение итогов',
 };
 
 const changeGame = (gameId) => {

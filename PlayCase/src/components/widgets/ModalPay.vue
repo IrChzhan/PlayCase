@@ -113,7 +113,7 @@ const pdfLink2 = ref('/files/Политика конфиденциальност
 const detailsPageLink = ref('/inn')
 
 const goToInn = () => {
-  router.push('/inn')
+  router.push('/client/inn')
 }
 
 function selectPlayers(number) {

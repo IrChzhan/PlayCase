@@ -9,17 +9,17 @@
           <p><strong>Наименование банка:</strong> ФИЛИАЛ «ЦЕНТРАЛЬНЫЙ» БАНКА ВТБ (ПАО)</p>
           <p><strong>Корр/счет:</strong> 30101810145250000411</p>
           <p><strong>БИК:</strong> 044525411</p>
-          <router-link to="/menu-app" class="home-button">На главную</router-link>
+          <router-link to="/client/menu-app" class="home-button">На главную</router-link>
       </div>
     </div>
   </template>
-  
+
   <script setup>
   import { useRouter } from 'vue-router';
-  
+
   const router = useRouter();
   </script>
-  
+
   <style scoped>
   .company-info-page {
     display: flex;
@@ -31,7 +31,7 @@
     color: #ffd700;
     font-family: 'Mulish', sans-serif;
   }
-  
+
   .info-container {
       background: #27364f;
       border-radius: 8px;
@@ -39,17 +39,17 @@
       max-width: 600px;
       margin: 20px auto;
   }
-  
+
   h1 {
     margin-bottom: 20px;
       text-align: center;
   }
-  
+
   p {
     margin-bottom: 10px;
       font-size: 18px;
   }
-  
+
   .home-button {
       color: #cc9f33;
       text-decoration: none;
@@ -57,11 +57,10 @@
       margin-top: 20px;
       transition: color 0.3s;
   }
-  
+
   .home-button:hover {
       text-decoration: underline;
       color: #b1882e;
   }
-  
+
   </style>
-  

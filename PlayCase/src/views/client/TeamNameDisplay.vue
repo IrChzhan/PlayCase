@@ -5,7 +5,7 @@
     </div>
     <div class="container_down_menu">
       <img
-        src="../assets/House_01.png"
+        src="../../assets/House_01.png"
         class="house-image"
         width="80"
         @click="goToMenuApp"

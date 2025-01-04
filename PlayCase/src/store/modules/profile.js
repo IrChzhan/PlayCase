@@ -39,6 +39,14 @@ export default {
     },
   },
   actions: {
+    async getCurrentTeam ({commit}) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/team`)
+        return response.data
+      } catch (error) {
+        console.error('Ошибка при загрузке пользователей:', error)
+      }
+    },
     async fetchUsers({ commit }) {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users`)

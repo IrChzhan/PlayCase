@@ -97,6 +97,10 @@ export default {
       commit('setGames', response.data)
       return response.data
     },
+    async fetchAllNotifications({ commit }, gameId) {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/help/game/${gameId}/all`)
+      return response.data
+    },
 
     async fetchGameById({ commit }, gameId) {
       try {

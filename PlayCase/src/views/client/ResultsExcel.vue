@@ -26,7 +26,7 @@
         </tbody>
       </table>
     </div>
-    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
+    <img src="../../assets/house_light.png" class="home-button" @click="goToMenuApp" />
   </div>
 </template>
 

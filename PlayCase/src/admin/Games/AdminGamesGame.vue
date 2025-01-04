@@ -74,6 +74,14 @@ const menuItems = [
     },
     name: 'loto',
   },
+  {
+    label: 'Online',
+    route: () => {
+      router.push(`/admin/games/${route.params.gameId}/online`)
+      selectedMenu.value = 4
+    },
+    name: 'online',
+  }
 ]
 
 const fetchGameById = async () => {

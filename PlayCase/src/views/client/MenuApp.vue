@@ -19,6 +19,7 @@
     <ModalLottery :show="showModalLottery" :closeModal="closeModalLottery" />
     <ModalContacts :show="showModalContacts" :closeModal="closeModalContacts" />
     <ModalPay :show="showModalPay" :closeModal="closeModalPay" />
+    <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
 
@@ -33,23 +34,35 @@ import manImage from '@/assets/img_3.png'
 import info from '@/assets/info.png'
 import lotteryImage from '@/assets/lotery.png'
 import menuImage from '@/assets/menu.png'
-import prizeImage from '@/assets/prize.png'
 import ratingImage from '@/assets/rating.png'
 import ModalContacts from '@/components/widgets/ModalContacts.vue'
 import ModalLottery from '@/components/widgets/ModalLottery.vue'
 import ModalPay from '@/components/widgets/ModalPay.vue'
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 import { useUserInactivity } from '@/hooks/useUserInactivity.js'
+import {useStore} from "vuex";
+import Notification from "@/admin/Notification.vue";
 
+const store = useStore()
 const route = useRoute()
 const router = useRouter()
-
+const toastMessage = ref('')
+const toastType = ref('success')
 useUserInactivity(30000000)
 
 const { teamName } = useAuthCheck()
 const showModalLottery = ref(false)
 const showModalContacts = ref(false)
 const showModalPay = ref(false)
+const showModalHelp = ref(false)
+
+const closeModalHelp = () => {
+  showModalHelp.value = false
+}
+
+const openModalHelp = () => {
+  showModalHelp.value = true
+}
 
 const goToTeamNameDisplay = () => {
   router.push({ name: 'TeamNameDisplay' })
@@ -108,7 +121,22 @@ const menuItems = ref([
   },
   { name: 'Лотерея', image: lotteryImage, function: openModalLottery },
   { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
-  { name: 'Хелп', image: helpImage, function: () => {} },
+  { name: 'Хелп', image: helpImage, function: async () => {
+    try {
+      await store.dispatch('helps/createHelp')
+
+      toastMessage.value = 'Запрос успешно отправлен!'
+      toastType.value = 'success'
+
+      setTimeout(() => {
+        toastMessage.value = ''
+      }, 1000)
+    } catch (e) {
+      toastMessage.value = 'Ошибка при запросе!'
+      toastType.value = 'error'
+      console.log(e)
+    }
+    } },
   {
     name: 'Участники лотереи',
     image: manImage,

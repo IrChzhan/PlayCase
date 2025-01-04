@@ -1,0 +1,94 @@
+<script setup>
+import {onBeforeUnmount, onMounted, ref} from "vue";
+import {useRouter} from "vue-router";
+import {Client} from "@stomp/stompjs";
+import {useStore} from "vuex";
+const router = useRouter()
+const store = useStore()
+
+const userId = ref(null)
+const gameId = ref(null)
+
+const client = new Client({
+  brokerURL: "ws://62.113.98.45:8080/ws",
+  reconnectDelay: 5000,
+  onConnect: () => {
+    console.log("STOMP подключен", userId.value, gameId.value);
+    client.subscribe(`/queue/user/${userId}/set-place`, (message) => {
+      const parsedMessage = JSON.parse(message.body);
+      console.log(2222, parsedMessage)
+      handleSetPlaceNotification(parsedMessage);
+    });
+    client.subscribe(`/queue/game/${gameId.value}`, (message) => {
+      const parsedMessage = JSON.parse(message.body);
+      handleGameStatusChange(parsedMessage);
+    });
+
+
+
+    client.subscribe(`/queue/user/${userId.value}`, (message) => {
+      const parsedMessage = JSON.parse(message.body);
+      if (parsedMessage?.mutationType === "REMOVE_USER_TEAM")
+      router.push({
+        name: 'HomePage'
+      })
+    });
+  },
+  onStompError: (error) => {
+    console.error("Ошибка STOMP:", error);
+  },
+});
+
+const handleHelpNotification = (message) => {
+  console.log("Уведомление о помощи:", message);
+  messages.value.push(message);
+};
+
+const handleSetPlaceNotification = (message) => {
+  if (message.type === "UserPlaceSetNotificationWsMsg") {
+    console.log("Уведомление о месте пользователя:", message);
+
+  }
+};
+
+const handleUserUpdateNotification = (message) => {
+  if (message.type === "UserUpdateWsMsg") {
+    console.log("Обновление пользователя:", message);
+
+  }
+};
+
+const handleGameStatusChange = (message) => {
+  if (message.type === "GameUpdateWsMsg") {
+    console.log("Смена статуса игры:", message);
+
+  }
+};
+
+const getCurrentTeam = async () => {
+  try {
+    const res = await store.dispatch('profile/getCurrentTeam')
+    userId.value = res.assignedUserId
+    gameId.value = res.gameId
+  }catch (e) {
+    console.log(e)
+  }
+}
+onMounted(() => {
+  getCurrentTeam()
+  client.activate();
+  router.push({name: 'TeamNameDisplay'})
+});
+
+onBeforeUnmount(() => {
+  client.deactivate();
+});
+</script>
+
+<template>
+  <router-view></router-view>
+</template>
+
+<style scoped>
+
+</style>

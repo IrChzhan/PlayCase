@@ -37,7 +37,7 @@ const handleLogin = async () => {
 
     try {
       await router.push({
-        name: 'TeamNameDisplay',
+        name: 'ClientHome',
       })
     } catch (error) {
       console.error('Ошибка загрузки команды:', error)
