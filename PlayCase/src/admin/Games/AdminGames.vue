@@ -34,14 +34,44 @@
           @click="goToGameTeams(game.id)"
           class="game-row"
         >
-          <td>{{ game.name || "нет названия" }}</td>
-          <td>{{ formatPlannedDate(game.plannedDate) }}</td>
-          <td>{{ findPlaceName(game.place.id) }}</td>
-          <td>{{ Statuses[game.status] }}</td>
-          <td><button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button></td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ game.name || "нет названия" }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ formatPlannedDate(game.plannedDate) }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ findPlaceName(game.place.id) }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ Statuses[game.status] }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">
+            <button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button>
+          </td>
           <div class="actions">
-            <button @click.stop="changeGame(game.id)" class="icon-setting"><IconsSetting/></button>
-            <button @click.stop="showDeleteDialog(game.id)" class="icon-setting"><IconDelete/></button>
+            <button @click.stop="changeGame(game.id)" class="icon-setting">
+              <IconsSetting/>
+            </button>
+            <button @click.stop="showDeleteDialog(game.id)" class="icon-setting">
+              <IconDelete/>
+            </button>
           </div>
         </tr>
         </tbody>
@@ -59,7 +89,8 @@
         type="submit"
         :class="{ disabled: loading }"
       >
-        <Loader v-if="loading" /> Добавить игру
+        <Loader v-if="loading"/>
+        Добавить игру
       </button>
     </div>
   </div>
@@ -71,13 +102,13 @@
     @confirm="handleConfirm"
     @cancel="handleCancel"
   />
-  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000"/>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import {computed, onMounted, ref} from 'vue';
+import {useRouter} from 'vue-router';
+import {useStore} from 'vuex';
 
 import Loader from '../Loader.vue';
 import IconsSetting from "@/components/icons/IconsSetting.vue";
@@ -206,7 +237,7 @@ const formatPlannedDate = (date) => {
 };
 
 const goToCreateGame = () => {
-  router.push({ name: 'AdminGamesCreate' });
+  router.push({name: 'AdminGamesCreate'});
 };
 
 const goToGameTeams = (gameId) => {
@@ -226,6 +257,7 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
 }
+
 .icon-setting {
   padding: 10px 0;
   background: none;
@@ -383,4 +415,17 @@ h1 {
   background: #3A4C6E;
   color: #CC9F33;
 }
+
+.status-finished {
+  background-color: #ffcccc;
+}
+
+.status-result {
+  background-color: #fff2cc;
+}
+
+.status-in-progress {
+  background-color: #ccffcc;
+}
+
 </style>

@@ -15,8 +15,15 @@
       </div>
       <div class="form-group">
         <label for="plannedDate">Дата проведения:</label>
-        <input id="plannedDate" v-model="plannedDate" type="date" class="input" required />
+        <input
+          id="plannedDate"
+          v-model="plannedDate"
+          type="date"
+          class="input full-click"
+          required
+        />
       </div>
+
       <div class="form-group">
         <label for="placeId">Выберите место:</label>
         <select id="placeId" v-model="selectedPlaceId" class="input" required>
@@ -255,4 +262,14 @@ button:disabled {
     transform: translateX(0);
   }
 }
+
+.input.full-click {
+  cursor: pointer;
+}
+
+.input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+
 </style>
