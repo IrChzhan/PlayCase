@@ -157,9 +157,10 @@ h1 {
   bottom: 20px;
   cursor: pointer;
 }
+
 .meals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr); 
   gap: 20px;
   justify-items: center;
 }
@@ -167,12 +168,12 @@ h1 {
 .meal-card {
   background-color: #ffffff;
   color: #333;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 15px;
   text-align: left;
-  width: 100%;
-  max-width: 250px;
+  width: 208px; 
+  height: 208px; 
   transition: transform 0.3s;
 }
 
@@ -182,6 +183,7 @@ h1 {
 
 .meal-image {
   width: 100%;
+  height: 150px; 
   border-radius: 10px;
   object-fit: cover;
 }
@@ -205,5 +207,8 @@ h1 {
 .meal-description {
   font-size: 14px;
   color: #666;
+  height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
