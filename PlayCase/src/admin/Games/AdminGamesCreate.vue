@@ -15,13 +15,16 @@
       </div>
       <div class="form-group">
         <label for="plannedDate">Дата проведения:</label>
-        <input
-          id="plannedDate"
-          v-model="plannedDate"
-          type="date"
-          class="input full-click"
-          required
-        />
+        <div class="clickable-date" @click="focusDateInput">
+          <input
+            id="plannedDate"
+            v-model="plannedDate"
+            type="date"
+            class="input full-click"
+            required
+            ref="dateInput"
+          />
+        </div>
       </div>
 
       <div class="form-group">
@@ -63,6 +66,13 @@ const nameGame = ref('')
 const places = ref([])
 const toastMessage = ref('')
 const toastType = ref('success')
+
+const dateInput = ref(null)
+
+const focusDateInput = () => {
+  dateInput.value?.focus()
+  dateInput.value?.showPicker()
+}
 
 const addGame = async () => {
   if (isFormValid.value) {
@@ -271,5 +281,14 @@ button:disabled {
   cursor: pointer;
 }
 
+.clickable-date {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.clickable-date .input {
+  pointer-events: none;
+}
 
 </style>

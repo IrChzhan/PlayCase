@@ -38,8 +38,23 @@
       </div>
 
       <div class="form-group">
-        <label for="mealImage">Загрузить изображение:</label>
-        <input id="mealImage" type="file" @change="handleFileUpload" class="input" required />
+        <label>Загрузить изображение:</label>
+        <input
+          id="mealImage"
+          type="file"
+          @change="handleFileUpload"
+          class="input-hidden"
+          ref="fileInput"
+          required
+        />
+        <button
+          type="button"
+          class="button btn-add"
+          @click="triggerFileInput"
+        >
+          Выбрать изображение
+        </button>
+        <span v-if="mealFile" class="file-name">{{ mealFile.name }}</span>
       </div>
 
       <div class="form-actions">
@@ -64,7 +79,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 import Notification from '@/admin/Notification.vue'
-
 import Loader from '../Loader.vue'
 
 const store = useStore()
@@ -79,6 +93,12 @@ const imageId = ref(null)
 const loading = ref(false)
 const toastMessage = ref('')
 const toastType = ref('success')
+
+const fileInput = ref(null)
+
+const triggerFileInput = () => {
+  fileInput.value.click()
+}
 
 const handleFileUpload = async (event) => {
   const file = event.target.files[0]
@@ -238,11 +258,29 @@ button:disabled {
   background-color: #0056b3;
 }
 
+.btn-add[type='button'] {
+  background: #CC9F33;
+}
+
+.btn-add[type='button']:hover {
+  background: #d1aa58;
+}
+
 .secondary {
   background-color: #6c757d;
 }
 
 .secondary:hover {
   background-color: #5a6268;
+}
+
+.input-hidden {
+  display: none;
+}
+
+.file-name {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #555;
 }
 </style>

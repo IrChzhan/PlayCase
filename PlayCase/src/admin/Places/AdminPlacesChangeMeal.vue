@@ -26,7 +26,16 @@
 
       <div class="form-group">
         <label for="file">Изображение:</label>
-        <input id="file" type="file" @change="handleFileUpload" class="input" />
+        <button type="button" class="button primary" @click="triggerFileInput">
+          Выбрать изображение
+        </button>
+        <input
+          id="file"
+          type="file"
+          @change="handleFileUpload"
+          class="input visually-hidden"
+        />
+        <div v-if="mealFile" class="hint">Выбран файл: {{ mealFile.name }}</div>
       </div>
     </form>
 
@@ -57,70 +66,104 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue'
-import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
-import Notification from '@/admin/Notification.vue'
-import router from '@/router/index.js'
+import Notification from '@/admin/Notification.vue';
+import ConfirmDialog from '../ConfirmDialog.vue';
+import Loader from '../Loader.vue';
+import router from '@/router/index.js';
 
-import ConfirmDialog from '../ConfirmDialog.vue'
-import Loader from '../Loader.vue'
-
-defineProps({
-  show: Boolean,
-  closeModal: Function,
-  dishId: String,
-  restaurantIdF: String,
-})
-
-const route = useRoute()
-const store = useStore()
+const route = useRoute();
+const store = useStore();
 const goBack = () => {
-  router.back()
-}
-const loading = ref(false)
-const dishName = ref('')
-const dishPrice = ref(0)
-const dishDescription = ref('')
-const dishImage = ref(null)
-const oldName = ref('')
-const showDialog = ref(false)
-const dialogTitle = ref('')
-const dialogMessage = ref('')
-const toastMessage = ref('')
-const toastType = ref('success')
-let dialogAction = null
-const restaurantId = ref('')
-const dishIdR = ref('')
-const mealFile = ref(null)
-const imageId = ref(null)
+  router.back();
+};
 
-const meals = computed(() => store.getters['places/mealsByCategory'](route.params.categoryId))
+const loading = ref(false);
+const dishName = ref('');
+const dishPrice = ref(0);
+const dishDescription = ref('');
+const mealFile = ref(null);
+const imageId = ref(null);
+const oldName = ref('');
+const showDialog = ref(false);
+const dialogTitle = ref('');
+const dialogMessage = ref('');
+const toastMessage = ref('');
+const toastType = ref('success');
+let dialogAction = null;
 
 const hasChanges = computed(
   () =>
-    dishName.value !== oldName.value || dishPrice.value || dishDescription.value || dishImage.value,
-)
+    dishName.value !== oldName.value ||
+    dishPrice.value ||
+    dishDescription.value ||
+    mealFile.value
+);
+
+const triggerFileInput = () => {
+  document.getElementById('file').click();
+};
+
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  mealFile.value = file;
+  try {
+    loading.value = true;
+    const response = await store.dispatch('places/uploadImage', file);
+    imageId.value = response;
+    toastMessage.value = 'Изображение успешно загружено!';
+    toastType.value = 'success';
+  } catch (error) {
+    console.error('Ошибка загрузки изображения:', error);
+    toastMessage.value = 'Ошибка загрузки изображения.';
+    toastType.value = 'error';
+  } finally {
+    loading.value = false;
+    setTimeout(() => {
+      toastMessage.value = '';
+    }, 1000);
+  }
+};
 
 const showUpdateDialog = (dishId, restaurantIdF) => () => {
-  dialogTitle.value = 'Подтверждение обновления'
-  dialogMessage.value = 'Вы уверены, что хотите сохранить изменения?'
-  dishIdR.value = dishId
-  restaurantId.value = restaurantIdF
-  dialogAction = updateDish
-  showDialog.value = true
-}
+  dialogTitle.value = 'Подтверждение обновления';
+  dialogMessage.value = 'Вы уверены, что хотите сохранить изменения?';
+  dialogAction = updateDish;
+  showDialog.value = true;
+};
 
-const showDeleteDialog = (dishId, restaurantIdF) => () => {
-  dialogTitle.value = 'Подтверждение удаления'
-  dialogMessage.value = 'Вы уверены, что хотите удалить это блюдо?'
-  dishIdR.value = dishId
-  restaurantId.value = restaurantIdF
-  dialogAction = deleteDish
-  showDialog.value = true
-}
-
+const updateDish = async () => {
+  try {
+    loading.value = true;
+    await store.dispatch('places/updateMeal', {
+      placeId: route.params.id,
+      categoryId: route.params.categoryId,
+      mealId: route.params.mealId,
+      mealData: {
+        name: dishName.value,
+        price: dishPrice.value,
+        description: dishDescription.value,
+        fileId: imageId.value,
+      },
+    });
+    toastMessage.value = 'Блюдо успешно обновлено!';
+    toastType.value = 'success';
+  } catch (error) {
+    console.error('Ошибка обновления блюда:', error);
+    toastMessage.value = 'Ошибка при обновлении блюда.';
+    toastType.value = 'error';
+  } finally {
+    loading.value = false;
+    setTimeout(() => {
+      router.push(`/admin/places/categories/${route.params.id}`);
+      toastMessage.value = '';
+    }, 1000);
+  }
+};
 const handleConfirm = async () => {
   showDialog.value = false
   if (dialogAction) {
@@ -132,99 +175,21 @@ const handleCancel = () => {
   showDialog.value = false
 }
 
-const handleFileUpload = async (event) => {
-  const file = event.target.files[0]
-  if (!file) return
-  mealFile.value = file
-  try {
-    loading.value = true
-    const response = await store.dispatch('places/uploadImage', file)
-    imageId.value = response
-    console.log(response, imageId.value)
-    toastMessage.value = 'Изображение успешно загружено!'
-    toastType.value = 'success'
-  } catch (error) {
-    console.error('Ошибка загрузки изображения:', error)
-    toastMessage.value = 'Ошибка загрузки изображения.'
-    toastType.value = 'error'
-  } finally {
-    loading.value = false
-    setTimeout(() => {
-      toastMessage.value = ''
-    }, 1000)
-  }
-}
-
-const updateDish = async () => {
-  try {
-    console.log(dishIdR, dishIdR.value)
-    loading.value = true
-    await store.dispatch('places/updateMeal', {
-      placeId: route.params.id,
-      categoryId: route.params.categoryId,
-      mealId: route.params.mealId,
-      mealData: {
-        name: dishName.value,
-        price: dishPrice.value,
-        description: dishDescription.value,
-        fileId: imageId.value,
-      },
-    })
-
-    toastMessage.value = 'Блюдо успешно обновлено!'
-    toastType.value = 'success'
-  } catch (error) {
-    console.error('Ошибка обновления блюда:', error)
-    toastMessage.value = 'Ошибка при обновлении блюда.'
-    toastType.value = 'error'
-  } finally {
-    loading.value = false
-    setTimeout(() => {
-      router.push(`/admin/places/categories/${route.params.id}`)
-      toastMessage.value = ''
-    }, 1000)
-  }
-}
-
-const deleteDish = async () => {
-  try {
-    loading.value = true
-    await store.dispatch('places/deleteMeal', {
-      placeId: route.params.id,
-      categoryId: route.params.categoryId,
-      mealId: route.params.mealId,
-    })
-    toastMessage.value = 'Блюдо удалено!'
-    toastType.value = 'success'
-  } catch (error) {
-    console.error('Ошибка удаления блюда:', error)
-    toastMessage.value = 'Ошибка при удалении блюда.'
-    toastType.value = 'error'
-  } finally {
-    loading.value = false
-    setTimeout(() => {
-      router.push(`/admin/places/categories/${route.params.id}`)
-      toastMessage.value = ''
-    }, 1000)
-  }
-}
-
-const fetchMeals = async () => {
-  const res = await store.dispatch('places/fetchMeals', {
-      placeId: route.params.id,
-      categoryId: route.params.categoryId,
-    })
-}
 
 onMounted(() => {
-  fetchMeals().then(() => {
-    const res = meals.value.filter((el) => el.id === route.params.mealId)[0]
-    dishName.value = res.name
-    dishPrice.value = res.price
-    dishDescription.value = res.description
-  })
-})
-
+  store.dispatch('places/fetchMeals', {
+    placeId: route.params.id,
+    categoryId: route.params.categoryId,
+  }).then(() => {
+    const res = store.getters['places/mealsByCategory'](route.params.categoryId)
+      .find((el) => el.id === route.params.mealId);
+    if (res) {
+      dishName.value = res.name;
+      dishPrice.value = res.price;
+      dishDescription.value = res.description;
+    }
+  });
+});
 </script>
 
 <style scoped>
@@ -257,19 +222,17 @@ label {
   color: #555;
 }
 
-input {
+.input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
   background: #fff;
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input:focus {
+.input:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   outline: none;
@@ -293,29 +256,26 @@ button.primary:hover:not([disabled]) {
   background-color: #d1aa58;
 }
 
-button.danger {
-  background-color: #dc3545;
+button.secondary {
+  background-color: #6c757d;
 }
 
-button.danger:hover:not([disabled]) {
-  background-color: #c82333;
+button.secondary:hover {
+  background-color: #5a6268;
 }
 
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
 .form-actions {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.secondary {
-  background-color: #6c757d;
-}
-
-.secondary:hover {
-  background-color: #5a6268;
+.visually-hidden {
+  display: none;
 }
 </style>

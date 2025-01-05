@@ -25,6 +25,7 @@
           <th>Заведение</th>
           <th>Статус</th>
           <th>Изменения статуса</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -65,14 +66,14 @@
   }">
             <button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button>
           </td>
-          <div class="actions">
+          <td class="actions-column">
             <button @click.stop="changeGame(game.id)" class="icon-setting">
-              <IconsSetting/>
+              <IconsSetting />
             </button>
             <button @click.stop="showDeleteDialog(game.id)" class="icon-setting">
-              <IconDelete/>
+              <IconDelete />
             </button>
-          </div>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -320,6 +321,11 @@ h1 {
   font-weight: bold;
 }
 
+.games-table th:last-child {
+  background-color: transparent;
+  font-weight: bold;
+}
+
 .game-row {
   cursor: pointer;
   transition: background 0.3s;
@@ -426,6 +432,66 @@ h1 {
 
 .status-in-progress {
   background-color: #ccffcc;
+}
+
+.actions-column {
+  text-align: center;
+  border: none;
+}
+
+.actions-column .icon-setting {
+  margin: 0 5px;
+}
+
+.games-table th:last-child,
+.games-table td:last-child {
+  text-align: center;
+  border: none;
+}
+td:last-child:hover {
+  background-color: transparent;
+}
+.games-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.games-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.games-table th,
+.games-table td {
+  border: 1px solid #ccc;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.games-table th:nth-child(1),
+.games-table td:nth-child(1) {
+  width: 20%;
+}
+
+.games-table th:nth-child(2),
+.games-table td:nth-child(2) {
+  width: 15%;
+}
+
+.games-table th:nth-child(3),
+.games-table td:nth-child(3) {
+  width: 25%;
+}
+
+.games-table th:nth-child(4),
+.games-table td:nth-child(4) {
+  width: 10%;
+}
+
+.games-table th:nth-child(5),
+.games-table td:nth-child(5) {
+  width: 15%;
 }
 
 </style>

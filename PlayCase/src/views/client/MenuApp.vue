@@ -41,7 +41,7 @@ import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 import { useUserInactivity } from '@/hooks/useUserInactivity.js'
 import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
-import person from '@/assets/person12.png'
+import person from '@/assets/hu.png'
 
 const store = useStore()
 const route = useRoute()

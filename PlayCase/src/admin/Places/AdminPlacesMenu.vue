@@ -17,6 +17,7 @@
           <th>Описание</th>
           <th>Цена</th>
           <th>Фото</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -26,10 +27,10 @@
           <td>{{ meal.description }}</td>
           <td>{{ meal.price }}</td>
           <td><img :src="meal.fileUrl" alt="Фото" class="thumbnail" /></td>
-          <div class="actions">
+          <td class="actions-column">
             <button @click.stop="editMeal(meal.id)" class="icon-setting"><IconsSetting/></button>
             <button @click.stop="showDeleteDialog(meal.id)" class="icon-setting"><IconDelete/></button>
-          </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -288,5 +289,24 @@ button:hover {
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.actions-column {
+  text-align: center;
+  border: none;
+}
+
+.actions-column .icon-setting {
+  margin: 0 5px;
+}
+
+.menu-table th:last-child,
+.menu-table td:last-child {
+  text-align: center;
+  border: none;
+}
+
+.menu-table th:last-child {
+  background: transparent;
 }
 </style>

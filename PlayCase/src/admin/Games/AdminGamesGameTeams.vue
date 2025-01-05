@@ -1,19 +1,35 @@
 <template>
   <div class="container">
     <div class="wrapper">
-    <div class="upload-container">
-
-      <h2>Загрузить команды из файла</h2>
-
-      <div class="file-select">
-        <input class="file-input" type="file" @change="handleFileChange" v-if="!selectedFile" />
-        <button class="file-button" v-if="selectedFile" @click="uploadFile" :disabled="loading">
-          {{ loading ? 'Загрузка...' : 'Загрузить файл' }}
-        </button>
+      <div class="upload-container">
+        <h2>Загрузить команды из файла</h2>
+        <div class="file-select">
+          <input
+            class="file-input input-hidden"
+            type="file"
+            @change="handleFileChange"
+            v-if="!selectedFile"
+            ref="fileInput"
+          />
+          <button
+            class="file-button btn-add"
+            v-if="!selectedFile"
+            @click="triggerFileInput"
+          >
+            Выбрать файл
+          </button>
+          <button
+            class="file-button btn-add"
+            v-if="selectedFile"
+            @click="uploadFile"
+            :disabled="loading"
+          >
+            {{ loading ? 'Загрузка...' : 'Загрузить файл' }}
+          </button>
+          <span v-if="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+        </div>
+        <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
       </div>
-
-      <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
-    </div>
       <button @click="check" class="button">Отзывы</button>
     </div>
     <table border="1" class="teams-table">
@@ -22,6 +38,7 @@
         <th>Номер стола</th>
         <th>Имя команды</th>
         <th>Привязанный планшет</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -45,10 +62,10 @@
           </div>
           <button v-else @click="setUser(team.id)" class="button">Привязать планшет</button>
         </td>
-        <div class="actions">
+        <td class="actions-column">
           <button @click.stop="changeTeam(team.id)" class="icon-setting"><IconsSetting/></button>
           <button @click.stop="showDeleteDialog(team.id)" class="icon-setting"><IconDelete/></button>
-        </div>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -108,6 +125,12 @@ const users = ref([])
 
 const check = () => {
   router.push(`/admin/games/${route.params.gameId}/team/feedback`)
+}
+
+const fileInput = ref(null)
+
+const triggerFileInput = () => {
+  fileInput.value.click()
 }
 
 const changeUserSet = (id, teamId) => async () => {
@@ -486,6 +509,67 @@ h1 {
 .btn-add {
   width: 200px;
 }
+.actions-column {
+  text-align: center;
+  border: none;
+}
 
+.actions-column .icon-setting {
+  margin: 0 5px;
+}
+.teams-table th:last-child,
+.teams-table td:last-child {
+  text-align: center;
+  border: none;
+}
+td:last-child:hover {
+  background-color: transparent;
+}
+
+.teams-table th:last-child {
+  background: transparent;
+}
+.file-select {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-hidden {
+  display: none;
+}
+
+.file-button {
+  padding: 10px;
+  background-color: #CC9F33;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.file-button:hover {
+  background-color: #d1aa58;
+  color: white;
+}
+
+.file-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.file-name {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.success-message {
+  color: #CC9F33;
+  font-size: 14px;
+  margin-top: 10px;
+}
 </style>
 
