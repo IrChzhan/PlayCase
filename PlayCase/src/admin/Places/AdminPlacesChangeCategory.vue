@@ -107,7 +107,7 @@ const updateCategory = async (categoryId, placeIdF) => {
     setTimeout(() => {
       toastMessage.value = ''
       router.push(`/admin/places/categories/${route.params.id}/menu/${route.params.categoryId}`)
-    }, 3000)
+    }, 1000)
   }
 }
 
@@ -129,7 +129,7 @@ const deleteCategory = async (categoryId, placeIdF) => {
     setTimeout(() => {
       router.push(`/admin/places`)
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
 const goBack = () => {

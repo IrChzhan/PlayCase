@@ -111,7 +111,7 @@ const deleteDish = (id) => async () => {
         .then(() => {
           filteredMeals.value = meals.value
         })
-    }, 3000)
+    }, 1000)
   }
 }
 const goToChangeUser = (id) => {

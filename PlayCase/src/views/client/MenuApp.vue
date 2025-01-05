@@ -12,7 +12,6 @@
     </div>
 
     <div class="footer">
-      <button @click="goToTeamNameDisplay" class="back-button">Вернуться к заставке</button>
       <button @click="goToTeamNameDisplay" class="play-button">ИГРА</button>
     </div>
 
@@ -42,6 +41,7 @@ import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 import { useUserInactivity } from '@/hooks/useUserInactivity.js'
 import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
+import person from '@/assets/person12.png'
 
 const store = useStore()
 const route = useRoute()
@@ -105,7 +105,7 @@ const menuItems = ref([
     },
   },
   {
-    name: 'Рейтинг команд',
+    name: 'Таблица результатов',
     image: ratingImage,
     function: () => {
       router.push({ name: 'ResultsExcel' })
@@ -139,7 +139,7 @@ const menuItems = ref([
     } },
   {
     name: 'Участники лотереи',
-    image: manImage,
+    image: person,
     function: () => {
       router.push({ name: 'RegistrateUsers' })
     },
@@ -164,19 +164,19 @@ const menuItems = ref([
   font-family: 'Mulish', sans-serif;
   font-weight: bold;
   text-align: center;
-  margin: 0 auto; /* Для горизонтального центрирования */
+  margin: 0 auto;
 }
 .header {
   display: flex;
-  justify-content: center; /* Центрирует содержимое горизонтально */
-  align-items: center; /* Центрирует содержимое вертикально */
-  flex-wrap: wrap; /* Позволяет текст переноситься при необходимости */
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   width: 95%;
   background-color: #3a4c6e;
   border: 2px solid #cc9f33;
   border-radius: 10px;
   padding: 10px;
-  margin: 12px auto; /* Центрирование самой секции */
+  margin: 12px auto;
 }
 
 h2 {
@@ -211,7 +211,7 @@ p {
 
 .footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 20px;
   margin-top: 90px;
   margin-left: 20px;

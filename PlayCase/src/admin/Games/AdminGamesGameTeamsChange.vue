@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -120,6 +120,27 @@ const handleSubmit = async () => {
 const goBack = () => {
   router.back()
 }
+
+const fetchTeams = async () => {
+  try {
+    const teams = await store.dispatch('games/fetchTeams', { gameId: route.params.gameId })
+    const team = teams.filter((el) => el.id === route.params.teamId)[0]
+    formData.name = team.name
+    formData.participantsCount = team.participantsCount
+    formData.isFirstTime = team.isFirstTime
+    formData.isPrepaid = team.isPrepaid
+    formData.certificate = team.certificate
+    formData.promocode = team.promocode
+
+  } catch (error) {
+    console.error('Ошибка при загрузке команд:', error)
+  }
+}
+
+onMounted(() => {
+ fetchTeams()
+})
+
 </script>
 
 <style scoped>

@@ -81,7 +81,7 @@ const addPlace = async () => {
 
       setTimeout(() => {
         toastMessage.value = ''
-      }, 3000)
+      }, 1000)
     } finally {
       loading.value = false
     }

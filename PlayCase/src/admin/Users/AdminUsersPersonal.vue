@@ -150,6 +150,7 @@ const openModalAdminUser = (id, name, role) => {
 const roles = {
   'ADMIN': 'Администратор',
   'MANAGER': 'Менеджер',
+  'CASHIER': 'Кассир'
 }
 
 const closeModalAdminUser = () => {

@@ -67,7 +67,7 @@ const menuItems = [
     name: 'results',
   },
   {
-    label: 'Реги Лото',
+    label: 'Лотерея',
     route: () => {
       router.push(`/admin/games/${route.params.gameId}/teams/loto`)
       selectedMenu.value = 3

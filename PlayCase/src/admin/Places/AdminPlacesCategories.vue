@@ -97,7 +97,7 @@ const deleteCategory = (id) => async () => {
     setTimeout(() => {
       fetchCategories()
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
 const fetchCategories = async () => {
@@ -132,10 +132,11 @@ onMounted(fetchCategories)
 
 <style scoped>
 .actions {
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 .icon-setting {
   padding: 10px 0 ;
