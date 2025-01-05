@@ -74,7 +74,7 @@ const goToMenuApp = () => {
 }
 
 h1 {
-  color: #ffd700;
+  color: #FFFFFC;
   font-size: 2rem;
   margin-bottom: 25px;
   margin-top: -30px;
@@ -96,12 +96,12 @@ h1 {
 }
 
 .results-table th {
-  background-color: #b5651d; 
+  background-color: #CC9F33; 
   color: white; 
 }
 
 .results-table tr.even-row {
-  background-color: #ffe4b5; 
+  background-color: #FFF6E0; 
 }
 
 .results-table tr.odd-row {

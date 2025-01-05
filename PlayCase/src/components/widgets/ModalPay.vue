@@ -29,7 +29,6 @@
             <div class="form">
               <p>Напишите вашу почту, на которую вы хотите, чтобы пришел чек</p>
               <input type="email" placeholder="Ваша электронная почта" class="email-input" />
-              <input type="text" placeholder="Введите промокод" class="promo-input" />
               <button class="pay-button" @click="startPayment">Перейти к оплате</button>
               <div class="policy">
                 <input type="checkbox" id="policy-checkbox" />

@@ -105,7 +105,7 @@ const menuItems = ref([
     },
   },
   {
-    name: 'Рейтинг команд',
+    name: 'Таблица результатов',
     image: ratingImage,
     function: () => {
       router.push({ name: 'ResultsExcel' })
