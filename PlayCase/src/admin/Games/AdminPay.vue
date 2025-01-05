@@ -7,8 +7,6 @@
         <tr>
           <th>#</th>
           <th>Название команды</th>
-          <th>Кол-во заявлено</th>
-          <th>Кол-во оплачено</th>
           <th>Онлайн оплаты</th>
           <th>Офлайн оплаты</th>
           <th>Итого</th>
@@ -16,56 +14,40 @@
         </tr>
       </thead>
       <tbody>
-  <tr v-for="(team, index) in editablePayments" :key="team.teamId">
-    <td>{{ index + 1 }}</td>
-    <td>{{ team.teamName }}</td>
-    <td>
-      <input
-        type="number"
-        v-model.number="team.participantsCount"
-        :disabled="!isEditing[team.teamId]"
-        class="editable-input"
-      />
-    </td>
-    <td>
-      <input
-        type="number"
-        v-model.number="team.totalPaid"
-        :disabled="true"
-        class="readonly-input"
-      />
-    </td>
-    <td>
-      <input
-        type="number"
-        v-model.number="team.onlinePaid"
-        :disabled="!isEditing[team.teamId]"
-        class="editable-input"
-      />
-    </td>
-    <td>
-      <input
-        type="number"
-        v-model.number="team.offlinePaid"
-        :disabled="!isEditing[team.teamId]"
-        class="editable-input"
-      />
-    </td>
-    <td>{{ team.onlinePaid + team.offlinePaid }}</td>
-    <td>
-      <button
-        v-if="!isEditing[team.teamId]"
-        @click="startEditing(team.teamId)"
-      >
-        Редактировать
-      </button>
-      <button v-else @click="saveChanges(team)">Сохранить</button>
-    </td>
-  </tr>
-  <tr v-if="editablePayments.length === 0">
-    <td colspan="8">Данные отсутствуют</td>
-  </tr>
-</tbody>
+        <tr v-for="(team, index) in editablePayments" :key="team.teamId">
+          <td>{{ index + 1 }}</td>
+          <td>{{ team.teamName }}</td>
+          <td>
+            <input
+              type="number"
+              v-model.number="team.onlinePaid"
+              :disabled="!isEditing[team.teamId]"
+              class="editable-input"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              v-model.number="team.offlinePaid"
+              :disabled="!isEditing[team.teamId]"
+              class="editable-input"
+            />
+          </td>
+          <td>{{ team.onlinePaid + team.offlinePaid }}</td>
+          <td>
+            <button
+              v-if="!isEditing[team.teamId]"
+              @click="startEditing(team.teamId)"
+            >
+              Редактировать
+            </button>
+            <button v-else @click="saveChanges(team)">Сохранить</button>
+          </td>
+        </tr>
+        <tr v-if="editablePayments.length === 0">
+          <td colspan="6">Данные отсутствуют</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -104,7 +86,6 @@ const startEditing = (teamId) => {
 const saveChanges = async (team) => {
   try {
     const updatedData = {
-      participantsCount: team.participantsCount,
       onlinePaid: team.onlinePaid,
       offlinePaid: team.offlinePaid,
     };
@@ -159,8 +140,7 @@ h1 {
   text-align: center;
 }
 
-.editable-input,
-.readonly-input {
+.editable-input {
   width: 100px;
   padding: 5px;
   text-align: center;
