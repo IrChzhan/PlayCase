@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import { useStore } from 'vuex'
 
 import router from '@/router/index.js'
@@ -53,13 +53,18 @@ import ConfirmDialog from "@/admin/ConfirmDialog.vue";
 import Notification from "@/admin/Notification.vue";
 const loading = ref(false)
 const store = useStore()
-const places = ref([])
+const places = ref(computed(()=> {
+  return store.getters['places/allPlaces']
+}))
 const selectedPlaceId = ref(null)
 const showDialog = ref(false)
 const dialogTitle = ref('')
 const dialogMessage = ref('')
 const toastMessage = ref('')
 const toastType = ref('success')
+
+
+
 let dialogAction = null
 const handleConfirm = async () => {
   showDialog.value = false
@@ -89,14 +94,14 @@ const deletePlace = (id) => async () => {
     setTimeout(() => {
       toastMessage.value = ''
       fetchPlaces()
-    }, 3000)
+    }, 1000)
   } catch (error) {
     console.error('Ошибка удаления места:', error)
     toastMessage.value = 'Ошибка при удалении места.'
     toastType.value = 'error'
     setTimeout(() => {
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   } finally {
     loading.value = false
   }

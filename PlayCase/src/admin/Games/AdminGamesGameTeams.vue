@@ -19,7 +19,7 @@
     <table border="1" class="teams-table">
       <thead>
       <tr>
-        <th>Номер команды</th>
+        <th>Номер стола</th>
         <th>Имя команды</th>
         <th>Привязанный планшет</th>
       </tr>
@@ -33,7 +33,7 @@
               <button class="icon-setting" @click="assignTable"><IconArrow/></button>
               <button class="icon-setting" @click="cancelTable"><IconClose/></button>
             </div>
-            <span v-else>{{ team?.tableNumber || 'нету номера стола' }}</span>
+            <span v-else>{{ team?.tableNumber || 'нет номера стола' }}</span>
             <button @click="changeTable(team.id)" class="change-tale-btn"><IconPencil/></button>
           </div>
         </td>

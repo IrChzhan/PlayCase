@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -95,6 +95,8 @@ const restaurantId = ref('')
 const dishIdR = ref('')
 const mealFile = ref(null)
 const imageId = ref(null)
+
+const meals = computed(() => store.getters['places/mealsByCategory'](route.params.categoryId))
 
 const hasChanges = computed(
   () =>
@@ -149,7 +151,7 @@ const handleFileUpload = async (event) => {
     loading.value = false
     setTimeout(() => {
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
 
@@ -180,7 +182,7 @@ const updateDish = async () => {
     setTimeout(() => {
       router.push(`/admin/places/categories/${route.params.id}`)
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
 
@@ -203,9 +205,26 @@ const deleteDish = async () => {
     setTimeout(() => {
       router.push(`/admin/places/categories/${route.params.id}`)
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
+
+const fetchMeals = async () => {
+  const res = await store.dispatch('places/fetchMeals', {
+      placeId: route.params.id,
+      categoryId: route.params.categoryId,
+    })
+}
+
+onMounted(() => {
+  fetchMeals().then(() => {
+    const res = meals.value.filter((el) => el.id === route.params.mealId)[0]
+    dishName.value = res.name
+    dishPrice.value = res.price
+    dishDescription.value = res.description
+  })
+})
+
 </script>
 
 <style scoped>

@@ -173,6 +173,9 @@ const filteredGames = computed(() => {
       findPlaceName(game.place.id).toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       game.plannedDate.includes(searchQuery.value)
   );
+
+  filtered.sort((a, b) => new Date(a.plannedDate) - new Date(b.plannedDate));
+
   const startIndex = (currentPage.value - 1) * itemsPerPage.value;
   const endIndex = startIndex + itemsPerPage.value;
   return filtered.slice(startIndex, endIndex);

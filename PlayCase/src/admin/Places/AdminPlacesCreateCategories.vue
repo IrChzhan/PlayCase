@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>Создать категорию</h1>
-    <form @submit.prevent="showUpdateDialog">
+    <form @submit.prevent="addCategory">
       <small>Старое название: {{ oldName }}</small>
       <div class="form-group">
         <label for="name">Название категории:</label>
@@ -18,7 +18,7 @@
         <button
           type="button"
           :disabled="!hasChanges || loading"
-          @click="showUpdateDialog"
+          @click="addCategory"
           :style="{ opacity: !hasChanges || loading ? '50%' : '100%' }"
         >
           <Loader v-if="loading" /> Создать
@@ -36,16 +36,6 @@
         </button>
       </div>
     </form>
-
-    <ConfirmDialog
-      v-if="showDialog"
-      :visible="showDialog"
-      :title="dialogTitle"
-      :message="dialogMessage"
-      @confirm="handleConfirm"
-      @cancel="handleCancel"
-    />
-
     <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
@@ -67,29 +57,9 @@ const route = useRoute()
 const loading = ref(false)
 const categoryName = ref('')
 const oldName = ref('')
-const showDialog = ref(false)
-const dialogTitle = ref('')
-const dialogMessage = ref('')
 const toastMessage = ref('')
 const toastType = ref('success')
 const hasChanges = computed(() => categoryName.value !== oldName.value)
-let dialogAction = null
-
-const showUpdateDialog = () => {
-  dialogTitle.value = 'Подтверждение обновления'
-  dialogMessage.value = 'Вы уверены, что хотите создать категорию?'
-  dialogAction = addCategory
-  showDialog.value = true
-}
-
-const handleConfirm = async () => {
-  showDialog.value = false
-  if (dialogAction) await dialogAction()
-}
-
-const handleCancel = () => {
-  showDialog.value = false
-}
 
 const addCategory = async () => {
   try {
@@ -108,7 +78,7 @@ const addCategory = async () => {
     loading.value = false
     setTimeout(() => {
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
 </script>

@@ -136,14 +136,14 @@ const updatePlace = async () => {
     setTimeout(() => {
       toastMessage.value = ''
       router.push(`/admin/places`)
-    }, 3000)
+    }, 1000)
   } catch (error) {
     console.error('Ошибка обновления места:', error)
     toastMessage.value = 'Ошибка при обновлении места.'
     toastType.value = 'error'
     setTimeout(() => {
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   } finally {
     loading.value = false
   }
@@ -165,7 +165,7 @@ const deletePlace = async () => {
     toastType.value = 'error'
     setTimeout(() => {
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   } finally {
     loading.value = false
   }

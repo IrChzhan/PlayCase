@@ -98,7 +98,7 @@ const handleFileUpload = async (event) => {
     loading.value = false
     setTimeout(() => {
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
 
@@ -136,7 +136,7 @@ const handleAddMeal = async () => {
     loading.value = false
     setTimeout(() => {
       toastMessage.value = ''
-    }, 3000)
+    }, 1000)
   }
 }
 

@@ -1,5 +1,24 @@
 <template>
   <div class="admin-results">
+    <div v-if="teams.length > 0" class="results-table-container">
+      <h2>Результаты</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Место</th>
+          <th>Название</th>
+          <th>Общий счёт</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="team in teams" :key="team.teamName">
+          <td>{{ team.currentPlace }}</td>
+          <td>{{ team.teamName }}</td>
+          <td>{{ team.totalScore }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
     <h1>Загрузить результаты для игры</h1>
     <div class="upload-container">
       <input class="file-input" type="file" @change="handleFileChange" />
@@ -12,24 +31,7 @@
     </div>
       <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
 
-        <div v-if="teams.length > 0" class="results-table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Место</th>
-                        <th>Название</th>
-                        <th>Общий счёт</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="team in teams" :key="team.teamName">
-                        <td>{{ team.currentPlace }}</td>
-                        <td>{{ team.teamName }}</td>
-                        <td>{{ team.totalScore }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
 
   </div>
 </template>
@@ -112,6 +114,10 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
 .admin-results {
   max-width: 600px;
   margin: 0 auto;
