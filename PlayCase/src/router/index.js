@@ -43,6 +43,7 @@ import CompanyInfo from '@/views/client/CompanyInfo.vue'
 import AdminGamesGameOnline from "@/admin/Games/AdminGamesGameOnline.vue";
 import ClientHome from "@/views/client/ClientHome.vue";
 import AdminGamesGameTeamFeefback from "@/admin/Games/AdminGamesGameTeamFeefback.vue";
+import ClientWatch from "@/views/client/ClientWatch.vue";
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -74,6 +75,12 @@ const routes = [{
           path: `/client/menu-app`,
           name: 'MenuApp',
           component: MenuApp,
+          props: true,
+        },
+        {
+          path: `/client/watch`,
+          name: 'Watch',
+          component: ClientWatch,
           props: true,
         },
         {

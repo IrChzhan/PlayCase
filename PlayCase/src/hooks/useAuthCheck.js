@@ -37,7 +37,7 @@ export function useAuthCheck() {
     }
 
     if (!token) {
-      await router.push('/TeamNameInput')
+      await router.push('/')
     }
   })
 
