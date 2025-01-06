@@ -65,7 +65,7 @@ const goToMenuApp = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #001845;
+  background-color: #1B2A46;
   color: #000; 
   padding: 20px;
   font-family: 'Mulish', sans-serif;
@@ -106,10 +106,6 @@ h1 {
 
 .results-table tr.odd-row {
   background-color: #fff; 
-}
-
-.results-table tr:hover {
-  background-color: #ffd70040; 
 }
 
 .home-button {

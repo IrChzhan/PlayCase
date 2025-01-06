@@ -43,7 +43,8 @@ import CompanyInfo from '@/views/client/CompanyInfo.vue'
 import AdminGamesGameOnline from "@/admin/Games/AdminGamesGameOnline.vue";
 import ClientHome from "@/views/client/ClientHome.vue";
 import AdminGamesGameTeamFeefback from "@/admin/Games/AdminGamesGameTeamFeefback.vue";
-import ClientWatch from "@/views/client/ClientWatch.vue";
+import Dogovor from '@/views/client/Dogovor.vue'
+import PoliticaPrivacy from '@/views/client/PoliticaPrivacy.vue'
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -96,32 +97,46 @@ const routes = [{
           props: true,
         },
 
-        {
-          path: '/client/inn',
-          name: 'CompanyInfo',
-          component: CompanyInfo,
-          props: true
-        },
+            {
+                path: '/client/inn',
+                name: 'CompanyInfo',
+                component: CompanyInfo,
+                props: true
+            },
 
-        {
-          path: '/client/winnerpage',
-          name: 'WinnerPage',
-          component: WinnerPage,
-          props: true,
-        },
-        {
-          path: '/client/registrateusers',
-          name: 'RegistrateUsers',
-          component: RegistrateUsers,
-          props: true,
-        },
-        {
-          path: '/client/resultsExcel',
-          name: 'ResultsExcel',
-          component: ResultsExcel,
-          props: true,
-        },
-      ]
+            {
+                path: '/client/dogovor',
+                name: 'Dogovor',
+                component: Dogovor,
+                props: true
+            },
+
+            {
+                path: '/client/politica',
+                name: 'Politica',
+                component: PoliticaPrivacy,
+                props: true
+            },
+
+            {
+                path: '/client/winnerpage',
+                name: 'WinnerPage',
+                component: WinnerPage,
+                props: true,
+            },
+            {
+                path: '/client/registrateusers',
+                name: 'RegistrateUsers',
+                component: RegistrateUsers,
+                props: true,
+            },
+            {
+                path: '/client/resultsExcel',
+                name: 'ResultsExcel',
+                component: ResultsExcel,
+                props: true,
+            },
+        ]
     },
     {
         path: '/admin',
@@ -233,18 +248,17 @@ const routes = [{
                 path: '/admin/games/game:gameId',
                 name: 'AdminGamesGame',
                 component: AdminGamesGame,
-                children: [
-                  {
-                    path: '/admin/games/:gameId/team/feedback',
-                    name: 'AdminGamesGameTeamFeedBack',
-                    component: AdminGamesGameTeamFeefback
-                  },
-                  {
-                    path: '/admin/games/:gameId/online',
-                    name: 'AdminGamesGameOnline',
-                    component: AdminGamesGameOnline,
-                  },
-                  {
+                children: [{
+                        path: '/admin/games/:gameId/team/feedback',
+                        name: 'AdminGamesGameTeamFeedBack',
+                        component: AdminGamesGameTeamFeefback
+                    },
+                    {
+                        path: '/admin/games/:gameId/online',
+                        name: 'AdminGamesGameOnline',
+                        component: AdminGamesGameOnline,
+                    },
+                    {
                         path: '/admin/games/:gameId/team',
                         name: 'AdminGamesGameTeams',
                         component: AdminGamesGameTeams,

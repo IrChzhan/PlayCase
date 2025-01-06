@@ -1,6 +1,6 @@
 <template>
   <div class="register-users-page">
-    <h1>Зарегистрированные пользователи</h1>
+    <h1 class="page-title">Зарегистрированные пользователи</h1>
     <br />
     <div v-if="error">
       <p class="error-message">{{ error }}</p>
@@ -8,13 +8,10 @@
     <div v-else-if="!registeredUsers || registeredUsers.length === 0">
       <p>Пока никто не зарегистрировался в лотерее.</p>
     </div>
-    <div v-else>
+    <div v-else class="users-grid">
       <div v-for="(user, index) in registeredUsers" :key="index" class="user-item">
-        <p><strong>Имя:</strong> {{ user.name }}</p>
-        <p><strong>Почта:</strong> {{ user.email }}</p>
-        <p><strong>Телефон:</strong> {{ user.phone }}</p>
-        <p><strong>Название команды:</strong> {{ user.teamName }}</p>
-        <p><strong>Номер:</strong> {{ user.sequenceNumber }}</p>
+        <p class="user-name">{{ user.name }}</p>
+        <p class="user-number">{{ user.sequenceNumber }}</p>
       </div>
     </div>
     <img src="../../assets/house_light.png" class="home-button" @click="goToMenuApp" />
@@ -50,30 +47,55 @@ const goToMenuApp = () => {
 .register-users-page {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background-color: #001845;
+  background-color: #1B2A46;
   color: #ffd700;
   height: 100vh;
   position: relative;
   font-family: 'Mulish', sans-serif;
   overflow: hidden;
+  padding: 20px;
 }
 
-.close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 1.5rem;
+.page-title {
+  align-self: flex-start;
+  font-size: 2rem;
   font-weight: bold;
-  color: #ffd700;
-  cursor: pointer;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
 }
 
 .user-item {
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 1px solid #ffd700;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1B2A46;
+  margin: 5px 0;
+}
+
+.user-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1B2A46;
+  margin: 5px 0;
 }
 
 .home-button {
@@ -92,32 +114,25 @@ const goToMenuApp = () => {
 }
 
 .register-users-page::before {
-  content: '';
-  position: absolute;
-  background-image: url('@/assets/lines.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.register-users-page::before {
   top: 0;
   left: 0;
   width: 1300px;
   height: 1300px;
 }
 
-.user-item p {
-  margin: 5px 0;
-}
-
-.user-item strong {
-  color: #ffd700;
-}
-
 @media (min-width: 768px) and (max-width: 1024px) {
   .register-users-page::before {
     width: 1050px;
     height: 1050px;
+  }
+  .users-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .users-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
