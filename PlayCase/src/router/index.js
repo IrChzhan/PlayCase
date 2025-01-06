@@ -45,6 +45,7 @@ import ClientHome from "@/views/client/ClientHome.vue";
 import AdminGamesGameTeamFeefback from "@/admin/Games/AdminGamesGameTeamFeefback.vue";
 import Dogovor from '@/views/client/Dogovor.vue'
 import PoliticaPrivacy from '@/views/client/PoliticaPrivacy.vue'
+import ClientWatch from "@/views/client/ClientWatch.vue";
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
