@@ -26,8 +26,6 @@ const client = new Client({
   onConnect: () => {
     console.log("STOMP подключен", userId.value, gameId.value);
 
-
-
     client.subscribe(`/queue/game/${gameId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
     });

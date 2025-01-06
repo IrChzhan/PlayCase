@@ -57,6 +57,7 @@ onMounted(fetchResults);
 const goToMenuApp = () => {
   router.push({ name: 'MenuApp' });
 };
+
 </script>
 
 <style scoped>

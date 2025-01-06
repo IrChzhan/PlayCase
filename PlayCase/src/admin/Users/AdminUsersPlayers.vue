@@ -15,16 +15,17 @@
         <tr>
           <th>Имя</th>
           <th>Логин</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="user in paginatedUsers" :key="user.id">
           <td>{{ user.name }}</td>
           <td>{{ user.username }}</td>
-          <div class="actions">
+          <td class="actions-column">
             <button @click="goToChangeUser(user.id)()" class="icon-setting"><IconsSetting/></button>
             <button @click="showDeleteDialog(user.id)" class="icon-setting"><IconDelete/></button>
-          </div>
+          </td>
 
         </tr>
       </tbody>
@@ -282,4 +283,43 @@ button:disabled {
   color: #CC9F33;
 }
 
+
+.actions-column {
+  text-align: center;
+  border: none;
+}
+
+.actions-column .icon-setting {
+  margin: 0 5px;
+}
+
+.user-table th:last-child {
+  background: transparent;
+}
+
+.user-table th:last-child,
+.user-table td:last-child {
+  text-align: center;
+  border: none;
+}
+td:last-child:hover {
+  background-color: transparent;
+}
+.user-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #ccc;
+  text-align: left;
+  word-wrap: break-word;
+}
 </style>

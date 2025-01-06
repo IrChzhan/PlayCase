@@ -18,8 +18,15 @@ const getReviews = async () => {
   }
 };
 
+const getStatusClass = (mark) => {
+  if (mark === "BAD") return "status-finished";
+  if (mark === "GOOD") return "status-in-progress";
+  if (mark === "NEUTRAL") return "status-result";
+  return ""; // Default class if no match
+};
+
 const goBack = () => {
-  router.back()
+  router.back();
 };
 
 onMounted(() => {
@@ -38,7 +45,7 @@ onMounted(() => {
       </tr>
       </thead>
       <tbody>
-      <tr v-for="review in reviews" :key="review.teamId">
+      <tr v-for="review in reviews" :key="review.teamId" :class="getStatusClass(review.gameMark)">
         <td>{{ review.teamName }}</td>
         <td>{{ review.gameMark }}</td>
         <td>{{ review.markComment }}</td>
@@ -84,5 +91,18 @@ button {
 
 button:hover {
   background-color: #5a6268;
+}
+
+/* Color classes */
+.status-finished {
+  background-color: #ffcccc;
+}
+
+.status-result {
+  background-color: #fff2cc;
+}
+
+.status-in-progress {
+  background-color: #ccffcc;
 }
 </style>

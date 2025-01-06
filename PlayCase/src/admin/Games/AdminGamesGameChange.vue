@@ -15,7 +15,16 @@
       </div>
       <div class="form-group">
         <label for="plannedDate">Дата проведения:</label>
-        <input id="plannedDate" v-model="plannedDate" type="date" class="input" required />
+        <div class="clickable-date" @click="focusDateInput">
+          <input
+            id="plannedDate"
+            v-model="plannedDate"
+            type="date"
+            class="input full-click"
+            required
+            ref="dateInput"
+          />
+        </div>
       </div>
       <div class="form-group">
         <label for="placeId">Выберите место:</label>
@@ -91,6 +100,13 @@ const saveChanges = async () => {
       loading.value = false
     }
   }
+}
+
+const dateInput = ref(null)
+
+const focusDateInput = () => {
+  dateInput.value?.focus()
+  dateInput.value?.showPicker()
 }
 
 const deleteGame = async () => {
@@ -285,5 +301,23 @@ button:disabled {
     transform: translateX(0);
   }
 }
+.input.full-click {
+  cursor: pointer;
+}
+
+.input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.clickable-date {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.clickable-date .input {
+  pointer-events: none;
+}
+
 </style>
 

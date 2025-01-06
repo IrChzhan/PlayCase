@@ -25,6 +25,7 @@
           <th>Заведение</th>
           <th>Статус</th>
           <th>Изменения статуса</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -34,15 +35,45 @@
           @click="goToGameTeams(game.id)"
           class="game-row"
         >
-          <td>{{ game.name || "нет названия" }}</td>
-          <td>{{ formatPlannedDate(game.plannedDate) }}</td>
-          <td>{{ findPlaceName(game.place.id) }}</td>
-          <td>{{ Statuses[game.status] }}</td>
-          <td><button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button></td>
-          <div class="actions">
-            <button @click.stop="changeGame(game.id)" class="icon-setting"><IconsSetting/></button>
-            <button @click.stop="showDeleteDialog(game.id)" class="icon-setting"><IconDelete/></button>
-          </div>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ game.name || "нет названия" }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ formatPlannedDate(game.plannedDate) }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ findPlaceName(game.place.id) }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">{{ Statuses[game.status] }}
+          </td>
+          <td :class="{
+    'status-finished': game.status === 'FINISHED',
+    'status-result': game.status === 'RESULT_SUMMING',
+    'status-in-progress': game.status === 'IN_PROGRESS'
+  }">
+            <button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button>
+          </td>
+          <td class="actions-column">
+            <button @click.stop="changeGame(game.id)" class="icon-setting">
+              <IconsSetting />
+            </button>
+            <button @click.stop="showDeleteDialog(game.id)" class="icon-setting">
+              <IconDelete />
+            </button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -59,7 +90,8 @@
         type="submit"
         :class="{ disabled: loading }"
       >
-        <Loader v-if="loading" /> Добавить игру
+        <Loader v-if="loading"/>
+        Добавить игру
       </button>
     </div>
   </div>
@@ -71,13 +103,13 @@
     @confirm="handleConfirm"
     @cancel="handleCancel"
   />
-  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
+  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000"/>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import {computed, onMounted, ref} from 'vue';
+import {useRouter} from 'vue-router';
+import {useStore} from 'vuex';
 
 import Loader from '../Loader.vue';
 import IconsSetting from "@/components/icons/IconsSetting.vue";
@@ -206,7 +238,7 @@ const formatPlannedDate = (date) => {
 };
 
 const goToCreateGame = () => {
-  router.push({ name: 'AdminGamesCreate' });
+  router.push({name: 'AdminGamesCreate'});
 };
 
 const goToGameTeams = (gameId) => {
@@ -226,6 +258,7 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
 }
+
 .icon-setting {
   padding: 10px 0;
   background: none;
@@ -285,6 +318,11 @@ h1 {
 
 .games-table th {
   background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.games-table th:last-child {
+  background-color: transparent;
   font-weight: bold;
 }
 
@@ -383,4 +421,77 @@ h1 {
   background: #3A4C6E;
   color: #CC9F33;
 }
+
+.status-finished {
+  background-color: #ffcccc;
+}
+
+.status-result {
+  background-color: #fff2cc;
+}
+
+.status-in-progress {
+  background-color: #ccffcc;
+}
+
+.actions-column {
+  text-align: center;
+  border: none;
+}
+
+.actions-column .icon-setting {
+  margin: 0 5px;
+}
+
+.games-table th:last-child,
+.games-table td:last-child {
+  text-align: center;
+  border: none;
+}
+td:last-child:hover {
+  background-color: transparent;
+}
+.games-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.games-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.games-table th,
+.games-table td {
+  border: 1px solid #ccc;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.games-table th:nth-child(1),
+.games-table td:nth-child(1) {
+  width: 20%;
+}
+
+.games-table th:nth-child(2),
+.games-table td:nth-child(2) {
+  width: 15%;
+}
+
+.games-table th:nth-child(3),
+.games-table td:nth-child(3) {
+  width: 25%;
+}
+
+.games-table th:nth-child(4),
+.games-table td:nth-child(4) {
+  width: 10%;
+}
+
+.games-table th:nth-child(5),
+.games-table td:nth-child(5) {
+  width: 15%;
+}
+
 </style>
