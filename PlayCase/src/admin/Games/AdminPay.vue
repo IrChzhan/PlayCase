@@ -7,37 +7,71 @@
         <tr>
           <th>#</th>
           <th>Название команды</th>
-          <th>Онлайн оплаты</th>
-          <th>Офлайн оплаты</th>
+          <th>Оплачено QR</th>
+          <th>Оплачено картой</th>
+          <th>Оплачено налом</th>
+          <th>Предоплата</th>
           <th>Итого</th>
+          <th>Фактическое кол-во участников</th>
           <th>Действия</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(team, index) in editablePayments" :key="team.teamId">
+        <tr
+          v-for="(team, index) in editablePayments"
+          :key="team.id"
+          :class="{
+            'row-complete': team.totalPayments === team.actualParticipantsCount,
+            'row-incomplete': team.totalPayments !== team.actualParticipantsCount
+          }"
+        >
           <td>{{ index + 1 }}</td>
           <td>{{ team.teamName }}</td>
           <td>
             <input
               type="number"
-              v-model.number="team.onlinePaid"
-              :disabled="!isEditing[team.teamId]"
+              v-model.number="team.paidByQr"
+              :disabled="!isEditing[team.id]"
               class="editable-input"
             />
           </td>
           <td>
             <input
               type="number"
-              v-model.number="team.offlinePaid"
-              :disabled="!isEditing[team.teamId]"
+              v-model.number="team.paidByCard"
+              :disabled="!isEditing[team.id]"
               class="editable-input"
             />
           </td>
-          <td>{{ team.onlinePaid + team.offlinePaid }}</td>
+          <td>
+            <input
+              type="number"
+              v-model.number="team.paidByCash"
+              :disabled="!isEditing[team.id]"
+              class="editable-input"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              v-model.number="team.prepaidCount"
+              :disabled="!isEditing[team.id]"
+              class="editable-input"
+            />
+          </td>
+          <td>{{ team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount }}</td>
+          <td>
+            <input
+              type="number"
+              v-model.number="team.actualParticipantsCount"
+              :disabled="!isEditing[team.id]"
+              class="editable-input"
+            />
+          </td>
           <td>
             <button
-              v-if="!isEditing[team.teamId]"
-              @click="startEditing(team.teamId)"
+              v-if="!isEditing[team.id]"
+              @click="startEditing(team.id)"
             >
               Редактировать
             </button>
@@ -45,7 +79,7 @@
           </td>
         </tr>
         <tr v-if="editablePayments.length === 0">
-          <td colspan="6">Данные отсутствуют</td>
+          <td colspan="9">Данные отсутствуют</td>
         </tr>
       </tbody>
     </table>
@@ -71,6 +105,7 @@ const fetchPayments = async () => {
     if (response && Array.isArray(response)) {
       editablePayments.value = response.map((team) => ({
         ...team,
+        totalPayments: team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount
       }));
     }
   } catch (error) {
@@ -86,26 +121,33 @@ const startEditing = (teamId) => {
 const saveChanges = async (team) => {
   try {
     const updatedData = {
-      onlinePaid: team.onlinePaid,
-      offlinePaid: team.offlinePaid,
+      paidByQr: team.paidByQr,
+      paidByCard: team.paidByCard,
+      paidByCash: team.paidByCash,
+      prepaidCount: team.prepaidCount,
+      actualParticipantsCount: team.actualParticipantsCount
     };
+
     await store.dispatch("payments/updatePayment", {
       gameId,
-      teamId: team.teamId,
-      data: updatedData,
+      teamId: team.id,
+      data: updatedData
     });
 
-    const index = editablePayments.value.findIndex(
-      (t) => t.teamId === team.teamId
-    );
+    const index = editablePayments.value.findIndex((t) => t.id === team.id);
     if (index !== -1) {
       editablePayments.value[index] = {
         ...editablePayments.value[index],
         ...updatedData,
+        totalPayments:
+          updatedData.paidByQr +
+          updatedData.paidByCard +
+          updatedData.paidByCash +
+          updatedData.prepaidCount
       };
     }
 
-    isEditing.value = { ...isEditing.value, [team.teamId]: false };
+    isEditing.value = { ...isEditing.value, [team.id]: false };
     alert("Изменения сохранены успешно");
   } catch (error) {
     console.error("Ошибка сохранения изменений:", error);
@@ -157,5 +199,13 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.row-complete {
+  background-color: #d4edda;
+}
+
+.row-incomplete {
+  background-color: #f8d7da;
 }
 </style>

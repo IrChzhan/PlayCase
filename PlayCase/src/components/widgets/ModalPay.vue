@@ -65,12 +65,12 @@
           <div class="additional-info">
             <ul>
               <li class="link-li">
-                <a class="link" :href="pdfLink1" target="_blank" download="Договор-оферта.pdf">
+                <a class="link" @click="goToDogovor" target="_blank">
                   Договор-оферта
                 </a>
               </li>
               <li class="link-li">
-                <a class="link" :href="pdfLink2" target="_blank" download="Политика_конфиденциальности.pdf">
+                <a class="link" @click="goToPolitica" target="_blank">
                   Политика конфиденциальности
                 </a>
               </li>
@@ -113,6 +113,14 @@ const detailsPageLink = ref('/inn')
 
 const goToInn = () => {
   router.push('/client/inn')
+}
+
+const goToDogovor = () => {
+  router.push('/client/dogovor')
+}
+
+const goToPolitica = () => {
+  router.push('/client/politica')
 }
 
 function selectPlayers(number) {
