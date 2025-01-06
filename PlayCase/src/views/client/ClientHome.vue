@@ -1,11 +1,12 @@
 <script setup>
 import {onBeforeUnmount, onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {Client} from "@stomp/stompjs";
 import {useStore} from "vuex";
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
 const router = useRouter()
 const store = useStore()
+const route = useRoute()
 
 const show = ref(false)
 
@@ -38,6 +39,11 @@ const client = new Client({
     client.subscribe(`/queue/user/${userId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
       if (parsedMessage?.mutationType === "REMOVE_USER_TEAM")
+        router.push({
+          name: 'Watch'
+        })
+      if (parsedMessage?.mutationType === "SET_USER_TEAM")
+        localStorage.setItem('team', 'a')
       router.push({
         name: 'HomePage'
       })
@@ -87,8 +93,11 @@ onMounted(() => {
   getCurrentTeam().then(() => {
     client.activate();
   })
-
-  router.push({name: 'TeamNameDisplay'})
+  const temp = route.path.split('/')
+  console.log(temp)
+  if (!(temp.find((el) => el === 'watch')))  {
+    router.push({name: 'TeamNameDisplay'})
+  }
 });
 
 onBeforeUnmount(() => {

@@ -129,6 +129,14 @@ export default {
         throw error
       }
     },
+    async getCurrentUser({commit}) {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/v1/users/me`)
+        return res.data
+      }catch (e) {
+        console.log(e)
+      }
+    },
     async addMark({ dispatch }, {mark, comment}) {
       try {
         await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/current/mark`,

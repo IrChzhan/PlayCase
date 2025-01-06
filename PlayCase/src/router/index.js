@@ -45,6 +45,7 @@ import ClientHome from "@/views/client/ClientHome.vue";
 import AdminGamesGameTeamFeefback from "@/admin/Games/AdminGamesGameTeamFeefback.vue";
 import Dogovor from '@/views/client/Dogovor.vue'
 import PoliticaPrivacy from '@/views/client/PoliticaPrivacy.vue'
+import ClientWatch from "@/views/client/ClientWatch.vue";
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -62,33 +63,40 @@ const routes = [{
         component: TeamNameInput,
     },
     {
-        path: '/client',
-        name: 'ClientHome',
-        component: ClientHome,
-        children: [{
-                path: '',
-                name: 'TeamNameDisplay',
-                component: TeamNameDisplay,
-                props: true,
-            },
-            {
-                path: `/client/menu-app`,
-                name: 'MenuApp',
-                component: MenuApp,
-                props: true,
-            },
-            {
-                path: `/client/restourant-menu`,
-                name: 'RestourantMenu',
-                component: MenuRestourant,
-                props: true,
-            },
-            {
-                path: '/client/rules',
-                name: 'Rules',
-                component: Rules,
-                props: true,
-            },
+      path: '/client',
+      name: 'ClientHome',
+      component: ClientHome,
+      children: [
+        {
+          path: '',
+          name: 'TeamNameDisplay',
+          component: TeamNameDisplay,
+          props: true,
+        },
+        {
+          path: `/client/menu-app`,
+          name: 'MenuApp',
+          component: MenuApp,
+          props: true,
+        },
+        {
+          path: `/client/watch`,
+          name: 'Watch',
+          component: ClientWatch,
+          props: true,
+        },
+        {
+          path: `/client/restourant-menu`,
+          name: 'RestourantMenu',
+          component: MenuRestourant,
+          props: true,
+        },
+        {
+          path: '/client/rules',
+          name: 'Rules',
+          component: Rules,
+          props: true,
+        },
 
             {
                 path: '/client/inn',
