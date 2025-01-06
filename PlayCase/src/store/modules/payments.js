@@ -13,12 +13,8 @@ const actions = {
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/payments`);
             if (response.data) {
-                const mappedPayments = response.data.map((team) => ({
-                    ...team,
-                    totalPaid: team.onlinePaid + team.offlinePaid,
-                }));
-                commit('setPayments', mappedPayments);
-                return mappedPayments;
+                commit('setPayments', response.data);
+                return response.data;
             }
             commit('setPayments', []);
             return [];
@@ -30,13 +26,15 @@ const actions = {
 
     async updatePayment({ dispatch }, { gameId, teamId, data }) {
         try {
-            const { onlinePaid, offlinePaid } = data;
+            const { paidByQr, paidByCard, paidByCash, actualParticipantsCount } = data;
             const response = await axios.put(
                 `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/updatePaid`, {}, // Пустое тело запроса
                 {
                     params: {
-                        onlinePaid,
-                        offlinePaid,
+                        paidByQr,
+                        paidByCard,
+                        paidByCash,
+                        actualParticipantsCount
                     },
                 },
             );
