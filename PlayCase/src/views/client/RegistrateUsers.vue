@@ -50,7 +50,7 @@ const goToMenuApp = () => {
   align-items: center;
   background-color: #1B2A46;
   color: #ffd700;
-  height: 100vh;
+  height: 100%;
   position: relative;
   font-family: 'Mulish', sans-serif;
   overflow: hidden;
@@ -63,6 +63,7 @@ const goToMenuApp = () => {
   font-weight: bold;
   margin-bottom: 20px;
   color: white;
+  margin: 0 auto;
 }
 
 .users-grid {
@@ -71,6 +72,7 @@ const goToMenuApp = () => {
   gap: 20px;
   justify-content: center;
   width: 100%;
+  margin: 0 auto;
 }
 
 .user-item {
