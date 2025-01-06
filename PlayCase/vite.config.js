@@ -8,10 +8,9 @@ export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   return defineConfig({
-    base: mode === 'production' ? '/PlayCase' : '/',
+    base: '/',
     plugins: [
-      vue(),
-      mode === 'development' && vueDevTools(),
+      vue()
     ].filter(Boolean),
     resolve: {
       alias: {

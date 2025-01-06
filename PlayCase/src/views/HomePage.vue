@@ -11,8 +11,7 @@
 import { useRouter } from 'vue-router'
 import {useAuthCheck} from "@/hooks/useAuthCheck.js";
 const router = useRouter()
-const name = useAuthCheck()
-console.log(name.value)
+
 const goToTeamNameDisplay = () => {
   router.push({ name: 'TeamNameInput' })
 }
