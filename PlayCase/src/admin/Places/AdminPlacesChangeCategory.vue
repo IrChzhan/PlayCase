@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -88,7 +88,7 @@ const handleCancel = () => {
   showDialog.value = false
 }
 
-const updateCategory = async (categoryId, placeIdF) => {
+const updateCategory = async () => {
   try {
     loading.value = true
     await store.dispatch('places/updateCategory', {
@@ -111,7 +111,7 @@ const updateCategory = async (categoryId, placeIdF) => {
   }
 }
 
-const deleteCategory = async (categoryId, placeIdF) => {
+const deleteCategory = async () => {
   try {
     loading.value = true
     await store.dispatch('places/deleteCategory', {
@@ -135,12 +135,27 @@ const deleteCategory = async (categoryId, placeIdF) => {
 const goBack = () => {
   router.back()
 }
+
+const fetchCategories = async (placeId) => {
+  const categories = await store.dispatch('places/fetchCategories', route.params.id)
+  return categories
+}
+
+onMounted(async () => {
+  const categories = await fetchCategories(route.params.id)
+  const category = categories.find(el => el.id === route.params.categoryId)
+  if (category) {
+    oldName.value = category.name
+    categoryName.value = category.name
+  }
+})
 </script>
 
 <style scoped>
 .place-page {
   padding: 20px;
 }
+
 h1 {
   margin-bottom: 20px;
   font-size: 2rem;
@@ -179,9 +194,8 @@ input {
   border-radius: 8px;
   font-size: 1rem;
   background: #fff;
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: border-color 0.3s ease,
+  box-shadow 0.3s ease;
 }
 
 input:focus {
@@ -207,6 +221,7 @@ button[type='button'] {
 button[type='button']:hover {
   background-color: #d1aa58;
 }
+
 .secondary {
   background-color: #6c757d;
 }
@@ -214,6 +229,7 @@ button[type='button']:hover {
 .secondary:hover {
   background-color: #5a6268;
 }
+
 button.delete-button {
   background-color: #dc3545;
 }

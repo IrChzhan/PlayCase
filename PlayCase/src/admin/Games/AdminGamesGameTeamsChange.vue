@@ -3,6 +3,7 @@
     <h1>Редактировать команду</h1>
     <form @submit.prevent="handleSubmit" class="form">
       <div class="form-group">
+        <p class="old-data">Старое название: {{ oldData.name }}</p>
         <label for="teamName">Название команды:</label>
         <input
           id="teamName"
@@ -14,16 +15,18 @@
         />
       </div>
       <div class="form-group">
+        <p class="old-data">Старое количество участников: {{ oldData.expectedParticipantsCount }}</p>
         <label for="participantsCount">Количество участников:</label>
         <input
           id="participantsCount"
-          v-model.number="formData.participantsCount"
+          v-model.number="formData.expectedParticipantsCount"
           type="number"
           placeholder="Введите количество участников"
           class="input"
         />
       </div>
       <div class="form-group">
+        <p class="old-data">Старое значение: {{ oldData.isFirstTime ? 'Да' : 'Нет' }}</p>
         <label for="isFirstTime">
           <input
             id="isFirstTime"
@@ -34,6 +37,7 @@
         </label>
       </div>
       <div class="form-group">
+        <p class="old-data">Старое значение предоплаты: {{ oldData.isPrepaid }}</p>
         <label for="isPrepaid">Предоплата</label>
         <input
           id="isPrepaid"
@@ -43,6 +47,7 @@
         />
       </div>
       <div class="form-group">
+        <p class="old-data">Старый сертификат: {{ oldData.certificate }}</p>
         <label for="certificate">Сертификат:</label>
         <input
           id="certificate"
@@ -53,6 +58,7 @@
         />
       </div>
       <div class="form-group">
+        <p class="old-data">Старый промокод: {{ oldData.promocode }}</p>
         <label for="promocode">Промокод:</label>
         <input
           id="promocode"
@@ -77,7 +83,7 @@
 </template>
 
 <script setup>
-import {onMounted, reactive, ref} from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -88,7 +94,16 @@ const notificationType = ref('info')
 const store = useStore()
 const formData = reactive({
   name: '',
-  participantsCount: 0,
+  expectedParticipantsCount: 0,
+  isFirstTime: true,
+  isPrepaid: 0,
+  certificate: '',
+  promocode: '',
+})
+
+const oldData = reactive({
+  name: '',
+  expectedParticipantsCount: 0,
   isFirstTime: true,
   isPrepaid: 0,
   certificate: '',
@@ -125,22 +140,20 @@ const fetchTeams = async () => {
   try {
     const teams = await store.dispatch('games/fetchTeams', { gameId: route.params.gameId })
     const team = teams.filter((el) => el.id === route.params.teamId)[0]
-    formData.name = team.name
-    formData.participantsCount = team.participantsCount
-    formData.isFirstTime = team.isFirstTime
-    formData.isPrepaid = team.isPrepaid
-    formData.certificate = team.certificate
-    formData.promocode = team.promocode
-
+    formData.name = oldData.name = team.name
+    formData.expectedParticipantsCount = oldData.expectedParticipantsCount = team.expectedParticipantsCount
+    formData.isFirstTime = oldData.isFirstTime = team.isFirstTime
+    formData.isPrepaid = oldData.isPrepaid = team.isPrepaid
+    formData.certificate = oldData.certificate = team.certificate
+    formData.promocode = oldData.promocode = team.promocode
   } catch (error) {
     console.error('Ошибка при загрузке команд:', error)
   }
 }
 
 onMounted(() => {
- fetchTeams()
+  fetchTeams()
 })
-
 </script>
 
 <style scoped>
@@ -165,6 +178,12 @@ label {
   font-weight: bold;
   font-size: 1rem;
   color: #555;
+}
+
+.old-data {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #aaa;
 }
 
 .input {
@@ -201,7 +220,7 @@ button {
 }
 
 button.primary {
-  background-color: #CC9F33;
+  background-color: #cc9f33;
 }
 
 button.primary:hover {

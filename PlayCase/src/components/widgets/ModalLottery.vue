@@ -13,7 +13,12 @@
             </div>
             <Input v-model:modelValue="formData.name" text="Имя" width="auto" />
             <Input v-model:modelValue="formData.email" text="E-mail" width="auto" />
-            <Input v-model:modelValue="formData.phone" text="Телефон" width="auto" />
+            <Input
+              v-model:modelValue="formData.phone"
+              text="Телефон"
+              width="auto"
+              placeholder="+7 (___) ___-____"
+            />
 
             <button type="submit" class="submit-button">Участвовать</button>
 
@@ -76,7 +81,7 @@ const phoneError = ref('')
 const submitForm = async () => {
   emailError.value = ''
   phoneError.value = ''
-
+  const cleanPhone = formData.value.phone.replace(/\D/g, '');
   if (!formData.value.agree) {
     alert('Вы должны согласиться с политикой обработки персональных данных.')
     return
@@ -85,7 +90,7 @@ const submitForm = async () => {
   const newUser = {
     name: formData.value.name.trim(),
     email: formData.value.email.trim(),
-    phone: formData.value.phone.trim(),
+    phone: cleanPhone.trim(),
   }
 
   try {
@@ -96,7 +101,7 @@ const submitForm = async () => {
     formData.value.phone = ''
     formData.value.agree = false
     alert(`Спасибо за участие в лотерее! Ваш номер: ${response.sequenceNumber}`)
-    closeModal()
+    props.closeModal()
   } catch (error) {
     if (error.message.includes('email')) {
       emailError.value = 'Пользователь с таким email уже существует'
@@ -107,6 +112,20 @@ const submitForm = async () => {
     alert(error.message)
   }
 }
+const phoneMask = (value) => {
+  return value
+    .replace(/\D/g, '')
+    .replace(/^7?/, '+7 ')
+    .replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4');
+};
+
+watch(
+  () => formData.value.phone,
+  (newVal) => {
+    formData.value.phone = phoneMask(newVal);
+  }
+);
+
 watch(
   () => props.show,
   (newVal) => {

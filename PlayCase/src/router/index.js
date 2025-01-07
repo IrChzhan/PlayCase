@@ -45,7 +45,7 @@ import ClientHome from "@/views/client/ClientHome.vue";
 import AdminGamesGameTeamFeefback from "@/admin/Games/AdminGamesGameTeamFeefback.vue";
 import Dogovor from '@/views/client/Dogovor.vue'
 import PoliticaPrivacy from '@/views/client/PoliticaPrivacy.vue'
-import ClientWatch from "@/views/client/ClientWatch.vue";
+import ClientWatch from "@/views/ClientWatch.vue";
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -63,6 +63,12 @@ const routes = [{
         component: TeamNameInput,
     },
     {
+      path: `/watch`,
+      name: 'Watch',
+      component: ClientWatch,
+      props: true,
+    },
+    {
       path: '/client',
       name: 'ClientHome',
       component: ClientHome,
@@ -77,12 +83,6 @@ const routes = [{
           path: `/client/menu-app`,
           name: 'MenuApp',
           component: MenuApp,
-          props: true,
-        },
-        {
-          path: `/client/watch`,
-          name: 'Watch',
-          component: ClientWatch,
           props: true,
         },
         {

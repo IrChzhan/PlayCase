@@ -34,6 +34,8 @@ export default {
       state.currentUser = null
       state.token = null
       localStorage.removeItem('authToken')
+      localStorage.removeItem('token')
+      localStorage.removeItem('team')
     },
     DEL_NAME_TEAM(state) {
       localStorage.removeItem('team')

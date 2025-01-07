@@ -12,12 +12,21 @@ export function useAuthCheck() {
     if (!team) {
       try {
         if (token) {
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/team`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
+          try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/team`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
 
-          localStorage.setItem('team', JSON.stringify(response.data.name))
-          teamName.value = response.data.name
+            localStorage.setItem('team', JSON.stringify(response.data.name))
+            teamName.value = response.data.name
+          } catch (e) {
+            console.log('da')
+            console.log('жопа')
+            await router.push('/watch')
+          }
+
+
+
         } else {
           await router.push('/TeamNameInput')
           return

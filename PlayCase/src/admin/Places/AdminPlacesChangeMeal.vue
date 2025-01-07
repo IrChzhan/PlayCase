@@ -10,11 +10,13 @@
 
       <div class="form-group">
         <label for="price">Цена:</label>
+        <div class="hint">Старая цена: {{ oldPrice }}</div>
         <input id="price" v-model="dishPrice" class="input" required />
       </div>
 
       <div class="form-group">
         <label for="description">Описание:</label>
+        <div class="hint">Старое описание: {{ oldDescription }}</div>
         <textarea
           id="description"
           v-model="dishDescription"
@@ -88,6 +90,8 @@ const dishDescription = ref('');
 const mealFile = ref(null);
 const imageId = ref(null);
 const oldName = ref('');
+const oldPrice = ref(0);
+const oldDescription = ref('');
 const showDialog = ref(false);
 const dialogTitle = ref('');
 const dialogMessage = ref('');
@@ -98,7 +102,8 @@ let dialogAction = null;
 const hasChanges = computed(
   () =>
     dishName.value !== oldName.value ||
-    dishPrice.value ||
+    dishPrice.value !== oldPrice.value ||
+    dishDescription.value !== oldDescription.value ||
     mealFile.value
 );
 
@@ -138,6 +143,7 @@ const showUpdateDialog = (dishId, restaurantIdF) => () => {
 const updateDish = async () => {
   try {
     loading.value = true;
+    console.log(dishName.value)
     await store.dispatch('places/updateMeal', {
       placeId: route.params.id,
       categoryId: route.params.categoryId,
@@ -164,16 +170,15 @@ const updateDish = async () => {
   }
 };
 const handleConfirm = async () => {
-  showDialog.value = false
+  showDialog.value = false;
   if (dialogAction) {
-    await dialogAction()
+    await dialogAction();
   }
-}
+};
 
 const handleCancel = () => {
-  showDialog.value = false
-}
-
+  showDialog.value = false;
+};
 
 onMounted(() => {
   store.dispatch('places/fetchMeals', {
@@ -186,6 +191,10 @@ onMounted(() => {
       dishName.value = res.name;
       dishPrice.value = res.price;
       dishDescription.value = res.description;
+
+      oldName.value = res.name;
+      oldPrice.value = res.price;
+      oldDescription.value = res.description;
     }
   });
 });

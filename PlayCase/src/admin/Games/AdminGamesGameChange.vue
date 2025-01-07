@@ -3,6 +3,7 @@
     <h1>Редактировать игру</h1>
     <form @submit.prevent="saveChanges" class="form">
       <div class="form-group">
+        <small class="old-data">Старое название: {{ oldGameData.name }}</small>
         <label for="nameGame">Название игры:</label>
         <input
           id="nameGame"
@@ -14,6 +15,7 @@
         />
       </div>
       <div class="form-group">
+        <small class="old-data">Старая дата: {{ oldGameData.plannedDate }}</small>
         <label for="plannedDate">Дата проведения:</label>
         <div class="clickable-date" @click="focusDateInput">
           <input
@@ -27,6 +29,7 @@
         </div>
       </div>
       <div class="form-group">
+        <small class="old-data">Старое место: {{ oldGameData.placeName }}</small>
         <label for="placeId">Выберите место:</label>
         <select id="placeId" v-model="selectedPlaceId" class="input" required>
           <option value="" disabled>Выберите место</option>
@@ -66,6 +69,11 @@ const places = ref([])
 const toastMessage = ref('')
 const toastType = ref('success')
 const gameId = ref(null)
+const oldGameData = ref({
+  name: '',
+  plannedDate: '',
+  placeName: ''
+})
 
 const saveChanges = async () => {
   if (isFormValid.value) {
@@ -109,30 +117,6 @@ const focusDateInput = () => {
   dateInput.value?.showPicker()
 }
 
-const deleteGame = async () => {
-  try {
-    loading.value = true
-    await store.dispatch('games/deleteGame', route.params.gameId)
-
-    toastMessage.value = 'Игра успешно удалена!'
-    toastType.value = 'success'
-
-    setTimeout(() => {
-      toastMessage.value = ''
-      router.push({ name: 'AdminGames' })
-    }, 1000)
-  } catch (error) {
-    console.error('Ошибка удаления игры:', error)
-    toastMessage.value = 'Ошибка при удалении игры.'
-    toastType.value = 'error'
-    setTimeout(() => {
-      toastMessage.value = ''
-    }, 3000)
-  } finally {
-    loading.value = false
-  }
-}
-
 const fetchPlaces = async () => {
   await store.dispatch('places/fetchPlacesGames')
   places.value = store.getters['places/allGamesPlaces']
@@ -141,11 +125,18 @@ const fetchPlaces = async () => {
 const fetchGameDetails = async (id) => {
   try {
     const game = await store.dispatch('games/fetchGameById', id)
+    console.log(game)
     if (game) {
       nameGame.value = game.name
       plannedDate.value = game.plannedDate
-      selectedPlaceId.value = game.placeId
+      selectedPlaceId.value = game.place.id
       gameId.value = game.id
+      oldGameData.value = {
+        name: game.name,
+        plannedDate: game.plannedDate,
+        placeName: places.value.find(p => p.id === game.place.id)?.name || 'Неизвестно'
+      }
+
     }
   } catch (error) {
     console.error('Ошибка загрузки данных игры:', error)
@@ -159,7 +150,8 @@ const goBack = () => {
 onMounted(() => {
   fetchPlaces()
 
-  const { id } = router.currentRoute.value.params
+  const id  = route.params.gameId
+  console.log(id)
   if (id) {
     fetchGameDetails(id)
   }
@@ -188,6 +180,13 @@ label {
   font-weight: bold;
   font-size: 1rem;
   color: #555;
+}
+
+.old-data {
+  display: block;
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 5px;
 }
 
 .input {
@@ -320,4 +319,3 @@ button:disabled {
 }
 
 </style>
-

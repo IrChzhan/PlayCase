@@ -16,6 +16,7 @@
     "@stomp/stompjs": "^7.0.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
+    "imask": "^7.6.1",
     "stomp": "^0.1.1",
     "vue": "^3.5.13",
     "vue-pdf-embed": "^2.1.1",

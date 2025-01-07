@@ -69,6 +69,7 @@ export default {
           `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories`,
         )
         commit('setCategories', { placeId, categories: response.data })
+        return response.data
       } catch (error) {
         console.error('Ошибка при загрузке категорий:', error)
       }

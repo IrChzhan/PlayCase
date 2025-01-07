@@ -9,8 +9,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import {useAuthCheck} from "@/hooks/useAuthCheck.js";
 const router = useRouter()
+
+const token = localStorage.getItem('token')
+
+if (token !== null) {
+  router.push({name: 'Watch'})
+}
 
 const goToTeamNameDisplay = () => {
   router.push({ name: 'TeamNameInput' })

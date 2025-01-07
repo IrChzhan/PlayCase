@@ -95,7 +95,7 @@ onMounted(() => {
   })
   const temp = route.path.split('/')
   console.log(temp)
-  if (!(temp.find((el) => el === 'watch')))  {
+  if (!(temp.find((el) => el !== 'watch')))  {
     router.push({name: 'TeamNameDisplay'})
   }
 });
