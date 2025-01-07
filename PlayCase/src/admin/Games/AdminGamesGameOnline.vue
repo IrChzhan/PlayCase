@@ -19,7 +19,7 @@ const client = new Client({
 
     client.subscribe('/queue/help/notifications', (message) => {
       const parsedMessage = JSON.parse(message.body);
-
+      console.log(parsedMessage)
       if (parsedMessage.gameId === gameId) {
         messages.value.push(parsedMessage);
         getNotifications()
@@ -60,12 +60,14 @@ onBeforeUnmount(() => {
       <table class="messages-table">
         <thead>
         <tr>
+          <th>Номер стола</th>
           <th>Команда</th>
           <th>Тип действия</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(msg, index) in messages" :key="index" class="message-row">
+          <td>{{msg.tableNumber || 'Номер стола не указан'}}</td>
           <td>{{ msg.teamName }}</td>
           <td>Помощь</td>
         </tr>

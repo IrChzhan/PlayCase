@@ -99,7 +99,6 @@ const hasChanges = computed(
   () =>
     dishName.value !== oldName.value ||
     dishPrice.value ||
-    dishDescription.value ||
     mealFile.value
 );
 

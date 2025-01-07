@@ -2,7 +2,7 @@
   <div class="container">
     <div class="sidebar">
       <button
-        v-for="item in menuItems"
+        v-for="item in menuItems.filter((item) => item.roles.includes(role))"
         :key="item.name"
         :class="{ active: isActive(item) }"
         @click="item.route"
@@ -10,19 +10,16 @@
         {{ item.label }}
       </button>
     </div>
-
     <div class="main-content">
       <div class="top-bar">
         <div>{{ game?.name || 'Имя не указано' }}</div>
         <div>{{ game?.place?.name || 'Место не указано' }}</div>
         <div>{{ Statuses[game?.status] || 'Статус не указан' }}</div>
       </div>
-
       <router-view />
     </div>
   </div>
 </template>
-
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -31,6 +28,25 @@ import { useStore } from 'vuex'
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
+
+const role = ref()
+
+const checkAccess =  () => {
+  const personalKey = localStorage.getItem('role')
+  role.value = personalKey
+  if (!personalKey || role.value === 'PLAYER') {
+    router.push('/')
+  } else {
+    router.push({ name: 'AdminGames' })
+  }
+}
+
+
+
+const isRouteActive = (routeName) => {
+  const temp = route.path.split('/')
+  return temp.find((el) => el === routeName) !== undefined
+}
 
 const game = ref(null)
 const selectedMenu = ref(0)
@@ -45,44 +61,49 @@ const menuItems = [
   {
     label: 'Команды',
     route: () => {
-      router.push(`/admin/games/${route.params.gameId}/team`)
-      selectedMenu.value = 0
+      router.push(`/admin/games/${route.params.gameId}/team`);
+      selectedMenu.value = 0;
     },
     name: 'team',
+    roles: ['ADMIN', 'MANAGER'],
   },
   {
     label: 'Оплаты',
     route: () => {
-      router.push(`/admin/games/${route.params.gameId}/teams/pay`)
-      selectedMenu.value = 1
+      router.push(`/admin/games/${route.params.gameId}/teams/pay`);
+      selectedMenu.value = 1;
     },
     name: 'pay',
+    roles: ['ADMIN', 'CASHIER', 'MANAGER'],
   },
   {
     label: 'Результаты',
     route: () => {
-      router.push(`/admin/games/${route.params.gameId}/teams/results`)
-      selectedMenu.value = 2
+      router.push(`/admin/games/${route.params.gameId}/teams/results`);
+      selectedMenu.value = 2;
     },
     name: 'results',
+    roles: ['ADMIN', 'MANAGER'],
   },
   {
     label: 'Лотерея',
     route: () => {
-      router.push(`/admin/games/${route.params.gameId}/teams/loto`)
-      selectedMenu.value = 3
+      router.push(`/admin/games/${route.params.gameId}/teams/loto`);
+      selectedMenu.value = 3;
     },
     name: 'loto',
+    roles: ['ADMIN', 'MANAGER'],
   },
   {
     label: 'Помощь',
     route: () => {
-      router.push(`/admin/games/${route.params.gameId}/online`)
-      selectedMenu.value = 4
+      router.push(`/admin/games/${route.params.gameId}/online`);
+      selectedMenu.value = 4;
     },
     name: 'online',
-  }
-]
+    roles: ['ADMIN', 'CASHIER', 'MANAGER'],
+  },
+];
 
 const fetchGameById = async () => {
   try {
@@ -98,18 +119,32 @@ const isActive = (routeName) => {
   return temp.find((el) => el === routeName.name) !== undefined
 }
 
-onMounted(() => {
-  fetchGameById()
-  selectedMenu.value = 0
-  router.push(`/admin/games/${route.params.gameId}/team`)
+onMounted( () => {
+   checkAccess()
+   fetchGameById()
+  if(role.value !== 'CASHIER') {
+    selectedMenu.value = 0
+    router.push(`/admin/games/${route.params.gameId}/team`)
+  } else {
+    selectedMenu.value = 1
+    router.push(`/admin/games/${route.params.gameId}/teams/pay`);
+  }
+
+
 })
 
 watch(
   () => route.params.gameId,
   async () => {
     await fetchGameById()
-    selectedMenu.value = 0
-    router.push(`/admin/games/${route.params.gameId}/team`)
+    checkAccess()
+    if(role.value !== 'CASHIER') {
+      selectedMenu.value = 0
+      router.push(`/admin/games/${route.params.gameId}/team`)
+    } else {
+      selectedMenu.value = 1
+      router.push(`/admin/games/${route.params.gameId}/teams/pay`);
+    }
   },
 )
 </script>

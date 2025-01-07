@@ -34,9 +34,6 @@
       <button class="upload-button" @click="uploadFile" :disabled="loading">
         {{ loading ? 'Uploading...' : 'Загрузить файл' }}
       </button>
-      <button class="view-results-button" @click="fetchResults" :disabled="loading">
-        {{ loading ? 'Loading...' : 'Посмотреть результаты' }}
-      </button>
     </div>
     <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
   </div>
@@ -83,6 +80,7 @@ export default {
           file: selectedFile.value,
         })
         uploadSuccess.value = true
+        await fetchResults()
       } catch (error) {
         console.error('Error uploading file:', error)
         alert('Error uploading file. Please try again.')

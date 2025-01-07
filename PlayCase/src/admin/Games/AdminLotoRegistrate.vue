@@ -28,8 +28,6 @@
       </table>
     </div>
 
-    <button @click="selectWinner" class="winner-button">Выбрать победителя</button>
-
     <div v-if="winner" class="winner-section">
       <h2>Победитель</h2>
       <p><strong>Имя:</strong> {{ winner.name }}</p>
@@ -51,10 +49,15 @@ const route = useRoute()
 const registrations = ref([])
 const winner = ref(null)
 
+const sortRegistrations = () => {
+  registrations.value.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+}
+
 const fetchRegistrations = async () => {
   try {
     const res = await store.dispatch('lottery/fetchRegistrationsAdmin', route.params.gameId)
     registrations.value = res
+    sortRegistrations()
   } catch (error) {
     console.error('Ошибка при получении данных регистраций:', error)
   }
