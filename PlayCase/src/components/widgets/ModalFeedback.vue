@@ -42,12 +42,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {ref, watch} from 'vue'
 import {useAuthCheck} from "@/hooks/useAuthCheck.js";
 import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
 
-defineProps({
+const props = defineProps({
   show: Boolean,
   closeModal: Function,
 })
@@ -82,6 +82,16 @@ const submitForm = async () => {
     console.log(e)
   }
 }
+watch(
+  () => props.show,
+  (newVal) => {
+    if (newVal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+);
 </script>
 
 <style scoped>

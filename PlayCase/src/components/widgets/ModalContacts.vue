@@ -26,9 +26,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {ref, watch} from 'vue'
 
-defineProps({
+const props = defineProps({
   show: Boolean,
   closeModal: Function,
 })
@@ -46,6 +46,16 @@ const submitForm = () => {
   formData.value.questionType = ''
   formData.value.hostType = ''
 }
+watch(
+  () => props.show,
+  (newVal) => {
+    if (newVal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+);
 </script>
 
 <style scoped>

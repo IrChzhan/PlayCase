@@ -28,7 +28,7 @@ const actions = {
         try {
             const { paidByQr, paidByCard, paidByCash, actualParticipantsCount } = data;
             const response = await axios.put(
-                `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/updatePaid`, {}, // Пустое тело запроса
+                `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/updatePaid`, {},
                 {
                     params: {
                         paidByQr,

@@ -87,12 +87,12 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import {computed, ref, watch} from 'vue'
 
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 import {useRouter} from "vue-router";
 
-defineProps({
+const props = defineProps({
   show: Boolean,
   closeModal: Function,
 })
@@ -137,6 +137,16 @@ function selectPaymentMethod(method) {
 function cancelPaymentMethod() {
   paymentMethod.value = null
 }
+watch(
+  () => props.show,
+  (newVal) => {
+    if (newVal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+);
 </script>
 
 <style scoped>

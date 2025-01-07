@@ -22,7 +22,7 @@
           v-for="(team, index) in editablePayments"
           :key="team.id"
           :class="{
-            'row-complete': team.totalPayments === team.actualParticipantsCount,
+            'row-complete': team.totalPayments === team.actualParticipantsCount && team.actualParticipantsCount !== 0 && team.totalPayments !== 0,
             'row-incomplete': team.totalPayments !== team.actualParticipantsCount
           }"
         >
