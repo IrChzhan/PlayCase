@@ -134,8 +134,8 @@ const deleteGame = async () => {
 }
 
 const fetchPlaces = async () => {
-  await store.dispatch('places/fetchPlaces')
-  places.value = store.getters['places/allPlaces']
+  await store.dispatch('places/fetchPlacesGames')
+  places.value = store.getters['places/allGamesPlaces']
 }
 
 const fetchGameDetails = async (id) => {

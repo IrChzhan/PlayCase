@@ -1,27 +1,27 @@
 <template>
-  <div class="modal-overlay" v-if="show" @click.self="closeModal">
+  <div class="modal-overlay" v-if="show">
     <div class="modal-content">
       <button class="close-button" @click="closeModal">×</button>
       <div class="modal-body">
         <div class="form-section">
           <div class="team-title">{{ teamName }}</div>
-          <h1 class="main-heading">Примите участие<br />в нашей лотерее</h1>
+          <h1 class="main-heading">Примите участие<br />в лотерее</h1>
           <form @submit.prevent="submitForm">
             <div v-if="emailError || phoneError" class="error-section">
               <p v-if="emailError" class="error-message">{{ emailError }}</p>
               <p v-if="phoneError" class="error-message">{{ phoneError }}</p>
             </div>
-            <Input v-model:modelValue="formData.name" text="Ваше имя" width="auto" />
-            <Input v-model:modelValue="formData.email" text="Ваша электронная почта" width="auto" />
+            <Input v-model:modelValue="formData.name" text="Имя" width="auto" />
+            <Input v-model:modelValue="formData.email" text="E-mail" width="auto" />
             <Input v-model:modelValue="formData.phone" text="Телефон" width="auto" />
 
-            <button type="submit" class="submit-button">Участвовать в лотерее</button>
+            <button type="submit" class="submit-button">Участвовать</button>
 
             <div class="checkbox-section">
               <label class="checkbox-container">
                 <input type="checkbox" id="agree" v-model="formData.agree" required />
                 <span>
-                  Нажмите кнопку, что вы соглашаетесь с политикой обработки персональных данных.
+                  Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
                 </span>
               </label>
             </div>
@@ -117,6 +117,7 @@ const submitForm = async () => {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;

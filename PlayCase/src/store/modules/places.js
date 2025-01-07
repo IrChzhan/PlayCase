@@ -8,6 +8,7 @@ export default {
       places: [],
       categories: [],
       meals: {},
+      placesGames: []
     }
   },
   mutations: {
@@ -39,6 +40,9 @@ export default {
     addCategory(state, { placeId, category }) {
       state.categories.push({ ...category, placeId })
     },
+    setPlacesGames(state, places) {
+      state.placesGames = places
+    },
     setMeals(state, { categoryId, meals }) {
       state.meals = {
         ...state.meals,
@@ -50,6 +54,10 @@ export default {
     async fetchPlaces({ commit }) {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/places`)
       commit('setPlaces', response.data)
+    },
+    async fetchPlacesGames({ commit }) {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/place`)
+      commit('setPlacesGames', response.data)
     },
     async fetchPlace({ commit }, placeId) {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}`)
@@ -192,6 +200,7 @@ export default {
   },
   getters: {
     allPlaces: (state) => state.places,
+    allGamesPlaces: (state) => state.placesGames,
     categoriesByPlace: (state) => (placeId) =>
       state.categories.filter((category) => category.placeId === placeId),
     findPlace: (state) => (placeId) => state.places.find((place) => place.id === placeId) || {},

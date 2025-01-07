@@ -17,15 +17,15 @@
       </select>
     </div>
     <div class="games-table-wrapper">
-      <table class="games-table">
+      <table class="games-table" :class="{'abra':role === 'CASHIER'}">
         <thead>
         <tr>
           <th>Название</th>
           <th>Дата</th>
           <th>Заведение</th>
           <th>Статус</th>
-          <th>Изменения статуса</th>
-          <th></th>
+          <th v-if="role !== 'CASHIER'">Изменения статуса</th>
+          <th v-if="role !== 'CASHIER'"></th>
         </tr>
         </thead>
         <tbody>
@@ -59,14 +59,14 @@
     'status-in-progress': game.status === 'IN_PROGRESS'
   }">{{ Statuses[game.status] }}
           </td>
-          <td :class="{
+          <td v-if="role !== 'CASHIER'" :class="{
     'status-finished': game.status === 'FINISHED',
     'status-result': game.status === 'RESULT_SUMMING',
     'status-in-progress': game.status === 'IN_PROGRESS'
   }">
             <button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button>
           </td>
-          <td class="actions-column">
+          <td v-if="role !== 'CASHIER'" class="actions-column">
             <button @click.stop="changeGame(game.id)" class="icon-setting">
               <IconsSetting />
             </button>
@@ -85,6 +85,7 @@
     </div>
     <div class="btn-container">
       <button
+        v-if="role !== 'CASHIER'"
         @click="goToCreateGame"
         class="button primary btn-add"
         type="submit"
@@ -172,6 +173,19 @@ const deleteGame = (id) => async () => {
     loading.value = false;
   }
 };
+const role = ref('')
+
+const checkAccess = () => {
+  const personalKey = localStorage.getItem('role')
+  role.value = personalKey
+  if (!personalKey || role.value === 'PLAYER') {
+    router.push('/')
+  } else {
+    router.push({ name: 'AdminGames' })
+  }
+}
+
+
 
 const totalPages = computed(() => {
   const filtered = games.value.filter(
@@ -223,8 +237,8 @@ const fetchGames = async () => {
 };
 
 const fetchPlaces = async () => {
-  await store.dispatch('places/fetchPlaces');
-  places.value = store.getters['places/allPlaces'];
+  await store.dispatch('places/fetchPlacesGames');
+  places.value = store.getters['places/allGamesPlaces'];
 };
 
 const findPlaceName = (id) => {
@@ -248,6 +262,7 @@ const goToGameTeams = (gameId) => {
 onMounted(() => {
   fetchPlaces();
   fetchGames();
+  checkAccess()
 });
 </script>
 
@@ -492,6 +507,18 @@ td:last-child:hover {
 .games-table th:nth-child(5),
 .games-table td:nth-child(5) {
   width: 15%;
+}
+.abra th:last-child {
+  padding: 10px;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+.abra td:last-child
+{
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
 }
 
 </style>

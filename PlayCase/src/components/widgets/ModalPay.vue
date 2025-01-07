@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay" v-if="show" @click.self="closeModal">
+  <div class="modal-overlay" v-if="show">
     <div class="modal-content">
       <button class="close-button" @click="closeModal">&times;</button>
       <div class="modal-body">
@@ -27,8 +27,7 @@
 
           <div v-if="!isPaying">
             <div class="form">
-              <p>Напишите вашу почту, на которую вы хотите, чтобы пришел чек</p>
-              <input type="email" placeholder="Ваша электронная почта" class="email-input" />
+              <p>Чек будет отправлен на почту, указанную при регистрации</p>
               <button class="pay-button" @click="startPayment">Перейти к оплате</button>
               <div class="policy">
                 <input type="checkbox" id="policy-checkbox" />
@@ -158,6 +157,7 @@ function cancelPaymentMethod() {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;

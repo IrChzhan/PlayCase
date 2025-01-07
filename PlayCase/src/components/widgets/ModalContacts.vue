@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay" v-if="show" @click.self="closeModal">
+  <div class="modal-overlay" v-if="show">
     <div class="modal-content">
       <button class="close-button" @click="closeModal">&times;</button>
       <div class="modal-body">
@@ -59,7 +59,9 @@ const submitForm = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(8px);
   z-index: 1000;
+
 }
 
 .modal-content {

@@ -45,6 +45,7 @@ const goToMenuApp = () => {
   margin: 0;
   color: var(--c-white);
   font-family: 'Mulish', sans-serif;
+  font-weight: 900;
 }
 
 .container_down_menu {

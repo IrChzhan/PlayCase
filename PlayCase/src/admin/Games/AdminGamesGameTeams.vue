@@ -42,7 +42,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(team, index) in teams" :key="index" class="team-row">
+      <tr v-for="(team, index) in sortedTeams" :key="index" class="team-row">
         <td>
           <div class="change-tale">
             <div class="change-input" v-if="selectTeamStol === team.id">
@@ -117,6 +117,14 @@ const notificationType = ref('info')
 const teamName = ref('')
 const editingTeam = ref(null)
 const teams = computed(() => store.state.games.teams[route.params.gameId] || [])
+const sortedTeams = computed(() => {
+  return [...teams.value].sort((a, b) => {
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
+    return 0;
+  });
+});
+
 const showDialog = ref(false);
 const dialogTitle = ref('');
 const dialogMessage = ref('');
@@ -292,13 +300,8 @@ const changeTeam = (teamId) => {
 }
 const getUsers = async () => {
   try {
-    const fetchedUsers = await store.dispatch('profile/fetchUsers')
-    users.value = store.getters['profile/users'].filter(
-      (user) =>
-        user.authorities[0] !== 'ADMIN' &&
-        user.authorities[0] !== 'MANAGER' &&
-        user.authorities.length !== 0,
-    )
+    const fetchedUsers = await store.dispatch('profile/fetchUsersPlanshet')
+    users.value = store.getters['profile/usersPlanhet']
   } catch (error) {
     console.error('Ошибка при загрузке пользователей:', error)
     showNotification('Ошибка при загрузке пользователей.', 'error')
@@ -308,12 +311,7 @@ onMounted(() => {
   fetchGameById()
   fetchTeams()
   getUsers().then(() => {
-    users.value = store.getters['profile/users'].filter(
-      (user) =>
-        user.authorities[0] !== 'ADMIN' &&
-        user.authorities[0] !== 'MANAGER' &&
-        user.authorities.length !== 0,
-    )
+    users.value = store.getters['profile/usersPlanhet']
   })
 })
 

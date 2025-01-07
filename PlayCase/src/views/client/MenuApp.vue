@@ -98,14 +98,14 @@ const closeModalPay = () => {
 
 const menuItems = ref([
   {
-    name: 'Правила игры',
+    name: 'Правила',
     image: info,
     function: () => {
       router.push({ name: 'Rules' })
     },
   },
   {
-    name: 'Таблица результатов',
+    name: 'Результаты',
     image: ratingImage,
     function: () => {
       router.push({ name: 'ResultsExcel' })
@@ -120,8 +120,8 @@ const menuItems = ref([
     },
   },
   { name: 'Лотерея', image: lotteryImage, function: openModalLottery },
-  { name: 'Наши контакты', image: contactsImage, function: openModalContacts },
-  { name: 'Хелп', image: helpImage, function: async () => {
+  { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
+  { name: 'Help', image: helpImage, function: async () => {
     try {
       await store.dispatch('helps/createHelp')
 

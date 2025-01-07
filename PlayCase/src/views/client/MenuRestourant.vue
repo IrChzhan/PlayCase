@@ -160,7 +160,7 @@ h1 {
 
 .meals-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   justify-items: center;
 }
@@ -172,8 +172,8 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 15px;
   text-align: left;
-  width: 208px; 
-  height: 208px; 
+  width: 208px;
+  height: 208px;
   transition: transform 0.3s;
 }
 
@@ -183,9 +183,9 @@ h1 {
 
 .meal-image {
   width: 100%;
-  height: 150px; 
+  height: 150px;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .meal-info {
@@ -196,7 +196,8 @@ h1 {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #4caf50;
+  color: #CC9F33;
+
 }
 
 .meal-name {

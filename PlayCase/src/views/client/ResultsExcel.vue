@@ -1,8 +1,6 @@
 <template>
   <div class="results-page">
-    <h1>Результаты игры</h1>
-
-    <table class="results-table">
+    <table v-if="teams.length !== 0" class="results-table">
       <thead>
         <tr>
           <th>Место</th>
@@ -24,6 +22,7 @@
         </tr>
       </tbody>
     </table>
+    <span v-else>Результатов нет</span>
 
     <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
   </div>
@@ -63,13 +62,12 @@ const goToMenuApp = () => {
 .results-page {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   background-color: #1B2A46;
-  color: #000; 
+  color: #000;
   padding: 20px;
+  height: 100%;
   font-family: 'Mulish', sans-serif;
-  height: 100vh;
   overflow: hidden;
 }
 
@@ -92,20 +90,20 @@ h1 {
   border: 1px solid #ffd700;
   padding: 10px;
   text-align: center;
-  color: #000; 
+  color: #000;
 }
 
 .results-table th {
-  background-color: #CC9F33; 
-  color: white; 
+  background-color: #CC9F33;
+  color: white;
 }
 
 .results-table tr.even-row {
-  background-color: #FFF6E0; 
+  background-color: #FFF6E0;
 }
 
 .results-table tr.odd-row {
-  background-color: #fff; 
+  background-color: #fff;
 }
 
 .home-button {

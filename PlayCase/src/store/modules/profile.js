@@ -7,11 +7,15 @@ export default {
       users: [],
       currentUser: null,
       token: localStorage.getItem('authToken') || null,
+      usersPlanhet: []
     }
   },
   mutations: {
     SET_USERS(state, users) {
       state.users = users
+    },
+    SET_USERS_PLANSHET(state, users) {
+      state.usersPlanhet = users
     },
     SET_CURRENT_USER(state, user) {
       state.currentUser = user
@@ -51,6 +55,15 @@ export default {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users`)
         commit('SET_USERS', response.data)
+        return response.data
+      } catch (error) {
+        console.error('Ошибка при загрузке пользователей:', error)
+      }
+    },
+    async fetchUsersPlanshet({commit}) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/users?authority=PLAYER`)
+        commit('SET_USERS_PLANSHET', response.data)
         return response.data
       } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error)
@@ -165,6 +178,7 @@ export default {
   },
   getters: {
     users: (state) => state.users,
+    usersPlanhet: (state) => state.usersPlanhet,
     currentUser: (state) => state.currentUser,
     token: (state) => state.token,
   },
