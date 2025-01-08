@@ -72,30 +72,22 @@ const fetchMenu = async () => {
     )
   } catch (error) {
     console.error('Ошибка при получении меню:', error)
-    store.dispatch('notification/showNotification', {
-      type: 'error',
-      message: 'Ошибка при загрузке меню. Попробуйте позже.',
-    })
   }
 }
 
 const filteredMenuItems = computed(() => {
   if (selectedCategoryName.value !== null) {
-    console.log(`Фильтруем блюда по категории: ${selectedCategoryName.value}`)
     return meals.value.filter((meal) => meal.categoryName === selectedCategoryName.value)
   }
-  console.log('Показываем все блюда')
   return meals.value
 })
 
 const filterByCategory = (categoryName) => {
   selectedCategoryName.value = categoryName
-  console.log(`Выбрана категория: ${categoryName}`)
 }
 
 const clearFilter = () => {
   selectedCategoryName.value = null
-  console.log('Сброс фильтра, показываем все категории')
 }
 
 onMounted(() => {
@@ -111,6 +103,9 @@ onMounted(() => {
 }
 
 .menu-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 20px;
   background-color: #1c2742;
   color: #fff;
@@ -149,12 +144,11 @@ h1 {
 .category-filters button:hover {
   background-color: #ffc107;
 }
+
 .home-button {
   width: 50px;
   height: 50px;
-  margin: 0 auto;
-  position: absolute;
-  bottom: 20px;
+  margin: 20px auto;
   cursor: pointer;
 }
 
@@ -163,6 +157,7 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   justify-items: center;
+  margin-bottom: 80px; /* Отступ для кнопки-домика */
 }
 
 .meal-card {
@@ -173,7 +168,10 @@ h1 {
   padding: 15px;
   text-align: left;
   width: 208px;
-  height: 208px;
+  height: 270px; /* Фиксированная высота для карточки */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   transition: transform 0.3s;
 }
 
@@ -190,6 +188,7 @@ h1 {
 
 .meal-info {
   margin-top: 10px;
+  flex-grow: 1;
 }
 
 .meal-price {
@@ -197,7 +196,6 @@ h1 {
   font-weight: bold;
   margin-bottom: 5px;
   color: #CC9F33;
-
 }
 
 .meal-name {
@@ -211,5 +209,6 @@ h1 {
   height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

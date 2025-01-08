@@ -187,6 +187,10 @@ onMounted(() => {
   gap: 10px;
 }
 
+.tr {
+  width: 100%;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -221,8 +225,9 @@ onMounted(() => {
 .user-table th,
 .user-table td {
   border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
+  padding: 2px; 
+    text-align: left;
+    line-height: 1.2; 
 }
 
 .user-table th {
@@ -268,21 +273,18 @@ button:disabled {
   cursor: pointer;
 }
 
-.icon-setting:hover {
-  background: none;
-}
-
 .btn-add {
   background: #CC9F33;
   color: white;
   transition: all 0.5s ease-in-out;
 }
-
+.icon-setting:hover {
+  background: none;
+}
 .btn-add:hover {
   background: #3A4C6E;
   color: #CC9F33;
 }
-
 
 .actions-column {
   text-align: center;
@@ -291,10 +293,6 @@ button:disabled {
 
 .actions-column .icon-setting {
   margin: 0 5px;
-}
-
-.user-table th:last-child {
-  background: transparent;
 }
 
 .user-table th:last-child,
@@ -321,5 +319,9 @@ td:last-child:hover {
   border: 1px solid #ccc;
   text-align: left;
   word-wrap: break-word;
+}
+
+.user-table th:last-child {
+  background: transparent;
 }
 </style>

@@ -326,9 +326,10 @@ h1 {
 
 .games-table th,
 .games-table td {
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: left;
+    padding: 2px;  
+    border: 1px solid #ccc;
+    text-align: left;
+    line-height: 1.2; 
 }
 
 .games-table th {
@@ -520,5 +521,5 @@ td:last-child:hover {
   border: 1px solid #ccc;
   text-align: left;
 }
-
 </style>
+

@@ -152,12 +152,19 @@ watch(
 <style scoped>
 .link-li {
   margin-top: 10px;
+  text-decoration: solid;
 }
 
 .link {
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
+  color: #cc9f33;
+  text-decoration: none; 
+  border-bottom: 1px dashed #cc9f33; 
+  cursor: pointer; 
+  transition: border-bottom 0.3s;
+}
+
+.link:hover {
+  border-bottom: 1px solid #cc9f33; 
 }
 
 .modal-overlay {

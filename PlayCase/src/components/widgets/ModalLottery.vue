@@ -46,6 +46,9 @@
             <li>Призы не подлежат обмену на деньги и возврату.</li>
           </ul>
           <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
+          <a class="link" @click="goToPolitica" target="_blank">
+                  Политика конфиденциальности
+          </a>
         </div>
       </div>
     </div>
@@ -55,6 +58,7 @@
 <script setup>
 import {ref, watch} from 'vue'
 import { useStore } from 'vuex'
+import {useRouter} from 'vue-router'
 
 import Input from '@/components/shared/forms/Input.vue'
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
@@ -67,6 +71,7 @@ const props = defineProps({
 const { teamName } = useAuthCheck()
 
 const store = useStore()
+const router = useRouter()
 
 const formData = ref({
   name: '',
@@ -119,6 +124,10 @@ const phoneMask = (value) => {
     .replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4');
 };
 
+const goToPolitica = () => {
+  router.push('/client/politica')
+};
+
 watch(
   () => formData.value.phone,
   (newVal) => {
@@ -151,6 +160,19 @@ watch(
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+
+.link {
+  color: #cc9f33;
+  text-decoration: none; 
+  border-bottom: 1px dashed #cc9f33; 
+  cursor: pointer; 
+  transition: border-bottom 0.3s;
+  margin-top: 20px;
+}
+
+.link:hover {
+  border-bottom: 1px solid #cc9f33; 
 }
 
 .error-section {

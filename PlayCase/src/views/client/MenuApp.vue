@@ -267,9 +267,9 @@ p {
     cursor: pointer;
   }
   .play-button {
-    margin-left: 250px;
+    margin-left: 300px;
     width: 40px;
-    margin-top: -22px;
+    margin-top: -50px;
   }
   .back-button {
     margin-top: -12px;

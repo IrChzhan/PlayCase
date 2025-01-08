@@ -228,8 +228,9 @@ onMounted(() => {
 .user-table th,
 .user-table td {
   border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
+  padding: 2px; 
+    text-align: left;
+    line-height: 1.2; 
 }
 
 .user-table th {
@@ -326,6 +327,4 @@ td:last-child:hover {
 .user-table th:last-child {
   background: transparent;
 }
-
-
 </style>

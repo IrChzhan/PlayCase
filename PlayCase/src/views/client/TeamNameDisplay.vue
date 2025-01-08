@@ -41,11 +41,13 @@ const goToMenuApp = () => {
 
 .team-name {
   text-align: center;
-  font-size: 9em;
+  font-size: clamp(4rem, 10vw, 9rem); 
   margin: 0;
   color: var(--c-white);
   font-family: 'Mulish', sans-serif;
   font-weight: 900;
+    max-width: 90vw;        
+   word-wrap: break-word;
 }
 
 .container_down_menu {
@@ -79,9 +81,9 @@ const goToMenuApp = () => {
   color: #cc9f33;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   .team-name {
-    font-size: 5em;
+    font-size: clamp(4rem, 10vw, 4rem); 
   }
 
   .right-corner {
@@ -90,3 +92,5 @@ const goToMenuApp = () => {
   }
 }
 </style>
+
+

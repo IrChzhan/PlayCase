@@ -57,10 +57,18 @@
         <td>{{ team?.name }}</td>
         <td>
           <div class="user-sets" v-if="team?.assignedUserId">
-            <span>{{users.filter((user) => user.id === team?.assignedUserId)[0]?.name}}</span>
-            <button @click="changeUserSet(team?.assignedUserId, team.id)()" class="button">отвязать</button>
+            <span>{{ users.find(user => user.id === team?.assignedUserId)?.name }}</span>
+            <button @click="unassignUser(team?.assignedUserId, team.id)" class="button">Отвязать</button>
           </div>
-          <button v-else @click="setUser(team.id)" class="button">Привязать планшет</button>
+          <div v-else>
+            <select v-model="selectedUser[team.id]" class="user-dropdown">
+              <option value="" disabled selected>Выберите пользователя</option>
+              <option v-for="user in users" :key="user.id" :value="user.id">
+                {{ user.name }}
+              </option>
+            </select>
+            <button @click="assignUserInline(team.id)" class="button">Привязать</button>
+          </div>
         </td>
         <td class="actions-column">
           <button @click.stop="changeTeam(team.id)" class="icon-setting"><IconsSetting/></button>
@@ -103,6 +111,7 @@ import ConfirmDialog from "@/admin/ConfirmDialog.vue";
 import IconPencil from "@/components/icons/IconPencil.vue";
 import IconArrow from "@/components/icons/IconArrow.vue";
 import IconClose from "@/components/icons/IconClose.vue";
+
 const tableNum = ref(0)
 const selectTeamStol = ref(null)
 const route = useRoute()
@@ -114,8 +123,9 @@ const loading = ref(false)
 const uploadSuccess = ref(false)
 const notificationMessage = ref('')
 const notificationType = ref('info')
-const teamName = ref('')
-const editingTeam = ref(null)
+const selectedUser = ref({})
+const users = ref([])
+
 const teams = computed(() => store.state.games.teams[route.params.gameId] || [])
 const sortedTeams = computed(() => {
   return [...teams.value].sort((a, b) => {
@@ -125,203 +135,69 @@ const sortedTeams = computed(() => {
   });
 });
 
-const showDialog = ref(false);
-const dialogTitle = ref('');
-const dialogMessage = ref('');
-let dialogAction = null;
-const users = ref([])
+onMounted(async () => {
+  await fetchUsers();
+  await fetchTeams();
+});
 
-const check = () => {
-  router.push(`/admin/games/${route.params.gameId}/team/feedback`)
-}
-
-const fileInput = ref(null)
-
-const triggerFileInput = () => {
-  fileInput.value.click()
-}
-
-const changeUserSet = (id, teamId) => async () => {
+const fetchUsers = async () => {
   try {
-      await store.dispatch('games/unSetUserForTeam', {
-        gameId: route.params.gameId,
-        teamId: teamId,
-        userId: id,
-      })
-    notificationMessage.value = 'Планшет успешно отвязан!'
-    notificationType.value = 'success'
-    setTimeout(() => {
-      notificationMessage.value = ''
-      fetchTeams()
-    }, 1000)
+    const fetchedUsers = await store.dispatch('profile/fetchUsersPlanshet');
+    users.value = store.getters['profile/usersPlanhet'];
   } catch (error) {
-    console.error('Ошибка при привязке пользователя:', error)
-    notificationMessage.value = 'Ошибка '
-    notificationType.value = 'error'
+    console.error('Ошибка при загрузке пользователей:', error);
   }
-}
-
-const assignTable = async () => {
-  try {
-      await store.dispatch('games/setStolForTeam', {
-        gameId: route.params.gameId,
-        teamId: selectTeamStol.value,
-        num: tableNum.value,
-      })
-      notificationMessage.value = 'Команда успешна удалена!'
-      notificationType.value = 'success'
-      cancelTable()
-      setTimeout(() => {
-        notificationMessage.value = ''
-        fetchTeams()
-      }, 1000)
-  } catch (error) {
-    console.error('Ошибка при привязке пользователя:', error)
-    notificationMessage.value = 'Ошибка при удаление команды.'
-    notificationType.value = 'error'
-  }
-}
-
-const cancelTable = () => {
-  selectTeamStol.value = null
-  tableNum.value = 0
-}
-
-const changeTable = (id) => {
-  selectTeamStol.value = id
-}
-
-const showDeleteDialog = (id) => {
-  dialogTitle.value = 'Подтверждение удаления';
-  dialogMessage.value = 'Вы уверены, что хотите удалить эту команду?';
-  dialogAction = handleSubmitDelete(id);
-  showDialog.value = true;
 };
-
-const handleConfirm = async () => {
-  showDialog.value = false;
-  if (dialogAction) await dialogAction();
-};
-
-const handleCancel = () => {
-  showDialog.value = false;
-};
-
-const handleSubmitDelete = (id) => async () => {
-  try {
-    const response = await store.dispatch('games/deleteTeamToGame', {
-      gameId: route.params.gameId,
-      teamId: id,
-    })
-
-    notificationMessage.value = 'Команда успешна удалена!'
-    notificationType.value = 'success'
-    setTimeout(() => {
-      notificationMessage.value = ''
-      fetchTeams()
-    }, 1000)
-  } catch (error) {
-    notificationMessage.value = 'Ошибка при удаление команды.'
-    notificationType.value = 'error'
-  }
-}
-
-const fetchGameById = async () => {
-  try {
-    const res = await store.dispatch('games/fetchGameById', route.params.gameId)
-    game.value = res
-  } catch (error) {
-    console.error('Ошибка при загрузке данных об игре:', error)
-  }
-}
-
-const handleFileChange = (event) => {
-  selectedFile.value = event.target.files[0]
-  if (selectedFile.value) {
-    console.log('Имя файла:', selectedFile.value.name)
-    console.log('Размер файла:', selectedFile.value.size)
-    console.log('Тип файла:', selectedFile.value.type)
-  }
-}
 
 const fetchTeams = async () => {
   try {
-    await store.dispatch('games/fetchTeams', { gameId: route.params.gameId })
+    await store.dispatch('games/fetchTeams', { gameId: route.params.gameId });
   } catch (error) {
-    console.error('Ошибка при загрузке команд:', error)
+    console.error('Ошибка при загрузке команд:', error);
   }
-}
+};
 
-const uploadFile = async () => {
-  if (!selectedFile.value) {
-    alert('Пожалуйста, выберите файл.')
-    return
-  }
-
-  loading.value = true
-  notificationMessage.value = 'Загрузка файла...'
-  notificationType.value = 'info'
-
+const assignUserInline = async (teamId) => {
   try {
-    await store.dispatch('games/replaceTeams', {
+    const userId = selectedUser.value[teamId];
+    if (!userId) {
+      alert('Выберите пользователя!');
+      return;
+    }
+
+    await store.dispatch('games/setUserForTeam', {
       gameId: route.params.gameId,
-      file: selectedFile.value,
-    })
-    uploadSuccess.value = true
-    await fetchTeams()
+      teamId,
+      userId,
+    });
 
-    notificationMessage.value = 'Файл успешно загружен!'
-    notificationType.value = 'success'
-
-    setTimeout(() => {
-      selectedFile.value = null
-      uploadSuccess.value = false
-    }, 1000)
+    notificationMessage.value = 'Пользователь успешно привязан!';
+    notificationType.value = 'success';
+    await fetchTeams();
   } catch (error) {
-    console.error('Ошибка при загрузке файла:', error)
-
-    notificationMessage.value = 'Ошибка при загрузке файла.'
-    notificationType.value = 'error'
-  } finally {
-    loading.value = false
+    console.error('Ошибка при привязке пользователя:', error);
+    notificationMessage.value = 'Ошибка при привязке пользователя.';
+    notificationType.value = 'error';
   }
-}
+};
 
-const createTeam = () => {
-  router.push(`/admin/games/${route.params.gameId}/team/create`)
-}
-
-const setUser = (teamId) => {
-  router.push(`/admin/games/${route.params.gameId}/team/${teamId}/setUser`)
-}
-
-const changeTeam = (teamId) => {
-  router.push(`/admin/games/${route.params.gameId}/team/${teamId}/changeTeam`)
-}
-const getUsers = async () => {
+const unassignUser = async (userId, teamId) => {
   try {
-    const fetchedUsers = await store.dispatch('profile/fetchUsersPlanshet')
-    users.value = store.getters['profile/usersPlanhet']
-  } catch (error) {
-    console.error('Ошибка при загрузке пользователей:', error)
-    showNotification('Ошибка при загрузке пользователей.', 'error')
-  }
-}
-onMounted(() => {
-  fetchGameById()
-  fetchTeams()
-  getUsers().then(() => {
-    users.value = store.getters['profile/usersPlanhet']
-  })
-})
+    await store.dispatch('games/unSetUserForTeam', {
+      gameId: route.params.gameId,
+      teamId,
+      userId,
+    });
 
-watch(
-  () => route.params.gameId,
-  async () => {
-    await fetchGameById()
-    await fetchTeams()
-  },
-)
+    notificationMessage.value = 'Пользователь успешно отвязан!';
+    notificationType.value = 'success';
+    await fetchTeams();
+  } catch (error) {
+    console.error('Ошибка при отвязывании пользователя:', error);
+    notificationMessage.value = 'Ошибка при отвязывании пользователя.';
+    notificationType.value = 'error';
+  }
+};
 </script>
 
 <style scoped>
@@ -426,7 +302,7 @@ h1 {
 
 .teams-table th,
 .teams-table td {
-  padding: 10px;
+  padding: 2px;
   border: 1px solid #ccc;
   text-align: left;
 }
@@ -482,16 +358,23 @@ h1 {
   justify-content: center;
   margin-top: 20px;
 }
+q
+.user-dropdown {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
 
 .button {
-  padding: 10px;
+  padding: 8px 12px;
   background-color: #CC9F33;
-  border: none;
-  border-radius: 5px;
   color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s;
+  margin-top: 2px;
 }
 
 .button:hover {
@@ -570,4 +453,3 @@ td:last-child:hover {
   margin-top: 10px;
 }
 </style>
-

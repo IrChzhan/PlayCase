@@ -247,8 +247,9 @@ onMounted(() => {
 .menu-table th,
 .menu-table td {
   border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
+    padding: 5px; /* Уменьшаем отступы внутри ячеек */
+    text-align: left;
+    line-height: 1.2; /* Уменьшаем межстрочный интервал */
 }
 
 .menu-table th {
