@@ -1,3 +1,36 @@
+<style scoped>
+.input-field {
+  outline: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: var(--c-white, #fff);
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: 'Mulish', sans-serif;
+  color: #0f1921;
+  transition: border-color 0.2s;
+}
+
+.input-field:hover {
+  border: 1px solid #b3b3b3;
+}
+
+.input-field:focus {
+  border: 1px solid #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.input-field.error {
+  border: 1px solid #ff4d4f;
+}
+
+.input-error {
+  font-size: 12px;
+  color: #ff4d4f;
+  margin-top: 4px;
+}
+</style>
+
 <template>
   <div class="input-container">
     <label v-if="text" :for="inputId" class="input-label">{{ text }}</label>
@@ -9,12 +42,14 @@
       @input="onInput"
       @blur="onBlur"
       class="input-field"
+      :class="{ error: errorMessage }"
       :style="{ width: width }"
       :disabled="disabled"
     />
     <span v-if="errorMessage" class="input-error">{{ errorMessage }}</span>
   </div>
 </template>
+
 
 <script setup>
 import { computed } from 'vue'
@@ -63,45 +98,3 @@ const onBlur = () => {
   emit('blur')
 }
 </script>
-
-<style scoped>
-.input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.input-label {
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Mulish', sans-serif;
-  color: #333;
-}
-
-.input-field {
-  outline: none;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  background: var(--c-white, #fff);
-  padding: 12px 14px;
-  font-size: 16px;
-  font-family: 'Mulish', sans-serif;
-  color: #0f1921;
-  transition: border-color 0.2s;
-}
-
-.input-field:hover {
-  border: 1px solid #b3b3b3;
-}
-
-.input-field:focus {
-  border: 1px solid #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-}
-
-.input-error {
-  font-size: 12px;
-  color: #ff4d4f;
-  margin-top: 4px;
-}
-</style>
