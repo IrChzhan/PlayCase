@@ -241,7 +241,6 @@ watch(
   color: white;
   background-color: #CC9F33;
   padding: 1vw 2vw;
-  border: 1px solid rgba(15, 25, 33, 0.4);
   border-radius: 12px;
   margin-bottom: 1vw;
 }
