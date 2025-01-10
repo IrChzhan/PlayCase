@@ -6,16 +6,16 @@
         <div class="form-section">
           <h1 class="main-heading">Наши контакты</h1>
           <div class="container_qr">
-            <div class="qr">
-              <img src="@/assets/qr.png" />
+            <div class="tg">
+              <img src="@/assets/TG.png" />
               <p>TELEGRAM</p>
             </div>
-            <div class="qr">
-              <img src="@/assets/qr.png" />
-              <p>WHATSAPP</p>
+            <div class="inst">
+              <img src="@/assets/INST.png" />
+              <p>INSTAGRAM</p>
             </div>
-            <div class="qr">
-              <img src="@/assets/qr.png" />
+            <div class="vk">
+              <img src="@/assets/VK.png" />
               <p>VKONTAKTE</p>
             </div>
           </div>
@@ -115,8 +115,24 @@ watch(
   gap: 20px;
 }
 
+
 p {
   margin-left: 10px;
+}
+
+.tg img {
+  width: 210px; 
+  height: auto;
+}
+
+.inst img {
+  width: 210px; 
+  height: auto;
+}
+
+.vk img {
+  width: 210px; 
+  height: auto;
 }
 
 @media (max-width: 768px) {

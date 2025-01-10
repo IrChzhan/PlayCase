@@ -103,7 +103,7 @@ const goToMenuApp = () => {
 
 .round-number {
   font-weight: 600;
-  color: #cc9f33;
+  color: #3A4C6E;
 }
 
 .additional-info {
@@ -117,7 +117,7 @@ const goToMenuApp = () => {
 }
 
 .highlight {
-  color: #cc9f33;
+  color: #3A4C6E;
 }
 
 .house_button {

@@ -1,53 +1,66 @@
 <template>
-  <div class="modal-overlay" v-if="show">
-    <div class="modal-content">
-      <button class="close-button" @click="closeModal">×</button>
-      <div class="modal-body">
-        <div class="form-section">
-          <div class="team-title">{{ teamName }}</div>
-          <h1 class="main-heading">Примите участие<br />в лотерее</h1>
-          <form @submit.prevent="submitForm">
-            <div v-if="emailError || phoneError" class="error-section">
-              <p class="error-message">Неверные данные</p>
-            </div>
-            <Input v-model:modelValue="formData.name" text="Имя" width="auto" />
-            <Input v-model:modelValue="formData.email" text="E-mail" width="auto" />
-            <Input
-              v-model:modelValue="formData.phone"
-              text="Телефон"
-              width="auto"
-              placeholder="+7 (___) ___-____"
-            />
+  <div>
+    <div class="modal-overlay" v-if="show">
+      <div class="modal-content">
+        <button class="close-button" @click="closeModal">×</button>
+        <div class="modal-body">
+          <div class="form-section">
+            <div class="team-title">{{ teamName }}</div>
+            <h1 class="main-heading">Примите участие<br />в лотерее</h1>
+            <form @submit.prevent="submitForm">
+              <div v-if="emailError || phoneError" class="error-section">
+                <p class="error-message">Неверные данные</p>
+              </div>
+              <Input v-model:modelValue="formData.name" text="Имя" width="auto" />
+              <Input v-model:modelValue="formData.email" text="E-mail" width="auto" />
+              <Input
+                v-model:modelValue="formData.phone"
+                text="Телефон"
+                width="auto"
+                placeholder="+7 (___) ___-____"
+              />
 
-            <button type="submit" class="submit-button">Участвовать</button>
+              <button type="submit" class="submit-button">Участвовать</button>
 
-            <div class="checkbox-section">
-              <label class="checkbox-container">
-                <input type="checkbox" id="agree" v-model="formData.agree" required />
-                <span>
-                  Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
-                </span>
-              </label>
-            </div>
-          </form>
+              <div class="checkbox-section">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="agree" v-model="formData.agree" required />
+                  <span>
+                    Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
+                  </span>
+                </label>
+              </div>
+            </form>
+          </div>
+
+          <div class="rules-section">
+            <h2>Правила проведения лотереи</h2>
+            <ul>
+              <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
+              <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
+              <li>
+                Каждый участник может зарегистрироваться
+                <span class="special-el">только один раз</span>.
+              </li>
+              <li>Победителя определяет генератор случайных чисел.</li>
+              <li>Призы не подлежат обмену на деньги и возврату.</li>
+            </ul>
+            <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
+            <a class="link" @click="goToPolitica" target="_blank">
+              Политика конфиденциальности
+            </a>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="rules-section">
-          <h2>Правила проведения лотереи</h2>
-          <ul>
-            <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
-            <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
-            <li>
-              Каждый участник может зарегистрироваться
-              <span class="special-el">только один раз</span>.
-            </li>
-            <li>Победителя определяет генератор случайных чисел.</li>
-            <li>Призы не подлежат обмену на деньги и возврату.</li>
-          </ul>
-          <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
-          <a class="link" @click="goToPolitica" target="_blank">
-                  Политика конфиденциальности
-          </a>
+    <div class="modal-overlay" v-if="showSuccessModal">
+      <div class="modal-content">
+        <button class="close-button" @click="closeSuccessModal">×</button>
+        <div class="modal-body success-body">
+            <h2 class="success-title">Спасибо за участие!</h2>
+             <p class="success-message">Ваш номер:</p>
+            <p class="success-number"> <strong>{{ successNumber }}</strong></p>
         </div>
       </div>
     </div>
@@ -55,32 +68,34 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
-import { useStore } from 'vuex'
-import {useRouter} from 'vue-router'
+import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-import Input from '@/components/shared/forms/Input.vue'
-import { useAuthCheck } from '@/hooks/useAuthCheck.js'
+import Input from '@/components/shared/forms/Input.vue';
+import { useAuthCheck } from '@/hooks/useAuthCheck.js';
 
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
-})
+});
 
-const { teamName } = useAuthCheck()
+const { teamName } = useAuthCheck();
 
-const store = useStore()
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
 
 const formData = ref({
   name: '',
   email: '',
   phone: '',
   agree: false,
-})
+});
 
-const emailError = ref('')
-const phoneError = ref('')
+const emailError = ref('');
+const phoneError = ref('');
+const showSuccessModal = ref(false);
+const successNumber = ref(null);
 
 const submitForm = async () => {
   emailError.value = '';
@@ -107,8 +122,9 @@ const submitForm = async () => {
     formData.value.phone = '';
     formData.value.agree = false;
 
-    alert(`Спасибо за участие в лотерее! Ваш номер: ${response.sequenceNumber}`);
-    props.closeModal();
+    // Показ модального окна с успешной регистрацией
+    successNumber.value = response.sequenceNumber;
+    showSuccessModal.value = true;
   } catch (error) {
     if (error.message.includes('email')) {
       emailError.value = 'Пользователь с таким email уже существует.';
@@ -122,6 +138,11 @@ const submitForm = async () => {
   }
 };
 
+const closeSuccessModal = () => {
+  showSuccessModal.value = false;
+  props.closeModal();
+};
+
 const phoneMask = (value) => {
   return value
     .replace(/\D/g, '')
@@ -130,7 +151,7 @@ const phoneMask = (value) => {
 };
 
 const goToPolitica = () => {
-  router.push('/client/politica')
+  router.push('/client/politica');
 };
 
 watch(
@@ -325,60 +346,57 @@ input[type='checkbox'] {
   font-weight: 900;
 }
 
+.success-body {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.success-title {
+  font-size: clamp(20px, 3vw, 28px);
+  color: #0f1921;
+  margin-bottom: 1vw;
+}
+
+.success-message {
+  font-size: clamp(16px, 2vw, 20px);
+  color: #0f1921;
+  margin-bottom: 0.5vw;
+}
+
+.success-number {
+    font-size: clamp(26px, 4vw, 34px);
+    color: #0f1921;
+    margin-bottom: 2vw;
+    margin-top: 0.5vw;
+}
+
 @media (max-width: 768px) {
   .modal-content {
-    width: 90vw;
-    max-width: 600px;
-    padding: 15px;
+    width: 90vw; 
+    max-width: 600px; 
+    padding: 15px; 
   }
 
-  .modal-body {
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    box-sizing: border-box;
+  .success-title {
+    font-size: clamp(18px, 4vw, 24px); 
   }
 
-  .form-section,
-  .rules-section {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
+  .success-message {
+    font-size: clamp(14px, 3vw, 18px); 
+  }
+  .success-number {
+     font-size: clamp(20px, 5vw, 28px);
+  }
+  .submit-button {
+    font-size: clamp(12px, 1.5vw, 16px);
+    padding: 0.8vw 1.5vw; 
   }
 
-  .main-heading {
-    font-size: clamp(1.5vw, 24px, 30px);
-    line-height: 1.3;
-  }
-
-  .team-title {
-    margin-top: 50px;
-  }
-
-  .checkbox-container {
-    font-size: clamp(1vw, 12px, 14px);
-  }
-
-  .rules-section h2 {
-    font-size: clamp(1.5vw, 18px, 22px);
-  }
-
-  .rules-section ul {
-    font-size: clamp(1vw, 12px, 14px);
-    padding-left: 1vw;
-    line-height: 1.5;
-  }
-
-  .rules-section p {
-    font-size: clamp(1vw, 12px, 14px);
-  }
-
-  .lottery-greeting {
-    font-size: clamp(1vw, 12px, 14px);
-  }
-
-  .input-container {
-    width: 100%;
+  .close-button {
+    font-size: clamp(14px, 2vw, 20px); 
   }
 }
 </style>

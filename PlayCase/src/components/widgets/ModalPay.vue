@@ -152,19 +152,19 @@ watch(
 <style scoped>
 .link-li {
   margin-top: 10px;
-  text-decoration: solid;
 }
 
 .link {
+  font-size: 0.8rem; 
   color: #cc9f33;
-  text-decoration: none; 
-  border-bottom: 1px dashed #cc9f33; 
-  cursor: pointer; 
+  text-decoration: none;
+  border-bottom: 1px dashed #cc9f33;
+  cursor: pointer;
   transition: border-bottom 0.3s;
 }
 
 .link:hover {
-  border-bottom: 1px solid #cc9f33; 
+  border-bottom: 1px solid #cc9f33;
 }
 
 .modal-overlay {
@@ -215,9 +215,9 @@ watch(
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
   font-weight: bold;
-  color: #cc9f33;
+  color: white;
+  background-color: #CC9F33;
   padding: 1vw 2vw;
-  border: 1px solid rgba(15, 25, 33, 0.4);
   border-radius: 12px;
   margin-bottom: 1vw;
 }
@@ -272,12 +272,17 @@ watch(
 }
 
 .policy {
-  font-size: 0.8rem;
-  color: #777;
-  text-align: left;
+  font-size: 1rem; 
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
 }
+
 .policy input {
-  margin-right: 5px;
+  width: 20px; 
+  height: 20px; 
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .title {
