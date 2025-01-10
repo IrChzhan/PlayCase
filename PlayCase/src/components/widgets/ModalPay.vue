@@ -5,7 +5,7 @@
       <div class="modal-body">
         <div class="form-section">
           <div class="team-title">{{ teamName }}</div>
-          <h1 class="title">Выберите количество игроков, за которых будете оплачивать</h1>
+          <h1 class="title">Выберите количество игроков для оплаты</h1>
 
           <div class="player-buttons">
             <button

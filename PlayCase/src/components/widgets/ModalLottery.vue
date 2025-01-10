@@ -8,8 +8,7 @@
           <h1 class="main-heading">Примите участие<br />в лотерее</h1>
           <form @submit.prevent="submitForm">
             <div v-if="emailError || phoneError" class="error-section">
-              <p v-if="emailError" class="error-message">Неправильно введенные данные: {{ emailError }}</p>
-              <p v-if="phoneError" class="error-message">Неправильно введенные данные: {{ phoneError }}</p>
+              <p class="error-message">Неверные данные</p>
             </div>
             <Input v-model:modelValue="formData.name" text="Имя" width="auto" />
             <Input v-model:modelValue="formData.email" text="E-mail" width="auto" />
@@ -239,7 +238,8 @@ watch(
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
   font-weight: bold;
-  color: #cc9f33;
+  color: white;
+  background-color: #CC9F33;
   padding: 1vw 2vw;
   border: 1px solid rgba(15, 25, 33, 0.4);
   border-radius: 12px;
