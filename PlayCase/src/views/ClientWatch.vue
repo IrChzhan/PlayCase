@@ -13,8 +13,6 @@ const token = ref('')
 const team = ref('')
 const id = ref('')
 
-
-
 const client = new Client({
   brokerURL: "ws://62.113.98.45:8080/ws",
   reconnectDelay: 5000,
@@ -56,6 +54,11 @@ const fetchTeam = async() => {
 
 }
 
+const Exit = () => {
+  localStorage.removeItem('token')
+  router.push('/')
+}
+
 onMounted(() => {
   token.value = localStorage.getItem('token')
   if (token.value === null) {
@@ -77,6 +80,7 @@ onBeforeUnmount(() => {
   <div class="home-page">
     <div class="button-container">
       <h1>{{name}}</h1>
+      <button class="btn" @click="Exit">Выйти</button>
     </div>
   </div>
 </template>
@@ -92,8 +96,22 @@ onBeforeUnmount(() => {
 }
 
 .button-container {
+  flex-direction: column;
   display: flex;
   gap: 20px;
+}
+
+.btn {
+  background: #d9534f;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #c9302c;
 }
 
 h1 {

@@ -14,6 +14,17 @@
         />
       </div>
       <div class="form-group">
+        <label for="teamName">Email:</label>
+        <input
+          id="teamName"
+          v-model="formData.email"
+          type="text"
+          placeholder="Введите email"
+          class="input"
+          required
+        />
+      </div>
+      <div class="form-group">
         <label for="tableNumber">Номер стола:</label>
         <input
           id="tableNumber"
@@ -27,7 +38,7 @@
         <label for="participantsCount">Количество участников:</label>
         <input
           id="participantsCount"
-          v-model.number="formData.participantsCount"
+          v-model.number="formData.expectedParticipantsCount"
           type="number"
           placeholder="Введите количество участников"
           class="input"
@@ -106,8 +117,9 @@ const notificationType = ref('info')
 const store = useStore()
 const formData = reactive({
   name: '',
+  email: '',
   tableNumber: 0,
-  participantsCount: 0,
+  expectedParticipantsCount: 0,
   isFirstTime: true,
   isPrepaid: 0,
   certificate: '',

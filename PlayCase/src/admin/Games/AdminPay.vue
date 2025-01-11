@@ -108,6 +108,7 @@ const gameId = route.params.gameId;
 const fetchPayments = async () => {
   try {
     const response = await store.dispatch("payments/fetchPayments", gameId);
+    console.log(response)
     if (response && Array.isArray(response)) {
       editablePayments.value = response.map((team) => ({
         ...team,

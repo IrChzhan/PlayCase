@@ -102,7 +102,15 @@ export default {
           `${import.meta.env.VITE_API_URL}/v1/authorization`,
           loginPayload,
         )
+        localStorage.removeItem('authToken')
         const { accessToken } = response.data
+        const response_two = await axios.get(`${import.meta.env.VITE_API_URL}/v1/users/me`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        console.log(response_two.data.authorities[0].authority)
+        if (response_two.data.authorities[0].authority !== 'PLAYER' ) {
+          return false
+        }
 
         commit('SET_TOKEN', accessToken)
         commit('SET_PLAYER_TOKEN', accessToken)

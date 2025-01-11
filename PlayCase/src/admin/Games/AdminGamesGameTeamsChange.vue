@@ -15,6 +15,18 @@
         />
       </div>
       <div class="form-group">
+        <p class="old-data">Старый email: {{ oldData.email }}</p>
+        <label for="teamName">Email:</label>
+        <input
+          id="teamName"
+          v-model="formData.email"
+          type="text"
+          placeholder="Введите email"
+          class="input"
+          required
+        />
+      </div>
+      <div class="form-group">
         <p class="old-data">Старое количество участников: {{ oldData.expectedParticipantsCount }}</p>
         <label for="participantsCount">Количество участников:</label>
         <input
@@ -94,6 +106,7 @@ const notificationType = ref('info')
 const store = useStore()
 const formData = reactive({
   name: '',
+  email: '',
   expectedParticipantsCount: 0,
   isFirstTime: true,
   isPrepaid: 0,
@@ -103,6 +116,7 @@ const formData = reactive({
 
 const oldData = reactive({
   name: '',
+  email: '',
   expectedParticipantsCount: 0,
   isFirstTime: true,
   isPrepaid: 0,
@@ -141,6 +155,7 @@ const fetchTeams = async () => {
     const teams = await store.dispatch('games/fetchTeams', { gameId: route.params.gameId })
     const team = teams.filter((el) => el.id === route.params.teamId)[0]
     formData.name = oldData.name = team.name
+    formData.email = oldData.email = team.email
     formData.expectedParticipantsCount = oldData.expectedParticipantsCount = team.expectedParticipantsCount
     formData.isFirstTime = oldData.isFirstTime = team.isFirstTime
     formData.isPrepaid = oldData.isPrepaid = team.isPrepaid

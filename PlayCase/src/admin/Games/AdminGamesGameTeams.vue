@@ -37,6 +37,7 @@
       <tr>
         <th>Номер стола</th>
         <th>Имя команды</th>
+        <th>Email</th>
         <th>Привязанный планшет</th>
         <th></th>
       </tr>
@@ -55,19 +56,26 @@
           </div>
         </td>
         <td>{{ team?.name }}</td>
+        <td>{{ team?.email || 'нет почты' }}</td>
         <td>
           <div class="user-sets" v-if="team?.assignedUserId">
             <span>{{ users.find(user => user.id === team?.assignedUserId)?.name }}</span>
             <button @click="unassignUser(team?.assignedUserId, team.id)" class="button">Отвязать</button>
           </div>
           <div v-else>
-            <select v-model="selectedUser[team.id]" class="user-dropdown">
-              <option value="" disabled selected>Выберите пользователя</option>
-              <option v-for="user in users" :key="user.id" :value="user.id">
-                {{ user.name }}
-              </option>
-            </select>
-            <button @click="assignUserInline(team.id)" class="button">Привязать</button>
+            <div v-if="showEditingUsers === team.id" class="change-input">
+              <select v-model="selectedUser[team.id]" class="user-dropdown">
+                <option value="" disabled selected>Выберите пользователя</option>
+                <option v-for="user in users" :key="user.id" :value="user.id">
+                  {{ user.name }}
+                </option>
+              </select>
+              <button class="icon-setting" @click="assignUserInline(team.id)"><IconArrow/></button>
+              <button class="icon-setting" @click="closeShowEditingUser"><IconClose/></button>
+            </div>
+            <div v-else>
+              <button @click="openShowEditingUsers(team.id)" class="button">Привязать</button>
+            </div>
           </div>
         </td>
         <td class="actions-column">
@@ -112,6 +120,15 @@ import IconPencil from "@/components/icons/IconPencil.vue";
 import IconArrow from "@/components/icons/IconArrow.vue";
 import IconClose from "@/components/icons/IconClose.vue";
 
+const teamName = ref('')
+const editingTeam = ref(null)
+const showDialog = ref(false);
+const dialogTitle = ref('');
+const dialogMessage = ref('');
+let dialogAction = null;
+
+const showEditingUsers = ref(false)
+
 const tableNum = ref(0)
 const selectTeamStol = ref(null)
 const route = useRoute()
@@ -125,6 +142,14 @@ const notificationMessage = ref('')
 const notificationType = ref('info')
 const selectedUser = ref({})
 const users = ref([])
+
+const openShowEditingUsers = (id) => {
+  showEditingUsers.value = id;
+}
+
+const closeShowEditingUser = () => {
+  showEditingUsers.value = false;
+}
 
 const teams = computed(() => store.state.games.teams[route.params.gameId] || [])
 const sortedTeams = computed(() => {
@@ -146,14 +171,6 @@ const fetchUsers = async () => {
     users.value = store.getters['profile/usersPlanhet'];
   } catch (error) {
     console.error('Ошибка при загрузке пользователей:', error);
-  }
-};
-
-const fetchTeams = async () => {
-  try {
-    await store.dispatch('games/fetchTeams', { gameId: route.params.gameId });
-  } catch (error) {
-    console.error('Ошибка при загрузке команд:', error);
   }
 };
 
@@ -198,6 +215,175 @@ const unassignUser = async (userId, teamId) => {
     notificationType.value = 'error';
   }
 };
+
+
+const check = () => {
+  router.push(`/admin/games/${route.params.gameId}/team/feedback`)
+}
+
+const fileInput = ref(null)
+
+const triggerFileInput = () => {
+  fileInput.value.click()
+}
+
+const changeUserSet = (id, teamId) => async () => {
+  try {
+    await store.dispatch('games/unSetUserForTeam', {
+      gameId: route.params.gameId,
+      teamId: teamId,
+      userId: id,
+    })
+    notificationMessage.value = 'Планшет успешно отвязан!'
+    notificationType.value = 'success'
+    setTimeout(() => {
+      notificationMessage.value = ''
+      fetchTeams()
+    }, 1000)
+  } catch (error) {
+    console.error('Ошибка при привязке пользователя:', error)
+    notificationMessage.value = 'Ошибка '
+    notificationType.value = 'error'
+  }
+}
+
+const assignTable = async () => {
+  try {
+    await store.dispatch('games/setStolForTeam', {
+      gameId: route.params.gameId,
+      teamId: selectTeamStol.value,
+      num: tableNum.value,
+    })
+    notificationMessage.value = 'Команда успешна удалена!'
+    notificationType.value = 'success'
+    cancelTable()
+    setTimeout(() => {
+      notificationMessage.value = ''
+      fetchTeams()
+    }, 1000)
+  } catch (error) {
+    console.error('Ошибка при привязке пользователя:', error)
+    notificationMessage.value = 'Ошибка при удаление команды.'
+    notificationType.value = 'error'
+  }
+}
+
+const cancelTable = () => {
+  selectTeamStol.value = null
+  tableNum.value = 0
+}
+
+const changeTable = (id) => {
+  selectTeamStol.value = id
+}
+
+const showDeleteDialog = (id) => {
+  dialogTitle.value = 'Подтверждение удаления';
+  dialogMessage.value = 'Вы уверены, что хотите удалить эту команду?';
+  dialogAction = handleSubmitDelete(id);
+  showDialog.value = true;
+};
+
+const handleConfirm = async () => {
+  showDialog.value = false;
+  if (dialogAction) await dialogAction();
+};
+
+const handleCancel = () => {
+  showDialog.value = false;
+};
+
+const handleSubmitDelete = (id) => async () => {
+  try {
+    const response = await store.dispatch('games/deleteTeamToGame', {
+      gameId: route.params.gameId,
+      teamId: id,
+    })
+
+    notificationMessage.value = 'Команда успешна удалена!'
+    notificationType.value = 'success'
+    setTimeout(() => {
+      notificationMessage.value = ''
+      fetchTeams()
+    }, 1000)
+  } catch (error) {
+    notificationMessage.value = 'Ошибка при удаление команды.'
+    notificationType.value = 'error'
+  }
+}
+
+const fetchGameById = async () => {
+  try {
+    const res = await store.dispatch('games/fetchGameById', route.params.gameId)
+    game.value = res
+  } catch (error) {
+    console.error('Ошибка при загрузке данных об игре:', error)
+  }
+}
+
+const handleFileChange = (event) => {
+  selectedFile.value = event.target.files[0]
+  if (selectedFile.value) {
+    console.log('Имя файла:', selectedFile.value.name)
+    console.log('Размер файла:', selectedFile.value.size)
+    console.log('Тип файла:', selectedFile.value.type)
+  }
+}
+
+const fetchTeams = async () => {
+  try {
+    await store.dispatch('games/fetchTeams', { gameId: route.params.gameId })
+  } catch (error) {
+    console.error('Ошибка при загрузке команд:', error)
+  }
+}
+
+const uploadFile = async () => {
+  if (!selectedFile.value) {
+    alert('Пожалуйста, выберите файл.')
+    return
+  }
+
+  loading.value = true
+  notificationMessage.value = 'Загрузка файла...'
+  notificationType.value = 'info'
+
+  try {
+    await store.dispatch('games/replaceTeams', {
+      gameId: route.params.gameId,
+      file: selectedFile.value,
+    })
+    uploadSuccess.value = true
+    await fetchTeams()
+
+    notificationMessage.value = 'Файл успешно загружен!'
+    notificationType.value = 'success'
+
+    setTimeout(() => {
+      selectedFile.value = null
+      uploadSuccess.value = false
+    }, 1000)
+  } catch (error) {
+    console.error('Ошибка при загрузке файла:', error)
+
+    notificationMessage.value = 'Ошибка при загрузке файла.'
+    notificationType.value = 'error'
+  } finally {
+    loading.value = false
+  }
+}
+
+const createTeam = () => {
+  router.push(`/admin/games/${route.params.gameId}/team/create`)
+}
+
+const setUser = (teamId) => {
+  router.push(`/admin/games/${route.params.gameId}/team/${teamId}/setUser`)
+}
+
+const changeTeam = (teamId) => {
+  router.push(`/admin/games/${route.params.gameId}/team/${teamId}/changeTeam`)
+}
 </script>
 
 <style scoped>

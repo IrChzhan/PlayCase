@@ -44,6 +44,11 @@ export default {
     },
   },
   actions: {
+    async exportReview({commit}, {gameId, exportType}) {
+      const response =await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/review/export?exportType=${exportType}`)
+      console.log(response)
+      return response
+    },
     async createGame({ commit }, newGame) {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game`, newGame)
       commit('addGame', response.data)
