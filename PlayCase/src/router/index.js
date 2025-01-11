@@ -46,6 +46,7 @@ import AdminGamesGameTeamFeefback from "@/admin/Games/AdminGamesGameTeamFeefback
 import Dogovor from '@/views/client/Dogovor.vue'
 import PoliticaPrivacy from '@/views/client/PoliticaPrivacy.vue'
 import ClientWatch from "@/views/ClientWatch.vue";
+import AdminGamesGameOnlineChangeStatus from "@/admin/Games/AdminGamesGameOnlineChangeStatus.vue";
 
 const routes = [{
         path: `${import.meta.env.VITE_Path_App}`,
@@ -259,6 +260,11 @@ const routes = [{
                         name: 'AdminGamesGameOnline',
                         component: AdminGamesGameOnline,
                     },
+                  {
+                    path: '/admin/games/:gameId/online/:requestId/changeStatus',
+                    name: 'AdminGamesGameOnlineChangeStatus',
+                    component: AdminGamesGameOnlineChangeStatus,
+                  },
                     {
                         path: '/admin/games/:gameId/team',
                         name: 'AdminGamesGameTeams',

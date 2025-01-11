@@ -38,6 +38,11 @@ const client = new Client({
 
     client.subscribe(`/queue/user/${userId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
+      if (parsedMessage?.mutationType === 'TEAM_UPDATED') {
+        router.push({
+          name: 'HomePage'
+        })
+      }
       if (parsedMessage?.mutationType === "REMOVE_USER_TEAM")
         router.push({
           name: 'Watch'

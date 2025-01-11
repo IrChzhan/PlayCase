@@ -386,6 +386,15 @@ export default {
         throw e
       }
     },
+    async switchStatusHelp ({commit}, {helpRequestId , newStatus}) {
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/help/${helpRequestId}/changeStatus?status=${newStatus}`)
+        return response.data
+      } catch (e) {
+        console.error('Ошибка при получении текущей игры:', e)
+        throw e
+      }
+    },
   },
   getters: {
     allGames: (state) => state.games,

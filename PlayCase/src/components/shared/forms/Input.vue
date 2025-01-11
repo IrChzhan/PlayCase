@@ -1,4 +1,10 @@
 <style scoped>
+.input-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
 .input-field {
   outline: none;
   border: 1px solid #d9d9d9;

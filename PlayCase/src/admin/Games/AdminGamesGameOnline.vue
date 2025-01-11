@@ -1,13 +1,14 @@
 <script setup>
-import {ref, onMounted, onBeforeUnmount} from 'vue';
-import {Client} from '@stomp/stompjs';
-import {useRoute} from "vue-router";
-import {useStore} from "vuex";
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { Client } from '@stomp/stompjs';
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-const route = useRoute()
-const store = useStore()
+const router = useRouter();
+const route = useRoute();
+const store = useStore();
 
-const gameId = route.params.gameId
+const gameId = route.params.gameId;
 
 const messages = ref([]);
 
@@ -19,9 +20,10 @@ const client = new Client({
 
     client.subscribe('/queue/help/notifications', (message) => {
       const parsedMessage = JSON.parse(message.body);
-      console.log(parsedMessage)
+      console.log(parsedMessage);
       if (parsedMessage.gameId === gameId) {
         messages.value.push(parsedMessage);
+        sortMessages();
         getNotifications()
       }
     });
@@ -33,17 +35,39 @@ const client = new Client({
 
 const getNotifications = async () => {
   try {
-    const res = await store.dispatch('games/fetchAllNotifications', gameId)
-    messages.value = res
-    console.log(res, messages)
+    const res = await store.dispatch('games/fetchAllNotifications', gameId);
+    messages.value = res;
+    sortMessages();
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
+};
+
+const sortMessages = () => {
+  messages.value.sort((a, b) => {
+    const statusOrder = { 'RESOLVED': 2, 'IN_PROGRESS': 1, 'CREATED': 0 };
+    return statusOrder[a.status] - statusOrder[b.status];
+  });
+};
+
+const typesHelp = {
+  'WAITER': 'Официант',
+  'HELPER': 'Помощник',
+};
+
+const typesStatuses = {
+  'CREATED': 'Создан',
+  'IN_PROGRESS': 'Помощь в пути',
+  'RESOLVED': 'Помощь оказана',
+};
+
+const changeStatus = (id) => {
+  router.push(`/admin/games/${route.params.gameId}/online/${id}/changeStatus`);
+};
 
 onMounted(() => {
   client.activate();
-  getNotifications()
+  getNotifications();
 });
 
 onBeforeUnmount(() => {
@@ -62,14 +86,34 @@ onBeforeUnmount(() => {
         <tr>
           <th>Номер стола</th>
           <th>Команда</th>
-          <th>Тип действия</th>
+          <th>Тип помощи</th>
+          <th>Статус</th>
+          <th>Изменение статуса</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(msg, index) in messages" :key="index" class="message-row">
-          <td>{{msg.tableNumber || 'Номер стола не указан'}}</td>
-          <td>{{ msg.teamName }}</td>
-          <td>Помощь</td>
+          <td :class="{
+    'status-finished': msg.status === 'RESOLVED',
+    'status-in-progress': msg.status === 'IN_PROGRESS'
+  }">{{msg.tableNumber || 'Номер стола не указан'}}</td>
+          <td :class="{
+    'status-finished': msg.status === 'RESOLVED',
+    'status-in-progress': msg.status === 'IN_PROGRESS'
+  }">{{ msg.teamName }}</td>
+          <td :class="{
+    'status-finished': msg.status === 'RESOLVED',
+    'status-in-progress': msg.status === 'IN_PROGRESS'
+  }">{{ typesHelp[msg.responsiblePerson] }}</td>
+          <td
+            :class="{
+          'status-finished': msg.status === 'RESOLVED',
+          'status-in-progress': msg.status === 'IN_PROGRESS'
+          }">{{ typesStatuses[msg.status] }}</td>
+          <td :class="{
+    'status-finished': msg.status === 'RESOLVED',
+    'status-in-progress': msg.status === 'IN_PROGRESS'
+  }"><button class="button primary btn-add" @click.stop="changeStatus(msg.id)">Сменить статус</button></td>
         </tr>
         </tbody>
       </table>
@@ -93,6 +137,23 @@ onBeforeUnmount(() => {
   color: #000000;
   text-align: center;
 }
+
+.button {
+  margin: 0 auto;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #CC9F33;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.button:hover {
+  background: #d1aa58;
+}
+
 
 .table-wrapper {
   padding: 20px;
@@ -127,4 +188,16 @@ onBeforeUnmount(() => {
 .message-row:hover {
   background-color: #f1f1f1;
 }
+.status-finished {
+  background-color: #ffcccc;
+}
+
+.status-result {
+  background-color: #fff2cc;
+}
+
+.status-in-progress {
+  background-color: #ccffcc;
+}
+
 </style>

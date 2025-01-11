@@ -190,15 +190,15 @@ watch(
 
 .link {
   color: #cc9f33;
-  text-decoration: none; 
-  border-bottom: 1px dashed #cc9f33; 
-  cursor: pointer; 
+  text-decoration: none;
+  border-bottom: 1px dashed #cc9f33;
+  cursor: pointer;
   transition: border-bottom 0.3s;
   margin-top: 20px;
 }
 
 .link:hover {
-  border-bottom: 1px solid #cc9f33; 
+  border-bottom: 1px solid #cc9f33;
 }
 
 .error-section {
@@ -239,9 +239,8 @@ watch(
 
 .modal-body {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: 5vw;
+  gap: 3vw;
 }
 
 .form-section,
@@ -375,28 +374,28 @@ input[type='checkbox'] {
 
 @media (max-width: 768px) {
   .modal-content {
-    width: 90vw; 
-    max-width: 600px; 
-    padding: 15px; 
+    width: 90vw;
+    max-width: 600px;
+    padding: 15px;
   }
 
   .success-title {
-    font-size: clamp(18px, 4vw, 24px); 
+    font-size: clamp(18px, 4vw, 24px);
   }
 
   .success-message {
-    font-size: clamp(14px, 3vw, 18px); 
+    font-size: clamp(14px, 3vw, 18px);
   }
   .success-number {
      font-size: clamp(20px, 5vw, 28px);
   }
   .submit-button {
     font-size: clamp(12px, 1.5vw, 16px);
-    padding: 0.8vw 1.5vw; 
+    padding: 0.8vw 1.5vw;
   }
 
   .close-button {
-    font-size: clamp(14px, 2vw, 20px); 
+    font-size: clamp(14px, 2vw, 20px);
   }
 }
 </style>
