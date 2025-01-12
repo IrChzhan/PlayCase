@@ -38,7 +38,6 @@ import ModalContacts from '@/components/widgets/ModalContacts.vue'
 import ModalLottery from '@/components/widgets/ModalLottery.vue'
 import ModalPay from '@/components/widgets/ModalPay.vue'
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
-import { useUserInactivity } from '@/hooks/useUserInactivity.js'
 import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
 import person from '@/assets/hu.png'
@@ -49,7 +48,6 @@ const route = useRoute()
 const router = useRouter()
 const toastMessage = ref('')
 const toastType = ref('success')
-useUserInactivity(30000000)
 
 const { teamName } = useAuthCheck()
 const showModalLottery = ref(false)
