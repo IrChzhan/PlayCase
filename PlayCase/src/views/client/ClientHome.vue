@@ -4,9 +4,12 @@ import {useRoute, useRouter} from "vue-router";
 import {Client} from "@stomp/stompjs";
 import {useStore} from "vuex";
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
+import useIdleRedirect from "@/hooks/useUserInactivity.js";
 const router = useRouter()
 const store = useStore()
 const route = useRoute()
+
+useIdleRedirect(60000)
 
 const show = ref(false)
 

@@ -124,16 +124,6 @@ const menuItems = ref([
   { name: 'Лотерея', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
   { name: 'Help', image: helpImage, function: openModalHelp},
-  {
-    name: 'Участники лотереи',
-    image: person,
-    function: () => {
-      router.push({ name: 'RegistrateUsers' })
-    },
-  },
-
-
-
 ])
 </script>
 

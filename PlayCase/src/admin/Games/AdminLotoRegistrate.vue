@@ -26,6 +26,9 @@
           </tr>
         </tbody>
       </table>
+      <div class="button-container">
+        <button class="btn" @click="exportLottery">Экспорт</button>
+      </div>
     </div>
 
     <div v-if="winner" class="winner-section">
@@ -48,6 +51,36 @@ const store = useStore()
 const route = useRoute()
 const registrations = ref([])
 const winner = ref(null)
+
+const exportLottery = async () => {
+  try {
+    const response = await store.dispatch('games/exportLottery', {
+      gameId: route.params.gameId,
+      exportType: 'CSV'
+    });
+
+    let res = [];
+
+    const data = response.data.split('\n');
+    for (let i of data) {
+      res.push(i.split(','));
+    }
+    const csvContent = res.map(row => row.join(";")).join("\n");
+    const BOM = "\uFEFF";
+    const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "lottery.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (e) {
+    console.error("Ошибка экспорта:", e);
+  }
+};
+
 
 const sortRegistrations = () => {
   registrations.value.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
@@ -78,6 +111,30 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+button {
+  display: block;
+  padding: 8px 16px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5a6268;
+}
+.btn {
+  background: #CC9F33;
+}
+.btn:hover {
+  background: #d1aa58;
+}
 .lottery-container {
   display: flex;
   flex-direction: column;

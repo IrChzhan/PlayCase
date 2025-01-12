@@ -66,7 +66,7 @@ const goToMenuApp = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #001845;
+  background-color: #1B2A46;
   color: #ffd700;
   padding: 20px;
   font-family: 'Mulish', sans-serif;

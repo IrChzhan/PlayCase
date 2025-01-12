@@ -33,7 +33,7 @@ const goToAuthPage = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #1b2a46;
+  background: #1B2A46;
 }
 
 .button-container {

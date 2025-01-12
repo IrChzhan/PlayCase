@@ -56,7 +56,7 @@ const goToMenuApp = () => {
   height: 100vh;
   font-family: 'Arial', sans-serif;
   text-align: center;
-  background: #1b2a46;
+  background: #1B2A46;
 }
 .rules-block {
   background: #ffffff;

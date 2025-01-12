@@ -49,6 +49,9 @@
             <a class="link" @click="goToPolitica" target="_blank">
               Политика конфиденциальности
             </a>
+            <div class="btn-con">
+              <button @click.stop="goToLottery" class="btn">Список участников</button>
+            </div>
           </div>
         </div>
       </div>
@@ -80,11 +83,16 @@ const props = defineProps({
   closeModal: Function,
 });
 
+
+
 const { teamName } = useAuthCheck();
 
 const store = useStore();
 const router = useRouter();
 
+const goToLottery = () => {
+  router.push({ name: 'RegistrateUsers' })
+}
 const formData = ref({
   name: '',
   email: '',
@@ -196,7 +204,12 @@ watch(
   transition: border-bottom 0.3s;
   margin-top: 20px;
 }
-
+.btn-con {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 20px;
+}
 .link:hover {
   border-bottom: 1px solid #cc9f33;
 }
@@ -235,6 +248,21 @@ watch(
   font-weight: bold;
   color: #0f1921;
   cursor: pointer;
+}
+
+.btn {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  background: #CC9F33;
+  border-radius: 4px;
+  right: 5%;
+  bottom: 5%;
+}
+.btn:hover {
+  background: #d1aa58;
 }
 
 .modal-body {

@@ -46,7 +46,14 @@ export default {
   actions: {
     async exportReview({commit}, {gameId, exportType}) {
       const response =await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/review/export?exportType=${exportType}`)
-      console.log(response)
+      return response
+    },
+    async exportLottery({commit}, {gameId, exportType}) {
+      const response =await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/lottery/export?exportType=${exportType}`)
+      return response
+    },
+    async exportPayments({commit}, {gameId, exportType}) {
+      const response =await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/payments/export?exportType=${exportType}`)
       return response
     },
     async createGame({ commit }, newGame) {

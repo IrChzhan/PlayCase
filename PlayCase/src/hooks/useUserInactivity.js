@@ -1,38 +1,37 @@
-import { onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
 
-export function useUserInactivity(timeout = 300000) {
-  const isInactive = ref(false)
-  const router = useRouter()
-  let timer = null
+export default function useIdleRedirect(timeout = 300000) {
+  const idleTimeout = ref(null);
+  const router = useRouter();
 
-  const resetTimer = () => {
-    isInactive.value = false
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      isInactive.value = true
-      router.push({
-        name: 'TeamNameDisplay',
-      })
-    }, timeout)
-  }
+  const resetIdleTimer = () => {
+    if (idleTimeout.value) {
+      clearTimeout(idleTimeout.value);
+    }
 
-  const handleUserActivity = (event) => {
-    console.log(2)
-    resetTimer()
-  }
+    idleTimeout.value = setTimeout(() => {
+      router.push({ name: 'TeamNameDisplay' });
+    }, timeout);
+  };
+
+  const events = ['mousemove', 'keydown', 'scroll', 'click'];
 
   onMounted(() => {
-    resetTimer()
-    window.addEventListener('keydown', handleUserActivity)
-    document.addEventListener('click', handleUserActivity)
-  })
+    resetIdleTimer();
 
-  onUnmounted(() => {
-    clearTimeout(timer)
-    window.removeEventListener('keydown', handleUserActivity)
-    document.removeEventListener('click', handleUserActivity)
-  })
+    events.forEach(event => {
+      window.addEventListener(event, resetIdleTimer);
+    });
+  });
 
-  return { isInactive }
+  onBeforeUnmount(() => {
+    events.forEach(event => {
+      window.removeEventListener(event, resetIdleTimer);
+    });
+
+    if (idleTimeout.value) {
+      clearTimeout(idleTimeout.value);
+    }
+  });
 }

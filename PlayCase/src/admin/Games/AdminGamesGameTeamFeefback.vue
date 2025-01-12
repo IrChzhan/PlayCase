@@ -18,7 +18,7 @@
     </table>
     <div class="button-container">
       <button @click="goBack">Назад</button>
-      <button @click="exportReviews">Экспорт</button>
+      <button class="btn" @click="exportReviews">Экспорт</button>
     </div>
   </div>
 </template>
@@ -55,26 +55,32 @@ const goBack = () => {
 };
 const exportReviews = async () => {
   try {
-    const response = await store.dispatch("games/exportReview", {
+    const response = await store.dispatch('games/exportReview', {
       gameId: route.params.gameId,
-      exportType: "XSLX",
-      includeHeaders: true,
+      exportType: 'CSV'
     });
-    var blob = new Blob([s2ab(atob(response))]);
 
-    function s2ab(s) {
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-      for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
+    let res = [];
+
+    const data = response.data.split('\n');
+    for (let i of data) {
+      res.push(i.split(','));
     }
-
-    console.log(blob)
+    const csvContent = res.map(row => row.join(";")).join("\n");
+    const BOM = "\uFEFF";
+    const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "reviews.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   } catch (e) {
     console.error("Ошибка экспорта:", e);
   }
 };
-
 
 
 onMounted(() => {
@@ -107,6 +113,7 @@ th {
 
 .button-container {
   display: flex;
+  justify-content: space-between;
   gap: 8px;
 }
 
@@ -135,5 +142,12 @@ button:hover {
 
 .status-in-progress {
   background-color: #ccffcc;
+}
+
+.btn {
+  background: #CC9F33;
+}
+.btn:hover {
+  background: #d1aa58;
 }
 </style>
