@@ -1,6 +1,9 @@
 <template>
-  <div class="contract-container">
-    <h1 class="contract-title">ДОГОВОР НА ПРЕДОСТАВЛЕНИЕ УСЛУГ</h1>
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-button" @click="$emit('close')">&times;</button>
+      <div class="modal-scrollable">
+        <h1 class="contract-title">ДОГОВОР НА ПРЕДОСТАВЛЕНИЕ УСЛУГ</h1>
     <p class="contract-date">г. Москва «26» декабря 2024 года</p>
     <p>
       Индивидуальный предприниматель Богатырев Тихон Константинович, именуемый в дальнейшем "Исполнитель",
@@ -73,56 +76,77 @@
     <p>Наименование банка: ФИЛИАЛ «ЦЕНТРАЛЬНЫЙ» БАНКА ВТБ (ПАО)</p>
     <p>Корр/счет 30101810145250000411</p>
     <p>БИК 044525411</p>
-  </div>
 
-  <button class="back-button" @click="goBack">Назад</button>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-export default {
-  name: 'PrivacyPolicyPage',
-  methods: {
-    goBack() {
-      this.$router.go(-1); 
-    }
-  }
-};
+<script setup>
+const props = defineProps({
+  close: Function,
+});
 </script>
 
 <style scoped>
-.contract-container {
-  background-color: white;
-  color: black;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 900px;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden; 
+}
+
+.modal-scrollable {
+  flex: 1; 
+  overflow-y: auto;
+  padding: 20px; 
+  margin-right: -10px; 
 }
 
 .contract-title {
   text-align: center;
-  font-size: 24px; 
+  font-size: 24px;
   margin-bottom: 20px;
 }
 
-h2 {
-  margin-top: 20px;
-  font-size: 20px;
-}
-
-.back-button {
-  background-color: orange;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  display: block;
-  margin: 30px auto 0; /* Центрируем кнопку */
-  border-radius: 5px;
+.contract-date {
   text-align: center;
+  margin-bottom: 20px;
+  font-style: italic;
+  color: #555;
 }
 
-.back-button:hover {
-  background-color: darkorange; 
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: red;
 }
 </style>

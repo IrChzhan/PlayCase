@@ -1,8 +1,10 @@
 <template>
-    <div class="privacy-policy-container">
-      <h1 class="privacy-policy-title">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</h1>
-
-      <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-button" @click="$emit('close')">&times;</button>
+      <div class="modal-scrollable">
+        <h1 class="privacy-policy-title">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</h1>
+        <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
       <p>1.1. Настоящая Политика о конфиденциальности (далее – Политика) определяет цели, устанавливает порядок и условия
       обработки персональных данных, меры, направленные на защиту персональных данных, а также содержит информацию о
       правах лиц, к которым относятся соответствующие персональные данные Индивидуальным предпринимателем Богатыревым
@@ -339,75 +341,60 @@
 блокирование (если обработка персональных данных осуществляется другим лицом, действующим по поручению
 Индивидуального предпринимателя) и обеспечивает уничтожение персональных данных в срок не более чем шесть месяцев,
 если иной срок не установлен федеральными законами.</p>
-
-      <button class="back-button" @click="goBack">Назад</button>
+      </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-  export default {
-    name: 'PrivacyPolicyPage',
-    methods: {
-      goBack() {
-        this.$router.go(-1);
-      }
-    }
-  };
-  </script>
+<script setup>
+const props = defineProps({
+  close: Function,
+});
+</script>
 
-  <style scoped>
-  .privacy-policy-container {
-    overflow: scroll;
-    background-color: white;
-    color: black;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-  }
-
-  .privacy-policy-title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
-  h2 {
-    margin-top: 20px;
-    font-size: 20px;
-  }
-
-  .policy-table {
+<style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.policy-table th,
-.policy-table td {
-  border: 1px solid #cccccc;
-  padding: 10px;
-  text-align: left;
+.modal-content {
+  background: white;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 900px;
+  max-height: 90%;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.policy-table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
+.modal-scrollable {
+  max-height: 80vh; 
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
-  .back-button {
-    background-color: orange;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    display: block;
-    margin: 30px auto 0;
-    border-radius: 5px;
-    text-align: center;
-  }
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
 
-  .back-button:hover {
-    background-color: darkorange;
-  }
-  </style>
+.close-button:hover {
+  color: red;
+}
+</style>
