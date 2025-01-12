@@ -6,7 +6,7 @@
         <div class="form-section">
           <div class="team-title">{{ teamName }}</div>
           <h1 class="title">Выберите количество игроков для оплаты</h1>
-          <!-- Выбор игроков -->
+
           <div class="player-buttons">
             <button
               v-for="number in 8"
@@ -17,18 +17,50 @@
               {{ number }}
             </button>
           </div>
-          <!-- Информация о цене -->
           <div class="price-info">
             <div class="total-price">{{ totalPrice }} ₽ <span>к оплате</span></div>
             <div class="price-per-player">
               {{ pricePerPlayer }} ₽ <span>цена за 1 человека</span>
             </div>
           </div>
-          <!-- Модальные окна -->
+          <div v-if="!isPaying">
+            <div class="form">
+              <p>Чек будет отправлен на почту, указанную при регистрации</p>
+              <button class="pay-button" @click="startPayment">Перейти к оплате</button>
+              <div class="policy">
+                <input type="checkbox" id="policy-checkbox" />
+                <label for="policy-checkbox">
+                  Нажимая на кнопку, вы соглашаетесь с политикой обработки персональных данных
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div v-else-if="!paymentMethod">
+            <div class="payment-options">
+              <button class="payment-option" @click="selectPaymentMethod('qr')">QR-код</button>
+              <button class="payment-option" @click="selectPaymentMethod('card')">Карта</button>
+            </div>
+          </div>
+
+          <div v-else-if="paymentMethod === 'qr'">
+            <p>Сканируйте QR-код для оплаты:</p>
+            <img src="@/assets/qr.png" alt="QR-код" class="qr-code" />
+            <button @click="cancelPaymentMethod" class="back-button">Назад</button>
+          </div>
+
+          <div v-else-if="paymentMethod === 'card'">
+            <div class="card-payment-form">
+              <input type="text" placeholder="Номер карты" class="card-number" />
+              <input type="text" placeholder="Срок действия (MM/YY)" class="card-expiry" />
+              <input type="text" placeholder="CVV" class="card-cvv" />
+              <button class="pay-now-button">Оплатить</button>
+            </div>
+            <button @click="cancelPaymentMethod" class="back-button">Назад</button>
+          </div>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
           <info-modal v-if="showInfo" @close="toggleModal('info', false)" />
-          <!-- Переходы -->
           <div class="additional-info">
             <ul>
               <li class="link-li">
@@ -49,11 +81,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import {ref, computed, watch} from 'vue';
 import DogovorModal from '@/views/client/Dogovor.vue';
 import PolicyModal from '@/views/client/PoliticaPrivacy.vue';
 import InfoModal from '@/views/client/CompanyInfo.vue';
+import {useAuthCheck} from "@/hooks/useAuthCheck.js";
 
+const {teamName} = useAuthCheck()
+const isPaying = ref(false)
+const paymentMethod = ref(null)
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
@@ -72,6 +108,32 @@ function toggleModal(type, value) {
   else if (type === 'politica') showPolitica.value = value;
   else if (type === 'info') showInfo.value = value;
 }
+
+function selectPlayers(number) {
+  selectedPlayers.value = number
+}
+
+function startPayment() {
+  isPaying.value = true
+}
+
+function selectPaymentMethod(method) {
+  paymentMethod.value = method
+}
+
+function cancelPaymentMethod() {
+  paymentMethod.value = null
+}
+watch(
+  () => props.show,
+  (newVal) => {
+    if (newVal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+);
 </script>
 
 
@@ -81,7 +143,7 @@ function toggleModal(type, value) {
 }
 
 .link {
-  font-size: 0.8rem; 
+  font-size: 0.8rem;
   color: #cc9f33;
   text-decoration: none;
   border-bottom: 1px dashed #cc9f33;
@@ -198,15 +260,15 @@ function toggleModal(type, value) {
 }
 
 .policy {
-  font-size: 1rem; 
+  font-size: 1rem;
   margin-top: 10px;
   display: flex;
   align-items: center;
 }
 
 .policy input {
-  width: 20px; 
-  height: 20px; 
+  width: 20px;
+  height: 20px;
   margin-right: 10px;
   cursor: pointer;
 }

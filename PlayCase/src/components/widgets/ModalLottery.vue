@@ -46,7 +46,7 @@
               <li>Призы не подлежат обмену на деньги и возврату.</li>
             </ul>
             <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
-            <a class="link" @click="goToPolitica" target="_blank">
+            <a class="link" @click="toggleModal('politica', true)" target="_blank">
               Политика конфиденциальности
             </a>
             <div class="btn-con">
@@ -68,6 +68,7 @@
       </div>
     </div>
   </div>
+  <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
 </template>
 
 <script setup>
@@ -77,14 +78,20 @@ import { useRouter } from 'vue-router';
 
 import Input from '@/components/shared/forms/Input.vue';
 import { useAuthCheck } from '@/hooks/useAuthCheck.js';
+import PolicyModal from "@/views/client/PoliticaPrivacy.vue";
 
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
 });
 
+const showPolitica = ref(false);
 
-
+function toggleModal(type, value) {
+  if (type === 'dogovor') showDogovor.value = value;
+  else if (type === 'politica') showPolitica.value = value;
+  else if (type === 'info') showInfo.value = value;
+}
 const { teamName } = useAuthCheck();
 
 const store = useStore();
