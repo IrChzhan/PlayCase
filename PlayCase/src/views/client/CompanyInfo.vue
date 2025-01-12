@@ -1,6 +1,9 @@
 <template>
     <div class="company-info-page">
-      <h1>Реквизиты ИП Богатырев Тихон Константинович</h1>
+      <div class="h_div">
+        <h1>Реквизиты ИП Богатырев Тихон Константинович</h1>
+        <!-- <button class="close-button" @click="goBack">&times;</button> -->
+      </div>
       <div class="info-container">
           <p><strong>ОГРНИП:</strong> 317344300073052</p>
           <p><strong>ИНН:</strong> 343534232543</p>
@@ -14,10 +17,15 @@
     </div>
   </template>
 
-  <script setup>
-  import { useRouter } from 'vue-router';
-
-  const router = useRouter();
+  <script>
+export default {
+  name: 'CompanyInfo',
+  methods: {
+    goBack() {
+      this.$router.go(-1); 
+    }
+  }
+};
   </script>
 
   <style scoped>
@@ -27,13 +35,17 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #0f1921;
-    color: #ffd700;
+    background-color: white;
+    color: #3A4C6E;
     font-family: 'Mulish', sans-serif;
   }
 
+  .h_div {
+    display: flex;
+  }
+
   .info-container {
-      background: #27364f;
+      background: white;
       border-radius: 8px;
       padding: 20px;
       max-width: 600px;

@@ -30,67 +30,68 @@ const goToMenuApp = () => {
 
 <style scoped>
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  justify-content: center;
-  position: relative;
-  background: #1b2a46;
+display: flex;
+flex-direction: column;
+align-items: center;
+height: 100vh;
+justify-content: center;
+position: relative;
+background: #1b2a46;
 }
 
 .team-name {
-  text-align: center;
-  font-size: clamp(4rem, 10vw, 9rem); 
-  margin: 0;
-  color: var(--c-white);
-  font-family: 'Mulish', sans-serif;
-  font-weight: 900;
-    max-width: 90vw;        
-   word-wrap: break-word;
+text-align: center;
+font-size: clamp(4rem, 10vw, 9rem);
+margin: 0;
+color: var(--c-white);
+font-family: 'Mulish', sans-serif;
+font-weight: 900;
+max-width: 90vw;
+
+word-wrap: break-word;
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .container_down_menu {
-  position: relative;
-  margin-top: 60px;
+position: relative;
+margin-top: 60px;
 }
 
 .house-image {
-  cursor: pointer;
-  display: block;
-  margin: 20px auto;
+cursor: pointer;
+display: block;
+margin: 20px auto;
 }
 
 .right-corner {
-  position: absolute;
-  right: 10px;
-  left: 400px;
-  bottom: 20px;
-  text-align: right;
+position: absolute;
+right: 10px;
+left: 400px;
+bottom: 20px;
+text-align: right;
 }
 
 .team-table {
-  margin: 0;
-  font-family: 'Mulish', sans-serif;
-  color: #cc9f33;
+margin: 0;
+font-family: 'Mulish', sans-serif;
+color: #cc9f33;
 }
 
 .table-label {
-  margin: 0;
-  font-family: 'Mulish', sans-serif;
-  color: #cc9f33;
+margin: 0;
+font-family: 'Mulish', sans-serif;
+color: #cc9f33;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-  .team-name {
-    font-size: clamp(4rem, 10vw, 4rem); 
-  }
+.team-name {
+font-size: clamp(4rem, 10vw, 4rem);
+}
 
-  .right-corner {
-    right: 10px;
-    bottom: 10px;
-  }
+.right-corner {
+right: 10px;
+bottom: 10px;
+}
 }
 </style>
-
 
