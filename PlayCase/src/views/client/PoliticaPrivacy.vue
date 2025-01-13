@@ -374,17 +374,17 @@ h2 {
 .modal-content {
   background: white;
   border-radius: 10px;
+  padding: 5%;
   width: 80%;
   max-width: 900px;
   max-height: 90%;
   overflow: hidden;
   position: relative;
-  padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .modal-scrollable {
-  max-height: 80vh; 
+  max-height: 80vh;
   overflow-y: auto;
   padding-right: 10px;
 }
