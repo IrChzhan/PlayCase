@@ -4,18 +4,27 @@
       <h2>Результаты</h2>
       <table>
         <thead>
-        <tr>
-          <th>Место</th>
-          <th>Название</th>
-          <th>Общий счёт</th>
-        </tr>
+          <tr>
+            <th>Место</th>
+            <th>Название</th>
+            <th>Общий счёт</th>
+
+            <th v-for="index in maxRounds" :key="'round-header-' + index">Раунд {{ index }}</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="team in teams" :key="team.teamName">
-          <td>{{ team.currentPlace }}</td>
-          <td>{{ team.teamName }}</td>
-          <td>{{ team.totalScore }}</td>
-        </tr>
+          <tr v-for="team in teams" :key="team.teamName">
+            <td>{{ team.currentPlace }}</td>
+            <td>{{ team.teamName }}</td>
+            <td>{{ team.totalScore }}</td>
+
+            <td
+              v-for="(score, index) in Array.from({ length: maxRounds }, (_, i) => team.scoreByRounds[i] || '0')"
+              :key="'round-score-' + team.teamName + '-' + index"
+            >
+              {{ score }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -40,8 +49,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useStore } from 'vuex'
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'AdminResults',
@@ -52,45 +61,51 @@ export default {
     },
   },
   setup(props) {
-    const store = useStore()
-    const selectedFile = ref(null)
-    const loading = ref(false)
-    const uploadSuccess = ref(false)
-    const teams = ref([])
-    const fileInput = ref()
+    const store = useStore();
+    const selectedFile = ref(null);
+    const loading = ref(false);
+    const uploadSuccess = ref(false);
+    const teams = ref([]);
+    const fileInput = ref();
+
     const handleFileChange = (event) => {
-      selectedFile.value = event.target.files[0]
+      selectedFile.value = event.target.files[0];
       if (selectedFile.value) {
-        console.log('File name:', selectedFile.value.name)
-        console.log('File size:', selectedFile.value.size)
-        console.log('File type:', selectedFile.value.type)
+        console.log('File name:', selectedFile.value.name);
+        console.log('File size:', selectedFile.value.size);
+        console.log('File type:', selectedFile.value.type);
       }
-    }
+    };
 
     const uploadFile = async () => {
       if (!selectedFile.value) {
-        alert('Please choose a file.')
-        return
+        alert('Please choose a file.');
+        return;
       }
 
-      loading.value = true
+      loading.value = true;
       try {
         await store.dispatch('games/uploadResultsFile', {
           gameId: props.gameId,
           file: selectedFile.value,
-        })
-        uploadSuccess.value = true
-        await fetchResults()
+        });
+        uploadSuccess.value = true;
+        await fetchResults();
       } catch (error) {
-        console.error('Error uploading file:', error)
-        alert('Error uploading file. Please try again.')
+        console.error('Error uploading file:', error);
+        alert('Error uploading file. Please try again.');
       } finally {
-        loading.value = false
+        loading.value = false;
       }
     };
 
+    const maxRounds = computed(() => {
+      if (!teams.value.length) return 0;
+      return Math.max(...teams.value.map((team) => team.scoreByRounds.length));
+    });
+
     const fetchResults = async () => {
-      loading.value = true
+      loading.value = true;
       try {
         const currentGame = await store.dispatch('games/fetchGameById', props.gameId);
         const results = await store.dispatch('games/fetchGameResults', currentGame.id);
@@ -98,13 +113,13 @@ export default {
       } catch (error) {
         console.error('Error fetching data:', error.message);
       } finally {
-        loading.value = false
+        loading.value = false;
       }
     };
 
     const triggerFileInput = () => {
-      fileInput.value.click()
-    }
+      fileInput.value.click();
+    };
 
     return {
       selectedFile,
@@ -115,10 +130,11 @@ export default {
       fetchResults,
       teams,
       triggerFileInput,
-      fileInput
-    }
+      fileInput,
+      maxRounds,
+    };
   },
-}
+};
 </script>
 
 <style scoped>
@@ -127,7 +143,7 @@ h2 {
   margin-bottom: 20px;
 }
 .admin-results {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 10px;

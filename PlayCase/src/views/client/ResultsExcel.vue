@@ -1,6 +1,6 @@
 <template>
   <div class="results-page">
-    <table v-if="teams.length !== 0" class="results-table">
+    <table class="results-table">
       <thead>
         <tr>
           <th>Место</th>
@@ -10,23 +10,29 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(team, index) in teams"
-          :key="team.teamName"
-          :class="index % 2 === 0 ? 'even-row' : 'odd-row'"
-        >
-          <td>{{ team.currentPlace }}</td>
-          <td>{{ team.teamName }}</td>
-          <td>{{ team.totalScore }}</td>
-          <td v-for="score in team.scoreByRounds" :key="score">{{ score }}</td>
-        </tr>
+        <template v-if="shouldDisplayTable">
+          <tr
+            v-for="(team, index) in teams"
+            :key="team.teamName"
+            :class="index % 2 === 0 ? 'even-row' : 'odd-row'"
+          >
+            <td>{{ team.currentPlace }}</td>
+            <td>{{ team.teamName }}</td>
+            <td>{{ team.totalScore }}</td>
+            <td v-for="score in team.scoreByRounds" :key="score">{{ score }}</td>
+          </tr>
+        </template>
+        <template v-else>
+          <tr>
+            <td colspan="100%" class="no-results">Результатов пока нет</td>
+          </tr>
+        </template>
       </tbody>
     </table>
-    <span v-else>Результатов нет</span>
-
     <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
   </div>
 </template>
+
 
 <script setup>
 import { onMounted, ref, computed } from 'vue';
@@ -36,6 +42,19 @@ import { useStore } from 'vuex';
 const store = useStore();
 const router = useRouter();
 const teams = ref([]);
+
+const hasResults = computed(() => {
+  return teams.value.some(
+    (team) =>
+      team.totalScore > 0 ||
+      team.scoreByRounds.some((score) => score > 0)
+  );
+});
+
+const shouldDisplayTable = computed(() => {
+  return teams.value.length > 0 && hasResults.value;
+});
+
 const maxRounds = computed(() => {
   if (!teams.value.length) return 0;
   return Math.max(...teams.value.map((team) => team.scoreByRounds.length));
@@ -64,18 +83,11 @@ const goToMenuApp = () => {
   flex-direction: column;
   align-items: center;
   background-color: #1B2A46;
-  color: #000;
+  color: #1B2A46;
   padding: 20px;
   height: 100%;
   font-family: 'Mulish', sans-serif;
   overflow: hidden;
-}
-
-h1 {
-  color: #FFFFFC;
-  font-size: 2rem;
-  margin-bottom: 25px;
-  margin-top: -30px;
 }
 
 .results-table {
@@ -90,7 +102,7 @@ h1 {
   border: 1px solid #ffd700;
   padding: 10px;
   text-align: center;
-  color: #000;
+  color: #1B2A46;
 }
 
 .results-table th {
@@ -106,6 +118,14 @@ h1 {
   background-color: #fff;
 }
 
+.no-results {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1B2A46;
+  background-color: white;
+  text-align: center;
+}
+
 .home-button {
   width: 50px;
   height: 50px;
@@ -114,5 +134,3 @@ h1 {
   cursor: pointer;
 }
 </style>
-
-

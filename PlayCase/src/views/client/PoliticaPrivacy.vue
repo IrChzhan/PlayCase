@@ -366,6 +366,11 @@ const props = defineProps({
   z-index: 1000;
 }
 
+h2 {
+    margin-top: 20px;
+    font-size: 20px;
+  }
+
 .modal-content {
   background: white;
   border-radius: 10px;
