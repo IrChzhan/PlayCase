@@ -105,6 +105,7 @@ onMounted(() => {
 <style scoped>
 .container {
   height: 100vh;
+  width: 100%;
   font-family: 'Arial', sans-serif;
   background: #1c2742;
   color: #fff;
@@ -116,18 +117,20 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #1c2742;
+  background-color: #1c2742; 
   color: #fff;
   font-family: 'Arial', sans-serif;
   text-align: center;
   height: 100%;
+  overflow: hidden; 
 }
 
 .sticky-header {
   position: sticky;
   top: 0;
-  background-color: #1c2742;
+  background-color: #1c2742; 
   z-index: 10;
+  width: 100%; 
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -153,9 +156,26 @@ h1 {
 
 .category-filters {
   display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  flex-wrap: nowrap; 
+  overflow-x: auto; 
+  max-width: 75vw; 
+  box-sizing: border-box; 
+  padding-bottom: 10px;
   gap: 10px;
+}
+
+.category-filters::-webkit-scrollbar {
+  height: 8px; 
+}
+
+.category-filters::-webkit-scrollbar-thumb {
+  background-color: #ffa726; 
+  border-radius: 4px;
+}
+
+.category-filters::-webkit-scrollbar-track {
+  background-color: #333; 
+  border-radius: 4px;
 }
 
 .category-filters button {
@@ -194,7 +214,7 @@ h1 {
 
 .meals-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 15px;
   justify-items: center;
   padding: 20px;
@@ -207,8 +227,8 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   text-align: left;
-  width: 180px;
-  height: 240px;
+  width: 140px;
+  height: 190px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

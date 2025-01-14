@@ -133,14 +133,6 @@ const menuItems = ref([
   background: #1b2a46;
 }
 
-.team-name {
-  font-size: 64px;
-  color: white;
-  font-family: 'Mulish', sans-serif;
-  font-weight: bold;
-  text-align: center;
-  margin: 0 auto;
-}
 .header {
   display: flex;
   justify-content: center;
@@ -152,6 +144,16 @@ const menuItems = ref([
   border-radius: 10px;
   padding: 10px;
   margin: 12px auto;
+}
+
+.team-name {
+    color: white;
+    font-family: 'Mulish', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: clamp(32px, 8vw, 50px); /* Адаптивный размер шрифта */
 }
 
 h2 {
