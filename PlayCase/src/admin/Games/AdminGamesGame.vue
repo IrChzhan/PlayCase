@@ -153,6 +153,8 @@ watch(
 .container {
   display: flex;
   height: 100%;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -205,4 +207,65 @@ button.active {
 .top-bar div {
   font-size: 20px;
 }
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: auto;
+    margin-bottom: 20px;
+  }
+
+  .sidebar button {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .top-bar {
+    padding: 10px 15px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .top-bar div {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 0 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .sidebar button {
+    padding: 6px 10px;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .top-bar {
+    padding: 8px 12px;
+  }
+
+  .top-bar div {
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 0 5px;
+  }
+}
 </style>
+

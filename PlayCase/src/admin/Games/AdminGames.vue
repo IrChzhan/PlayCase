@@ -20,17 +20,41 @@
       <table class="games-table" :class="{'abra':role === 'CASHIER'}">
         <thead>
         <tr>
-          <th>Название</th>
-          <th>Дата</th>
-          <th>Заведение</th>
-          <th>Статус</th>
+          <th @click="sortTable('name')">
+            Название
+            <span class="sort-arrows">
+              <span v-if="sortKey === 'name' && sortOrder === 'asc'">↑</span>
+              <span v-if="sortKey === 'name' && sortOrder === 'desc'">↓</span>
+            </span>
+          </th>
+          <th @click="sortTable('plannedDate')">
+            Дата
+            <span class="sort-arrows">
+              <span v-if="sortKey === 'plannedDate' && sortOrder === 'asc'">↑</span>
+              <span v-if="sortKey === 'plannedDate' && sortOrder === 'desc'">↓</span>
+            </span>
+          </th>
+          <th @click="sortTable('place')">
+            Заведение
+            <span class="sort-arrows">
+              <span v-if="sortKey === 'place' && sortOrder === 'asc'">↑</span>
+              <span v-if="sortKey === 'place' && sortOrder === 'desc'">↓</span>
+            </span>
+          </th>
+          <th @click="sortTable('status')">
+            Статус
+            <span class="sort-arrows">
+              <span v-if="sortKey === 'status' && sortOrder === 'asc'">↑</span>
+              <span v-if="sortKey === 'status' && sortOrder === 'desc'">↓</span>
+            </span>
+          </th>
           <th v-if="role !== 'CASHIER'">Изменения статуса</th>
           <th v-if="role !== 'CASHIER'"></th>
         </tr>
         </thead>
         <tbody>
         <tr
-          v-for="game in filteredGames"
+          v-for="game in sortedGames"
           :key="game.id"
           @click="goToGameTeams(game.id)"
           class="game-row"
@@ -186,7 +210,6 @@ const checkAccess = () => {
 }
 
 
-
 const totalPages = computed(() => {
   const filtered = games.value.filter(
     (game) =>
@@ -225,6 +248,31 @@ const filteredGames = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage.value;
   const endIndex = startIndex + itemsPerPage.value;
   return filtered.slice(startIndex, endIndex);
+});
+
+const sortKey = ref('');
+const sortOrder = ref('asc');
+
+const sortTable = (key) => {
+  if (sortKey.value === key) {
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortKey.value = key;
+    sortOrder.value = 'asc';
+  }
+};
+
+const sortedGames = computed(() => {
+  const sorted = [...filteredGames.value];
+  sorted.sort((a, b) => {
+    const fieldA = sortKey.value === 'place' ? findPlaceName(a.place.id) : a[sortKey.value];
+    const fieldB = sortKey.value === 'place' ? findPlaceName(b.place.id) : b[sortKey.value];
+
+    if (fieldA < fieldB) return sortOrder.value === 'asc' ? -1 : 1;
+    if (fieldA > fieldB) return sortOrder.value === 'asc' ? 1 : -1;
+    return 0;
+  });
+  return sorted;
 });
 
 const fetchGames = async () => {
@@ -326,10 +374,10 @@ h1 {
 
 .games-table th,
 .games-table td {
-    padding: 2px;  
+    padding: 2px;
     border: 1px solid #ccc;
     text-align: left;
-    line-height: 1.2; 
+    line-height: 1.2;
 }
 
 .games-table th {

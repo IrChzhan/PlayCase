@@ -35,10 +35,21 @@
     <table border="1" class="teams-table">
       <thead>
       <tr>
-        <th>Номер стола</th>
-        <th>Имя команды</th>
-        <th>Email</th>
-        <th>Привязанный планшет</th>
+        <th @click="changeSort('tableNumber')">
+          Номер стола
+          <span v-if="sortKey === 'tableNumber'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+        </th>
+        <th @click="changeSort('name')">
+          Имя команды
+          <span v-if="sortKey === 'name'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+        </th>
+        <th @click="changeSort('email')">
+          Email
+          <span v-if="sortKey === 'email'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+        </th>
+        <th>
+          Привязанный планшет
+        </th>
         <th></th>
       </tr>
       </thead>
@@ -142,6 +153,8 @@ const notificationMessage = ref('')
 const notificationType = ref('info')
 const selectedUser = ref({})
 const users = ref([])
+const sortKey = ref('name');
+const sortDirection = ref('asc');
 
 const openShowEditingUsers = (id) => {
   showEditingUsers.value = id;
@@ -154,11 +167,21 @@ const closeShowEditingUser = () => {
 const teams = computed(() => store.state.games.teams[route.params.gameId] || [])
 const sortedTeams = computed(() => {
   return [...teams.value].sort((a, b) => {
-    if (a.name < b.name) return -1;
-    if (a.name > b.name) return 1;
+    let modifier = sortDirection.value === 'asc' ? 1 : -1;
+    if (a[sortKey.value] < b[sortKey.value]) return -1 * modifier;
+    if (a[sortKey.value] > b[sortKey.value]) return 1 * modifier;
     return 0;
   });
 });
+
+const changeSort = (key) => {
+  if (sortKey.value === key) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortKey.value = key;
+    sortDirection.value = 'asc';
+  }
+};
 
 onMounted(async () => {
   await fetchUsers();
