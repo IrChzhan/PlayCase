@@ -38,6 +38,7 @@ const client = new Client({
 
     client.subscribe(`/queue/user/${userId.value}/set-place`, (message) => {
       const parsedMessage = JSON.parse(message.body);
+      store.commit('results/setResult')
       openModal()
     });
 

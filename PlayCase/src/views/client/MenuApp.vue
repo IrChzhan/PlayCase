@@ -9,6 +9,10 @@
         <img :src="item.image" alt="" class="menu-image" @click="item.function" />
         <p>{{ item.name }}</p>
       </div>
+      <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
+        <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />
+        <p>Обратная связь</p>
+      </div>
     </div>
 
     <div class="footer">
@@ -19,12 +23,13 @@
     <ModalContacts :show="showModalContacts" :closeModal="closeModalContacts" />
     <ModalPay :show="showModalPay" :closeModal="closeModalPay" />
     <ModalHelp :show="showModalHelp" :closeModal="closeModalHelp"/>
+    <ModalFeedback :show="showModalFeedback" :closeModal="closeModalFeedback"/>
     <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import cashImage from '@/assets/cash.png'
@@ -42,6 +47,8 @@ import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
 import person from '@/assets/hu.png'
 import ModalHelp from "@/components/widgets/ModalHelp.vue";
+import FeedBackImage from "@/assets/feedback2.png"
+import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
 
 const store = useStore()
 const route = useRoute()
@@ -49,12 +56,24 @@ const router = useRouter()
 const toastMessage = ref('')
 const toastType = ref('success')
 
+const watchedState = computed(() => store.state.results.result);
+
 const { teamName } = useAuthCheck()
 const showModalLottery = ref(false)
 const showModalContacts = ref(false)
 const showModalPay = ref(false)
 const showModalHelp = ref(false)
+const showModalFeedback = ref(false)
 
+const status = ref('')
+
+const openModalFeedback = () => {
+  showModalFeedback.value = true
+}
+
+const closeModalFeedback = () => {
+  showModalFeedback.value = false
+}
 
 const closeModalHelp = () => {
   showModalHelp.value = false
@@ -121,8 +140,26 @@ const menuItems = ref([
   },
   { name: 'Лотерея', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
-  { name: 'Help', image: helpImage, function: openModalHelp},
+  { name: 'Help', image: helpImage, function: openModalHelp}
 ])
+
+const fetchGame = async () => {
+  try {
+    const res = await store.dispatch('online/getGame')
+    status.value = res.status
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+watch(watchedState, () => {
+  fetchGame();
+});
+
+onMounted(()=>{
+  fetchGame()
+})
+
 </script>
 
 <style scoped>
@@ -153,7 +190,7 @@ const menuItems = ref([
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
-    font-size: clamp(32px, 8vw, 50px); /* Адаптивный размер шрифта */
+    font-size: clamp(32px, 8vw, 50px);
 }
 
 h2 {
@@ -184,6 +221,12 @@ p {
 .menu-image {
   width: 70px;
   height: 70px;
+}
+
+.image-one {
+  margin-top: 15px;
+  width: 40px;
+  height: 40px;
 }
 
 .footer {

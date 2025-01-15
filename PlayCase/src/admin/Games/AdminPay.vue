@@ -29,11 +29,7 @@
         <td>{{ team.teamName }}</td>
         <td>{{ team.expectedParticipantsCount }}</td>
         <td>
-<<<<<<< HEAD
           {{ team.paidByQr }}
-=======
-          {{team.paidByQr}}
->>>>>>> c2c2683ff2bf3c8e4d102159fa55defecae07b68
         </td>
         <td>
           <input

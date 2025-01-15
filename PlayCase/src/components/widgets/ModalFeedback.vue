@@ -1,36 +1,32 @@
 <template>
-  <div class="modal-overlay" v-if="show" @click.self="closeModal">
+  <div class="modal-overlay" v-if="show">
     <div class="modal-content">
       <button class="close-button" @click="closeModal">&times;</button>
       <div class="modal-body">
         <div class="form-section">
           <div class="team-title">{{teamName}}</div>
-          <h1 class="main-heading">Оставьте свой комментарий</h1>
-          <textarea
-            v-model="formData.comment"
-            placeholder="Ваш комментарий"
-            class="textarea"
-          ></textarea>
-          <div class="checkbox-groups">
-            <div class="checkbox-column">
-              <h3 class="checkbox-title">Оценка игры:</h3>
-              <label class="checkbox-container">
-                <input type="radio" name="questions" v-model="formData.questionType" value="BAD" />
-                Плохая
-              </label>
-              <label class="checkbox-container">
-                <input
-                  type="radio"
-                  name="questions"
-                  v-model="formData.questionType"
-                  value="NEUTRAL"
-                />
-                Нормальная
-              </label>
-              <label class="checkbox-container">
-                <input type="radio" name="questions" v-model="formData.questionType" value="GOOD" />
-                Отличная
-              </label>
+          <h2 class="title-box">Поставьте оценку игре</h2>
+          <div class="image-selection">
+            <div
+              class="image-container"
+              :class="{'selected': formData.questionType === 'GOOD'}"
+              @click="formData.questionType = 'GOOD'"
+              style="background: #8ECE40;">
+              <img :src="Good" alt="Good" class="image" />
+            </div>
+            <div
+              class="image-container"
+              :class="{'selected': formData.questionType === 'NEUTRAL'}"
+              @click="formData.questionType = 'NEUTRAL'"
+              style="background-color: #FEC923;">
+              <img :src="Neutral" alt="Neutral" class="image" />
+            </div>
+            <div
+              class="image-container"
+              :class="{'selected': formData.questionType === 'BAD'}"
+              @click="formData.questionType = 'BAD'"
+              style="background-color: #E85C29;">
+              <img :src="Bad" alt="Bad" class="image" />
             </div>
           </div>
           <button type="button" class="submit-button" @click="submitForm">Отправить данные</button>
@@ -46,6 +42,9 @@ import {ref, watch} from 'vue'
 import {useAuthCheck} from "@/hooks/useAuthCheck.js";
 import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
+import Good from "@/assets/Good.png"
+import Neutral from "@/assets/Neutral.png"
+import Bad from "@/assets/Bad.png"
 
 const props = defineProps({
   show: Boolean,
@@ -57,17 +56,14 @@ const { teamName } = useAuthCheck()
 const store = useStore()
 
 const formData = ref({
-  comment: '',
   questionType: '',
-  hostType: '',
 })
 
 const submitForm = async () => {
   try {
     await store.dispatch('profile/addMark',
       {
-        mark: formData.value.questionType,
-        comment: formData.value.comment
+        mark: formData.value.questionType
       }
     )
     toastMessage.value = 'Оценка успешно отправлена!'
@@ -77,7 +73,7 @@ const submitForm = async () => {
       closeModal()
     }, 1000)
   }catch (e) {
-    toastMessage.value = 'Проищошла ошибка'
+    toastMessage.value = 'Произошла ошибка'
     toastType.value = 'error'
     console.log(e)
   }
@@ -108,6 +104,14 @@ watch(
   z-index: 1000;
 }
 
+.title-box {
+  font-size: 36px;
+  color: #CC9F33;
+  font-weight: 700;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
 .modal-content {
   background: var(--c-white, #fff);
   border-radius: 1vw;
@@ -130,14 +134,6 @@ watch(
   cursor: pointer;
 }
 
-.main-heading {
-  font-size: clamp(24px, 4vw, 36px);
-  color: #0f1921;
-  margin-bottom: 2vw;
-  line-height: 1.2;
-  font-weight: 700;
-}
-
 .team-title {
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
@@ -149,46 +145,34 @@ watch(
   margin-bottom: 1vw;
 }
 
-.textarea {
-  width: 100%;
-  height: 150px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1vw;
-  font-size: clamp(12px, 1.5vw, 14px);
-  margin-bottom: 1.5vw;
-  resize: none;
-}
-
-.checkbox-groups {
+.image-selection {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 2vw;
 }
 
-.checkbox-column {
+.image-container {
+  width: 120px;
+  height: 120px;
+  padding: 20px;
   display: flex;
-  flex-direction: column;
-  gap: 0.75vw;
-}
-
-.checkbox-title {
-  font-size: clamp(14px, 1.5vw, 18px);
-  color: #cc9f33;
-  margin-bottom: 0.5vw;
-}
-
-.checkbox-container {
-  display: flex;
+  justify-content: center;
   align-items: center;
-  font-size: clamp(12px, 1.5vw, 14px);
-  color: #0f1921;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: inherit;
 }
 
-.checkbox-container input[type='radio'] {
-  margin-right: 0.5vw;
-  width: 16px;
-  height: 16px;
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.image-container.selected {
+  border-color: currentColor;
 }
 
 .submit-button {
@@ -207,35 +191,21 @@ watch(
 }
 
 @media (max-width: 768px) {
-  @media (max-width: 768px) {
-    .modal-content {
-      width: 90vw;
-      padding: 15px;
-    }
-    .main-heading {
-      font-size: clamp(18px, 3vw, 24px);
-    }
-    .team-title {
-      font-size: clamp(10px, 1.5vw, 14px);
-      padding: 0.5vw 1vw;
-    }
-    .textarea {
-      height: 100px;
-      font-size: clamp(10px, 1.5vw, 12px);
-    }
-    .checkbox-title {
-      font-size: clamp(10px, 1.5vw, 14px);
-    }
-    .checkbox-container {
-      font-size: clamp(10px, 1.5vw, 12px);
-    }
-    .submit-button {
-      font-size: clamp(10px, 1.5vw, 12px);
-      padding: 0.8vw 1.5vw;
-    }
-    .checkbox-groups {
-      flex-direction: column;
-    }
+  .modal-content {
+    width: 90vw;
+    padding: 15px;
+  }
+  .team-title {
+    font-size: clamp(10px, 1.5vw, 14px);
+    padding: 0.5vw 1vw;
+  }
+  .image-container {
+    width: 80px;
+    height: 80px;
+  }
+  .submit-button {
+    font-size: clamp(10px, 1.5vw, 12px);
+    padding: 0.8vw 1.5vw;
   }
 }
 </style>

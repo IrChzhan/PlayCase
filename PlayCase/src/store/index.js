@@ -7,6 +7,7 @@ import profile from './modules/profile.js'
 import payments from './modules/payments'
 import helps from "@/store/modules/helps.js";
 import results from "@/store/modules/results.js";
+import online from "@/store/modules/online.js";
 
 export const store = createStore({
   modules: {
@@ -16,6 +17,7 @@ export const store = createStore({
     games,
     payments,
     helps,
-    results
+    results,
+    online
   },
 })
