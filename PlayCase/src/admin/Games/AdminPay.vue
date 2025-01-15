@@ -29,13 +29,7 @@
         <td>{{ team.teamName }}</td>
         <td>{{ team.expectedParticipantsCount }}</td>
         <td>
-          <input
-            type="text"
-            v-model.number="team.paidByQr"
-            class="editable-input"
-            @input="updateTotal(team)"
-            @blur="saveChanges(team)"
-          />
+          {{ team.paidByQr }}
         </td>
         <td>
           <input

@@ -11,14 +11,26 @@
               <div v-if="emailError || phoneError" class="error-section">
                 <p class="error-message">Неверные данные</p>
               </div>
-              <Input v-model:modelValue="formData.name" text="Имя" width="auto" />
-              <Input v-model:modelValue="formData.email" text="E-mail" width="auto" />
               <Input
-                v-model:modelValue="formData.phone"
-                text="Телефон"
-                width="auto"
-                placeholder="+7 (___) ___-____"
-              />
+  v-model:modelValue="formData.name"
+  text="Имя"
+  width="auto"
+/>
+<Input
+  v-model:modelValue="formData.email"
+  :error="emailError"
+  :errorMessage="emailError"
+  text="E-mail"
+  width="auto"
+/>
+<Input
+  v-model:modelValue="formData.phone"
+  :error="phoneError"
+  :errorMessage="phoneError"
+  text="Телефон"
+  width="auto"
+  placeholder="+7 (___) ___-____"
+/>
 
               <button type="submit" class="submit-button">Участвовать</button>
 

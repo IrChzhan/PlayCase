@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="menu-page">
+      <!-- Существующая структура -->
       <div class="header sticky-header">
         <div class="header-content">
           <h1>Меню ресторана</h1>
@@ -20,7 +21,12 @@
 
       <div class="meals-scrollable">
         <div class="meals-grid">
-          <div class="meal-card" v-for="meal in filteredMenuItems" :key="meal.id">
+          <div
+            class="meal-card"
+            v-for="meal in filteredMenuItems"
+            :key="meal.id"
+            @click="openMealModal(meal)"
+          >
             <img
               :src="meal.image || '/assets/default-image.png'"
               alt="Изображение блюда"
@@ -29,13 +35,24 @@
             <div class="meal-info">
               <p class="meal-price">{{ meal.price }} ₽</p>
               <h2 class="meal-name">{{ meal.name }}</h2>
-              <p class="meal-description">{{ meal.description }}</p>
             </div>
           </div>
         </div>
       </div>
 
       <img src="../../assets/house_light.png" class="home-button" @click="goToMenuApp" />
+
+      <div class="modal-overlay" v-if="showMealModal">
+        <div class="modal-content">
+          <button class="close-button" @click="closeMealModal">&times;</button>
+          <div class="meal-details">
+            <img :src="currentMeal.image || '/assets/default-image.png'" alt="Изображение блюда" class="meal-modal-image" />
+            <p class="meal-modal-name">{{ currentMeal.name }}</p>
+            <p class="meal-modal-description">{{ currentMeal.description }}</p>
+            <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +65,9 @@ const router = useRouter();
 const categories = ref([])
 const meals = ref([])
 const selectedCategoryName = ref(null)
+
+const showMealModal = ref(false);
+const currentMeal = ref({});
 
 const goToMenuApp = () => {
   router.push({ name: 'MenuApp' });
@@ -95,6 +115,15 @@ const filterByCategory = (categoryName) => {
 
 const clearFilter = () => {
   selectedCategoryName.value = null
+}
+
+const openMealModal = (meal) => {
+  currentMeal.value = meal;
+  showMealModal.value = true;
+}
+
+const closeMealModal = () => {
+  showMealModal.value = false;
 }
 
 onMounted(() => {
@@ -270,5 +299,69 @@ h1 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.meal-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.meal-modal-image {
+  max-width: 40%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.meal-modal-description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.meal-modal-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #cc9f33;
+}
+
+.meal-modal-name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 10px;
 }
 </style>

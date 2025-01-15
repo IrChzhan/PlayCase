@@ -18,46 +18,12 @@
             </button>
           </div>
           <div class="price-info">
-            <div class="total-price">{{ totalPrice }} ₽ <span>к оплате</span></div>
+            <div class="total-price">ИТОГО: {{ totalPrice }} ₽</div>
             <div class="price-per-player">
               {{ pricePerPlayer }} ₽ <span>цена за 1 человека</span>
             </div>
           </div>
-          <div v-if="!isPaying">
-            <div class="form">
-              <p>Чек будет отправлен на почту, указанную при регистрации</p>
-              <button class="pay-button" @click="startPayment">Перейти к оплате</button>
-              <div class="policy">
-                <input type="checkbox" id="policy-checkbox" />
-                <label for="policy-checkbox">
-                  Нажимая на кнопку, вы соглашаетесь с политикой обработки персональных данных
-                </label>
-              </div>
-            </div>
-          </div>
 
-          <div v-else-if="!paymentMethod">
-            <div class="payment-options">
-              <button class="payment-option" @click="selectPaymentMethod('qr')">QR-код</button>
-              <button class="payment-option" @click="selectPaymentMethod('card')">Карта</button>
-            </div>
-          </div>
-
-          <div v-else-if="paymentMethod === 'qr'">
-            <p>Сканируйте QR-код для оплаты:</p>
-            <img src="@/assets/qr.png" alt="QR-код" class="qr-code" />
-            <button @click="cancelPaymentMethod" class="back-button">Назад</button>
-          </div>
-
-          <div v-else-if="paymentMethod === 'card'">
-            <div class="card-payment-form">
-              <input type="text" placeholder="Номер карты" class="card-number" />
-              <input type="text" placeholder="Срок действия (MM/YY)" class="card-expiry" />
-              <input type="text" placeholder="CVV" class="card-cvv" />
-              <button class="pay-now-button">Оплатить</button>
-            </div>
-            <button @click="cancelPaymentMethod" class="back-button">Назад</button>
-          </div>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
           <info-modal v-if="showInfo" @close="toggleModal('info', false)" />
@@ -75,21 +41,26 @@
             </ul>
           </div>
         </div>
+
+        <div class="qr-section">
+          <div class="qr-container">
+            <img src="@/assets/qr.png" alt="QR-код" class="qr-code" />
+            <p class="qr-instruction">Отсканируйте код камерой или в приложении банка</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref, computed, watch} from 'vue';
+import { ref, computed, watch } from 'vue';
 import DogovorModal from '@/views/client/Dogovor.vue';
 import PolicyModal from '@/views/client/PoliticaPrivacy.vue';
 import InfoModal from '@/views/client/CompanyInfo.vue';
-import {useAuthCheck} from "@/hooks/useAuthCheck.js";
+import { useAuthCheck } from "@/hooks/useAuthCheck.js";
 
-const {teamName} = useAuthCheck()
-const isPaying = ref(false)
-const paymentMethod = ref(null)
+const { teamName } = useAuthCheck();
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
@@ -110,20 +81,9 @@ function toggleModal(type, value) {
 }
 
 function selectPlayers(number) {
-  selectedPlayers.value = number
+  selectedPlayers.value = number;
 }
 
-function startPayment() {
-  isPaying.value = true
-}
-
-function selectPaymentMethod(method) {
-  paymentMethod.value = method
-}
-
-function cancelPaymentMethod() {
-  paymentMethod.value = null
-}
 watch(
   () => props.show,
   (newVal) => {
@@ -136,23 +96,34 @@ watch(
 );
 </script>
 
-
 <style scoped>
 .link-li {
   margin-top: 10px;
+  display: inline;
 }
 
 .link {
   font-size: 0.8rem;
-  color: #cc9f33;
+  color: #000;
   text-decoration: none;
-  border-bottom: 1px dashed #cc9f33;
+  border-bottom: 1px solid #000;
   cursor: pointer;
-  transition: border-bottom 0.3s;
+  margin: 0 5px;
 }
 
 .link:hover {
-  border-bottom: 1px solid #cc9f33;
+  border-bottom: 2px solid #000;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.price-per-player {
+  margin-top: 10px;
 }
 
 .modal-overlay {
@@ -181,8 +152,8 @@ watch(
 
 .close-button {
   position: absolute;
-  top: 2%;
-  right: 2%;
+  top: 0.3%;
+  right: 0.3%;
   background: none;
   border: none;
   font-size: clamp(16px, 2vw, 24px);
@@ -191,20 +162,12 @@ watch(
   cursor: pointer;
 }
 
-.main-heading {
-  font-size: clamp(24px, 4vw, 36px);
-  color: #0f1921;
-  margin-bottom: 2vw;
-  line-height: 1.2;
-  font-weight: 700;
-}
-
 .team-title {
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
   font-weight: bold;
   color: white;
-  background-color: #CC9F33;
+  background-color: #cc9f33;
   padding: 1vw 2vw;
   border-radius: 12px;
   margin-bottom: 1vw;
@@ -215,7 +178,15 @@ watch(
   font-size: 1.2rem;
 }
 
-.price-info .total-price,
+.price-info .total-price {
+  font-weight: 700;
+  color: #fff;
+  background-color: #cc9f33;
+  padding: 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
 .price-info .price-per-player {
   font-weight: 700;
   color: #333;
@@ -226,79 +197,31 @@ watch(
   color: #555;
 }
 
-.form p {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.email-input,
-.promo-input {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.pay-button {
-  background-color: #cc9f33;
-  color: #fff;
-  font-size: 1rem;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  transition: background-color 0.3s;
-}
-
-.pay-button:hover {
-  background-color: #b1882e;
-}
-
-.policy {
-  font-size: 1rem;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.policy input {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
 .player-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: 30px;
+  margin-top: 15px;
   margin-right: 160px;
+  justify-content: flex-start;
 }
 
 .player-button {
   background-color: #f5f5f5;
   border: 2px solid #ddd;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  border-radius: 60%;
+  width: 30px;
+  height: 30px;
+  flex-grow: 0;
+  flex-shrink: 0;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
   cursor: pointer;
-  transition:
-    background-color 0.3s,
-    border-color 0.3s;
+  transition: background-color 0.3s, border-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .player-button.active {
@@ -307,58 +230,37 @@ watch(
   border-color: #cc9f33;
 }
 
-.payment-options {
+.form-section {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.qr-section {
+  flex: 0 0 30%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
 }
 
-.payment-option {
-  background: #cc9f33;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.card-payment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.card-number,
-.card-expiry,
-.card-cvv {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.pay-now-button {
-  background: #cc9f33;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
+.qr-container {
+  background: rgba(0, 0, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .qr-code {
-  max-width: 100%;
-  margin-bottom: 20px;
+  width: 250px;
+  height: 100px;
+  height: auto;
 }
 
-.back-button {
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: 790px;
-  margin-top: 9px;
-  background: #cc9f33;
-  color: white;
+.qr-instruction {
+  margin-top: 10px;
+  font-size: 1rem;
+  text-align: center;
+  color: #555;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
@@ -367,32 +269,22 @@ watch(
     padding: 20px;
   }
 
-  .main-heading {
-    font-size: clamp(18px, 3.5vw, 24px);
-    margin-bottom: 10px;
-  }
-
   .team-title {
     font-size: clamp(12px, 2.5vw, 16px);
     padding: 1vw 2vw;
   }
 
-  .title {
-    font-size: clamp(16px, 3vw, 20px);
-    margin-bottom: 20px;
-  }
-
   .player-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 4px;
     margin-bottom: 20px;
     justify-content: center;
   }
 
   .player-button {
-    width: 60px;
-    height: 60px;
+    width: 47px;
+    height: 47px;
     font-size: 1.1rem;
   }
 
@@ -400,88 +292,8 @@ watch(
     margin-bottom: 20px;
   }
 
-  .price-info .total-price,
-  .price-info .price-per-player {
-    font-size: 1.1rem;
-  }
-
-  .price-info span {
-    font-size: 0.9rem;
-  }
-
-  .form p {
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-
-  .email-input,
-  .promo-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-  }
-
-  .pay-button {
-    padding: 12px 20px;
-    font-size: 1.1rem;
-  }
-
-  .policy {
-    font-size: 0.9rem;
-    margin-top: 10px;
-  }
-
-  .payment-options {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 20px;
-  }
-
-  .payment-option {
+  .qr-container {
     padding: 15px;
-    font-size: 1rem;
-  }
-
-  .card-payment-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .card-number,
-  .card-expiry,
-  .card-cvv {
-    padding: 12px;
-    font-size: 1rem;
-  }
-
-  .pay-now-button {
-    padding: 12px 20px;
-    font-size: 1.1rem;
-  }
-
-  .qr-code {
-    width: 150px;
-    margin-bottom: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .back-button {
-    position: relative;
-    padding: 12px;
-    font-size: 1rem;
-    margin-left: 0;
-    margin-top: 20px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .back-button:hover {
-    background-color: #b1882e;
   }
 }
 </style>
