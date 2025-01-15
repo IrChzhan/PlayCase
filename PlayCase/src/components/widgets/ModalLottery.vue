@@ -9,7 +9,6 @@
             <h1 class="main-heading">Примите участие<br />в лотерее</h1>
             <form @submit.prevent="submitForm">
               <div v-if="emailError || phoneError" class="error-section">
-                <p class="error-message">Неверные данные</p>
               </div>
               <Input
   v-model:modelValue="formData.name"
@@ -18,14 +17,14 @@
 />
 <Input
   v-model:modelValue="formData.email"
-  :error="emailError"
+  :error="!!emailError"
   :errorMessage="emailError"
   text="E-mail"
   width="auto"
 />
 <Input
   v-model:modelValue="formData.phone"
-  :error="phoneError"
+  :error="!!phoneError"
   :errorMessage="phoneError"
   text="Телефон"
   width="auto"
@@ -125,45 +124,50 @@ const showSuccessModal = ref(false);
 const successNumber = ref(null);
 
 const submitForm = async () => {
-  emailError.value = '';
-  phoneError.value = '';
-  const cleanPhone = formData.value.phone.replace(/\D/g, '');
+    emailError.value = '';
+    phoneError.value = '';
+    const cleanPhone = formData.value.phone.replace(/\D/g, ''); 
+if (!cleanPhone.match(/^7\d{10}$/)) {
+    phoneError.value = 'Введите корректный номер телефона.';
+}
 
-  if (!formData.value.agree) {
-    emailError.value = 'Вы должны согласиться с политикой обработки персональных данных.';
-    return;
-  }
 
-  const newUser = {
-    name: formData.value.name.trim(),
-    email: formData.value.email.trim(),
-    phone: cleanPhone.trim(),
-  };
-
-  try {
-    const response = await store.dispatch('lottery/registerInLottery', newUser);
-
-    // Очистка формы
-    formData.value.name = '';
-    formData.value.email = '';
-    formData.value.phone = '';
-    formData.value.agree = false;
-
-    // Показ модального окна с успешной регистрацией
-    successNumber.value = response.sequenceNumber;
-    showSuccessModal.value = true;
-  } catch (error) {
-    if (error.message.includes('email')) {
-      emailError.value = 'Пользователь с таким email уже существует.';
+    if (!formData.value.email.match(/^\S+@\S+\.\S+$/)) {
+        emailError.value = 'Введите корректный email.';
     }
-    if (error.message.includes('phone')) {
-      phoneError.value = 'Пользователь с таким номером телефона уже существует.';
+
+    if (emailError.value || phoneError.value) {
+        return;
     }
-    if (!emailError.value && !phoneError.value) {
-      emailError.value = 'Произошла ошибка. Попробуйте еще раз.';
+
+    try {
+        const newUser = {
+            name: formData.value.name,
+            email: formData.value.email,
+            phone: cleanPhone, 
+        };
+        const response = await store.dispatch('lottery/registerInLottery', newUser);
+
+        formData.value.name = '';
+        formData.value.email = '';
+        formData.value.phone = '';
+        formData.value.agree = false;
+
+        successNumber.value = response.sequenceNumber;
+        showSuccessModal.value = true;
+    } catch (error) {
+        if (error.message.includes('email')) {
+            emailError.value = 'Пользователь с таким email уже существует.';
+        }
+        if (error.message.includes('phone')) {
+            phoneError.value = 'Пользователь с таким номером телефона уже существует.';
+        }
+        if (!emailError.value && !phoneError.value) {
+            emailError.value = 'Произошла ошибка. Попробуйте еще раз.';
+        }
     }
-  }
 };
+
 
 const closeSuccessModal = () => {
   showSuccessModal.value = false;
@@ -182,9 +186,21 @@ const goToPolitica = () => {
 };
 
 watch(
-  () => formData.value.phone,
-  (newVal) => {
-    formData.value.phone = phoneMask(newVal);
+    () => formData.value.phone,
+    (newVal, oldVal) => {
+        if (newVal !== phoneMask(newVal)) {
+            formData.value.phone = phoneMask(newVal);
+        }
+    }
+);
+
+
+watch(
+  () => formData.value.email,
+  (newValue) => {
+    if (newValue && emailError.value) {
+      emailError.value = '';
+    }
   }
 );
 

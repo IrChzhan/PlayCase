@@ -41,17 +41,17 @@
   <div class="input-container">
     <label v-if="text" :for="inputId" class="input-label">{{ text }}</label>
     <input
-      :id="inputId"
-      :type="type"
-      :placeholder="placeholder"
-      :value="modelValue"
-      @input="onInput"
-      @blur="onBlur"
-      class="input-field"
-      :class="{ error: errorMessage }"
-      :style="{ width: width }"
-      :disabled="disabled"
-    />
+  :id="inputId"
+  :type="type"
+  :placeholder="placeholder"
+  :value="modelValue"
+  @input="onInput"
+  @blur="onBlur"
+  class="input-field"
+  :class="{ error: errorMessage }"
+  :style="{ width: width }"
+  :disabled="disabled"
+/>
     <span v-if="errorMessage" class="input-error">{{ errorMessage }}</span>
   </div>
 </template>

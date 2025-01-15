@@ -50,10 +50,10 @@ const goToMenuApp = () => {
   align-items: center;
   background-color: #1B2A46;
   color: #ffd700;
-  height: 100%;
+  min-height: 100vh; 
   position: relative;
   font-family: 'Mulish', sans-serif;
-  overflow: hidden;
+  overflow-x: hidden; 
   padding: 20px;
 }
 
@@ -103,8 +103,10 @@ const goToMenuApp = () => {
 .home-button {
   width: 50px;
   height: 50px;
-  position: absolute;
-  bottom: 20px;
+  position: fixed; 
+  bottom: 20px;   
+  left: 50%;     
+  transform: translateX(-50%); 
   cursor: pointer;
 }
 
@@ -123,18 +125,20 @@ const goToMenuApp = () => {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-  .register-users-page::before {
-    width: 1050px;
-    height: 1050px;
+  .register-users-page {
+    padding: 10px; 
   }
+
   .users-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 15px;
   }
 }
 
 @media (max-width: 767px) {
   .users-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; 
+    gap: 10px;
   }
 }
 </style>
