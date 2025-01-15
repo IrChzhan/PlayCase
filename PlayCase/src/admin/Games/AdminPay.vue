@@ -1,7 +1,7 @@
 <template>
   <div class="admin-payments">
     <h1>Управление оплатами</h1>
-
+    <div class="table-container">
     <table class="payments-table">
       <thead>
       <tr>
@@ -29,13 +29,7 @@
         <td>{{ team.teamName }}</td>
         <td>{{ team.expectedParticipantsCount }}</td>
         <td>
-          <input
-            type="text"
-            v-model.number="team.paidByQr"
-            class="editable-input"
-            @input="updateTotal(team)"
-            @blur="saveChanges(team)"
-          />
+          {{team.paidByQr}}
         </td>
         <td>
           <input
@@ -79,6 +73,7 @@
       </tr>
       </tbody>
     </table>
+    </div>
     <div class="button-container">
       <button class="btn" @click="exportPayments">Экспорт</button>
     </div>
@@ -136,7 +131,7 @@ const fetchPayments = async () => {
         ...team,
         totalPayments:
           team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount,
-      }));
+      })).sort((a, b) => a.teamName.localeCompare(b.teamName, "ru"));
     }
   } catch (error) {
     console.error("Ошибка загрузки платежей:", error);
@@ -226,6 +221,7 @@ h1 {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
+  overflow-x: auto;
 }
 
 .payments-table th,
@@ -267,4 +263,82 @@ button:hover {
 .row-incomplete {
   background-color: #f8d7da;
 }
+
+
+ .admin-payments {
+   padding: 20px;
+   font-family: Arial, sans-serif;
+ }
+
+.btn {
+  background: #cc9f33;
+}
+
+.btn:hover {
+  background: #d1aa58;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.payments-table th,
+.payments-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.editable-input {
+  width: 100px;
+  padding: 5px;
+  text-align: center;
+}
+
+.editable-input:focus {
+  outline: 2px solid #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  border: 1px solid #007bff;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.row-complete {
+  background-color: #d4edda;
+}
+
+.row-incomplete {
+  background-color: #f8d7da;
+}
+
 </style>
+

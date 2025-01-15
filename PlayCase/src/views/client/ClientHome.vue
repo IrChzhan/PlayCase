@@ -32,6 +32,8 @@ const client = new Client({
 
     client.subscribe(`/queue/game/${gameId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
+      console.log(parsedMessage)
+      store.commit('results/setResult')
     });
 
     client.subscribe(`/queue/user/${userId.value}/set-place`, (message) => {

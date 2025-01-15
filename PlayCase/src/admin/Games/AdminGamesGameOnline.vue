@@ -154,12 +154,12 @@ onBeforeUnmount(() => {
   background: #d1aa58;
 }
 
-
 .table-wrapper {
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
 }
 
 .messages-table {
@@ -188,6 +188,7 @@ onBeforeUnmount(() => {
 .message-row:hover {
   background-color: #f1f1f1;
 }
+
 .status-finished {
   background-color: #ffcccc;
 }
@@ -200,4 +201,39 @@ onBeforeUnmount(() => {
   background-color: #ccffcc;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .help-header h1 {
+    font-size: 24px;
+  }
+
+  .messages-table th, .messages-table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .button {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages-table th, .messages-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .button {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .help-header h1 {
+    font-size: 20px;
+  }
+}
 </style>

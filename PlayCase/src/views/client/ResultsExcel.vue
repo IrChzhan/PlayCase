@@ -35,13 +35,15 @@
 
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import {onMounted, ref, computed, watch} from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter();
 const teams = ref([]);
+
+const watchedState = computed(() => store.state.results.result);
 
 const hasResults = computed(() => {
   return teams.value.some(
@@ -69,6 +71,11 @@ const fetchResults = async () => {
     console.error('Ошибка при получении данных:', error.message);
   }
 };
+
+
+watch(watchedState, () => {
+  fetchResults();
+});
 
 onMounted(fetchResults);
 
