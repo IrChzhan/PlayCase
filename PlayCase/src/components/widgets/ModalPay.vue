@@ -23,7 +23,7 @@
               {{ pricePerPlayer }} ₽ <span>цена за 1 человека</span>
             </div>
           </div>
-
+          <button class="pay-button" @click="fetchCreatePayment">Оплатить</button>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
           <info-modal v-if="showInfo" @close="toggleModal('info', false)" />
@@ -54,11 +54,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import {ref, computed, watch, onMounted} from 'vue';
 import DogovorModal from '@/views/client/Dogovor.vue';
 import PolicyModal from '@/views/client/PoliticaPrivacy.vue';
 import InfoModal from '@/views/client/CompanyInfo.vue';
 import { useAuthCheck } from "@/hooks/useAuthCheck.js";
+import {useStore} from "vuex";
+
+const store = useStore()
 
 const { teamName } = useAuthCheck();
 const props = defineProps({
@@ -82,6 +85,14 @@ function toggleModal(type, value) {
 
 function selectPlayers(number) {
   selectedPlayers.value = number;
+}
+
+const fetchCreatePayment = () => {
+ try {
+   store.dispatch('payments/createPayment', {amount: totalPrice.value})
+ }catch (e) {
+   console.log(e)
+ }
 }
 
 watch(
@@ -241,7 +252,21 @@ watch(
   flex-direction: column;
   align-items: center;
 }
+.pay-button {
+  background-color: #cc9f33;
+  color: #fff;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
+}
 
+.pay-button:hover {
+  background-color: #b1882e;
+}
 .qr-container {
   background: rgba(0, 0, 255, 0.1);
   padding: 20px;
