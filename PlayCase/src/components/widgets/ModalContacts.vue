@@ -12,7 +12,7 @@
             </div>
             <div class="inst">
               <img src="@/assets/INST.png" />
-              <p>INSTAGRAM</p>
+              <p>INSTA</p>
             </div>
             <div class="vk">
               <img src="@/assets/VK.png" />

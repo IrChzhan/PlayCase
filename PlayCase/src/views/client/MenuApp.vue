@@ -18,7 +18,7 @@
     <div class="footer">
       <button @click="goToTeamNameDisplay" class="play-button">ИГРА</button>
     </div>
-
+    <Rules :show="showModalRules" :closeModal="closeModalRules" />
     <ModalLottery :show="showModalLottery" :closeModal="closeModalLottery" />
     <ModalContacts :show="showModalContacts" :closeModal="closeModalContacts" />
     <ModalPay :show="showModalPay" :closeModal="closeModalPay" />
@@ -49,6 +49,7 @@ import person from '@/assets/hu.png'
 import ModalHelp from "@/components/widgets/ModalHelp.vue";
 import FeedBackImage from "@/assets/feedback2.png"
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
+import Rules from "@/components/widgets/Rules.vue";
 
 const store = useStore()
 const route = useRoute()
@@ -115,13 +116,21 @@ const closeModalPay = () => {
   showModalPay.value = false
 }
 
+const showModalRules = ref(false)
+
+const openModalRules = () => {
+  showModalRules.value = true;
+}
+
+const closeModalRules = () => {
+  showModalRules.value = false;
+}
+
 const menuItems = ref([
   {
     name: 'Правила',
     image: info,
-    function: () => {
-      router.push({ name: 'Rules' })
-    },
+    function: openModalRules,
   },
   {
     name: 'Результаты',
@@ -191,6 +200,7 @@ onMounted(()=>{
     white-space: nowrap;
     overflow: hidden;
     font-size: clamp(32px, 8vw, 50px);
+    padding-bottom: 5px; 
 }
 
 h2 {
@@ -219,7 +229,7 @@ p {
 }
 
 .menu-image {
-  width: 70px;
+  width: 75px;
   height: 70px;
 }
 
@@ -227,6 +237,10 @@ p {
   margin-top: 15px;
   width: 40px;
   height: 40px;
+}
+
+.lotteryIimage {
+  margin-left: 20px; 
 }
 
 .footer {
@@ -286,20 +300,22 @@ p {
     height: 60px;
     cursor: pointer;
   }
-  .play-button {
-    margin-left: 300px;
-    width: 40px;
-    margin-top: -50px;
-  }
   .back-button {
     margin-top: -12px;
     margin-left: -120px;
   }
+  .play-button {
+    position: absolute; 
+    right: 25px; 
+    bottom: 25px; 
+    font-size: 30px; 
+    margin: 0; 
+  }
+
   .footer {
-    margin-top: 3px;
-    margin-left: 35px;
-    justify-content: space-around;
+    justify-content: center; 
     flex-direction: row;
+    position: relative; 
   }
 }
 </style>
