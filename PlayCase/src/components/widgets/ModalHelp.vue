@@ -80,6 +80,7 @@ const getCurrentHelp = async () => {
     console.log(res)
     resHelp.value = res.status
   } catch (e) {
+    resHelp.value = ''
     console.log(e)
   }
 }

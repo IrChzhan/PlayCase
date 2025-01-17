@@ -40,7 +40,7 @@ const actions = {
         },
         confirmation: {
           type: "redirect",
-          return_url: "http://igra-pads.ru/client",
+          return_url: "https://igra-pads.ru/client",
         },
         description: "Заказ №72",
       };
