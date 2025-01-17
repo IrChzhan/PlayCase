@@ -1,6 +1,6 @@
 <template>
   <div class="modal-overlay" v-if="show">
-    <div class="modal-content">
+    <div v-if="!showSuccessModal" class="modal-content">
       <button class="close-button" @click="closeModal">&times;</button>
       <div class="modal-body">
         <div class="form-section">
@@ -33,6 +33,14 @@
         </div>
       </div>
     </div>
+    <div class="modal-overlay" v-else>
+      <div class="modal-content">
+        <button class="close-button" @click="closeSuccessModal">×</button>
+        <div class="modal-body success-body">
+          <h2 class="success-title">Спасибо, благодаря вам мы становимся лучше!</h2>
+        </div>
+      </div>
+    </div>
   </div>
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
@@ -50,10 +58,17 @@ const props = defineProps({
   show: Boolean,
   closeModal: Function,
 })
+
+const showSuccessModal = ref(false);
 const toastMessage = ref('')
 const toastType = ref('success')
 const { teamName } = useAuthCheck()
 const store = useStore()
+
+const closeSuccessModal = () => {
+  showSuccessModal.value = false;
+  props.closeModal();
+};
 
 const formData = ref({
   questionType: '',
@@ -66,15 +81,11 @@ const submitForm = async () => {
         mark: formData.value.questionType
       }
     )
-    toastMessage.value = 'Оценка успешно отправлена!'
-    toastType.value = 'success'
+    showSuccessModal.value = true;
     setTimeout(() => {
       toastMessage.value = ''
-      closeModal()
     }, 1000)
   }catch (e) {
-    toastMessage.value = 'Произошла ошибка'
-    toastType.value = 'error'
     console.log(e)
   }
 }
@@ -102,6 +113,19 @@ watch(
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+
+.success-body {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.success-title {
+  font-size: clamp(20px, 3vw, 28px);
+  color: #0f1921;
 }
 
 .title-box {

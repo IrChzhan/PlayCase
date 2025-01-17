@@ -5,9 +5,12 @@
       <div class="modal-body">
         <div class="form-section">
           <h1 class="main-heading">Помощь</h1>
-          <div class="help-buttons">
+          <div class="help-buttons" v-if="resHelp === ''">
             <button class="help-button" @click="callWaiter">Официант</button>
             <button class="help-button" @click="callHelper">Хелпер</button>
+          </div>
+          <div class="help-box" v-else>
+            <span class="help-text">Помощь уже спешит к вам!</span>
           </div>
         </div>
       </div>
@@ -17,16 +20,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import Notification from "@/admin/Notification.vue";
 import {useStore} from "vuex";
 const store = useStore()
 const toastMessage = ref('')
 const toastType = ref('success')
+
+const resHelp = ref('')
+
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
 });
+
+const watchedState = computed(() => store.state.results.helps);
 
 const callWaiter = async () => {
   try {
@@ -36,7 +44,7 @@ const callWaiter = async () => {
 
     toastMessage.value = 'Запрос успешно отправлен!'
     toastType.value = 'success'
-
+    store.commit('results/setHelps')
     setTimeout(() => {
       toastMessage.value = ''
     }, 1000)
@@ -55,7 +63,7 @@ const callHelper = async () => {
 
     toastMessage.value = 'Запрос успешно отправлен!'
     toastType.value = 'success'
-
+    store.commit('results/setHelps')
     setTimeout(() => {
       toastMessage.value = ''
     }, 1000)
@@ -65,6 +73,24 @@ const callHelper = async () => {
     console.log(e)
   }
 }
+
+const getCurrentHelp = async () => {
+  try {
+    const res = await store.dispatch('helps/getCurrentHelp')
+    console.log(res)
+    resHelp.value = res.status
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+watch(watchedState, () => {
+  getCurrentHelp()
+});
+
+onMounted(()=>{
+  getCurrentHelp()
+})
 
 watch(
   () => props.show,
@@ -79,6 +105,16 @@ watch(
 </script>
 
 <style scoped>
+.help-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.help-text {
+  font-size: 28px;
+  text-align: center;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

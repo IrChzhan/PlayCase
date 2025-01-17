@@ -69,7 +69,8 @@ const actions = {
     }
   },
 
-    async updatePayment({ dispatch }, { gameId, teamId, data }) {
+
+  async updatePayment({ dispatch }, { gameId, teamId, data }) {
         try {
             const { paidByQr, paidByCard, paidByCash, actualParticipantsCount } = data;
             const response = await axios.put(

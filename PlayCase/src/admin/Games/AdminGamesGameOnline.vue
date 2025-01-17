@@ -37,6 +37,7 @@ const getNotifications = async () => {
   try {
     const res = await store.dispatch('games/fetchAllNotifications', gameId);
     messages.value = res;
+    console.log(res)
     sortMessages();
   } catch (e) {
     console.log(e);
@@ -44,11 +45,9 @@ const getNotifications = async () => {
 };
 
 const sortMessages = () => {
-  messages.value.sort((a, b) => {
-    const statusOrder = { 'RESOLVED': 2, 'IN_PROGRESS': 1, 'CREATED': 0 };
-    return statusOrder[a.status] - statusOrder[b.status];
-  });
+  messages.value.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 };
+
 
 const typesHelp = {
   'WAITER': 'Официант',

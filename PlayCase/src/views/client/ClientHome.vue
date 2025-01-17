@@ -36,6 +36,11 @@ const client = new Client({
       store.commit('results/setResult')
     });
 
+    client.subscribe(`/queue/user/${userId.value}/help`, (message) => {
+      const parsedMessage = JSON.parse(message.body);
+      store.commit('results/setHelps')
+    })
+
     client.subscribe(`/queue/user/${userId.value}/set-place`, (message) => {
       const parsedMessage = JSON.parse(message.body);
       store.commit('results/setResult')

@@ -53,6 +53,9 @@ const getStatusClass = (mark) => {
 const goBack = () => {
   router.back();
 };
+
+import * as XLSX from 'xlsx';
+
 const exportReviews = async () => {
   try {
     const response = await store.dispatch('games/exportReview', {
@@ -60,27 +63,37 @@ const exportReviews = async () => {
       exportType: 'CSV'
     });
 
-    let res = [];
+    const data = response.data.split('\n').map(row => row.split(','));
 
-    const data = response.data.split('\n');
-    for (let i of data) {
-      res.push(i.split(','));
-    }
-    const csvContent = res.map(row => row.join(";")).join("\n");
-    const BOM = "\uFEFF";
-    const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Reviews');
+
+    const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+    const blob = new Blob([s2ab(excelFile)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "reviews.csv");
-    link.style.visibility = "hidden";
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'reviews.xlsx');
+    link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   } catch (e) {
-    console.error("Ошибка экспорта:", e);
+    console.error('Ошибка экспорта:', e);
   }
 };
+
+function s2ab(s) {
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i < s.length; i++) {
+    view[i] = s.charCodeAt(i) & 0xFF;
+  }
+  return buf;
+}
 
 
 onMounted(() => {
