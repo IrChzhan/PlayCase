@@ -13,7 +13,7 @@ const gameId = route.params.gameId;
 const messages = ref([]);
 
 const client = new Client({
-  brokerURL: 'wss://62.113.98.45/ws',
+  brokerURL: 'wss://back.igra-pads.ru/ws',
   reconnectDelay: 5000,
   onConnect: () => {
     console.log('STOMP подключен');

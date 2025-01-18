@@ -25,7 +25,7 @@ const userId = ref(null)
 const gameId = ref(null)
 
 const client = new Client({
-  brokerURL: "wss://62.113.98.45/ws",
+  brokerURL: "wss://back.igra-pads.ru/ws",
   reconnectDelay: 5000,
   onConnect: () => {
     console.log("STOMP подключен", userId.value, gameId.value);
