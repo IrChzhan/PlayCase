@@ -37,12 +37,23 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import {defineProps, watch} from 'vue';
 
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
 });
+
+watch(
+  () => props.show,
+  (newVal) => {
+    if (newVal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+);
 </script>
 
 <style scoped>

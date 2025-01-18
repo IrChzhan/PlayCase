@@ -10,7 +10,7 @@
         <p>{{ item.name }}</p>
       </div>
       <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
-        <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />
+        <img :src="Stars" alt="Обратная связь" class="menu-image" @click="openModalFeedback" />
         <p>Обратная связь</p>
       </div>
     </div>
@@ -46,6 +46,7 @@ import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
 import person from '@/assets/hu.png'
+import Stars from '@/assets/start.png'
 import ModalHelp from "@/components/widgets/ModalHelp.vue";
 import FeedBackImage from "@/assets/feedback2.png"
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
@@ -200,7 +201,7 @@ onMounted(()=>{
     white-space: nowrap;
     overflow: hidden;
     font-size: clamp(32px, 8vw, 50px);
-    padding-bottom: 5px; 
+    padding-bottom: 5px;
 }
 
 h2 {
@@ -240,7 +241,7 @@ p {
 }
 
 .lotteryIimage {
-  margin-left: 20px; 
+  margin-left: 20px;
 }
 
 .footer {
@@ -305,17 +306,17 @@ p {
     margin-left: -120px;
   }
   .play-button {
-    position: absolute; 
-    right: 25px; 
-    bottom: 25px; 
-    font-size: 30px; 
-    margin: 0; 
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+    font-size: 30px;
+    margin: 0;
   }
 
   .footer {
-    justify-content: center; 
+    justify-content: center;
     flex-direction: row;
-    position: relative; 
+    position: relative;
   }
 }
 </style>

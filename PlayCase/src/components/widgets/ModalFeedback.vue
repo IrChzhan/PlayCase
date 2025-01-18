@@ -9,26 +9,36 @@
           <div class="image-selection">
             <div
               class="image-container"
+              :style="{'--icon-color': selectedColor}"
               :class="{'selected': formData.questionType === 'GOOD'}"
-              @click="formData.questionType = 'GOOD'"
-              style="background: #8ECE40;">
+              @click="formData.questionType = 'GOOD';setSelectedColor('green')">
               <img :src="Good" alt="Good" class="image" />
             </div>
             <div
               class="image-container"
+              :style="{'--icon-color': selectedColor}"
               :class="{'selected': formData.questionType === 'NEUTRAL'}"
-              @click="formData.questionType = 'NEUTRAL'"
-              style="background-color: #FEC923;">
+              @click="formData.questionType = 'NEUTRAL';setSelectedColor('yellow')">
               <img :src="Neutral" alt="Neutral" class="image" />
             </div>
             <div
               class="image-container"
+              :style="{'--icon-color': selectedColor}"
               :class="{'selected': formData.questionType === 'BAD'}"
-              @click="formData.questionType = 'BAD'"
-              style="background-color: #E85C29;">
+              @click="formData.questionType = 'BAD';setSelectedColor('red')">
               <img :src="Bad" alt="Bad" class="image" />
             </div>
           </div>
+
+          <p class="details-text" @click="toggleDetails">хотите поподробнее?</p>
+          <div v-if="showDetails" class="details-section">
+            <label for="comment" class="details-label">Комментарий:</label>
+            <textarea v-model="formData.comment"
+                      placeholder="Ваш комментарий" id="comment" class="details-textarea">
+              Введите ваш комментарий!
+            </textarea>
+          </div>
+
           <button type="button" class="submit-button" @click="submitForm">Отправить данные</button>
         </div>
       </div>
@@ -46,24 +56,34 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
-import {useAuthCheck} from "@/hooks/useAuthCheck.js";
-import {useStore} from "vuex";
+import { ref, watch } from 'vue';
+import { useAuthCheck } from "@/hooks/useAuthCheck.js";
+import { useStore } from "vuex";
 import Notification from "@/admin/Notification.vue";
-import Good from "@/assets/Good.png"
-import Neutral from "@/assets/Neutral.png"
-import Bad from "@/assets/Bad.png"
+import Good from "@/assets/green-ok.png";
+import Neutral from "@/assets/yellow-ok.png";
+import Bad from "@/assets/red-ok.png";
 
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
-})
+});
 
 const showSuccessModal = ref(false);
-const toastMessage = ref('')
-const toastType = ref('success')
-const { teamName } = useAuthCheck()
-const store = useStore()
+const toastMessage = ref('');
+const toastType = ref('success');
+const {teamName} = useAuthCheck();
+const store = useStore();
+const selectedColor = ref('');
+const showDetails = ref(false);
+
+const setSelectedColor = (color) => {
+  selectedColor.value = color;
+};
+
+const toggleDetails = () => {
+  showDetails.value = !showDetails.value;
+};
 
 const closeSuccessModal = () => {
   showSuccessModal.value = false;
@@ -72,23 +92,26 @@ const closeSuccessModal = () => {
 
 const formData = ref({
   questionType: '',
-})
+  comment: ''
+});
 
 const submitForm = async () => {
   try {
-    await store.dispatch('profile/addMark',
-      {
-        mark: formData.value.questionType
-      }
-    )
+    await store.dispatch('profile/addMark', {
+      mark: formData.value.questionType,
+      comment: formData.value.comment
+    });
     showSuccessModal.value = true;
+    formData.value.questionType = ''
+    formData.value.comment = ''
     setTimeout(() => {
-      toastMessage.value = ''
-    }, 1000)
-  }catch (e) {
-    console.log(e)
+      toastMessage.value = '';
+    }, 1000);
+  } catch (e) {
+    console.log(e);
   }
-}
+};
+
 watch(
   () => props.show,
   (newVal) => {
@@ -113,6 +136,37 @@ watch(
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+
+.details-text {
+  color: #cc9f33;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: center;
+  margin-bottom: 1vw;
+}
+
+.details-section {
+  padding: 10px;
+  margin-bottom: 1.5vw;
+}
+
+.details-label {
+  display: block;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 0.5vw;
+}
+
+.details-textarea {
+  width: 100%;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+  font-size: 14px;
+  color: #555;
 }
 
 .success-body {
@@ -162,9 +216,9 @@ watch(
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
   font-weight: bold;
-  color: #cc9f33;
+  color: white;
+  background-color: #CC9F33;
   padding: 1vw 2vw;
-  border: 1px solid rgba(15, 25, 33, 0.4);
   border-radius: 12px;
   margin-bottom: 1vw;
 }
@@ -178,25 +232,28 @@ watch(
 .image-container {
   width: 120px;
   height: 120px;
-  padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 100%;
   border: 2px solid transparent;
-  border-radius: 8px;
   cursor: pointer;
   overflow: hidden;
-  background-color: inherit;
+  -icon-color: transparent;
+  color: var(--icon-color);
 }
 
 .image {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  opacity: 0.8;
 }
 
 .image-container.selected {
-  border-color: currentColor;
+  border-color: transparent;
+  box-shadow: 0 0 15px 5px currentColor;
+  transition: box-shadow 0.3s ease-in-out;
 }
 
 .submit-button {
@@ -219,14 +276,17 @@ watch(
     width: 90vw;
     padding: 15px;
   }
+
   .team-title {
     font-size: clamp(10px, 1.5vw, 14px);
     padding: 0.5vw 1vw;
   }
+
   .image-container {
     width: 80px;
     height: 80px;
   }
+
   .submit-button {
     font-size: clamp(10px, 1.5vw, 12px);
     padding: 0.8vw 1.5vw;
