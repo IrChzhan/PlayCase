@@ -268,7 +268,7 @@ watch(
   background-color: #b1882e;
 }
 .qr-container {
-  background: rgba(0, 0, 255, 0.1);
+  background: rgba(58, 76, 110, 0.5);
   padding: 20px;
   border-radius: 12px;
   width: 100%;

@@ -158,7 +158,7 @@ onMounted(() => {
   position: sticky;
   top: 0;
   background-color: #1c2742; 
-  z-index: 10;
+  z-index: 5;
   width: 100%; 
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -264,6 +264,7 @@ h1 {
   transition: transform 0.3s;
 }
 
+
 .meal-card:hover {
   transform: translateY(-5px);
 }
@@ -311,7 +312,21 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 800;
+}
+
+.meals-scrollable::-webkit-scrollbar {
+  width: 6px; 
+}
+
+.meals-scrollable::-webkit-scrollbar-thumb {
+  background-color: #ffa726;
+  border-radius: 3px;
+}
+
+.meals-scrollable::-webkit-scrollbar-track {
+  background-color: #333;
+  border-radius: 3px;
 }
 
 .modal-content {

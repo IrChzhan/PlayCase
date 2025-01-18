@@ -36,9 +36,7 @@
               <div class="checkbox-section">
                 <label class="checkbox-container">
                   <input type="checkbox" id="agree" v-model="formData.agree" required />
-                  <span>
-                    Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
-                  </span>
+                  <span>Нажимая кнопку, вы соглашаетесь с <span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span> </span>
                 </label>
               </div>
             </form>
@@ -79,7 +77,6 @@
       </div>
     </div>
   </div>
-  <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
 </template>
 
 <script setup>
@@ -435,7 +432,19 @@ input[type='checkbox'] {
     margin-top: 0.5vw;
 }
 
-@media (max-width: 768px) {
+.policy-link {
+  font-weight: bold;
+  color: #cc9f33;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.policy-link:hover {
+  color: #b68d2f;
+}
+
+@media (min-width: 768px) {
   .modal-content {
     width: 90vw;
     max-width: 600px;
