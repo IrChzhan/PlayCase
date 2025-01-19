@@ -77,6 +77,7 @@
       </div>
     </div>
   </div>
+  <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
 </template>
 
 <script setup>
@@ -123,7 +124,7 @@ const successNumber = ref(null);
 const submitForm = async () => {
     emailError.value = '';
     phoneError.value = '';
-    const cleanPhone = formData.value.phone.replace(/\D/g, ''); 
+    const cleanPhone = formData.value.phone.replace(/\D/g, '');
 if (!cleanPhone.match(/^7\d{10}$/)) {
     phoneError.value = 'Введите корректный номер телефона.';
 }
@@ -141,7 +142,7 @@ if (!cleanPhone.match(/^7\d{10}$/)) {
         const newUser = {
             name: formData.value.name,
             email: formData.value.email,
-            phone: cleanPhone, 
+            phone: cleanPhone,
         };
         const response = await store.dispatch('lottery/registerInLottery', newUser);
 
@@ -444,7 +445,7 @@ input[type='checkbox'] {
   color: #b68d2f;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .modal-content {
     width: 90vw;
     max-width: 600px;

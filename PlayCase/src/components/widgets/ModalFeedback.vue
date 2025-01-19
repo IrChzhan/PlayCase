@@ -5,7 +5,7 @@
       <div class="modal-body">
         <div class="form-section">
           <div class="team-title">{{teamName}}</div>
-          <h2 class="title-box">Поставьте оценку игре</h2>
+          <h2 class="title-box">Оцените игру</h2>
           <div class="image-selection">
             <div
               class="image-container"
@@ -30,7 +30,7 @@
             </div>
           </div>
 
-          <p class="details-text" @click="toggleDetails">хотите поподробнее?</p>
+          <p class="details-text" @click="toggleDetails">Хотите рассказать подробнее?</p>
           <div v-if="showDetails" class="details-section">
             <label for="comment" class="details-label">Комментарий:</label>
             <textarea v-model="formData.comment"
@@ -60,7 +60,7 @@ import { ref, watch } from 'vue';
 import { useAuthCheck } from "@/hooks/useAuthCheck.js";
 import { useStore } from "vuex";
 import Notification from "@/admin/Notification.vue";
-import Good from "@/assets/green-ok.png";
+import Good from "@/assets/good-ok12.png";
 import Neutral from "@/assets/yellow-ok.png";
 import Bad from "@/assets/red-ok.png";
 
@@ -134,13 +134,14 @@ watch(
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
+  backdrop-filter: blur(8px);
   align-items: center;
   z-index: 1000;
 }
 
 .details-text {
   color: #cc9f33;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   text-decoration: underline;
   text-align: center;

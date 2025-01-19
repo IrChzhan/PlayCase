@@ -67,6 +67,7 @@ watch(
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(8px);
   z-index: 1000;
 }
 
