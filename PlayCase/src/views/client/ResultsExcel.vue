@@ -33,9 +33,8 @@
   </div>
 </template>
 
-
 <script setup>
-import {onMounted, ref, computed, watch} from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -71,7 +70,6 @@ const fetchResults = async () => {
     console.error('Ошибка при получении данных:', error.message);
   }
 };
-
 
 watch(watchedState, () => {
   fetchResults();
@@ -115,6 +113,29 @@ const goToMenuApp = () => {
 .results-table th {
   background-color: #CC9F33;
   color: white;
+  position: sticky; 
+  top: 0; 
+  z-index: 1; 
+}
+
+.results-table tbody {
+  display: block; 
+  max-height: 420px; 
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.results-table td:nth-child(2),
+.results-table th:nth-child(2) {
+  width: 120px; 
+  min-width: 100px; 
+}
+
+.results-table tr {
+  display: table; 
+  width: 100%;
+  table-layout: fixed;
 }
 
 .results-table tr.even-row {

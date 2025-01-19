@@ -239,6 +239,7 @@ h1 {
   flex-grow: 1;
   overflow-y: auto;
   margin-bottom: 20px;
+  z-index: 5;
 }
 
 .meals-grid {
