@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import { useStore } from 'vuex';
 
 export default {
@@ -120,6 +120,10 @@ export default {
     const triggerFileInput = () => {
       fileInput.value.click();
     };
+
+    onMounted(() => {
+      fetchResults()
+    });
 
     return {
       selectedFile,

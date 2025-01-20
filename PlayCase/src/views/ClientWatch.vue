@@ -14,7 +14,7 @@ const team = ref('')
 const id = ref('')
 
 const client = new Client({
-  brokerURL: "ws://62.113.98.45:8080/ws",
+  brokerURL: "wss://back.igra-pads.ru/ws",
   reconnectDelay: 5000,
   onConnect: () => {
     client.subscribe(`/queue/user/${id.value}`, (message) => {

@@ -9,7 +9,7 @@ const router = useRouter()
 const store = useStore()
 const route = useRoute()
 
-useIdleRedirect(60000)
+useIdleRedirect(180000)
 
 const show = ref(false)
 
