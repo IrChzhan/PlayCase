@@ -124,7 +124,14 @@ export default {
       }
     },
 
-
+    async deleteResult({commit}, gameId) {
+      try {
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/results`)
+      }catch (e) {
+        console.log(e);
+        throw e
+      }
+    },
 
     async fetchCurrentGame({ commit }) {
       try {

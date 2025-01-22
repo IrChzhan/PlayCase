@@ -43,6 +43,9 @@
       <button class="upload-button" @click="uploadFile" :disabled="loading">
         {{ loading ? 'Uploading...' : 'Загрузить файл' }}
       </button>
+      <button class="upload-button delete-button" @click="deleteResults" :disabled="loading">
+        {{ loading ? 'Uploading...' : 'Удалить результаты' }}
+      </button>
     </div>
     <p v-if="uploadSuccess" class="success-message">Файл успешно загружен!</p>
   </div>
@@ -117,6 +120,19 @@ export default {
       }
     };
 
+    const deleteResults = async () => {
+      loading.value = true;
+      uploadSuccess.value = false;
+      try {
+        const currentGame = await store.dispatch('games/deleteResult', props.gameId);
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      } finally {
+        loading.value = false;
+        await fetchResults();
+      }
+    };
+
     const triggerFileInput = () => {
       fileInput.value.click();
     };
@@ -136,6 +152,7 @@ export default {
       triggerFileInput,
       fileInput,
       maxRounds,
+      deleteResults
     };
   },
 };
@@ -245,5 +262,13 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+button.delete-button {
+  background-color: #dc3545;
+}
+
+button.delete-button:hover {
+  background-color: #c82333;
 }
 </style>

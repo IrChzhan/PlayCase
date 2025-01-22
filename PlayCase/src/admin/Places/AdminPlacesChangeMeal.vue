@@ -90,7 +90,8 @@ const dishDescription = ref('');
 const mealFile = ref(null);
 const imageId = ref(null);
 const oldName = ref('');
-const oldPrice = ref(0);
+const oldPrice = ref(0)
+const oldFileId = ref('');
 const oldDescription = ref('');
 const showDialog = ref(false);
 const dialogTitle = ref('');
@@ -152,7 +153,7 @@ const updateDish = async () => {
         name: dishName.value,
         price: dishPrice.value,
         description: dishDescription.value,
-        fileId: imageId.value,
+        fileId: imageId.value ? imageId.value : oldFileId.value,
       },
     });
     toastMessage.value = 'Блюдо успешно обновлено!';
@@ -195,6 +196,7 @@ onMounted(() => {
       oldName.value = res.name;
       oldPrice.value = res.price;
       oldDescription.value = res.description;
+      oldFileId.value = res.fileId;
     }
   });
 });

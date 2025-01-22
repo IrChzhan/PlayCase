@@ -12,14 +12,17 @@
       <tbody>
         <template v-if="shouldDisplayTable">
           <tr
+
             v-for="(team, index) in teams"
             :key="team.teamName"
-            :class="index % 2 === 0 ? 'even-row' : 'odd-row'"
+            :class="{'even-row': index % 2 === 0,
+            'odd-row': index % 2 !== 0,
+            boldText: teamName === team.teamName}"
           >
             <td>{{ team.currentPlace }}</td>
-            <td>{{ team.teamName }}</td>
-            <td>{{ team.totalScore }}</td>
-            <td v-for="score in team.scoreByRounds" :key="score">{{ score }}</td>
+            <td :class="{boldText: teamName === team.teamName}">{{ team.teamName }}</td>
+            <td :class="{boldText: teamName === team.teamName}">{{ team.totalScore }}</td>
+            <td :class="{boldText: teamName === team.teamName}" v-for="score in team.scoreByRounds" :key="score">{{ score }}</td>
           </tr>
         </template>
         <template v-else>
@@ -37,10 +40,12 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import {useAuthCheck} from "@/hooks/useAuthCheck.js";
 
 const store = useStore();
 const router = useRouter();
 const teams = ref([]);
+const { teamName } = useAuthCheck()
 
 const watchedState = computed(() => store.state.results.result);
 
@@ -113,14 +118,14 @@ const goToMenuApp = () => {
 .results-table th {
   background-color: #CC9F33;
   color: white;
-  position: sticky; 
-  top: 0; 
-  z-index: 1; 
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .results-table tbody {
-  display: block; 
-  max-height: 420px; 
+  display: block;
+  max-height: 420px;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
@@ -128,12 +133,12 @@ const goToMenuApp = () => {
 
 .results-table td:nth-child(2),
 .results-table th:nth-child(2) {
-  width: 120px; 
-  min-width: 100px; 
+  width: 120px;
+  min-width: 100px;
 }
 
 .results-table tr {
-  display: table; 
+  display: table;
   width: 100%;
   table-layout: fixed;
 }
@@ -160,5 +165,9 @@ const goToMenuApp = () => {
   position: fixed;
   bottom: 20px;
   cursor: pointer;
+}
+
+.boldText {
+  font-weight: bold;
 }
 </style>

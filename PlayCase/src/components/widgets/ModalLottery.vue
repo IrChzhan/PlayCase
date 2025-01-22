@@ -55,9 +55,6 @@
               <li>Призы не подлежат обмену на деньги и возврату.</li>
             </ul>
             <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
-            <a class="link" @click="toggleModal('politica', true)" target="_blank">
-              Политика конфиденциальности
-            </a>
             <div class="btn-con">
               <button @click.stop="goToLottery" class="btn">Список участников</button>
             </div>
@@ -70,8 +67,7 @@
       <div class="modal-content">
         <button class="close-button" @click="closeSuccessModal">×</button>
         <div class="modal-body success-body">
-            <h2 class="success-title">Спасибо за участие!</h2>
-             <p class="success-message">Ваш номер:</p>
+             <p class="success-title">Ваш номер:</p>
             <p class="success-number"> <strong>{{ successNumber }}</strong></p>
         </div>
       </div>
@@ -417,7 +413,7 @@ input[type='checkbox'] {
 .success-title {
   font-size: clamp(20px, 3vw, 28px);
   color: #0f1921;
-  margin-bottom: 1vw;
+  margin-bottom: 0.3vw;
 }
 
 .success-message {
@@ -429,8 +425,8 @@ input[type='checkbox'] {
 .success-number {
     font-size: clamp(26px, 4vw, 34px);
     color: #0f1921;
-    margin-bottom: 2vw;
-    margin-top: 0.5vw;
+    margin-bottom: 1vw;
+    margin-top: 0.3vw;
 }
 
 .policy-link {
