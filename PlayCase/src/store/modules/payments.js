@@ -27,10 +27,8 @@ const actions = {
 
   async createPayment({ commit }, {amount}) {
     try {
-      const secretKey = 'test_OACU1WVo7VwUy67xYn98z2IGD3FrDgI0p6-gEc3GMUM';
-      const shopId = 1015185;
-      const uuid = uuidv4();
-      const paymentData = {
+
+      const paymentData ={
         amount: {
           value: `${amount}.00`,
           currency: "RUB",
@@ -45,29 +43,26 @@ const actions = {
         description: "Заказ №72",
       };
 
-      const response = await fetch("https://api.yookassa.ru/v3/payments", {
-        method: "POST",
+      const response = await fetch('https://igra-pads.ru/api/payments', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "Idempotence-Key": `${uuid}`,
-          Authorization: `Basic ${btoa(`${shopId}:${secretKey}`)}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(paymentData),
       });
 
       const data = await response.json();
 
-      if (response.ok && data.confirmation && data.confirmation.confirmation_url) {
-
+      if (data.confirmation && data.confirmation.confirmation_url) {
         window.location.href = data.confirmation.confirmation_url;
       } else {
-
-        console.error('Ошибка при создании платежа или нет confirmation_url:', data);
+        console.error('Ошибка при создании платежа:', data);
       }
-    } catch (e) {
-      console.error('Ошибка при отправке запроса на создание платежа:', e);
+    } catch (error) {
+      console.error('Ошибка при запросе на создание платежа:', error);
     }
   },
+
 
 
   async updatePayment({ dispatch }, { gameId, teamId, data }) {
