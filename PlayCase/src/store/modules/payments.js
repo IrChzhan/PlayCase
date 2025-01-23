@@ -54,7 +54,7 @@ const actions = {
       const data = await response.json();
 
       if (data.confirmation && data.confirmation.confirmation_url) {
-        window.location.href = data.confirmation.confirmation_url;
+        return data.confirmation.confirmation_url;
       } else {
         console.error('Ошибка при создании платежа:', data);
       }

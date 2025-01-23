@@ -23,10 +23,12 @@
               {{ pricePerPlayer }} ₽ <span>цена за 1 человека</span>
             </div>
           </div>
-          <button class="pay-button" @click="fetchCreatePayment">Оплатить</button>
+          <button class="pay-button" @click="generateQRCode">Оплатить</button>
+
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
           <info-modal v-if="showInfo" @close="toggleModal('info', false)" />
+
           <div class="additional-info">
             <ul>
               <li class="link-li">
@@ -42,9 +44,10 @@
           </div>
         </div>
 
-        <div class="qr-section">
+        <!-- QR-код -->
+        <div class="qr-section" v-if="qrCodeUrl">
           <div class="qr-container">
-            <img src="@/assets/qr.png" alt="QR-код" class="qr-code" />
+            <img :src="qrCodeUrl" alt="QR-код" class="qr-code" />
             <p class="qr-instruction">Отсканируйте код камерой или в приложении банка</p>
           </div>
         </div>
@@ -54,20 +57,22 @@
 </template>
 
 <script setup>
-import {ref, computed, watch, onMounted} from 'vue';
+import { ref, computed, watch } from 'vue';
+import QRCode from 'qrcode';
 import DogovorModal from '@/views/client/Dogovor.vue';
 import PolicyModal from '@/views/client/PoliticaPrivacy.vue';
 import InfoModal from '@/views/client/CompanyInfo.vue';
 import { useAuthCheck } from "@/hooks/useAuthCheck.js";
 import {useStore} from "vuex";
 
-const store = useStore()
-
 const { teamName } = useAuthCheck();
+
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
 });
+
+const store = useStore();
 
 const selectedPlayers = ref(1);
 const pricePerPlayer = ref(1000);
@@ -76,6 +81,7 @@ const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
 const showDogovor = ref(false);
 const showPolitica = ref(false);
 const showInfo = ref(false);
+const qrCodeUrl = ref(null);
 
 function toggleModal(type, value) {
   if (type === 'dogovor') showDogovor.value = value;
@@ -87,12 +93,13 @@ function selectPlayers(number) {
   selectedPlayers.value = number;
 }
 
-const fetchCreatePayment = () => {
- try {
-   store.dispatch('payments/createPayment', {amount: totalPrice.value})
- }catch (e) {
-   console.log(e)
- }
+const generateQRCode = async () => {
+  try {
+    const paymentUrl = await store.dispatch('payments/createPayment', {amount: totalPrice.value})
+    qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
+  } catch (error) {
+    console.error('Ошибка генерации QR-кода:', error);
+  }
 }
 
 watch(
@@ -106,6 +113,7 @@ watch(
   }
 );
 </script>
+
 
 <style scoped>
 .link-li {
