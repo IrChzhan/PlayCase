@@ -8,10 +8,10 @@
             <div class="team-title">{{ teamName }}</div>
             <h1 class="main-heading">Примите участие<br />в лотерее</h1>
             <form @submit.prevent="submitForm">
-              <div v-if="emailError || phoneError" class="error-section">
-              </div>
               <Input
   v-model:modelValue="formData.name"
+  :error="!!nameError"
+  :errorMessage="nameError"
   text="Имя"
   width="auto"
 />
@@ -116,21 +116,28 @@ const emailError = ref('');
 const phoneError = ref('');
 const showSuccessModal = ref(false);
 const successNumber = ref(null);
+const nameError = ref('');
 
 const submitForm = async () => {
     emailError.value = '';
     phoneError.value = '';
+    nameError.value = '';
+
     const cleanPhone = formData.value.phone.replace(/\D/g, '');
-if (!cleanPhone.match(/^7\d{10}$/)) {
-    phoneError.value = 'Введите корректный номер телефона.';
-}
 
-
-    if (!formData.value.email.match(/^\S+@\S+\.\S+$/)) {
-        emailError.value = 'Введите корректный email.';
+    if (!formData.value.name) {
+        nameError.value = ' ';
     }
 
-    if (emailError.value || phoneError.value) {
+    if (!cleanPhone.match(/^7\d{10}$/)) {
+        phoneError.value = ' ';
+    }
+
+    if (!formData.value.email.match(/^\S+@\S+\.\S+$/)) {
+        emailError.value = ' ';
+    }
+
+    if (nameError.value || emailError.value || phoneError.value) {
         return;
     }
 
@@ -151,13 +158,10 @@ if (!cleanPhone.match(/^7\d{10}$/)) {
         showSuccessModal.value = true;
     } catch (error) {
         if (error.message.includes('email')) {
-            emailError.value = 'Пользователь с таким email уже существует.';
+            emailError.value = 'E-mail уже зарегистрирован';
         }
         if (error.message.includes('phone')) {
-            phoneError.value = 'Пользователь с таким номером телефона уже существует.';
-        }
-        if (!emailError.value && !phoneError.value) {
-            emailError.value = 'Произошла ошибка. Попробуйте еще раз.';
+            phoneError.value = 'Телефон уже зарегистрирован';
         }
     }
 };
