@@ -51,14 +51,31 @@ const actions = {
         },
         confirmation: {
           type: "redirect",
-          return_url: "https://igra-pads.ru"
+          return_url: "https://igra-pads.ru/client",
         },
         receipt: {
           customer: {
-            email: 'Lapxi010@yandex.ru'
-          }
+            email: 'Lapxi010@yandex.ru',
+          },
+          items: [
+            {
+              description: "Наименование товара 1",
+              quantity: 1,
+              amount: {
+                value: `${amount}.00`,
+                currency: "RUB"
+              },
+              vat_code: 1,
+              payment_subject: "commodity",
+              payment_mode: "full_prepayment"
+            }
+          ],
+          tax_system_code: 1,
+          email: 'Lapxi010@yandex.ru'
         },
         description: `${generateOrderNumber()}`,
+        capture: false,
+        save_payment_method: false
       };
       const response = await fetch('https://igra-pads.ru/api/payments', {
         method: 'POST',
