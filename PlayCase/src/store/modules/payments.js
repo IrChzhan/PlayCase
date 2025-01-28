@@ -1,13 +1,26 @@
-// store/payments.js
 import { ref } from 'vue';
 import axios from 'axios';
 
 const state = {
   payments: [],
+  notifications: [],
 };
+
+const generateOrderNumber = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  const length = 10; // Длина номера заказа
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+  const orderNumber = `Заказ-${result}`;
+  return orderNumber;
+}
 
 const getters = {
   getPayments: (state) => state.payments,
+  getNotifications: (state) => state.notifications,
 };
 
 const actions = {
@@ -40,9 +53,9 @@ const actions = {
           type: "redirect",
           return_url: "https://igra-pads.ru/client",
         },
-        description: "Заказ №72",
+        description: `${generateOrderNumber()}`,
       };
-      const response = await fetch(`https://igra-pads.ru/api/payments`, {
+      const response = await fetch('http://igra-pads.ru/api/payments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,11 +98,18 @@ const actions = {
   updatePayments({ commit }, payments) {
     commit('setPayments', payments);
   },
+
+  addNotification({ commit }, notification) {
+    commit('addNotification', notification);
+  },
 };
 
 const mutations = {
   setPayments(state, payments) {
     state.payments = payments;
+  },
+  addNotification(state, notification) {
+    state.notifications.push(notification);
   },
 };
 

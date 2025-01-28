@@ -46,12 +46,13 @@
             <p class="qr-instruction">Отсканируйте код камерой или в приложении банка</p>
           </div>
         </div>
-        <Notification
-          v-if="notificationVisible"
-          :message="notificationMessage"
-          :type="notificationType"
-          @close="hideNotification"
-        />
+        <div v-for="(notification, index) in notifications" :key="index">
+          <Notification
+            :message="notification.message"
+            :type="notification.type"
+            @close="removeNotification(index)"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -82,9 +83,7 @@ const showPolitica = ref(false);
 const showInfo = ref(false);
 const qrCodeUrl = ref(null);
 
-const notificationVisible = ref(false);
-const notificationMessage = ref('');
-const notificationType = ref('info');
+const notifications = computed(() => store.getters['payments/getNotifications']);
 
 function toggleModal(type, value) {
   if (type === 'dogovor') showDogovor.value = value;
@@ -130,15 +129,12 @@ onUnmounted(() => {
 
 const connectWebSocket = () => {
   socket = new WebSocket(`wss://igra-pads.ru/websocket`);
-
   socket.onopen = () => {
     console.log('WebSocket connection established');
   };
-
   socket.onmessage = (event) => {
     const message = JSON.parse(event.data);
     console.log('Received message:', message);
-
     if (message.eventType === 'payment.waiting_for_capture' ||
       message.eventType === 'payment.succeeded' ||
       message.eventType === 'payment.canceled' ||
@@ -147,12 +143,10 @@ const connectWebSocket = () => {
       updatePayments(message.data);
     }
   };
-
   socket.onclose = () => {
     console.log('WebSocket connection closed');
     setTimeout(connectWebSocket, 5000);
   };
-
   socket.onerror = (error) => {
     console.error('WebSocket error:', error);
   };
@@ -165,31 +159,31 @@ const showNotification = (data) => {
   switch (data.eventType) {
     case 'payment.waiting_for_capture':
       type = 'warning';
-      message = `Платеж ожидает подтверждения: ${data.data.id}`;
+      message = `Платеж ожидает подтверждения`;
       break;
     case 'payment.succeeded':
       type = 'success';
-      message = `Платеж успешно завершен: ${data.data.id}`;
+      message = `Платеж успешно завершен`;
       break;
     case 'payment.canceled':
       type = 'error';
-      message = `Платеж отменен: ${data.data.id}`;
+      message = `Платеж отменен`;
       break;
     case 'refund.succeeded':
       type = 'info';
-      message = `Возврат средств выполнен: ${data.data.id}`;
+      message = `Возврат средств выполнен`;
       break;
     default:
       return;
   }
 
-  notificationMessage.value = message;
-  notificationType.value = type;
-  notificationVisible.value = true;
+  store.dispatch('payments/addNotification', { message, type });
 };
 
-const hideNotification = () => {
-  notificationVisible.value = false;
+const removeNotification = (index) => {
+  const updatedNotifications = [...notifications.value];
+  updatedNotifications.splice(index, 1);
+  store.commit('payments/setNotifications', updatedNotifications);
 };
 
 const updatePayments = (data) => {
