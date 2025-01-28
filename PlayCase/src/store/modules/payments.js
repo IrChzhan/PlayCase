@@ -74,7 +74,7 @@ const actions = {
           email: 'Lapxi010@yandex.ru'
         },
         description: `${generateOrderNumber()}`,
-        capture: false,
+        capture: true,
         save_payment_method: false
       };
       const response = await fetch('https://igra-pads.ru/api/payments', {
