@@ -42,7 +42,7 @@ const actions = {
         },
         description: "Заказ №72",
       };
-      const response = await fetch(`https://back.igra-pads/api/payments`, {
+      const response = await fetch(`https://igra-pads.ru/api/payments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

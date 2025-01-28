@@ -129,7 +129,7 @@ onUnmounted(() => {
 });
 
 const connectWebSocket = () => {
-  socket = new WebSocket(`wss://back.igra-pads/websocket`);
+  socket = new WebSocket(`wss://igra-pads.ru/websocket`);
 
   socket.onopen = () => {
     console.log('WebSocket connection established');
