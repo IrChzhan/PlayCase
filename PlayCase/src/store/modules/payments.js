@@ -55,7 +55,7 @@ const actions = {
         },
         description: `${generateOrderNumber()}`,
       };
-      const response = await fetch('http://igra-pads.ru/api/payments', {
+      const response = await fetch('https://igra-pads.ru/api/payments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
