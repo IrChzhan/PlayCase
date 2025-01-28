@@ -47,11 +47,11 @@ const actions = {
           currency: "RUB",
         },
         payment_method_data: {
-          type: ["bank_card","sbp"],
+          type: "bank_card",
         },
         confirmation: {
-          type: "embedded",
-          locale: 'ru_RU',
+          type: "redirect",
+          return_url: "https://igra-pads.ru"
         },
         receipt: {
           customer: {
