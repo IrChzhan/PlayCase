@@ -59,8 +59,6 @@ const actions = {
           },
         },
         description: `${generateOrderNumber()}`,
-        capture: true,
-
       };
       const response = await fetch('https://igra-pads.ru/api/payments', {
         method: 'POST',
