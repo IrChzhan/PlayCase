@@ -129,7 +129,7 @@ onUnmounted(() => {
 });
 
 const connectWebSocket = () => {
-  socket = new WebSocket(`wss://${import.meta.env.VITE_API_URL}/websocket`);
+  socket = new WebSocket(`wss://back.igra-pads/websocket`);
 
   socket.onopen = () => {
     console.log('WebSocket connection established');

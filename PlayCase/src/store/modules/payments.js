@@ -42,7 +42,7 @@ const actions = {
         },
         description: "Заказ №72",
       };
-      const response = await fetch(`https://${import.meta.env.VITE_API_URL}/api/payments`, {
+      const response = await fetch(`https://back.igra-pads/api/payments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
