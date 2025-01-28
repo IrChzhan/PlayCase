@@ -53,11 +53,6 @@ const actions = {
           type: "redirect",
           return_url: "https://igra-pads.ru"
         },
-        receipt: {
-          customer: {
-            email: 'Lapxi010@yandex.ru'
-          },
-        },
         description: `${generateOrderNumber()}`,
       };
       const response = await fetch('https://igra-pads.ru/api/payments', {
