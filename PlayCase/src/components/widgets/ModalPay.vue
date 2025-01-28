@@ -6,7 +6,6 @@
         <div class="form-section">
           <div class="team-title">{{ teamName }}</div>
           <h1 class="title">Выберите количество игроков для оплаты</h1>
-
           <div class="player-buttons">
             <button
               v-for="number in 8"
@@ -24,11 +23,9 @@
             </div>
           </div>
           <button class="pay-button" @click="generateQRCode">Оплатить</button>
-
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
           <info-modal v-if="showInfo" @close="toggleModal('info', false)" />
-
           <div class="additional-info">
             <ul>
               <li class="link-li">
@@ -43,45 +40,51 @@
             </ul>
           </div>
         </div>
-
-        <!-- QR-код -->
         <div class="qr-section" v-if="qrCodeUrl">
           <div class="qr-container">
             <img :src="qrCodeUrl" alt="QR-код" class="qr-code" />
             <p class="qr-instruction">Отсканируйте код камерой или в приложении банка</p>
           </div>
         </div>
+        <Notification
+          v-if="notificationVisible"
+          :message="notificationMessage"
+          :type="notificationType"
+          @close="hideNotification"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import QRCode from 'qrcode';
 import DogovorModal from '@/views/client/Dogovor.vue';
 import PolicyModal from '@/views/client/PoliticaPrivacy.vue';
 import InfoModal from '@/views/client/CompanyInfo.vue';
+import Notification from '@/admin/Notification.vue';
 import { useAuthCheck } from "@/hooks/useAuthCheck.js";
-import {useStore} from "vuex";
+import { useStore } from "vuex";
 
 const { teamName } = useAuthCheck();
-
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
 });
-
 const store = useStore();
 
 const selectedPlayers = ref(1);
 const pricePerPlayer = ref(1000);
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
-
 const showDogovor = ref(false);
 const showPolitica = ref(false);
 const showInfo = ref(false);
 const qrCodeUrl = ref(null);
+
+const notificationVisible = ref(false);
+const notificationMessage = ref('');
+const notificationType = ref('info');
 
 function toggleModal(type, value) {
   if (type === 'dogovor') showDogovor.value = value;
@@ -95,12 +98,12 @@ function selectPlayers(number) {
 
 const generateQRCode = async () => {
   try {
-    const paymentUrl = await store.dispatch('payments/createPayment', {amount: totalPrice.value})
+    const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value });
     qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
   } catch (error) {
     console.error('Ошибка генерации QR-кода:', error);
   }
-}
+};
 
 watch(
   () => props.show,
@@ -112,8 +115,96 @@ watch(
     }
   }
 );
-</script>
 
+let socket = null;
+
+onMounted(() => {
+  connectWebSocket();
+});
+
+onUnmounted(() => {
+  if (socket) {
+    socket.close();
+  }
+});
+
+const connectWebSocket = () => {
+  socket = new WebSocket(`wss://${import.meta.env.VITE_API_URL}/websocket`);
+
+  socket.onopen = () => {
+    console.log('WebSocket connection established');
+  };
+
+  socket.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    console.log('Received message:', message);
+
+    if (message.eventType === 'payment.waiting_for_capture' ||
+      message.eventType === 'payment.succeeded' ||
+      message.eventType === 'payment.canceled' ||
+      message.eventType === 'refund.succeeded') {
+      showNotification(message);
+      updatePayments(message.data);
+    }
+  };
+
+  socket.onclose = () => {
+    console.log('WebSocket connection closed');
+    setTimeout(connectWebSocket, 5000);
+  };
+
+  socket.onerror = (error) => {
+    console.error('WebSocket error:', error);
+  };
+};
+
+const showNotification = (data) => {
+  let type = 'info';
+  let message = '';
+
+  switch (data.eventType) {
+    case 'payment.waiting_for_capture':
+      type = 'warning';
+      message = `Платеж ожидает подтверждения: ${data.data.id}`;
+      break;
+    case 'payment.succeeded':
+      type = 'success';
+      message = `Платеж успешно завершен: ${data.data.id}`;
+      break;
+    case 'payment.canceled':
+      type = 'error';
+      message = `Платеж отменен: ${data.data.id}`;
+      break;
+    case 'refund.succeeded':
+      type = 'info';
+      message = `Возврат средств выполнен: ${data.data.id}`;
+      break;
+    default:
+      return;
+  }
+
+  notificationMessage.value = message;
+  notificationType.value = type;
+  notificationVisible.value = true;
+};
+
+const hideNotification = () => {
+  notificationVisible.value = false;
+};
+
+const updatePayments = (data) => {
+  const existingPaymentIndex = store.state.payments.find(payment => payment.id === data.id);
+  if (existingPaymentIndex !== -1) {
+    store.commit('payments/setPayments', [
+      ...store.state.payments.map(payment =>
+        payment.id === data.id ? { ...payment, ...data } : payment
+      )
+    ]);
+  } else {
+    store.commit('payments/setPayments', [...store.state.payments, data]);
+  }
+};
+</script>
 
 <style scoped>
 .link-li {
