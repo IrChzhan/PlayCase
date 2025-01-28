@@ -46,9 +46,6 @@ const actions = {
           value: `${amount}.00`,
           currency: "RUB",
         },
-        payment_method_data: {
-          type: "sbp",
-        },
         confirmation: {
           type: "redirect",
           return_url: "https://igra-pads.ru/client",
