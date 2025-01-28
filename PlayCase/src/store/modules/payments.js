@@ -50,10 +50,17 @@ const actions = {
           type: "bank_card",
         },
         confirmation: {
-          type: "redirect",
-          return_url: "https://igra-pads.ru/client",
+          type: "embedded",
+          locale: 'ru_RU',
+        },
+        receipt: {
+          customer: {
+            email: 'Lapxi010@yandex.ru'
+          },
         },
         description: `${generateOrderNumber()}`,
+        capture: true,
+
       };
       const response = await fetch('https://igra-pads.ru/api/payments', {
         method: 'POST',
