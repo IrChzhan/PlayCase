@@ -20,13 +20,8 @@ export function useAuthCheck() {
             localStorage.setItem('team', JSON.stringify(response.data.name))
             teamName.value = response.data.name
           } catch (e) {
-            console.log('da')
-            console.log('жопа')
             await router.push('/watch')
           }
-
-
-
         } else {
           await router.push('/TeamNameInput')
           return
@@ -49,8 +44,7 @@ export function useAuthCheck() {
       await router.push('/TeamNameInput')
     }
   })
-
   return {
-    teamName,
+    teamName
   }
 }

@@ -21,8 +21,25 @@
             <div class="price-per-player">
               {{ pricePerPlayer }} ₽ <span>цена за 1 человека</span>
             </div>
+            <div class="checkbox-section">
+              <label>
+                <input type="checkbox" v-model="sendReceiptToCaptain" @change="toggleCheckbox('captain')">
+                Отправить чек капитану команды
+              </label>
+              <label>
+                <input type="checkbox" v-model="sendReceiptToEmail" @change="toggleCheckbox('email')">
+                Отправить чек на выбранный адрес
+                <input
+                  v-if="sendReceiptToEmail"
+                  type="email"
+                  v-model="selectedEmail"
+                  placeholder="Введите email"
+                  :class="{ 'invalid-email': !isValidEmail && sendReceiptToEmail }"
+                />
+              </label>
+            </div>
           </div>
-          <button class="pay-button" @click="generateQRCode">Оплатить</button>
+          <button class="pay-button" @click="handlePayment">Оплатить</button>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
           <info-modal v-if="showInfo" @close="toggleModal('info', false)" />
@@ -75,6 +92,7 @@ const props = defineProps({
 });
 const store = useStore();
 
+const emailTeam = ref('');
 const selectedPlayers = ref(1);
 const pricePerPlayer = ref(11);
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
@@ -82,8 +100,11 @@ const showDogovor = ref(false);
 const showPolitica = ref(false);
 const showInfo = ref(false);
 const qrCodeUrl = ref(null);
-
 const notifications = computed(() => store.getters['payments/getNotifications']);
+const sendReceiptToCaptain = ref(false);
+const sendReceiptToEmail = ref(false);
+const selectedEmail = ref('');
+const isValidEmail = ref(true);
 
 function toggleModal(type, value) {
   if (type === 'dogovor') showDogovor.value = value;
@@ -95,9 +116,42 @@ function selectPlayers(number) {
   selectedPlayers.value = number;
 }
 
+function toggleCheckbox(type) {
+  if (type === 'captain') {
+    if (sendReceiptToCaptain.value) {
+      sendReceiptToEmail.value = false;
+    }
+  } else if (type === 'email') {
+    if (sendReceiptToEmail.value) {
+      sendReceiptToCaptain.value = false;
+    }
+  }
+}
+
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+function handlePayment() {
+  if (!sendReceiptToCaptain.value && !sendReceiptToEmail.value) {
+    store.dispatch('payments/addNotification', { message: 'Выберите способ отправки чека', type: 'error' });
+    return;
+  }
+
+  if (sendReceiptToEmail.value && !validateEmail(selectedEmail.value)) {
+    isValidEmail.value = false;
+    store.dispatch('payments/addNotification', { message: 'Неверный формат email', type: 'error' });
+    return;
+  }
+
+  generateQRCode();
+}
+
 const generateQRCode = async () => {
   try {
-    const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value });
+    const email = sendReceiptToCaptain.value ? emailTeam.value : selectedEmail.value;
+    const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email });
     qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
   } catch (error) {
     console.error('Ошибка генерации QR-кода:', error);
@@ -116,9 +170,10 @@ watch(
 );
 
 let socket = null;
-
-onMounted(() => {
+onMounted(async () => {
   connectWebSocket();
+  const res = await store.dispatch('profile/getCurrentTeam');
+  emailTeam.value = res.email;
 });
 
 onUnmounted(() => {
@@ -155,7 +210,6 @@ const connectWebSocket = () => {
 const showNotification = (data) => {
   let type = 'info';
   let message = '';
-
   switch (data.eventType) {
     case 'payment.waiting_for_capture':
       type = 'warning';
@@ -176,7 +230,6 @@ const showNotification = (data) => {
     default:
       return;
   }
-
   store.dispatch('payments/addNotification', { message, type });
 };
 
@@ -205,7 +258,6 @@ const updatePayments = (data) => {
   margin-top: 10px;
   display: inline;
 }
-
 .link {
   font-size: 0.8rem;
   color: #000;
@@ -214,22 +266,18 @@ const updatePayments = (data) => {
   cursor: pointer;
   margin: 0 5px;
 }
-
 .link:hover {
   border-bottom: 2px solid #000;
 }
-
 .modal-body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
 }
-
 .price-per-player {
   margin-top: 10px;
 }
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -243,7 +291,6 @@ const updatePayments = (data) => {
   align-items: center;
   z-index: 1000;
 }
-
 .modal-content {
   background: #fff;
   border-radius: 1vw;
@@ -253,7 +300,6 @@ const updatePayments = (data) => {
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
-
 .close-button {
   position: absolute;
   top: 0.3%;
@@ -265,7 +311,6 @@ const updatePayments = (data) => {
   color: #0f1921;
   cursor: pointer;
 }
-
 .team-title {
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
@@ -276,12 +321,10 @@ const updatePayments = (data) => {
   border-radius: 12px;
   margin-bottom: 1vw;
 }
-
 .price-info {
   margin-bottom: 30px;
   font-size: 1.2rem;
 }
-
 .price-info .total-price {
   font-weight: 700;
   color: #fff;
@@ -290,17 +333,14 @@ const updatePayments = (data) => {
   border-radius: 20px;
   display: inline-block;
 }
-
 .price-info .price-per-player {
   font-weight: 700;
   color: #333;
 }
-
 .price-info span {
   font-weight: 400;
   color: #555;
 }
-
 .player-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -310,7 +350,6 @@ const updatePayments = (data) => {
   margin-right: 160px;
   justify-content: flex-start;
 }
-
 .player-button {
   background-color: #f5f5f5;
   border: 2px solid #ddd;
@@ -323,22 +362,19 @@ const updatePayments = (data) => {
   font-weight: 400;
   cursor: pointer;
   transition: background-color 0.3s, border-color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 .player-button.active {
   background-color: #cc9f33;
   color: #fff;
   border-color: #cc9f33;
 }
-
 .form-section {
   flex: 1;
   margin-right: 10px;
 }
-
 .qr-section {
   flex: 0 0 30%;
   display: flex;
@@ -356,7 +392,6 @@ const updatePayments = (data) => {
   margin-bottom: 20px;
   transition: background-color 0.3s;
 }
-
 .pay-button:hover {
   background-color: #b1882e;
 }
@@ -367,31 +402,46 @@ const updatePayments = (data) => {
   width: 100%;
   box-sizing: border-box;
 }
-
 .qr-code {
   width: 250px;
   height: 100px;
   height: auto;
 }
-
 .qr-instruction {
   margin-top: 10px;
   font-size: 1rem;
   text-align: center;
   color: #555;
 }
-
+.checkbox-section {
+  margin-top: 20px;
+}
+.checkbox-section label {
+  display: block;
+  margin-bottom: 10px;
+}
+.checkbox-section input[type="checkbox"] {
+  margin-right: 10px;
+}
+.checkbox-section input[type="email"] {
+  margin-left: 25px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+}
+.invalid-email {
+  border-color: red;
+}
 @media (min-width: 768px) and (max-width: 1024px) {
   .modal-content {
     width: 85vw;
     padding: 20px;
   }
-
   .team-title {
     font-size: clamp(12px, 2.5vw, 16px);
     padding: 1vw 2vw;
   }
-
   .player-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -399,17 +449,14 @@ const updatePayments = (data) => {
     margin-bottom: 20px;
     justify-content: center;
   }
-
   .player-button {
     width: 47px;
     height: 47px;
     font-size: 1.1rem;
   }
-
   .price-info {
     margin-bottom: 20px;
   }
-
   .qr-container {
     padding: 15px;
   }

@@ -1,4 +1,3 @@
-import { ref } from 'vue';
 import axios from 'axios';
 
 const state = {
@@ -39,7 +38,7 @@ const actions = {
     }
   },
 
-  async createPayment({ commit }, { amount }) {
+  async createPayment({ commit }, { amount, email }) {
     try {
       const paymentData = {
         amount: {
@@ -52,7 +51,7 @@ const actions = {
         },
         receipt: {
           customer: {
-            email: 'Lapxi010@yandex.ru',
+            email: `${email}`,
           },
           items: [
             {
@@ -65,11 +64,11 @@ const actions = {
               vat_code: 1,
               payment_subject: "commodity",
               payment_mode: "full_prepayment",
-              email: 'Lapxi010@yandex.ru'
+              email: `${email}`
             }
           ],
           tax_system_code: 1,
-          email: 'Lapxi010@yandex.ru'
+          email: `${email}`
         },
         description: `${generateOrderNumber()}`,
         capture: true,
