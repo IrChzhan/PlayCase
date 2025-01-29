@@ -57,7 +57,7 @@ const actions = {
           items: [
             {
               description: "Оплата участия в квизе",
-              quantity: amount / 1000,
+              quantity: 1,
               amount: {
                 value: `${amount}.00`,
                 currency: "RUB"
