@@ -48,7 +48,7 @@ const actions = {
         },
         confirmation: {
           type: "redirect",
-          return_url: "https://igra-pads.ru/client",
+          return_url: "https://igra-pads.ru/success",
         },
         receipt: {
           customer: {
@@ -56,15 +56,16 @@ const actions = {
           },
           items: [
             {
-              description: "Наименование товара 1",
-              quantity: 1,
+              description: "Оплата участия в квизе",
+              quantity: amount / 1000,
               amount: {
                 value: `${amount}.00`,
                 currency: "RUB"
               },
               vat_code: 1,
               payment_subject: "commodity",
-              payment_mode: "full_prepayment"
+              payment_mode: "full_prepayment",
+              email: 'Lapxi010@yandex.ru'
             }
           ],
           tax_system_code: 1,
@@ -91,7 +92,9 @@ const actions = {
       console.error('Ошибка при запросе на создание платежа:', error);
     }
   },
-
+  removeNotification({ commit }, updatedNotifications) {
+    commit('setNotifications', updatedNotifications);
+  },
   async updatePayment({ dispatch }, { gameId, teamId, data }) {
     try {
       const { paidByQr, paidByCard, paidByCash, actualParticipantsCount } = data;
@@ -130,6 +133,9 @@ const mutations = {
   addNotification(state, notification) {
     state.notifications.push(notification);
   },
+  setNotifications(state, notifications) {
+    state.notifications = notifications;
+  }
 };
 
 export default {

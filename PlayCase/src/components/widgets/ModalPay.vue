@@ -76,7 +76,7 @@ const props = defineProps({
 const store = useStore();
 
 const selectedPlayers = ref(1);
-const pricePerPlayer = ref(1000);
+const pricePerPlayer = ref(11);
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
 const showDogovor = ref(false);
 const showPolitica = ref(false);
@@ -183,7 +183,7 @@ const showNotification = (data) => {
 const removeNotification = (index) => {
   const updatedNotifications = [...notifications.value];
   updatedNotifications.splice(index, 1);
-  store.commit('payments/setNotifications', updatedNotifications);
+  store.dispatch('payments/removeNotification', updatedNotifications);
 };
 
 const updatePayments = (data) => {

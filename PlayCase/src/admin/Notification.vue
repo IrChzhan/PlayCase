@@ -33,6 +33,8 @@ const props = defineProps({
 const visible = ref(false)
 let timeout = null
 
+const emit = defineEmits(['close']);
+
 const showNotification = () => {
   visible.value = true
   autoHide()
@@ -40,6 +42,7 @@ const showNotification = () => {
 
 const hideNotification = () => {
   visible.value = false
+  emit('close');
 }
 
 const autoHide = () => {
