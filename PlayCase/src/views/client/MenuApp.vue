@@ -10,13 +10,13 @@
         <p>{{ item.name }}</p>
       </div>
       <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
-        <img :src="Stars" alt="Обратная связь" class="menu-image" @click="openModalFeedback" />
+        <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />
         <p>Обратная связь</p>
       </div>
     </div>
 
     <div class="footer">
-      <button @click="goToTeamNameDisplay" class="play-button">ИГРА</button>
+      <img src="@/assets/ИГРА.png" alt="ИГРА" class="play-button" @click="goToTeamNameDisplay" />
     </div>
     <Rules :show="showModalRules" :closeModal="closeModalRules" />
     <ModalLottery :show="showModalLottery" :closeModal="closeModalLottery" />
@@ -33,6 +33,7 @@ import {computed, onMounted, ref, watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import cashImage from '@/assets/cash.png'
+import house from '@/assets/House_01.png'
 import contactsImage from '@/assets/contacts.png'
 import helpImage from '@/assets/help.png'
 import info from '@/assets/info.png'
@@ -46,7 +47,6 @@ import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
 import person from '@/assets/hu.png'
-import Stars from '@/assets/start.png'
 import ModalHelp from "@/components/widgets/ModalHelp.vue";
 import FeedBackImage from "@/assets/feedback2.png"
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
@@ -201,7 +201,7 @@ onMounted(()=>{
     white-space: nowrap;
     overflow: hidden;
     font-size: clamp(32px, 8vw, 50px);
-    padding-bottom: 5px;
+    padding-bottom: 5px; 
 }
 
 h2 {
@@ -215,8 +215,8 @@ p {
 .menu {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding: 20px;
+  gap: 40px;
+  padding: 30px;
   width: 90%;
 }
 
@@ -241,14 +241,14 @@ p {
 }
 
 .lotteryIimage {
-  margin-left: 20px;
+  margin-left: 20px; 
 }
 
 .footer {
   display: flex;
   justify-content: flex-end;
   padding: 20px;
-  margin-top: 90px;
+  margin-top: 50px;
   margin-left: 20px;
 }
 
@@ -269,11 +269,10 @@ p {
   color: #cc9f33;
   font-family: 'Mulish', sans-serif;
   font-weight: bold;
-  font-size: 35px;
   cursor: pointer;
   margin-left: 800px;
   padding: 10px;
-  margin-bottom: 80px;
+  margin-bottom: 0; 
 }
 @media (min-width: 768px) and (max-width: 1024px) {
   .header {
@@ -306,17 +305,23 @@ p {
     margin-left: -120px;
   }
   .play-button {
-    position: absolute;
-    right: 25px;
-    bottom: 25px;
-    font-size: 30px;
-    margin: 0;
-  }
+  background-color: transparent;
+  border: none;
+  color: #cc9f33;
+  font-family: 'Mulish', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 800px;
+  padding: 10px;
+  /* Уменьшаем или убираем margin-bottom */
+  margin-bottom: 20px; /* Или установите 0 */
+}
 
   .footer {
-    justify-content: center;
+    justify-content: center; 
     flex-direction: row;
-    position: relative;
+    position: relative; 
+    margin-top: -50px;
   }
 }
 </style>

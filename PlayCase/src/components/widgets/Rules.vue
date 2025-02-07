@@ -1,43 +1,46 @@
 <template>
   <div v-if="show" class="modal-overlay">
     <div class="modal-content">
-      <button class="close-button" @click="closeModal">×</button>
-      <div class="rules-block">
-        <h1 class="title">Правила игры</h1>
-        <p class="intro">Вас ждут 7 раундов с небольшими перерывами после 3 и 6 раундов.</p>
-        <p class="description">
-          Почти во всех раундах, за редким исключением, будет по 6 вопросов. После каждого вопроса вам
-          в команде надо будет посовещаться и написать ответ на бланках, которые будут лежать где-то
-          рядом. После каждого раунда надо сдать бланк.
+      <div class="modal-header">
+        <h1 class="modal-title">ПРАВИЛА</h1>
+        <button class="close-button" @click="closeModal">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Вас ждут <b class="seven">7 раундов</b> с перерывами после 3 и 6 раундов.</p>
+        <br>
+        <p>
+          После каждого вопроса участники команды совещаются и пишут ответ на бланках, которые лежат на столах.
+          Бланки необходимо сдавать после каждого раунда. Всего за игру можно набрать максимум <b>1000 баллов</b>.
         </p>
-
+        <br>
         <ul class="rounds-list">
-          <li><span class="round-number">1 раунд.</span> Разминка.</li>
-          <li><span class="round-number">2 раунд.</span> На логику.</li>
-          <li><span class="round-number">3 раунд.</span> Музыкальный.</li>
-          <li><span class="round-number">4 раунд.</span> Интерактивный.</li>
-          <li><span class="round-number">5 раунд.</span> Сюрприз.</li>
-          <li><span class="round-number">6 раунд.</span> Тематический.</li>
-          <li><span class="round-number">7 раунд.</span> Решающий.</li>
+          <li><b>1 раунд.</b> Начало</li>
+          <li><b>2 раунд.</b> Логика</li>
+          <li><b>3 раунд.</b> Картинки</li>
+          <li><b>4 раунд.</b> Комбо</li>
+          <li><b>5 раунд.</b> Хет-трик</li>
+          <li><b>6 раунд.</b> Связь</li>
+          <li><b>7 раунд.</b> Финал</li>
         </ul>
-
-        <p class="additional-info">
-          Если у вас будут появляться вопросы перед игрой или в течение нее, не стесняйтесь задавать
-          их нашим помощникам.
+        <br>
+        <p>
+          На наших играх запрещено пользоваться электронными устройствами, поэтому не забудьте отложить их на время вопросов.
         </p>
-
-        <p class="note">
-          Ни в коем случае <span class="highlight">нельзя забывать вкусно есть</span> и
-          <span class="highlight">пить во время игры</span>! За этот пункт вашего досуга отвечают наши
-          партнерские крутые бары.
+        <br>
+        <p>
+          Если у вас будут появляться вопросы перед игрой или в течение неё, не стесняйтесь задавать их нашим хелперам.
         </p>
+        <p class="highlighted-text">
+          Ни в коем случае <b>нельзя забывать вкусно есть и пить во время игры!</b>
+        </p>
+        <p>Меню можно посмотреть прямо на этом планшете или попросить у официанта.</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {defineProps, watch} from 'vue';
+import { defineProps, watch } from 'vue';
 
 const props = defineProps({
   show: Boolean,
@@ -63,101 +66,80 @@ watch(
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(8px);
   z-index: 1000;
 }
 
 .modal-content {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  max-width: 800px;
-  max-height: 700px;
-  width: calc(100% - 40px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  position: relative;
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 860px;
+  width: 95%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   font-family: 'Mulish', sans-serif;
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1B2A46;
+  padding: 12px 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  text-align: center;
+  height: 50px;
+}
+
+.modal-title {
+  font-size: 50px;
+  font-weight: 500;
+  color: #ffffff;
+  flex-grow: 1;
+  text-align: center;
+  margin-left: 10px;
+}
+
+.seven {
+  font-weight: bold;
+  color: #1c2b4b;
+}
+
 .close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background: none;
   border: none;
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  font-size: 50px;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #ffffff;
   cursor: pointer;
 }
 
-.rules-block {
-  text-align: left;
-}
-
-.rules-block h1.title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 24px;
+.modal-body {
+  padding: 16px;
   color: #333;
+  font-size: 18px;
 }
 
-.additional-info {
-  margin-top: -10px;
-}
-
-.rules-block .intro,
-.rules-block .description,
-.rules-block .additional-info,
-.rules-block .note {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 28px;
-  color: #333;
-}
-
-.rules-block .rounds-list {
+.rounds-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 28px;
+  margin-bottom: 20px;
 }
 
-.rules-block .rounds-list li {
-  font-size: 1.1rem;
-  margin-bottom: 12px;
+.rounds-list li {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
-.rules-block .round-number {
-  font-weight: 600;
-  color: #3A4C6E;
-}
-
-.rules-block .additional-info {
-  font-weight: 400;
-  color: #555;
-}
-
-.rules-block .note {
-  font-weight: 600;
-  color: #555;
-}
-
-.rules-block .highlight {
-  color: #3A4C6E;
-}
-
-@media (max-width: 768px) {
-  .modal-content {
-    width: 90vw;
-    max-width: 600px;
-    padding: 15px;
-  }
-  .close-button {
-    font-size: 20px;
-  }
+.highlighted-text {
+  font-weight: bold;
+  color: #1c2b4b;
+  margin-top: 20px;
 }
 </style>

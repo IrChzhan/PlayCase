@@ -4,7 +4,9 @@
       <button class="close-button" @click="$emit('close')">&times;</button>
       <div class="modal-scrollable">
         <h1 class="contract-title">ДОГОВОР НА ПРЕДОСТАВЛЕНИЕ УСЛУГ</h1>
+        <br>
     <p class="contract-date">г. Москва «26» декабря 2024 года</p>
+    <br>
     <p>
       Индивидуальный предприниматель Богатырев Тихон Константинович, именуемый в дальнейшем "Исполнитель",
       действующий на основании записи в ЕГРИП от __.__.__ за ОГРНИП 317344300073052, предлагает любому
@@ -25,6 +27,7 @@
       Акцептируя данную оферту, Клиент подтверждает расторжение ранее заключенных с Исполнителем договоров
       на оказание услуг.
     </p>
+    <br>
     <h2>ТЕРМИНЫ И ОПРЕДЕЛЕНИЯ</h2>
     <p>
       <strong>Сайт</strong> - принадлежащий Исполнителю, содержащий совокупность информации, текстов, графических
@@ -46,7 +49,7 @@
       <strong>Клиент</strong> – заказчик услуг, оформивший заявку на Сайте, действующий от своего имени и от имени всех
       привлеченных им участников.
     </p>
-
+    <br>
 
     <h2>УСЛОВИЯ ОПЛАТЫ</h2>
     <p>3.1. Расчет стоимости заказанных услуг производится в соответствии с утвержденным прейскурантом цен
@@ -66,7 +69,7 @@
     течение 1 (одного) календарного дня после окончания оказания услуг Исполнитель не получил от
     Клиента письменных мотивированных возражений. По истечении указанного срока претензии в отношении
     недостатков оказанных услуг Исполнителем не принимаются.</p>
-
+    <br>
     <h2>РЕКВИЗИТЫ ИСПОЛНИТЕЛЯ</h2>
     <p><strong>ИП Богатырев Тихон Константинович</strong></p>
     <p><strong>ОГРНИП 317344300073052</strong></p>
@@ -102,10 +105,17 @@ const props = defineProps({
   z-index: 1000;
 }
 
+p {
+  font-size: 17px;
+}
+
+h2 {
+  font-weight: 600;
+}
 .modal-content {
   background: white;
   border-radius: 10px;
-  padding: 2%;
+  padding: 20px;
   width: 80%;
   max-width: 900px;
   max-height: 90%;
@@ -113,23 +123,24 @@ const props = defineProps({
   flex-direction: column;
   position: relative;
   overflow: hidden;
+  text-align: left;
 }
 
 .modal-scrollable {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  margin-right: -10px;
+  text-align: left;
 }
 
 .contract-title {
-  text-align: center;
-  font-size: 24px;
+  text-align: left;
+  font-size: 22px;
   margin-bottom: 20px;
 }
 
 .contract-date {
-  text-align: center;
+  text-align: left;
   margin-bottom: 20px;
   font-style: italic;
   color: #555;

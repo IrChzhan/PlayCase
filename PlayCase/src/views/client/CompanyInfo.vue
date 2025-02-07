@@ -56,19 +56,22 @@ const props = defineProps({
 }
 
 .modal-title {
-  text-align: center;
+  text-align: left; 
   font-size: 24px;
+  font-weight: 600;
   margin-bottom: 20px;
 }
 
 .info-container {
   padding: 10px 0;
+  text-align: left; 
 }
 
 p {
   margin-bottom: 10px;
   font-size: 18px;
   color: #3A4C6E;
+  text-align: left; 
 }
 
 .close-button {

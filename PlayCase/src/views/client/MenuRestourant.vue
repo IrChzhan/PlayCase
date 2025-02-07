@@ -1,25 +1,36 @@
 <template>
   <div class="container">
     <div class="menu-page">
-      <!-- Существующая структура -->
       <div class="header sticky-header">
         <div class="header-content">
-          <h1>Меню ресторана</h1>
-          <div class="category-filters">
-            <button
-              v-for="category in categories"
-              :key="category.id"
-              @click="filterByCategory(category.name)"
-              :class="{ active: selectedCategoryName === category.name }"
-            >
-              {{ category.name }}
-            </button>
-            <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">Все</button>
+          <h1>Меню</h1>
+          <img
+            src="@/assets/narrow_menu_left.png"
+            class="scroll-arrow left"
+            @click="scrollCategories(-1)"
+          />
+          <div class="category-filters-wrapper">
+            <div class="category-filters" ref="categoryFilters">
+              <button
+                v-for="category in categories"
+                :key="category.id"
+                @click="filterByCategory(category.name)"
+                :class="{ active: selectedCategoryName === category.name }"
+              >
+                {{ category.name }}
+              </button>
+              <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">Все</button>
+            </div>
           </div>
+          <img
+            src="@/assets/narrow-menu_right.png"
+            class="scroll-arrow right"
+            @click="scrollCategories(1)"
+          />
         </div>
       </div>
-
-      <div class="meals-scrollable">
+      
+      <div class="meals-scrollable"> 
         <div class="meals-grid">
           <div
             class="meal-card"
@@ -36,20 +47,6 @@
               <p class="meal-price">{{ meal.price }} ₽</p>
               <h2 class="meal-name">{{ meal.name }}</h2>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <img src="../../assets/house_light.png" class="home-button" @click="goToMenuApp" />
-
-      <div class="modal-overlay" v-if="showMealModal">
-        <div class="modal-content">
-          <button class="close-button" @click="closeMealModal">&times;</button>
-          <div class="meal-details">
-            <img :src="currentMeal.image || '/assets/default-image.png'" alt="Изображение блюда" class="meal-modal-image" />
-            <p class="meal-modal-name">{{ currentMeal.name }}</p>
-            <p class="meal-modal-description">{{ currentMeal.description }}</p>
-            <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
           </div>
         </div>
       </div>
@@ -126,6 +123,13 @@ const closeMealModal = () => {
   showMealModal.value = false;
 }
 
+const scrollCategories = (direction) => {
+  if (categoryFilters.value) {
+    const scrollAmount = direction * 200; 
+    categoryFilters.value.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+}
+
 onMounted(() => {
   fetchMenu()
 })
@@ -177,6 +181,37 @@ onMounted(() => {
   align-items: center;
 }
 
+.category-filters-wrapper {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  max-width: 60vw;
+  flex-grow: 1;
+}
+
+.category-filters {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  gap: 10px;
+}
+
+.scroll-arrow {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-left: 60px;
+}
+
+.left {
+  margin-right: 10px;
+}
+
+.right {
+  margin-left: 10px;
+}
+
 h1 {
   font-size: 24px;
   margin: 0;
@@ -198,14 +233,14 @@ h1 {
 }
 
 .category-filters::-webkit-scrollbar-thumb {
-  background-color: #ffa726; 
-  border-radius: 4px;
-}
+      background-color: transparent;
+      border-radius: 4px;
+    }
 
-.category-filters::-webkit-scrollbar-track {
-  background-color: #333; 
-  border-radius: 4px;
-}
+    .category-filters::-webkit-scrollbar-track {
+      background-color: transparent;
+      border-radius: 4px;
+    }
 
 .category-filters button {
   padding: 10px 20px;
@@ -321,12 +356,12 @@ h1 {
 }
 
 .meals-scrollable::-webkit-scrollbar-thumb {
-  background-color: #ffa726;
+  background-color: #1B2A46;
   border-radius: 3px;
 }
 
 .meals-scrollable::-webkit-scrollbar-track {
-  background-color: #333;
+  background-color: #1B2A46;
   border-radius: 3px;
 }
 
