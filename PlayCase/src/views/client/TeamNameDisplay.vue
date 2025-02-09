@@ -1,16 +1,22 @@
 <template>
   <div class="container">
-    <div class="container_name_team">
-      <h1 class="team-name">{{ teamName || 'Загрузка...' }}</h1>
-    </div>
-    <div class="container_down_menu">
-      <img
-        src="../../assets/House_01.png"
-        class="house-image"
-        width="80"
-        @click="goToMenuApp"
-        alt="home"
-      />
+    <video autoplay loop muted class="background-video">
+      <source src="../../assets/fon.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="content-wrapper">
+      <div class="container_name_team">
+        <h1 class="team-name">{{ teamName || 'Загрузка...' }}</h1>
+      </div>
+      <div class="container_down_menu">
+        <img
+          src="../../assets/House_01.png"
+          class="house-image"
+          width="80"
+          @click="goToMenuApp"
+          alt="home"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -36,7 +42,27 @@ const goToMenuApp = () => {
   height: 100vh;
   justify-content: center;
   position: relative;
-  background: #1b2a46;
+}
+
+.background-video {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 1500px;
+  height: 1000px;
+  object-fit: cover; 
+  z-index: 0; 
+}
+
+.content-wrapper {
+  position: relative; 
+  z-index: 1; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  height: 100%;
+  width: 100%; 
 }
 
 .team-name {
@@ -48,20 +74,20 @@ const goToMenuApp = () => {
   font-weight: 900;
   max-width: 90vw;
   word-wrap: break-word;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 0 20px black;
 }
 
 .container_down_menu {
   margin-top: 60px;
-  position: relative; 
+  position: relative;
 }
 
 .house-image {
   cursor: pointer;
   display: block;
-  position: absolute; 
-  top: 60px; 
-  left: 50%; 
+  position: relative; 
+  top: 60px;
+  left: 50%;
   transform: translateX(-50%);
 }
 
@@ -87,12 +113,13 @@ const goToMenuApp = () => {
 
 @media (min-width: 768px) and (max-width: 1024px) {
   .team-name {
-    font-size: clamp(4rem, 10vw, 4rem); 
-    overflow-wrap: break-word; 
+    font-size: clamp(4rem, 10vw, 4rem);
+    overflow-wrap: break-word;
   }
 
   .house-image {
-    top: 40px; 
+    top: 40px;
+    width: 70px;
   }
 }
 </style>

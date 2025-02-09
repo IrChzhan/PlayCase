@@ -2,43 +2,27 @@
   <div>
     <div class="modal-overlay" v-if="show">
       <div class="modal-content">
-        <button class="close-button" @click="closeModal">×</button>
+
+        <div class="modal-header">
+          <span class="lottery_text">ЛОТЕРЕЯ</span>
+          <button class="close-button" @click="closeModal">×</button>
+        </div>
+
         <div class="modal-body">
           <div class="form-section">
-            <div class="team-title">{{ teamName }}</div>
-            <h1 class="main-heading">Примите участие<br />в лотерее</h1>
             <form @submit.prevent="submitForm">
-              <Input
-  v-model:modelValue="formData.name"
-  :error="!!nameError"
-  :errorMessage="nameError"
-  text="Имя"
-  width="auto"
-/>
-<Input
-  v-model:modelValue="formData.email"
-  :error="!!emailError"
-  :errorMessage="emailError"
-  text="E-mail"
-  width="auto"
-/>
-<Input
-  v-model:modelValue="formData.phone"
-  :error="!!phoneError"
-  :errorMessage="phoneError"
-  text="Телефон"
-  width="auto"
-  placeholder="+7 (___) ___-____"
-/>
-
-              <button type="submit" class="submit-button">Участвовать</button>
+              <Input v-model:modelValue="formData.name" :error="!!nameError" :errorMessage="nameError" text="Имя" width="auto" />
+              <Input v-model:modelValue="formData.email" :error="!!emailError" :errorMessage="emailError" text="E-mail" width="auto" />
+              <Input v-model:modelValue="formData.phone" :error="!!phoneError" :errorMessage="phoneError" text="Телефон" width="auto" placeholder="+7 (___) ___-____" />
 
               <div class="checkbox-section">
                 <label class="checkbox-container">
                   <input type="checkbox" id="agree" v-model="formData.agree" required />
-                  <span>Нажимая кнопку, вы соглашаетесь с <span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span> </span>
+                  <span>Нажимая на кнопку, вы соглашаетесь с <span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span></span>
                 </label>
               </div>
+
+              <button type="submit" class="submit-button">Участвовать</button>
             </form>
           </div>
 
@@ -47,16 +31,13 @@
             <ul>
               <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
               <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
-              <li>
-                Каждый участник может зарегистрироваться
-                <span class="special-el">только один раз</span>.
-              </li>
+              <li>Каждый участник может зарегистрироваться <span class="special-el">только один раз</span>.</li>
               <li>Победителя определяет генератор случайных чисел.</li>
               <li>Призы не подлежат обмену на деньги и возврату.</li>
             </ul>
             <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
             <div class="btn-con">
-              <button @click.stop="goToLottery" class="btn">Список участников</button>
+              <button @click.stop="toggleModal('registrateUsers', true)" class="btn">Список участников</button>
             </div>
           </div>
         </div>
@@ -65,15 +46,20 @@
 
     <div class="modal-overlay" v-if="showSuccessModal">
       <div class="modal-content">
-        <button class="close-button" @click="closeSuccessModal">×</button>
+        <div class="modal-header">
+          <span>Результат</span>
+          <button class="close-button" @click="closeSuccessModal">×</button>
+        </div>
         <div class="modal-body success-body">
-             <p class="success-title">Ваш номер:</p>
-            <p class="success-number"> <strong>{{ successNumber }}</strong></p>
+          <p class="success-title">Ваш номер:</p>
+          <p class="success-number"><strong>{{ successNumber }}</strong></p>
         </div>
       </div>
     </div>
+
+    <RegistrateUsers v-if="showRegistrateUsers" :show="showRegistrateUsers" @close="toggleModal('registrateUsers', false)" />
+    <PolicyModal v-if="showPolitica" @close="toggleModal('politica', false)" />
   </div>
-  <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
 </template>
 
 <script setup>
@@ -84,6 +70,7 @@ import { useRouter } from 'vue-router';
 import Input from '@/components/shared/forms/Input.vue';
 import { useAuthCheck } from '@/hooks/useAuthCheck.js';
 import PolicyModal from "@/views/client/PoliticaPrivacy.vue";
+import RegistrateUsers from "@/views/client/RegistrateUsers.vue";
 
 const props = defineProps({
   show: Boolean,
@@ -91,20 +78,16 @@ const props = defineProps({
 });
 
 const showPolitica = ref(false);
+const showRegistrateUsers = ref(false);
 
 function toggleModal(type, value) {
-  if (type === 'dogovor') showDogovor.value = value;
-  else if (type === 'politica') showPolitica.value = value;
-  else if (type === 'info') showInfo.value = value;
+  if (type === 'politica') showPolitica.value = value;
+  else if (type === 'registrateUsers') showRegistrateUsers.value = value;
 }
+
 const { teamName } = useAuthCheck();
-
 const store = useStore();
-const router = useRouter();
 
-const goToLottery = () => {
-  router.push({ name: 'RegistrateUsers' })
-}
 const formData = ref({
   name: '',
   email: '',
@@ -114,9 +97,9 @@ const formData = ref({
 
 const emailError = ref('');
 const phoneError = ref('');
+const nameError = ref('');
 const showSuccessModal = ref(false);
 const successNumber = ref(null);
-const nameError = ref('');
 
 const submitForm = async () => {
     emailError.value = '';
@@ -166,7 +149,6 @@ const submitForm = async () => {
     }
 };
 
-
 const closeSuccessModal = () => {
   showSuccessModal.value = false;
   props.closeModal();
@@ -179,19 +161,12 @@ const phoneMask = (value) => {
     .replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '($1) $2-$3-$4');
 };
 
-const goToPolitica = () => {
-  router.push('/client/politica');
-};
-
 watch(
-    () => formData.value.phone,
-    (newVal, oldVal) => {
-        if (newVal !== phoneMask(newVal)) {
-            formData.value.phone = phoneMask(newVal);
-        }
-    }
+  () => formData.value.phone,
+  (newVal) => {
+      formData.value.phone = phoneMask(newVal);
+  }
 );
-
 
 watch(
   () => formData.value.email,
@@ -205,16 +180,38 @@ watch(
 watch(
   () => props.show,
   (newVal) => {
-    if (newVal) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = newVal ? 'hidden' : '';
   }
 );
 </script>
 
+
 <style scoped>
+
+.modal-header {
+  background-color: #1c2536;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 5px 20px;
+  font-size: 22px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.lottery_text {
+  margin-left: 300px;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 500;
+  font-size: 33px;
+}
+
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -226,7 +223,7 @@ watch(
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 200;
 }
 
 .link {
@@ -264,23 +261,20 @@ watch(
 .modal-content {
   background: var(--c-white, #fff);
   border-radius: 1vw;
-  padding: clamp(30px, 4vw, 50px) clamp(20px, 8vw, 100px);
-  width: 70vw;
-  max-width: 900px;
+  padding: clamp(10px, 4vw, 10px); 
+  width: 100%;
+  max-width: 800px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
 
 .close-button {
-  position: absolute;
-  top: 2%;
-  right: 2%;
   background: none;
   border: none;
-  font-size: clamp(16px, 2vw, 24px);
-  font-weight: bold;
-  color: #0f1921;
+  color: white;
+  font-size: 26px;
   cursor: pointer;
+  margin-bottom: 5px;
 }
 
 .btn {
@@ -312,7 +306,8 @@ watch(
 .form-section form {
   display: flex;
   flex-direction: column;
-  gap: 1.2vw;
+  gap:3vw;
+  margin-top: 20px;
 }
 
 .team-title {
@@ -341,13 +336,14 @@ input[type='checkbox'] {
 .checkbox-section {
   display: flex;
   justify-content: center;
-  margin-top: 1vw;
+  margin-bottom: 2px;
+  margin-top: 5px;
 }
 
 .checkbox-container {
   display: flex;
   align-items: center;
-  font-size: clamp(12px, 1.5vw, 14px);
+  font-size: 14px;
   color: #0f1921;
 }
 
@@ -356,15 +352,16 @@ input[type='checkbox'] {
   background-color: #cc9f33;
   color: #fffffc;
   border: none;
-  border-radius: 1.5vw;
-  padding: 1vw 2vw;
-  font-size: clamp(12px, 1.5vw, 14px);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
   cursor: pointer;
 }
 
 .submit-button:hover {
   background-color: #b68d2f;
 }
+
 .rules-section h2 {
   font-size: clamp(18px, 2vw, 22px);
   color: #cc9f33;

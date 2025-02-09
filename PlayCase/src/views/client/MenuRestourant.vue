@@ -3,7 +3,7 @@
     <div class="menu-page">
       <div class="header sticky-header">
         <div class="header-content">
-          <h1>Меню</h1>
+          <h1 class="menu_title">Меню</h1>
           <img
             src="@/assets/narrow_menu_left.png"
             class="scroll-arrow left"
@@ -29,7 +29,7 @@
           />
         </div>
       </div>
-      
+
       <div class="meals-scrollable"> 
         <div class="meals-grid">
           <div
@@ -44,11 +44,22 @@
               class="meal-image"
             />
             <div class="meal-info">
-              <p class="meal-price">{{ meal.price }} ₽</p>
               <h2 class="meal-name">{{ meal.name }}</h2>
+              <p class="meal-price">{{ meal.price }} ₽</p>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+
+    <div v-if="showMealModal" class="modal-overlay" @click.self="closeMealModal">
+      <div class="modal-content">
+        <button class="close-button" @click="closeMealModal">×</button>
+        <img :src="currentMeal.image || '/assets/default-image.png'" alt="Блюдо" class="meal-modal-image" />
+        <h2 class="meal-modal-name">{{ currentMeal.name }}</h2>
+        <p class="meal-modal-description">{{ currentMeal.description }}</p>
+        <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
       </div>
     </div>
   </div>
@@ -57,82 +68,75 @@
 <script setup>
 import axios from 'axios'
 import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+
 const router = useRouter();
-const categories = ref([])
-const meals = ref([])
-const selectedCategoryName = ref(null)
+const categories = ref([]);
+const meals = ref([]);
+const selectedCategoryName = ref(null);
 
 const showMealModal = ref(false);
 const currentMeal = ref({});
 
-const goToMenuApp = () => {
-  router.push({ name: 'MenuApp' });
-};
 const fetchMenu = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/place/current/menu`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-    })
+    });
 
     categories.value = response.data.mealCategories.map((category) => ({
       id: category.id,
       name: category.name,
-    }))
+    }));
 
     meals.value = response.data.mealCategories.flatMap((category) =>
-      category.meals.map((meal) => {
-        return {
-          id: meal.id,
-          name: meal.name,
-          description: meal.description,
-          categoryName: category.name,
-          price: meal.price,
-          image: meal.fileUrl,
-        }
-      }),
-    )
+      category.meals.map((meal) => ({
+        id: meal.id,
+        name: meal.name,
+        description: meal.description,
+        categoryName: category.name,
+        price: meal.price,
+        image: meal.fileUrl,
+      }))
+    );
   } catch (error) {
-    console.error('Ошибка при получении меню:', error)
+    console.error('Ошибка при получении меню:', error);
   }
-}
+};
 
 const filteredMenuItems = computed(() => {
-  if (selectedCategoryName.value !== null) {
-    return meals.value.filter((meal) => meal.categoryName === selectedCategoryName.value)
-  }
-  return meals.value
-})
+  return selectedCategoryName.value
+    ? meals.value.filter((meal) => meal.categoryName === selectedCategoryName.value)
+    : meals.value;
+});
 
 const filterByCategory = (categoryName) => {
-  selectedCategoryName.value = categoryName
-}
+  selectedCategoryName.value = categoryName;
+};
 
 const clearFilter = () => {
-  selectedCategoryName.value = null
-}
+  selectedCategoryName.value = null;
+};
 
 const openMealModal = (meal) => {
   currentMeal.value = meal;
   showMealModal.value = true;
-}
+};
 
 const closeMealModal = () => {
   showMealModal.value = false;
-}
+};
 
 const scrollCategories = (direction) => {
   if (categoryFilters.value) {
-    const scrollAmount = direction * 200; 
+    const scrollAmount = direction * 200;
     categoryFilters.value.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
-}
+};
 
-onMounted(() => {
-  fetchMenu()
-})
+onMounted(fetchMenu);
 </script>
 
 <style scoped>
@@ -144,6 +148,13 @@ onMounted(() => {
   color: #fff;
   display: flex;
   flex-direction: column;
+}
+
+.menu_title {
+  margin-left: 10px;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
+  font-size: 34px;
 }
 
 .menu-page {
@@ -185,7 +196,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   overflow: hidden;
-  max-width: 60vw;
+  max-width: 70vw;
   flex-grow: 1;
 }
 
@@ -194,15 +205,17 @@ onMounted(() => {
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 15px;
 }
 
 .scroll-arrow {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
-  margin-left: 60px;
+  margin-left: 20px;
 }
+
 
 .left {
   margin-right: 10px;
@@ -292,12 +305,13 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   text-align: left;
-  width: 140px;
-  height: 190px;
+  width: 180px;
+  height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: transform 0.3s;
+  font-family: 'Mulish', sans-serif;
 }
 
 
@@ -307,7 +321,7 @@ h1 {
 
 .meal-image {
   width: 100%;
-  height: 120px;
+  height: 160px;
   border-radius: 10px;
   object-fit: contain;
 }
@@ -320,7 +334,7 @@ h1 {
 .meal-price {
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   color: #CC9F33;
 }
 
@@ -349,6 +363,7 @@ h1 {
   justify-content: center;
   align-items: center;
   z-index: 800;
+  font-family: 'Mulish', sans-serif;
 }
 
 .meals-scrollable::-webkit-scrollbar {
@@ -368,21 +383,23 @@ h1 {
 .modal-content {
   background: #fff;
   border-radius: 8px;
-  padding: 20px;
+  padding: 5px;
   width: 80%;
   max-width: 600px;
-  text-align: center;
+  text-align: left;
   position: relative;
+  margin-left: 20px;
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 35px;
   cursor: pointer;
+  color: white;
 }
 
 .meal-details {
@@ -392,27 +409,35 @@ h1 {
 }
 
 .meal-modal-image {
-  max-width: 40%;
+  width: 100%;
+  height: 350px; 
   border-radius: 10px;
   margin-bottom: 20px;
+  object-fit: cover; 
 }
 
 .meal-modal-description {
-  font-size: 1rem;
-  color: #666;
+  font-size: 20px;
+  color: #000000;
   margin-bottom: 10px;
+  margin-top: 15px;
+  margin-left: 20px;
 }
 
 .meal-modal-price {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #cc9f33;
+  color: #C59216;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  margin-left: 20px;
 }
 
 .meal-modal-name {
-  font-size: 2rem;
+  font-size: 30px;
   font-weight: bold;
-  color: #666;
+  color: #0F1921;
   margin-bottom: 10px;
+  margin-left: 15px;
 }
 </style>

@@ -92,11 +92,11 @@ watch(
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   text-align: center;
-  height: 50px;
+  height: 30px;
 }
 
 .modal-title {
-  font-size: 50px;
+  font-size: 30px;
   font-weight: 500;
   color: #ffffff;
   flex-grow: 1;
@@ -112,8 +112,8 @@ watch(
 .close-button {
   background: none;
   border: none;
-  font-size: 50px;
-  margin-bottom: 4px;
+  font-size: 30px;
+  margin-bottom: 6px;
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;

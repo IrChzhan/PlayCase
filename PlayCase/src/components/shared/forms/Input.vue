@@ -15,6 +15,7 @@
   font-family: 'Mulish', sans-serif;
   color: #0f1921;
   transition: border-color 0.2s;
+  width: 200px;
 }
 
 .input-field:hover {

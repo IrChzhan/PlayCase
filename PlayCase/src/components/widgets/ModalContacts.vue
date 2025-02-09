@@ -4,19 +4,15 @@
       <button class="close-button" @click="closeModal">&times;</button>
       <div class="modal-body">
         <div class="form-section">
-          <h1 class="main-heading">Наши контакты</h1>
           <div class="container_qr">
             <div class="tg">
-              <img src="@/assets/TG.png" />
-              <p>TELEGRAM</p>
+              <img src="@/assets/telegram.png" />
             </div>
             <div class="inst">
-              <img src="@/assets/INST.png" />
-              <p>INSTA</p>
+              <img src="@/assets/vk.png" />
             </div>
             <div class="vk">
-              <img src="@/assets/VK.png" />
-              <p>VKONTAKTE</p>
+              <img src="@/assets/site.png" />
             </div>
           </div>
         </div>
@@ -79,7 +75,7 @@ watch(
   border-radius: 1vw;
   padding: clamp(30px, 4vw, 50px) clamp(20px, 8vw, 100px);
   width: 70vw;
-  max-width: 900px;
+  max-width: 800px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
@@ -106,32 +102,27 @@ watch(
 
 .container_qr {
   display: flex;
-  gap: 60px;
+  gap: 20px;
 }
 
 .qr {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-
-p {
-  margin-left: 10px;
+  gap: 10px;
 }
 
 .tg img {
-  width: 210px; 
+  width: 240px; 
   height: auto;
 }
 
 .inst img {
-  width: 210px; 
+  width: 240px; 
   height: auto;
 }
 
 .vk img {
-  width: 210px; 
+  width: 240px; 
   height: auto;
 }
 

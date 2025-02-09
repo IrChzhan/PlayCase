@@ -1,5 +1,6 @@
 <template>
   <div class="results-page">
+    <h1>Результаты игры</h1>
     <table class="results-table">
       <thead>
         <tr>
@@ -17,7 +18,7 @@
             :key="team.teamName"
             :class="{'even-row': index % 2 === 0,
             'odd-row': index % 2 !== 0,
-            boldText: teamName === team.teamName}"
+            'highlighted-row': teamName === team.teamName}"
           >
             <td>{{ team.currentPlace }}</td>
             <td :class="{boldText: teamName === team.teamName}">{{ team.teamName }}</td>
@@ -151,6 +152,10 @@ const goToMenuApp = () => {
   background-color: #fff;
 }
 
+.results-table tr.highlighted-row {
+  box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.4); 
+}
+
 .no-results {
   font-size: 1rem;
   font-weight: bold;
@@ -165,9 +170,5 @@ const goToMenuApp = () => {
   position: fixed;
   bottom: 20px;
   cursor: pointer;
-}
-
-.boldText {
-  font-weight: bold;
 }
 </style>
