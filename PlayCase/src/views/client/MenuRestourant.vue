@@ -62,6 +62,10 @@
         <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
       </div>
     </div>
+
+    <div class="home-button-container">
+      <img src="@/assets/House_01.png" alt="Домой" class="home-button" @click="goToMenuApp" />
+    </div>
   </div>
 </template>
 
@@ -127,6 +131,10 @@ const openMealModal = (meal) => {
 
 const closeMealModal = () => {
   showMealModal.value = false;
+};
+
+const goToMenuApp = () => {
+  router.push('/client/menu-app'); 
 };
 
 const scrollCategories = (direction) => {
@@ -439,5 +447,25 @@ h1 {
   color: #0F1921;
   margin-bottom: 10px;
   margin-left: 15px;
+}
+
+.home-button-container {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background: #1c2742;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  z-index: 10;
+  height: 30px;
+}
+
+.home-button {
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  margin-top: 0px;
 }
 </style>
