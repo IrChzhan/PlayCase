@@ -40,8 +40,7 @@
         </div>
       </div>
     </div>
-    <div class="modal-overlay" v-else>
-        <div class="modal-content">
+        <div class="modal-content" v-else>
           <div class="modal-header">
           <h1 class="modal-title">ОЦЕНИТЕ ИГРУ</h1>
           <button class="close-button" @click="closeModal">×</button>
@@ -51,7 +50,6 @@
         </div>
       </div>
     </div>
-  </div>
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
@@ -171,6 +169,7 @@ watch(
   left: 0;
   width: 100%;
   height: 100%;
+  backdrop-filter: blur(8px);
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;

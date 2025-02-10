@@ -68,6 +68,7 @@ watch(
   height: 100vh;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
+  backdrop-filter: blur(8px);
   justify-content: center;
   align-items: center;
   z-index: 1000;

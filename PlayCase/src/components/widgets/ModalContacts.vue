@@ -1,18 +1,20 @@
 <template>
   <div class="modal-overlay" v-if="show">
     <div class="modal-content">
-      <button class="close-button" @click="closeModal">&times;</button>
+      <button class="close-button" @click="closeModal">
+        <img class="image" src="@/assets/CloseBtnBlack.png" alt="CloseImage">
+      </button>
       <div class="modal-body">
         <div class="form-section">
           <div class="container_qr">
             <div class="tg">
-              <img src="@/assets/telegram.png" />
+              <img src="@/assets/telegram.png" alt="Telegram">
             </div>
             <div class="inst">
-              <img src="@/assets/VK.png" />
+              <img src="@/assets/VK.png" alt="VK">
             </div>
             <div class="vk">
-              <img src="@/assets/site.png" />
+              <img src="@/assets/site.png" alt="Site">
             </div>
           </div>
         </div>
@@ -42,6 +44,7 @@ const submitForm = () => {
   formData.value.questionType = ''
   formData.value.hostType = ''
 }
+
 watch(
   () => props.show,
   (newVal) => {
@@ -55,40 +58,40 @@ watch(
 </script>
 
 <style scoped>
+.image {
+  width: 45px;
+  height: 45px;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(8px);
   z-index: 1000;
-
 }
 
 .modal-content {
-  background: var(--c-white, #fff);
-  border-radius: 1vw;
-  padding: clamp(30px, 4vw, 50px) clamp(20px, 8vw, 100px);
-  width: 70vw;
-  max-width: 800px;
+  background: #F5F5F5;
+  border-radius: 28px;
+  padding: 114px 124px;
+  max-width: 1469px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
 
 .close-button {
   position: absolute;
-  top: 2%;
-  right: 2%;
+  top: 38px;
+  right: 34px;
   background: none;
   border: none;
-  font-size: clamp(16px, 2vw, 24px);
-  font-weight: bold;
-  color: #0f1921;
   cursor: pointer;
 }
 
@@ -102,7 +105,7 @@ watch(
 
 .container_qr {
   display: flex;
-  gap: 20px;
+  gap: 29px;
 }
 
 .qr {
@@ -111,30 +114,72 @@ watch(
   gap: 10px;
 }
 
-.tg img {
-  width: 240px; 
-  height: auto;
-}
-
-.inst img {
-  width: 240px; 
-  height: auto;
-}
-
+.tg img,
+.inst img,
 .vk img {
-  width: 240px; 
+  width: 388px; 
   height: auto;
+}
+
+@media (max-width: 1200px) {
+  .modal-content {
+    padding: 80px 90px;
+  }
+
+  .tg img,
+  .inst img,
+  .vk img {
+    width: 300px;
+  }
+}
+
+@media (max-width: 992px) {
+  .modal-content {
+    padding: 60px 70px;
+  }
+
+  .container_qr {
+    gap: 20px;
+  }
+
+  .tg img,
+  .inst img,
+  .vk img {
+    width: 250px;
+  }
 }
 
 @media (max-width: 768px) {
-  @media (max-width: 1024px) {
-    .modal-content {
-      width: 90vw;
-      padding: 15px;
-    }
-    .main-heading {
-      font-size: clamp(18px, 3vw, 24px);
-    }
+  .modal-content {
+    padding: 40px 50px;
+  }
+
+  .tg img,
+  .inst img,
+  .vk img {
+    width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-content {
+    padding: 20px 30px;
+  }
+
+  .tg img,
+  .inst img,
+  .vk img {
+    width: 150px;
+  }
+
+  .close-button {
+    top: 20px;
+    right: 20px;
+  }
+
+  .image {
+    width: 30px;
+    height: 30px;
   }
 }
 </style>

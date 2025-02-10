@@ -3,7 +3,7 @@
     <div class="modal-content" v-if="resHelp === ''">
       <div class="modal-header">
         <h1 class="modal-title">ПОЗВАТЬ</h1>
-        <button class="close-button" @click="closeModal">×</button>
+        <button class="close-button" @click="closeModal"><img src="@/assets/CloseImageWhite.png" class="imageWhite" alt="closeImage"></button>
       </div>
       <div class="modal-body">
         <div class="form-section">
@@ -16,7 +16,7 @@
     </div>
     <div class="help-box" v-else>
       <span class="help-text">{{ helpMessage }}</span>
-      <button class="close-button-v" @click="closeModal">×</button>
+      <button class="close-button-v" @click="closeModal"><img class="image" src="@/assets/CloseImage.png" alt="closeImage"></button>
     </div>
   </div>
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
@@ -116,25 +116,36 @@ watch(
 </script>
 
 <style scoped>
+
+.image {
+  width: 21px;
+  height: 21px;
+}
+
+.imageWhite {
+  width: 23px;
+  height: 23px;
+}
+
 .help-box {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   background: #ffffff;
-  border-radius: 8px;
-  padding: 6px;
-  max-width: 860px;
-  width: 95%;
+  border-radius: 15px;
+  padding: 48px 0 58px 0;
+  max-width: 722px;
+  width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   font-family: 'Mulish', sans-serif;
   position: relative;
 }
 
 .help-text {
-  margin-top: 30px;
-  margin-bottom: 30px;
-  font-size: 28px;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 400;
+  font-size: 38px;
   text-align: center;
 }
 
@@ -144,7 +155,8 @@ watch(
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -164,20 +176,20 @@ watch(
 }
 
 .modal-title {
-  font-size: 30px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 36px;
   font-weight: 500;
   color: #ffffff;
   flex-grow: 1;
   text-align: center;
-  margin-left: 10px;
 }
 
 .modal-content {
   background: var(--c-white, #fff);
-  border-radius: 1vw;
+  border-radius: 15px;
   padding: 6px;
-  width: 70vw;
-  max-width: 900px;
+  width: 100%;
+  max-width: 790px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
@@ -185,25 +197,23 @@ watch(
 .close-button {
   background: none;
   border: none;
-  font-size: 30px;
-  margin-bottom: 6px;
-  font-weight: 500;
   color: #ffffff;
   cursor: pointer;
   position: absolute;
-  right: 20px;
+  right: 17px;
 }
 
 .close-button-v {
+  width: 21px;
+  height: 21px;
   background: none;
   border: none;
-  font-size: 30px;
   font-weight: 500;
   color: #3A4C6E;
   cursor: pointer;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 21px;
+  right: 26px;
 }
 
 .main-heading {
@@ -216,17 +226,21 @@ watch(
 }
 
 .help-buttons {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 72px;
+  margin-bottom: 71px;
   display: flex;
   justify-content: space-around;
 }
 
 .help-button {
-  background-color: #CC9F33;
+  font-family: 'Mulish', sans-serif;
+  background-color: #C59216;
   color: #fff;
+  width: 227px;
+  line-height: 33.24px;
   padding: 15px 25px;
-  font-size: clamp(16px, 2vw, 20px);
+  font-size: 26px;
+  font-weight: 400;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -235,19 +249,5 @@ watch(
 
 .help-button:hover {
   background-color: #d1aa58;
-}
-
-@media (max-width: 768px) {
-  .modal-content {
-    width: 90vw;
-    padding: 15px;
-  }
-  .main-heading {
-    font-size: clamp(18px, 3vw, 24px);
-  }
-  .help-button {
-    font-size: clamp(14px, 2vw, 18px);
-    padding: 8px 15px;
-  }
 }
 </style>
