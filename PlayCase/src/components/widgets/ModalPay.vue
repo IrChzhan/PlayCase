@@ -42,15 +42,15 @@
                   v-model="picked"
                 />
                 Отправить чек на выбранный адрес
-                <input
+              </label>
+              <input
                   v-if="picked === 'sendReceiptToEmail'"
                   type="email"
                   v-model="selectedEmail"
                   placeholder="Введите email"
-                  :class="{ 'invalid-email': !isValidEmail && sendReceiptToEmail }"
+                  :class="{ 'invalid-email': !isValidEmail }"
                   required
                 />
-              </label>
             </div>
           </div>
           <button class="pay-button" @click="handlePayment">Оплатить</button>
@@ -126,6 +126,11 @@ const notifications = computed(() => store.getters['payments/getNotifications'])
 const selectedEmail = ref('');
 const isValidEmail = ref(true);
 
+function toggleModal(type, value) {
+  if (type === 'dogovor') showDogovor.value = value;
+  else if (type === 'politica') showPolitica.value = value;
+  else if (type === 'info') showInfo.value = value;
+}
 
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -467,11 +472,10 @@ const updatePayments = (data) => {
   margin-right: 10px;
 }
 .checkbox-section input[type="email"] {
-  margin-left: 25px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 200px;
+  width: 400px;
 }
 .invalid-email {
   border-color: red;
