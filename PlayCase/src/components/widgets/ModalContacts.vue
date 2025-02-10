@@ -9,7 +9,7 @@
               <img src="@/assets/telegram.png" />
             </div>
             <div class="inst">
-              <img src="@/assets/vk.png" />
+              <img src="@/assets/VK.png" />
             </div>
             <div class="vk">
               <img src="@/assets/site.png" />
