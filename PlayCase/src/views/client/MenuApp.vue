@@ -37,7 +37,7 @@ import house from '@/assets/House_01.png'
 import contactsImage from '@/assets/contacts.png'
 import helpImage from '@/assets/help.png'
 import info from '@/assets/info.png'
-import lotteryImage from '@/assets/loto.png'
+import lotteryImage from '@/assets/lottery-icons.png'
 import menuImage from '@/assets/menu.png'
 import ratingImage from '@/assets/rating.png'
 import ModalContacts from '@/components/widgets/ModalContacts.vue'
@@ -48,7 +48,7 @@ import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
 import person from '@/assets/hu.png'
 import ModalHelp from "@/components/widgets/ModalHelp.vue";
-import FeedBackImage from "@/assets/feedback2.png"
+import FeedBackImage from "@/assets/starts-group.png"
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
 import Rules from "@/components/widgets/Rules.vue";
 
@@ -234,11 +234,6 @@ p {
   height: 70px;
 }
 
-.image-one {
-  margin-top: 15px;
-  width: 40px;
-  height: 40px;
-}
 
 .lotteryIimage {
   margin-left: 20px; 

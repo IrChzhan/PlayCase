@@ -76,7 +76,7 @@ watch(
 .modal-content {
   background: #ffffff;
   border-radius: 8px;
-  padding: 16px;
+  padding: 6px;
   max-width: 860px;
   width: 95%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);

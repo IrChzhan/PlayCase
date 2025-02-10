@@ -263,6 +263,7 @@ watch(
   border-radius: 1vw;
   padding: clamp(10px, 4vw, 10px); 
   width: 100%;
+  padding: 6px;
   max-width: 800px;
   position: relative;
   font-family: 'Mulish', sans-serif;
