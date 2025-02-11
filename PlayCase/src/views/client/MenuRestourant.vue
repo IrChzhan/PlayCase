@@ -4,36 +4,39 @@
       <div class="header sticky-header">
         <div class="header-content">
           <h1 class="menu_title">Меню</h1>
-          <img
-            src="@/assets/narrow_menu_left.png"
-            class="scroll-arrow left"
-            :class="{ disabled: isScrollLeftDisabled }"
-            @click="scrollCategories(-1)"
-          />
-          <div class="category-filters-wrapper">
-            <div class="category-filters" ref="categoryFilters" @scroll="handleScroll">
-              <button
-                v-for="category in categories"
-                :key="category.id"
-                @click="filterByCategory(category.name)"
-                :class="{ active: selectedCategoryName === category.name }"
-              >
-                {{ category.name }}
-              </button>
-              <button 
-                @click="clearFilter" 
-                :class="{ active: selectedCategoryName === null }"
-              >
-                Все
-              </button>
+          <div class="category_scroll">
+            <img
+              src="@/assets/narrow_menu_left.png"
+              class="scroll-arrow left"
+              :class="{ disabled: isScrollLeftDisabled }"
+              @click="scrollOneCategory(-1)"
+            />
+            <div class="category-filters-wrapper" ref="categoryFiltersWrapper">
+              <div class="category-filters" ref="categoryFilters" @scroll="handleScroll">
+                <button
+                  v-for="category in categories"
+                  :key="category.id"
+                  @click="filterByCategory(category.name)"
+                  :class="{ active: selectedCategoryName === category.name }"
+                  ref="categoryButtons"
+                >
+                  {{ category.name }}
+                </button>
+                <button
+                  @click="clearFilter"
+                  :class="{ active: selectedCategoryName === null }"
+                >
+                  Все
+                </button>
+              </div>
             </div>
+            <img
+              src="@/assets/narrow-menu_right.png"
+              class="scroll-arrow right"
+              :class="{ disabled: isScrollRightDisabled }"
+              @click="scrollOneCategory(1)"
+            />
           </div>
-          <img
-            src="@/assets/narrow-menu_right.png"
-            class="scroll-arrow right"
-            :class="{ disabled: isScrollRightDisabled }"
-            @click="scrollCategories(1)"
-          />
         </div>
       </div>
 
@@ -75,17 +78,19 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import axios from 'axios';
+import { computed, onMounted, ref, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const categories = ref([]);
 const meals = ref([]);
 const selectedCategoryName = ref(null);
 const categoryFilters = ref(null);
+const categoryFiltersWrapper = ref(null);
 const isScrollLeftDisabled = ref(true);
 const isScrollRightDisabled = ref(false);
+const categoryButtons = ref([]);
 
 const showMealModal = ref(false);
 const currentMeal = ref({});
@@ -142,12 +147,14 @@ const closeMealModal = () => {
 };
 
 const goToMenuApp = () => {
-  router.push('/client/menu-app'); 
+  router.push('/client/menu-app');
 };
 
-const scrollCategories = (direction) => {
-  if (categoryFilters.value) {
-    const scrollAmount = direction * 200;
+const scrollOneCategory = async (direction) => {
+  if (categoryFilters.value && categoryButtons.value.length > 0) {
+    await nextTick();
+    const buttonWidth = categoryButtons.value[0].offsetWidth;
+    const scrollAmount = direction * buttonWidth;
     categoryFilters.value.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
 };
@@ -160,11 +167,23 @@ const handleScroll = () => {
   }
 };
 
+const setCategoryWrapperWidth = async () => {
+  if (categoryFiltersWrapper.value && categoryButtons.value.length > 0) {
+    await nextTick();
+    const buttonWidth = categoryButtons.value[0].offsetWidth;
+    const visibleButtonsWidth = buttonWidth * 6;
+    categoryFiltersWrapper.value.style.maxWidth = `${visibleButtonsWidth}px`;
+  }
+};
+
 onMounted(() => {
   fetchMenu();
   if (categoryFilters.value) {
     categoryFilters.value.addEventListener('scroll', handleScroll);
   }
+
+  setCategoryWrapperWidth();
+  window.addEventListener('resize', setCategoryWrapperWidth);
 });
 </script>
 
@@ -180,32 +199,40 @@ onMounted(() => {
 }
 
 .menu_title {
-  margin-left: 10px;
+  margin-left: 40px;
   font-family: 'Mulish', sans-serif;
   font-weight: 700;
-  font-size: 34px;
+  font-size: 40px;
+  margin-top: 5px;
 }
 
 .menu-page {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #1c2742; 
+  background-color: #1c2742;
   color: #fff;
   font-family: 'Arial', sans-serif;
   text-align: center;
   height: 100%;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .sticky-header {
   position: sticky;
   top: 0;
-  background-color: #1c2742; 
+  background-color: #1c2742;
   z-index: 5;
-  width: 100%; 
+  width: 100%;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category_scroll {
+  display: flex;
+  margin-left: 60px;
+  gap: 50px;
+  align-items: center; 
 }
 
 .header {
@@ -225,8 +252,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   overflow: hidden;
-  max-width: 70vw;
   flex-grow: 1;
+  transition: max-width 0.3s ease; 
 }
 
 .category-filters {
@@ -234,17 +261,19 @@ onMounted(() => {
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
-  gap: 12px;
-  margin-top: 15px;
+  gap: 40px; 
+  margin-top: 10px;
+  padding: 0 15px; 
 }
 
 .scroll-arrow {
   width: 40px;
   height: 40px;
   cursor: pointer;
-  margin-left: 20px;
+  margin-left: 0px; 
+  margin-right: 0px; 
+  transition: opacity 0.3s;
 }
-
 
 .left {
   margin-right: 10px;
@@ -260,32 +289,22 @@ h1 {
   flex-shrink: 0;
 }
 
-.category-filters {
-  display: flex;
-  flex-wrap: nowrap; 
-  overflow-x: auto; 
-  max-width: 75vw; 
-  box-sizing: border-box; 
-  padding-bottom: 10px;
-  gap: 10px;
-}
-
 .category-filters::-webkit-scrollbar {
-  height: 8px; 
+  height: 8px;
 }
 
 .category-filters::-webkit-scrollbar-thumb {
-      background-color: transparent;
-      border-radius: 4px;
-    }
+  background-color: transparent;
+  border-radius: 4px;
+}
 
-    .category-filters::-webkit-scrollbar-track {
-      background-color: transparent;
-      border-radius: 4px;
-    }
+.category-filters::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 4px;
+}
 
 .category-filters button {
-  padding: 10px 20px;
+  padding: 12px 24px; 
   border: none;
   border-radius: 5px;
   background-color: #f4f4f4;
@@ -294,6 +313,7 @@ h1 {
   font-weight: bold;
   transition: all 0.3s;
   white-space: nowrap;
+  font-size: 16px; 
 }
 
 .category-filters button.active {
@@ -305,13 +325,6 @@ h1 {
   background-color: #ffc107;
 }
 
-.home-button {
-  width: 50px;
-  height: 50px;
-  margin: 20px auto;
-  cursor: pointer;
-}
-
 .meals-scrollable {
   flex-grow: 1;
   overflow-y: auto;
@@ -321,8 +334,8 @@ h1 {
 
 .meals-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(5, 1fr); 
+  gap: 8px; 
   justify-items: center;
   padding: 20px;
 }
@@ -332,10 +345,10 @@ h1 {
   color: #333;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  padding: 15px; 
   text-align: left;
-  width: 180px;
-  height: 250px;
+  width: 310px; 
+  height: 300px; 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -343,14 +356,13 @@ h1 {
   font-family: 'Mulish', sans-serif;
 }
 
-
 .meal-card:hover {
   transform: translateY(-5px);
 }
 
 .meal-image {
   width: 100%;
-  height: 160px;
+  height: 200px; 
   border-radius: 10px;
   object-fit: contain;
 }
@@ -361,21 +373,21 @@ h1 {
 }
 
 .meal-price {
-  font-size: 16px;
+  font-size: 25px; 
   font-weight: bold;
   margin-bottom: 0px;
   color: #CC9F33;
 }
 
 .meal-name {
-  font-size: 14px;
+  font-size: 22npm px; 
   margin: 5px 0;
 }
 
 .meal-description {
-  font-size: 12px;
+  font-size: 14px; 
   color: #666;
-  height: 40px;
+  height: 50px; 
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -387,6 +399,7 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
+
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -396,7 +409,7 @@ h1 {
 }
 
 .meals-scrollable::-webkit-scrollbar {
-  width: 6px; 
+  width: 6px;
 }
 
 .meals-scrollable::-webkit-scrollbar-thumb {
@@ -439,10 +452,10 @@ h1 {
 
 .meal-modal-image {
   width: 100%;
-  height: 350px; 
+  height: 350px;
   border-radius: 10px;
   margin-bottom: 20px;
-  object-fit: cover; 
+  object-fit: cover;
 }
 
 .meal-modal-description {
@@ -484,10 +497,10 @@ h1 {
 }
 
 .home-button {
-  width: 70px;
-  height: 70px;
+  width: 120px;
+  height: 120px;
   cursor: pointer;
-  margin-top: 0px;
+  margin-top: -80px;
 }
 .scroll-arrow {
   width: 40px;
@@ -515,7 +528,7 @@ h1 {
   color: white;
 }
 .category-filters button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
   background-color: #f4f4f4;
@@ -524,14 +537,15 @@ h1 {
   font-weight: bold;
   transition: all 0.3s;
   white-space: nowrap;
+  font-size: 16px;
 }
 
 .category-filters button.active {
   background-color: #ffa726;
-  color: white; 
+  color: white;
 }
 
 .category-filters button:hover {
-  background-color: #ffc107; 
+  background-color: #ffc107;
 }
 </style>
