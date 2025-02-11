@@ -1,42 +1,56 @@
 <template>
   <div class="modal-overlay" v-if="show">
     <div class="modal-content">
-      <button class="close-button" @click="closeModal">&times;</button>
+      <div class="modal-header">
+        <h1 class="modal-title">ОПЛАТА ИГРЫ</h1>
+        <button class="close-button" @click="closeModal">×</button>
+      </div>
       <div class="modal-body">
         <div class="form-section">
-          <div class="team-title">{{ teamName }}</div>
-          <h1 class="title">Выберите количество игроков для оплаты</h1>
+          <div class="team-title">Команда: {{ teamName }}</div>
+          <h1 class="title">Выберите количество человек</h1>
           <div class="player-buttons">
             <button
               v-for="number in 8"
               :key="number"
               :class="['player-button', { active: selectedPlayers === number }]"
-              @click="selectPlayers(number)"
+              @click="selectedPlayers = number"
             >
               {{ number }}
             </button>
           </div>
+          <div class="price-per-player">
+            <span>стоимость участия {{ pricePerPlayer }} ₽ с человека</span>
+          </div>
           <div class="price-info">
             <div class="total-price">ИТОГО: {{ totalPrice }} ₽</div>
-            <div class="price-per-player">
-              {{ pricePerPlayer }} ₽ <span>цена за 1 человека</span>
-            </div>
             <div class="checkbox-section">
-              <label>
-                <input type="checkbox" v-model="sendReceiptToCaptain" @change="toggleCheckbox('captain')">
+              <label for="one" class="text" v-if="emailTeam">
+                <input
+                id="one"
+                  type="radio"
+                  value="sendReceiptToCaptain"
+                  v-model="picked"
+                />
                 Отправить чек капитану команды
               </label>
-              <label>
-                <input type="checkbox" v-model="sendReceiptToEmail" @change="toggleCheckbox('email')">
-                Отправить чек на выбранный адрес
+              <label for="two" class="text">
                 <input
-                  v-if="sendReceiptToEmail"
+                id="two"
+                  type="radio"
+                  value="sendReceiptToEmail"
+                  v-model="picked"
+                />
+                Отправить чек на выбранный адрес
+              </label>
+              <input
+                  v-if="picked === 'sendReceiptToEmail'"
                   type="email"
                   v-model="selectedEmail"
                   placeholder="Введите email"
-                  :class="{ 'invalid-email': !isValidEmail && sendReceiptToEmail }"
+                  :class="{ 'invalid-email': !isValidEmail }"
+                  required
                 />
-              </label>
             </div>
           </div>
           <button class="pay-button" @click="handlePayment">Оплатить</button>
@@ -48,11 +62,13 @@
               <li class="link-li">
                 <a class="link" @click="toggleModal('dogovor', true)">Договор-оферта</a>
               </li>
+              |
               <li class="link-li">
                 <a class="link" @click="toggleModal('politica', true)">Политика конфиденциальности</a>
               </li>
+              |
               <li class="link-li">
-                <a class="link" @click="toggleModal('info', true)">Открыть страницу с реквизитами</a>
+                <a class="link" @click="toggleModal('info', true)">реквизиты</a>
               </li>
             </ul>
           </div>
@@ -96,13 +112,17 @@ const emailTeam = ref('');
 const selectedPlayers = ref(1);
 const pricePerPlayer = ref(11);
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
+
+const picked = ref('sendReceiptToCaptain')
+
 const showDogovor = ref(false);
 const showPolitica = ref(false);
 const showInfo = ref(false);
+
 const qrCodeUrl = ref(null);
+
 const notifications = computed(() => store.getters['payments/getNotifications']);
-const sendReceiptToCaptain = ref(false);
-const sendReceiptToEmail = ref(false);
+
 const selectedEmail = ref('');
 const isValidEmail = ref(true);
 
@@ -112,34 +132,14 @@ function toggleModal(type, value) {
   else if (type === 'info') showInfo.value = value;
 }
 
-function selectPlayers(number) {
-  selectedPlayers.value = number;
-}
-
-function toggleCheckbox(type) {
-  if (type === 'captain') {
-    if (sendReceiptToCaptain.value) {
-      sendReceiptToEmail.value = false;
-    }
-  } else if (type === 'email') {
-    if (sendReceiptToEmail.value) {
-      sendReceiptToCaptain.value = false;
-    }
-  }
-}
-
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
 }
 
 function handlePayment() {
-  if (!sendReceiptToCaptain.value && !sendReceiptToEmail.value) {
-    store.dispatch('payments/addNotification', { message: 'Выберите способ отправки чека', type: 'error' });
-    return;
-  }
 
-  if (sendReceiptToEmail.value && !validateEmail(selectedEmail.value)) {
+  if (picked.value == 'sendReceiptToEmail' && !validateEmail(selectedEmail.value)) {
     isValidEmail.value = false;
     store.dispatch('payments/addNotification', { message: 'Неверный формат email', type: 'error' });
     return;
@@ -150,7 +150,7 @@ function handlePayment() {
 
 const generateQRCode = async () => {
   try {
-    const email = sendReceiptToCaptain.value ? emailTeam.value : selectedEmail.value;
+    const email = picked.value === 'sendReceiptToCaptain' ? emailTeam.value : selectedEmail.value;
     const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email });
     qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
   } catch (error) {
@@ -170,10 +170,15 @@ watch(
 );
 
 let socket = null;
+
 onMounted(async () => {
   connectWebSocket();
   const res = await store.dispatch('profile/getCurrentTeam');
   emailTeam.value = res.email;
+
+  if (!emailTeam.value) {
+    picked.value = 'sendReceiptToEmail';
+  }
 });
 
 onUnmounted(() => {
@@ -254,6 +259,27 @@ const updatePayments = (data) => {
 </script>
 
 <style scoped>
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1B2A46;
+  padding: 12px 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  text-align: center;
+  height: 30px;
+}
+
+.modal-title {
+  font-size: 30px;
+  font-weight: 500;
+  color: #ffffff;
+  flex-grow: 1;
+  text-align: center;
+  margin-left: 10px;
+}
+
 .link-li {
   margin-top: 10px;
   display: inline;
@@ -272,11 +298,16 @@ const updatePayments = (data) => {
 .modal-body {
   display: flex;
   flex-direction: row;
+  padding: 45px 75px;
   justify-content: space-between;
   align-items: flex-start;
 }
 .price-per-player {
   margin-top: 10px;
+  font-size: 22px;
+  font-weight: 500;
+  font-family: 'Mulish',sans-serif;
+  margin-bottom: 25px;
 }
 .modal-overlay {
   position: fixed;
@@ -294,43 +325,48 @@ const updatePayments = (data) => {
 .modal-content {
   background: #fff;
   border-radius: 1vw;
-  padding: clamp(30px, 4vw, 50px) clamp(20px, 8vw, 100px);
+  padding: 6px;
   width: 70vw;
   max-width: 900px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
 .close-button {
-  position: absolute;
-  top: 0.3%;
-  right: 0.3%;
   background: none;
   border: none;
-  font-size: clamp(16px, 2vw, 24px);
-  font-weight: bold;
-  color: #0f1921;
+  font-size: 30px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #ffffff;
   cursor: pointer;
 }
 .team-title {
   display: inline-block;
-  font-size: clamp(14px, 1.5vw, 18px);
-  font-weight: bold;
-  color: white;
-  background-color: #cc9f33;
-  padding: 1vw 2vw;
-  border-radius: 12px;
-  margin-bottom: 1vw;
+  font-size: 30px;
+  font-family: 'Mulish',sans-serif;
+  font-weight: 500;
+  color: #0F1921  ;
+  margin-bottom: 24px;
 }
+
+.title {
+  font-size: 30px;
+  font-family: 'Mulish',sans-serif;
+  font-weight: 500;
+  color: #0F1921  ;
+  margin-bottom: 24px;
+}
+
 .price-info {
   margin-bottom: 30px;
   font-size: 1.2rem;
 }
 .price-info .total-price {
-  font-weight: 700;
+  font-weight: 400;
   color: #fff;
   background-color: #cc9f33;
-  padding: 10px;
-  border-radius: 20px;
+  padding: 10px 35px;
+  border-radius: 13px;
   display: inline-block;
 }
 .price-info .price-per-player {
@@ -344,7 +380,7 @@ const updatePayments = (data) => {
 .player-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 10px;
   margin-bottom: 30px;
   margin-top: 15px;
   margin-right: 160px;
@@ -353,9 +389,9 @@ const updatePayments = (data) => {
 .player-button {
   background-color: #f5f5f5;
   border: 2px solid #ddd;
-  border-radius: 60%;
-  width: 30px;
-  height: 30px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
   flex-grow: 0;
   flex-shrink: 0;
   font-size: 1rem;
@@ -395,15 +431,27 @@ const updatePayments = (data) => {
 .pay-button:hover {
   background-color: #b1882e;
 }
+
+.text {
+  font-size: 20px;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 400;
+  color: #000000;
+}
+
 .qr-container {
   background: rgba(58, 76, 110, 0.5);
-  padding: 20px;
+  padding: 10px;
   border-radius: 12px;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .qr-code {
-  width: 250px;
+  width: 150px;
   height: 100px;
   height: auto;
 }
@@ -424,41 +472,43 @@ const updatePayments = (data) => {
   margin-right: 10px;
 }
 .checkbox-section input[type="email"] {
-  margin-left: 25px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 200px;
+  width: 400px;
 }
 .invalid-email {
   border-color: red;
 }
-@media (min-width: 768px) and (max-width: 1024px) {
+
+@media (max-width: 1000px) {
   .modal-content {
-    width: 85vw;
-    padding: 20px;
+    width: 90vw;
+    padding: 6px;
   }
   .team-title {
-    font-size: clamp(12px, 2.5vw, 16px);
-    padding: 1vw 2vw;
+    font-size: 24px;
   }
   .player-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 20px;
-    justify-content: center;
+    gap: 5px;
+    margin-right: 0;
   }
   .player-button {
-    width: 47px;
-    height: 47px;
-    font-size: 1.1rem;
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
   }
   .price-info {
     margin-bottom: 20px;
   }
   .qr-container {
-    padding: 15px;
+    padding: 10px;
+  }
+  .modal-body {
+    padding: 20px;
+  }
+  .qr-section {
+    margin-top: 20px;
   }
 }
 </style>

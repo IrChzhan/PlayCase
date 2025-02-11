@@ -1,35 +1,26 @@
 <template>
   <div class="modal-overlay" v-if="show">
     <div v-if="!showSuccessModal" class="modal-content">
-      <button class="close-button" @click="closeModal">&times;</button>
+      <div class="modal-header">
+        <h1 class="modal-title">ОЦЕНИТЕ ИГРУ</h1>
+        <button class="close-button" @click="closeModal">×</button>
+      </div>
       <div class="modal-body">
         <div class="form-section">
-          <div class="team-title">{{teamName}}</div>
-          <h2 class="title-box">Оцените игру</h2>
           <div class="image-selection">
             <div
               class="image-container"
-              :style="{'--icon-color': selectedColor}"
-              :class="{'selected': formData.questionType === 'GOOD'}"
-              @click="formData.questionType = 'GOOD';setSelectedColor('green')">
-              <img :src="Good" alt="Good" class="image" />
-            </div>
-            <div
-              class="image-container"
-              :style="{'--icon-color': selectedColor}"
-              :class="{'selected': formData.questionType === 'NEUTRAL'}"
-              @click="formData.questionType = 'NEUTRAL';setSelectedColor('yellow')">
-              <img :src="Neutral" alt="Neutral" class="image" />
-            </div>
-            <div
-              class="image-container"
-              :style="{'--icon-color': selectedColor}"
               :class="{'selected': formData.questionType === 'BAD'}"
-              @click="formData.questionType = 'BAD';setSelectedColor('red')">
-              <img :src="Bad" alt="Bad" class="image" />
+              @click="selectImage('BAD')">
+              <img :src="formData.questionType === 'BAD' ? BadYellow : Bad" alt="Bad" class="image" />
+            </div>
+            <div
+              class="image-container"
+              :class="{'selected': formData.questionType === 'GOOD'}"
+              @click="selectImage('GOOD')">
+              <img :src="formData.questionType === 'GOOD' ? GoodYellow : Good" alt="Good" class="image" />
             </div>
           </div>
-
           <p class="details-text" @click="toggleDetails">Хотите рассказать подробнее?</p>
           <div v-if="showDetails" class="details-section">
             <label for="comment" class="details-label">Комментарий:</label>
@@ -38,36 +29,50 @@
               Введите ваш комментарий!
             </textarea>
           </div>
-
-          <button type="button" class="submit-button" @click="submitForm">Отправить данные</button>
+          <div class="con">
+            <button v-if="formData.questionType" type="button" 
+                  class="submit-button" 
+                  :disabled="!formData.questionType"
+                  @click="submitForm">
+            Отправить данные
+          </button>
+          </div>
         </div>
       </div>
     </div>
-    <div class="modal-overlay" v-else>
-      <div class="modal-content">
-        <button class="close-button" @click="closeSuccessModal">×</button>
+        <div class="modal-content" v-else>
+          <div class="modal-header">
+          <h1 class="modal-title">ОЦЕНИТЕ ИГРУ</h1>
+          <button class="close-button" @click="closeModal">×</button>
+        </div>
         <div class="modal-body success-body">
-          <h2 class="success-title">Спасибо, благодаря вам мы становимся лучше!</h2>
+          <h2 class="success-title">Спасибо за вашу оценку!</h2>
         </div>
       </div>
     </div>
-  </div>
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
+
 
 <script setup>
 import { ref, watch } from 'vue';
 import { useAuthCheck } from "@/hooks/useAuthCheck.js";
 import { useStore } from "vuex";
 import Notification from "@/admin/Notification.vue";
-import Good from "@/assets/good-ok12.png";
-import Neutral from "@/assets/yellow-ok.png";
-import Bad from "@/assets/red-ok.png";
+import Good from "@/assets/Good-svg.svg";
+import Bad from "@/assets/Bad-svg.svg";
+import GoodYellow from "@/assets/Good-svg-yellow.svg";
+import BadYellow from "@/assets/Bad-svg-yellow.svg";
 
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
 });
+
+const selectImage = (type) => {
+  formData.value.questionType = type;
+  setSelectedColor(type === 'GOOD' ? 'green' : 'red');
+};
 
 const showSuccessModal = ref(false);
 const toastMessage = ref('');
@@ -125,23 +130,56 @@ watch(
 </script>
 
 <style scoped>
+
+.con {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1B2A46;
+  padding: 12px 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  text-align: center;
+  height: 30px;
+}
+
+.modal-title {
+  font-size: 30px;
+  font-weight: 500;
+  color: #ffffff;
+  flex-grow: 1;
+  text-align: center;
+  margin-left: 10px;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  backdrop-filter: blur(8px);
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  backdrop-filter: blur(8px);
   align-items: center;
   z-index: 1000;
 }
 
 .details-text {
   color: #cc9f33;
-  font-size: 14px;
+  font-size: 18px;
   cursor: pointer;
   text-decoration: underline;
   text-align: center;
@@ -149,13 +187,13 @@ watch(
 }
 
 .details-section {
-  padding: 10px;
+  padding: 0 97px;
   margin-bottom: 1.5vw;
 }
 
 .details-label {
   display: block;
-  font-size: 14px;
+  font-size: 20px;
   color: #333;
   margin-bottom: 0.5vw;
 }
@@ -168,9 +206,12 @@ watch(
   resize: none;
   font-size: 14px;
   color: #555;
+  outline: none;
 }
 
 .success-body {
+  margin-top: 50px;
+  margin-bottom: 50px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -194,7 +235,7 @@ watch(
 .modal-content {
   background: var(--c-white, #fff);
   border-radius: 1vw;
-  padding: clamp(30px, 4vw, 50px) clamp(20px, 8vw, 100px);
+  padding: 6px;
   width: 70vw;
   max-width: 900px;
   position: relative;
@@ -202,17 +243,14 @@ watch(
 }
 
 .close-button {
-  position: absolute;
-  top: 2%;
-  right: 2%;
   background: none;
   border: none;
-  font-size: clamp(16px, 2vw, 24px);
-  font-weight: bold;
-  color: #0f1921;
+  font-size: 30px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #ffffff;
   cursor: pointer;
 }
-
 .team-title {
   display: inline-block;
   font-size: clamp(14px, 1.5vw, 18px);
@@ -228,11 +266,12 @@ watch(
   display: flex;
   justify-content: space-around;
   margin-bottom: 2vw;
+  margin-top: 40px;
 }
 
 .image-container {
-  width: 120px;
-  height: 120px;
+  width: 290px;
+  height: 290px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -240,31 +279,23 @@ watch(
   border: 2px solid transparent;
   cursor: pointer;
   overflow: hidden;
-  -icon-color: transparent;
-  color: var(--icon-color);
+  background: #1B2A46;
 }
 
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0.8;
-}
 
 .image-container.selected {
   border-color: transparent;
-  box-shadow: 0 0 15px 5px currentColor;
   transition: box-shadow 0.3s ease-in-out;
 }
 
 .submit-button {
-  width: 100%;
-  background-color: #cc9f33;
+  background-color: #C59216;
+  margin: 0 auto 30px auto;
   color: #fffffc;
   border: none;
   border-radius: 1.5vw;
-  padding: 1vw 2vw;
-  font-size: clamp(12px, 1.5vw, 14px);
+  padding: 14px 26px;
+  font-size: clamp(20px, 1.5vw, 14px);
   cursor: pointer;
 }
 

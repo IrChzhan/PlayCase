@@ -69,6 +69,7 @@ const closeModal = () => {
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 6px;
   font-family: 'Mulish', sans-serif;
 }
 .modal-header {
@@ -80,6 +81,8 @@ const closeModal = () => {
   padding: 10px 15px;
   font-size: 18px;
   font-weight: bold;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   height: 25px;
 }
 .modal-title {

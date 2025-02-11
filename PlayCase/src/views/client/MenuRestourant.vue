@@ -7,10 +7,11 @@
           <img
             src="@/assets/narrow_menu_left.png"
             class="scroll-arrow left"
+            :class="{ disabled: isScrollLeftDisabled }"
             @click="scrollCategories(-1)"
           />
           <div class="category-filters-wrapper">
-            <div class="category-filters" ref="categoryFilters">
+            <div class="category-filters" ref="categoryFilters" @scroll="handleScroll">
               <button
                 v-for="category in categories"
                 :key="category.id"
@@ -19,18 +20,24 @@
               >
                 {{ category.name }}
               </button>
-              <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">Все</button>
+              <button 
+                @click="clearFilter" 
+                :class="{ active: selectedCategoryName === null }"
+              >
+                Все
+              </button>
             </div>
           </div>
           <img
             src="@/assets/narrow-menu_right.png"
             class="scroll-arrow right"
+            :class="{ disabled: isScrollRightDisabled }"
             @click="scrollCategories(1)"
           />
         </div>
       </div>
 
-      <div class="meals-scrollable"> 
+      <div class="meals-scrollable">
         <div class="meals-grid">
           <div
             class="meal-card"
@@ -52,7 +59,6 @@
       </div>
     </div>
 
-
     <div v-if="showMealModal" class="modal-overlay" @click.self="closeMealModal">
       <div class="modal-content">
         <button class="close-button" @click="closeMealModal">×</button>
@@ -62,10 +68,14 @@
         <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
       </div>
     </div>
+<<<<<<< HEAD
 
     <div class="home-button-container">
       <img src="@/assets/House_01.png" alt="Домой" class="home-button" @click="goToMenuApp" />
     </div>
+=======
+    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
+>>>>>>> 206ec58ba6d37cd935a289f575704c17c9d5c53b
   </div>
 </template>
 
@@ -78,6 +88,9 @@ const router = useRouter();
 const categories = ref([]);
 const meals = ref([]);
 const selectedCategoryName = ref(null);
+const categoryFilters = ref(null);
+const isScrollLeftDisabled = ref(true);
+const isScrollRightDisabled = ref(false);
 
 const showMealModal = ref(false);
 const currentMeal = ref({});
@@ -144,7 +157,20 @@ const scrollCategories = (direction) => {
   }
 };
 
-onMounted(fetchMenu);
+const handleScroll = () => {
+  if (categoryFilters.value) {
+    const { scrollLeft, scrollWidth, clientWidth } = categoryFilters.value;
+    isScrollLeftDisabled.value = scrollLeft === 0;
+    isScrollRightDisabled.value = scrollLeft + clientWidth >= scrollWidth;
+  }
+};
+
+onMounted(() => {
+  fetchMenu();
+  if (categoryFilters.value) {
+    categoryFilters.value.addEventListener('scroll', handleScroll);
+  }
+});
 </script>
 
 <style scoped>
@@ -467,5 +493,50 @@ h1 {
   height: 70px;
   cursor: pointer;
   margin-top: 0px;
+}
+.scroll-arrow {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  margin-left: 20px;
+  transition: opacity 0.3s;
+}
+
+.scroll-arrow.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.left {
+  margin-right: 10px;
+}
+
+.right {
+  margin-left: 10px;
+}
+
+.category-filters button.active {
+  background-color: #ffa726;
+  color: white;
+}
+.category-filters button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.category-filters button.active {
+  background-color: #ffa726;
+  color: white; 
+}
+
+.category-filters button:hover {
+  background-color: #ffc107; 
 }
 </style>
