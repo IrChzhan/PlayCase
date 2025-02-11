@@ -15,7 +15,10 @@
         <tr
           v-for="(team, index) in teams"
           :key="team.teamName"
-          :class="index % 2 === 0 ? 'even-row' : 'odd-row'"
+          :class="[
+            index % 2 === 0 ? 'even-row' : 'odd-row',
+            { 'highlighted-team': team.teamName === currentTeamName },
+          ]"
         >
           <td>{{ team.currentPlace }}</td>
           <td>{{ team.teamName }}</td>
@@ -33,6 +36,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { useAuthCheck } from '@/hooks/useAuthCheck.js'; 
 
 const store = useStore();
 const router = useRouter();
@@ -41,6 +45,9 @@ const maxRounds = computed(() => {
   if (!teams.value.length) return 0;
   return Math.max(...teams.value.map((team) => team.scoreByRounds.length));
 });
+
+
+const { teamName: currentTeamName } = useAuthCheck();
 
 const fetchResults = async () => {
   try {
@@ -57,7 +64,6 @@ onMounted(fetchResults);
 const goToMenuApp = () => {
   router.push({ name: 'MenuApp' });
 };
-
 </script>
 
 <style scoped>
@@ -99,15 +105,19 @@ h1 {
 }
 
 .results-table tr.even-row {
-  background-color: #ffd70020; /* Светло-жёлтый */
+  background-color: #ffd70020;
 }
 
 .results-table tr.odd-row {
-  background-color: #001845; /* Тёмно-синий */
+  background-color: #001845;
 }
 
 .results-table tr:hover {
-  background-color: #ffd70040; /* Подсветка строки */
+  background-color: #CFDBF3;
+}
+
+.results-table tr.highlighted-row { /* Corrected selector */
+  background-color: lightblue;
 }
 
 .home-button {
@@ -118,4 +128,3 @@ h1 {
   cursor: pointer;
 }
 </style>
-
