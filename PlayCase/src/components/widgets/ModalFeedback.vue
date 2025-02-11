@@ -3,7 +3,7 @@
     <div v-if="!showSuccessModal" class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title">ОЦЕНИТЕ ИГРУ</h1>
-        <button class="close-button" @click="closeModal">×</button>
+        <button class="close-button" @click="closeModal"><img src="@/assets/CloseImageWhite.png" class="imageWhite" alt="CloseBtnWhite"></button>
       </div>
       <div class="modal-body">
         <div class="form-section">
@@ -12,13 +12,13 @@
               class="image-container"
               :class="{'selected': formData.questionType === 'BAD'}"
               @click="selectImage('BAD')">
-              <img :src="formData.questionType === 'BAD' ? BadYellow : Bad" alt="Bad" class="image" />
+              <img :src="formData.questionType === 'BAD' ? BadYellow : Bad" alt="Bad" class="one image" />
             </div>
             <div
               class="image-container"
               :class="{'selected': formData.questionType === 'GOOD'}"
               @click="selectImage('GOOD')">
-              <img :src="formData.questionType === 'GOOD' ? GoodYellow : Good" alt="Good" class="image" />
+              <img :src="formData.questionType === 'GOOD' ? GoodYellow : Good" alt="Good" class=" two image" />
             </div>
           </div>
           <p class="details-text" @click="toggleDetails">Хотите рассказать подробнее?</p>
@@ -30,9 +30,8 @@
             </textarea>
           </div>
           <div class="con">
-            <button v-if="formData.questionType" type="button" 
-                  class="submit-button" 
-                  :disabled="!formData.questionType"
+            <button v-if="formData.questionType || formData.comment" type="button" 
+                  class="submit-button"
                   @click="submitForm">
             Отправить данные
           </button>
@@ -43,11 +42,12 @@
         <div class="modal-content" v-else>
           <div class="modal-header">
           <h1 class="modal-title">ОЦЕНИТЕ ИГРУ</h1>
-          <button class="close-button" @click="closeModal">×</button>
+          <button class="close-button" @click="closeModal"><img src="@/assets/CloseImageWhite.png" class="imageWhite" alt="CloseBtnWhite"></button>
         </div>
         <div class="modal-body success-body">
           <h2 class="success-title">Спасибо за вашу оценку!</h2>
         </div>
+        <p class="details-text some" @click="toggleDetails">Хотите рассказать подробнее?</p>
       </div>
     </div>
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
@@ -72,6 +72,7 @@ const props = defineProps({
 const selectImage = (type) => {
   formData.value.questionType = type;
   setSelectedColor(type === 'GOOD' ? 'green' : 'red');
+  submitForm();
 };
 
 const showSuccessModal = ref(false);
@@ -88,6 +89,9 @@ const setSelectedColor = (color) => {
 
 const toggleDetails = () => {
   showDetails.value = !showDetails.value;
+  if(showSuccessModal.value) {
+    showSuccessModal.value = false;
+  }
 };
 
 const closeSuccessModal = () => {
@@ -107,7 +111,6 @@ const submitForm = async () => {
       comment: formData.value.comment
     });
     showSuccessModal.value = true;
-    formData.value.questionType = ''
     formData.value.comment = ''
     setTimeout(() => {
       toastMessage.value = '';
@@ -130,7 +133,10 @@ watch(
 </script>
 
 <style scoped>
-
+.imageWhite {
+  width: 23px;
+  height: 23px;
+}
 .con {
   width: 100%;
   display: flex;
@@ -150,12 +156,11 @@ watch(
 }
 
 .modal-title {
-  font-size: 30px;
+  font-size: 36px;
   font-weight: 500;
   color: #ffffff;
   flex-grow: 1;
   text-align: center;
-  margin-left: 10px;
 }
 
 .submit-button:disabled {
@@ -179,11 +184,16 @@ watch(
 
 .details-text {
   color: #cc9f33;
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 19px;
   cursor: pointer;
   text-decoration: underline;
   text-align: center;
-  margin-bottom: 1vw;
+  margin-bottom: 40px;
+}
+
+.some {
+  margin-bottom: 21px;
 }
 
 .details-section {
@@ -210,8 +220,8 @@ watch(
 }
 
 .success-body {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 79px;
+  margin-bottom: 103px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -220,8 +230,10 @@ watch(
 }
 
 .success-title {
-  font-size: clamp(20px, 3vw, 28px);
-  color: #0f1921;
+  font-size: 36px;
+  font-weight: 500;
+  color: #0F1921;
+  line-height: 45px;
 }
 
 .title-box {
@@ -236,8 +248,8 @@ watch(
   background: var(--c-white, #fff);
   border-radius: 1vw;
   padding: 6px;
-  width: 70vw;
-  max-width: 900px;
+  width: 100%;
+  max-width: 883px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
@@ -246,7 +258,6 @@ watch(
   background: none;
   border: none;
   font-size: 30px;
-  margin-bottom: 6px;
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
@@ -264,8 +275,9 @@ watch(
 
 .image-selection {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 2vw;
+  justify-content: center;
+  gap: 97px;
+  margin-bottom: 45px;
   margin-top: 40px;
 }
 
@@ -275,7 +287,7 @@ watch(
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 100%;
+  border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
   overflow: hidden;
@@ -301,6 +313,10 @@ watch(
 
 .submit-button:hover {
   background-color: #b68d2f;
+}
+
+.two {
+  margin-right: 30px;
 }
 
 @media (max-width: 768px) {
