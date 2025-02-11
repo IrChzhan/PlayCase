@@ -68,14 +68,9 @@
         <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
       </div>
     </div>
-<<<<<<< HEAD
-
     <div class="home-button-container">
       <img src="@/assets/House_01.png" alt="Домой" class="home-button" @click="goToMenuApp" />
     </div>
-=======
-    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
->>>>>>> 206ec58ba6d37cd935a289f575704c17c9d5c53b
   </div>
 </template>
 
