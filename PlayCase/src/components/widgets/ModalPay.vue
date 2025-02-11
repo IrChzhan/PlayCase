@@ -362,7 +362,7 @@ const updatePayments = (data) => {
   font-size: 40px;
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
-  color: #0F1921  ;
+  color: #1B2A46  ;
   margin-bottom: 24px;
 }
 
