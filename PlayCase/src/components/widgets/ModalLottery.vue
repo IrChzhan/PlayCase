@@ -11,9 +11,11 @@
         <div class="modal-body">
           <div class="form-section">
             <form @submit.prevent="submitForm">
-              <Input v-model:modelValue="formData.name" :error="!!nameError" :errorMessage="nameError" text="Имя" width="auto" />
-              <Input v-model:modelValue="formData.email" :error="!!emailError" :errorMessage="emailError" text="E-mail" width="auto" />
-              <Input v-model:modelValue="formData.phone" :error="!!phoneError" :errorMessage="phoneError" text="Телефон" width="auto" placeholder="+7 (___) ___-____" />
+              <div class="input_part">
+              <Input v-model:modelValue="formData.name" :error="!!nameError" :errorMessage="nameError" text="Имя" width="100%" labelWidth="120px"/>
+              <Input v-model:modelValue="formData.email" :error="!!emailError" :errorMessage="emailError" text="Email" width="100%"  labelWidth="120px"/>
+              <Input v-model:modelValue="formData.phone" :error="!!phoneError" :errorMessage="phoneError" text="Телефон" width="100%" labelWidth="120px" placeholder="+7 (___) ___-____" />
+              </div>
 
               <div class="checkbox-section">
                 <label class="checkbox-container">
@@ -202,6 +204,7 @@ watch(
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   margin-bottom: 20px;
+  height: 30px;
 }
 
 .lottery_text {
@@ -278,6 +281,14 @@ watch(
   margin-bottom: 5px;
 }
 
+.input_part {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 2px;
+  margin-left: 20px;
+}
+
 .btn {
   display: block;
   color: white;
@@ -285,9 +296,9 @@ watch(
   border: none;
   cursor: pointer;
   background: #CC9F33;
-  border-radius: 4px;
+  border-radius: 6px;
   right: 5%;
-  bottom: 5%;
+  bottom: 10%;
 }
 .btn:hover {
   background: #d1aa58;
@@ -338,7 +349,8 @@ input[type='checkbox'] {
   display: flex;
   justify-content: center;
   margin-bottom: 2px;
-  margin-top: 5px;
+  margin-top: 0px;
+  margin-left: 25px;
 }
 
 .checkbox-container {
@@ -357,6 +369,7 @@ input[type='checkbox'] {
   padding: 12px;
   font-size: 16px;
   cursor: pointer;
+  margin-left: 30px;
 }
 
 .submit-button:hover {

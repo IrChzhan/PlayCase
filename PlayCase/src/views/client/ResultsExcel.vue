@@ -153,7 +153,7 @@ const goToMenuApp = () => {
 }
 
 .results-table tr.highlighted-row {
-  box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.4); 
+  background-color: #CFDBF3;
 }
 
 .no-results {
@@ -165,8 +165,8 @@ const goToMenuApp = () => {
 }
 
 .home-button {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   position: fixed;
   bottom: 20px;
   cursor: pointer;
