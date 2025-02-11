@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay" v-if="show">
+  <div class="modal-overlay" v-if="show" @click.self="closeModal">
     <div v-if="!showSuccessModal" class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title">ОЦЕНИТЕ ИГРУ</h1>

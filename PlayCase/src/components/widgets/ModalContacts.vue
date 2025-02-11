@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay" v-if="show">
+  <div class="modal-overlay" v-if="show" @click.self="closeModal">
     <div class="modal-content">
       <button class="close-button" @click="closeModal">
         <img class="image" src="@/assets/CloseBtnBlack.png" alt="CloseImage">

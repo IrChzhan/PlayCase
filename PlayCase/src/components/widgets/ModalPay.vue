@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay" v-if="show">
+  <div class="modal-overlay" v-if="show" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title">ОПЛАТА ИГРЫ</h1>
