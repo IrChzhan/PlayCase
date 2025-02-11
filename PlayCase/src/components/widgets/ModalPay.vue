@@ -1,9 +1,9 @@
 <template>
-  <div class="modal-overlay" v-if="show">
+  <div class="modal-overlay" v-if="show" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title">ОПЛАТА ИГРЫ</h1>
-        <button class="close-button" @click="closeModal">×</button>
+        <button class="close-button" @click="closeModal"><img src="@/assets/CloseImageWhite.png" class="imageWhite" alt="CloseBtnWhite"></button>
       </div>
       <div class="modal-body">
         <div class="form-section">
@@ -32,7 +32,7 @@
                   value="sendReceiptToCaptain"
                   v-model="picked"
                 />
-                Отправить чек капитану команды
+                Отправить чек на почту регистрации
               </label>
               <label for="two" class="text">
                 <input
@@ -41,32 +41,39 @@
                   value="sendReceiptToEmail"
                   v-model="picked"
                 />
-                Отправить чек на выбранный адрес
+                Отправить чек на другой адрес
               </label>
               <input
                   v-if="picked === 'sendReceiptToEmail'"
                   type="email"
+                  class="input-check"
                   v-model="selectedEmail"
                   placeholder="Введите email"
-                  :class="{ 'invalid-email': !isValidEmail }"
+                  :class="{ 'invalid-email': !isValidEmail && picked === 'sendReceiptToEmail' }"
                   required
                 />
             </div>
           </div>
-          <button class="pay-button" @click="handlePayment">Оплатить</button>
+          <button 
+            class="pay-button" 
+            @click="handlePayment" 
+            :disabled="picked === 'sendReceiptToEmail' && !validateEmail(selectedEmail)"
+          >
+            Оплатить
+          </button>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
           <info-modal v-if="showInfo" @close="toggleModal('info', false)" />
           <div class="additional-info">
-            <ul>
+            <ul class="list">
               <li class="link-li">
-                <a class="link" @click="toggleModal('dogovor', true)">Договор-оферта</a>
+                <a class="link" @click="toggleModal('dogovor', true)">договор-оферта</a>
               </li>
-              |
+              <span class="line"></span>
               <li class="link-li">
-                <a class="link" @click="toggleModal('politica', true)">Политика конфиденциальности</a>
+                <a class="link" @click="toggleModal('politica', true)">политика конфиденциальности</a>
               </li>
-              |
+              <span class="line"></span>
               <li class="link-li">
                 <a class="link" @click="toggleModal('info', true)">реквизиты</a>
               </li>
@@ -75,8 +82,11 @@
         </div>
         <div class="qr-section" v-if="qrCodeUrl">
           <div class="qr-container">
-            <img :src="qrCodeUrl" alt="QR-код" class="qr-code" />
-            <p class="qr-instruction">Отсканируйте код камерой или в приложении банка</p>
+            <div class="qr-wrapper">
+              <img :src="qrCodeUrl" alt="QR-код" class="qr-code" />
+              <img class='sbp' src="@/assets/sbp.png" alt="sbp">
+            </div>
+            <p class="qr-instruction">Отсканируйте код камерой<br> или в приложении банка</p>
           </div>
         </div>
         <div v-for="(notification, index) in notifications" :key="index">
@@ -138,8 +148,7 @@ function validateEmail(email) {
 }
 
 function handlePayment() {
-
-  if (picked.value == 'sendReceiptToEmail' && !validateEmail(selectedEmail.value)) {
+  if (picked.value === 'sendReceiptToEmail' && !validateEmail(selectedEmail.value)) {
     isValidEmail.value = false;
     store.dispatch('payments/addNotification', { message: 'Неверный формат email', type: 'error' });
     return;
@@ -168,6 +177,12 @@ watch(
     }
   }
 );
+
+watch(selectedEmail, (newEmail) => {
+  if (picked.value === 'sendReceiptToEmail') {
+    isValidEmail.value = validateEmail(newEmail);
+  }
+});
 
 let socket = null;
 
@@ -259,6 +274,10 @@ const updatePayments = (data) => {
 </script>
 
 <style scoped>
+.imageWhite {
+  width: 23px;
+  height: 23px;
+}
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -272,12 +291,11 @@ const updatePayments = (data) => {
 }
 
 .modal-title {
-  font-size: 30px;
+  font-size: 37px;
   font-weight: 500;
   color: #ffffff;
   flex-grow: 1;
   text-align: center;
-  margin-left: 10px;
 }
 
 .link-li {
@@ -285,26 +303,27 @@ const updatePayments = (data) => {
   display: inline;
 }
 .link {
-  font-size: 0.8rem;
-  color: #000;
+  font-size: 19px;
+  color: #0F1921;
+  font-weight: 400;
   text-decoration: none;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #0F1921;
   cursor: pointer;
   margin: 0 5px;
 }
 .link:hover {
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid #0F1921;
 }
 .modal-body {
   display: flex;
   flex-direction: row;
-  padding: 45px 75px;
+  padding: 50px 75px 46px 75px;
   justify-content: space-between;
   align-items: flex-start;
 }
 .price-per-player {
   margin-top: 10px;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 500;
   font-family: 'Mulish',sans-serif;
   margin-bottom: 25px;
@@ -323,26 +342,24 @@ const updatePayments = (data) => {
   z-index: 1000;
 }
 .modal-content {
-  background: #fff;
-  border-radius: 1vw;
+  background: #F5F5F5;
+  border-radius: 16px;
   padding: 6px;
-  width: 70vw;
-  max-width: 900px;
+  width: 100%;
+  max-width: 1328px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
 .close-button {
   background: none;
   border: none;
-  font-size: 30px;
-  margin-bottom: 6px;
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
 }
 .team-title {
   display: inline-block;
-  font-size: 30px;
+  font-size: 40px;
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
   color: #0F1921  ;
@@ -350,7 +367,7 @@ const updatePayments = (data) => {
 }
 
 .title {
-  font-size: 30px;
+  font-size: 40px;
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
   color: #0F1921  ;
@@ -362,11 +379,14 @@ const updatePayments = (data) => {
   font-size: 1.2rem;
 }
 .price-info .total-price {
-  font-weight: 400;
-  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  font-family: 'Mulish',sans-serif;
+  color: #FFFFFC;
   background-color: #cc9f33;
-  padding: 10px 35px;
+  padding: 10px 65px;
   border-radius: 13px;
+  line-height: 31px;
   display: inline-block;
 }
 .price-info .price-per-player {
@@ -384,18 +404,19 @@ const updatePayments = (data) => {
   margin-bottom: 30px;
   margin-top: 15px;
   margin-right: 160px;
+  width: 100%;
   justify-content: flex-start;
 }
 .player-button {
-  background-color: #f5f5f5;
-  border: 2px solid #ddd;
+  background-color: #F5F5F5;
+  border: 2px solid #D7D7D7;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   flex-grow: 0;
   flex-shrink: 0;
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: 24px;
+  font-weight: 700;
   cursor: pointer;
   transition: background-color 0.3s, border-color 0.3s;
   display: flex;
@@ -408,11 +429,12 @@ const updatePayments = (data) => {
   border-color: #cc9f33;
 }
 .form-section {
-  flex: 1;
+  width: 711px;
   margin-right: 10px;
 }
 .qr-section {
-  flex: 0 0 30%;
+  width: 351px;
+  height: 488px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -420,10 +442,10 @@ const updatePayments = (data) => {
 .pay-button {
   background-color: #cc9f33;
   color: #fff;
-  font-size: 1rem;
-  padding: 10px 20px;
+  font-size: 26px;
+  padding: 15px 50px;
   border: none;
-  border-radius: 5px;
+  border-radius: 13px;
   cursor: pointer;
   margin-bottom: 20px;
   transition: background-color 0.3s;
@@ -433,36 +455,50 @@ const updatePayments = (data) => {
 }
 
 .text {
-  font-size: 20px;
+  font-size: 28px;
+  line-height: 35px;
   font-family: 'Mulish', sans-serif;
   font-weight: 400;
   color: #000000;
 }
 
 .qr-container {
-  background: rgba(58, 76, 110, 0.5);
-  padding: 10px;
-  border-radius: 12px;
-  width: 100%;
+  background: #1B2A46;
+  padding: 11px;
+  border-radius: 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
+.qr-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #FFFEFD;
+}
+
+.sbp {
+  margin: 0 auto 13px auto;
+}
+
 .qr-code {
-  width: 150px;
-  height: 100px;
+  width: 328px;
+  height: 272px;
   height: auto;
 }
 .qr-instruction {
-  margin-top: 10px;
-  font-size: 1rem;
+  margin-top: 12px;
+  font-size: 17px;
+  line-height: 22px;
   text-align: center;
-  color: #555;
+  color: #FFFFFC;
+  margin-bottom: 13x;
 }
 .checkbox-section {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 .checkbox-section label {
   display: block;
@@ -477,10 +513,83 @@ const updatePayments = (data) => {
   border-radius: 4px;
   width: 400px;
 }
-.invalid-email {
-  border-color: red;
+
+
+
+.input-check {
+  font-size: 26px;
+  padding: 10px 20px;
+  font-weight: 400;
 }
 
+.list {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  margin-top: 30px;
+}
+
+input[type="radio"] {
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none;
+  width: 19px;
+  height: 19px;
+  border: 1px solid #C59216; 
+  border-radius: 50%; 
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="radio"]:checked::before {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 9px;
+  background-color: #C59216; 
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 48%;
+  transform: translate(-50%, -50%);
+}
+
+input[type="radio"]:focus {
+  box-shadow: 0 0 3px #C59216;
+}
+
+.line {
+  height: 19px;
+  width: 1px;
+  background-color: #0F1921;
+  margin-top: 12px;
+}
+:deep(.invalid-email) {
+  border: 2px solid red !important;
+  background-color: #ffe6e6;
+}
+
+.invalid-email:active {
+  border: 2px solid red !important;
+  background-color: #ffe6e6;
+}
+
+.input-check.invalid-email {
+  border: 2px solid red !important;
+  background-color: #ffe6e6;
+}
+
+.input-check:focus {
+  border-color: #cc9f33; 
+  box-shadow: 0 0 5px rgba(204, 159, 51, 0.5); 
+}
+
+.input-check.invalid-email:focus {
+  border-color: red !important; 
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); /* Красная тень */
+}
 @media (max-width: 1000px) {
   .modal-content {
     width: 90vw;
