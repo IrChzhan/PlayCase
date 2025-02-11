@@ -6,7 +6,7 @@
 
     <div class="menu">
       <div class="menu-item" v-for="item in menuItems" :key="item.name">
-        <img :src="item.image" alt="" class="menu-image" @click="item.function" />
+        <img :src="item.image" alt="" class="menu-image" :class="{ 'lotteryIimage': item.name === 'Лототрон' }" @click="item.function" />
         <p>{{ item.name }}</p>
       </div>
       <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
@@ -148,7 +148,7 @@ const menuItems = ref([
       router.push({ name: 'RestourantMenu' })
     },
   },
-  { name: 'Лотерея', image: lotteryImage, function: openModalLottery },
+  { name: 'Лототрон', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
   { name: 'Help', image: helpImage, function: openModalHelp}
 ])
@@ -190,7 +190,7 @@ onMounted(()=>{
   border: 2px solid #cc9f33;
   border-radius: 10px;
   padding: 10px;
-  margin: 12px auto;
+  margin: 47px auto;
 }
 
 .team-name {
@@ -210,14 +210,17 @@ h2 {
 
 p {
   margin-left: 5px;
+  font-weight: 500;
+  font-size: 30px;
 }
 
 .menu {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  gap: 100px;
   padding: 30px;
   width: 90%;
+  margin-left: 65px;
 }
 
 .menu-item {
@@ -227,11 +230,20 @@ p {
   cursor: pointer;
   color: white;
   font-family: 'Mulish', sans-serif;
+  font-weight: 500;
+  font-size: 30;
 }
 
 .menu-image {
-  width: 75px;
-  height: 70px;
+  width: 131px;
+  height: 131px;
+}
+
+.lotteryIimage {
+  width: 100px; 
+  height: 100px; 
+  margin-top: 30px;
+  margin-left: 5px;
 }
 
 .image-one {
@@ -240,16 +252,11 @@ p {
   height: 40px;
 }
 
-.lotteryIimage {
-  margin-left: 20px; 
-}
-
 .footer {
   display: flex;
   justify-content: flex-end;
   padding: 20px;
   margin-top: 50px;
-  margin-left: 20px;
 }
 
 .back-button {
@@ -266,13 +273,13 @@ p {
 .play-button {
   background-color: transparent;
   border: none;
-  color: #cc9f33;
-  font-family: 'Mulish', sans-serif;
-  font-weight: bold;
   cursor: pointer;
-  margin-left: 800px;
-  padding: 10px;
+  margin-left: 0px;
+  margin-top: 80px;
+  padding: 20px;
   margin-bottom: 0; 
+  width: 161px;
+  height: 32px;
 }
 @media (min-width: 768px) and (max-width: 1024px) {
   .header {
@@ -296,8 +303,8 @@ p {
     margin-top: 20px;
   }
   .menu-image {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     cursor: pointer;
   }
   .back-button {
@@ -313,8 +320,7 @@ p {
   cursor: pointer;
   margin-left: 800px;
   padding: 10px;
-  /* Уменьшаем или убираем margin-bottom */
-  margin-bottom: 20px; /* Или установите 0 */
+  margin-bottom: 20px; 
 }
 
   .footer {

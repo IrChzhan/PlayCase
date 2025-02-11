@@ -6,7 +6,8 @@
     </video>
     <div class="content-wrapper">
       <div class="container_name_team">
-        <h1 class="team-name">{{ teamName || 'Загрузка...' }}</h1>
+        <h1 class="team-name" :data-text="teamName || 'Загрузка...'">{{ teamName || 'Загрузка...' }}</h1>
+
       </div>
       <div class="container_down_menu">
         <img
@@ -45,13 +46,13 @@ const goToMenuApp = () => {
 }
 
 .background-video {
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0;
-  width: 1500px;
-  height: 1000px;
-  object-fit: cover; 
-  z-index: 0; 
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
 }
 
 .content-wrapper {
@@ -66,6 +67,7 @@ const goToMenuApp = () => {
 }
 
 .team-name {
+  position: relative;
   text-align: center;
   font-size: clamp(4rem, 10vw, 9rem);
   margin: 0;
@@ -75,7 +77,24 @@ const goToMenuApp = () => {
   max-width: 90vw;
   word-wrap: break-word;
   text-shadow: 0 0 20px black;
+  z-index: 1;
 }
+
+.team-name::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  color: black;
+  font-weight: 900;
+  filter: blur(100px);
+  opacity: 0.9;
+  z-index: -1;
+  white-space: nowrap;
+}
+
 
 .container_down_menu {
   margin-top: 60px;
@@ -86,9 +105,11 @@ const goToMenuApp = () => {
   cursor: pointer;
   display: block;
   position: relative; 
-  top: 60px;
+  top: 270px;
   left: 50%;
   transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
 }
 
 .right-corner {
@@ -111,7 +132,7 @@ const goToMenuApp = () => {
   color: #cc9f33;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1224px) {
   .team-name {
     font-size: clamp(4rem, 10vw, 4rem);
     overflow-wrap: break-word;

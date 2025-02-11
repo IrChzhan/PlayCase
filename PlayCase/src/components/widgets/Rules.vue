@@ -13,23 +13,24 @@
           Бланки необходимо сдавать после каждого раунда. Всего за игру можно набрать максимум <b>1000 баллов</b>.
         </p>
         <br>
-        <ul class="rounds-list">
-          <li><b>1 раунд.</b> Начало</li>
-          <li><b>2 раунд.</b> Логика</li>
-          <li><b>3 раунд.</b> Картинки</li>
-          <li><b>4 раунд.</b> Комбо</li>
-          <li><b>5 раунд.</b> Хет-трик</li>
-          <li><b>6 раунд.</b> Связь</li>
-          <li><b>7 раунд.</b> Финал</li>
-        </ul>
+
+        <div class="rounds-container">
+          <ul class="rounds-list">
+            <li v-for="(round, index) in rounds" :key="index">
+              <a href="#" @click.prevent="selectRound(index)"><b>{{ round.title }}</b></a>
+            </li>
+          </ul>
+
+          <div v-if="selectedRound !== null" class="round-description">
+            <h3>{{ rounds[selectedRound].pretitle }}</h3>
+            <p v-html="rounds[selectedRound].description"></p>
+          </div>
+        </div>
+
         <br>
-        <p>
-          На наших играх запрещено пользоваться электронными устройствами, поэтому не забудьте отложить их на время вопросов.
-        </p>
+        <p>На наших играх запрещено пользоваться электронными устройствами, поэтому не забудьте отложить их на время вопросов.</p>
         <br>
-        <p>
-          Если у вас будут появляться вопросы перед игрой или в течение неё, не стесняйтесь задавать их нашим хелперам.
-        </p>
+        <p>Если у вас будут появляться вопросы перед игрой или в течение неё, не стесняйтесь задавать их нашим хелперам.</p>
         <p class="highlighted-text">
           Ни в коем случае <b>нельзя забывать вкусно есть и пить во время игры!</b>
         </p>
@@ -40,21 +41,105 @@
 </template>
 
 <script setup>
-import { defineProps, watch } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
 });
 
+const selectedRound = ref(null);
+
+const rounds = ref([
+  { 
+    title: '1 раунд. Начало', 
+    pretitle: 'РАУНД 1 / Начало', 
+    description: `
+      <b>6 вопросов, 4 варианта ответа.</b>
+      <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Подготовительный этап для разогрева.</li>
+        <li>Простые вопросы для включения в игру.</li>
+        <li>Знакомство с форматом вопросов.</li>
+      </ul>
+    ` 
+  },
+  { 
+    title: '2 раунд. Логика', 
+    description: `
+      <b>6 вопросов, 4 варианта ответа.</b>
+      <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Задачи на логику и нестандартное мышление.</li>
+        <li>Необходимо найти скрытые связи.</li>
+        <li>Ответ может быть неочевидным.</li>
+      </ul>
+    ` 
+  },
+  { 
+    title: '3 раунд. Картинки', 
+    description: `
+      <b>6 вопросов, 4 варианта ответа.</b>
+      <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Показаны изображения.</li>
+        <li>Ваша задача — угадать, что на них изображено.</li>
+        <li>Требуется внимательность и наблюдательность.</li>
+      </ul>
+    ` 
+  },
+  { 
+    title: '4 раунд. Комбо', 
+    description: `
+      <b>6 вопросов, 4 варианта ответа.</b>
+      <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Сложные вопросы.</li>
+        <li>Требуют знания нескольких тем одновременно.</li>
+        <li>Ответ строится на комбинации фактов.</li>
+      </ul>
+    ` 
+  },
+  { 
+    title: '5 раунд. Хет-трик', 
+    description: `
+      <b>6 вопросов, 4 варианта ответа.</b>
+      <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Три вопроса подряд.</li>
+        <li>Объединены одной темой.</li>
+        <li>Важно уловить общий смысл.</li>
+      </ul>
+    ` 
+  },
+  { 
+    title: '6 раунд. Связь', 
+    description: `
+      <b>6 вопросов, 4 варианта ответа.</b>
+      <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Находите связь между разными элементами.</li>
+        <li>Логическая цепочка ответов.</li>
+        <li>Нестандартные ассоциации помогут выиграть.</li>
+      </ul>
+    ` 
+  },
+  { 
+    title: '7 раунд. Финал', 
+    description: `
+      <b>6 вопросов, 4 варианта ответа.</b>
+      <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Самые сложные вопросы игры.</li>
+        <li>Последний шанс набрать баллы!</li>
+        <li>Решающий момент для победы.</li>
+      </ul>
+    ` 
+  }
+]);
+
+
+const selectRound = (index) => {
+  selectedRound.value = index;
+};
+
 watch(
   () => props.show,
   (newVal) => {
-    if (newVal) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    if (!newVal) selectedRound.value = null; 
   }
 );
 </script>
@@ -73,10 +158,14 @@ watch(
   z-index: 1000;
 }
 
+h3 {
+  font-weight: bold;
+}
+
 .modal-content {
   background: #ffffff;
   border-radius: 8px;
-  padding: 16px;
+  padding: 5px;
   max-width: 860px;
   width: 95%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -117,6 +206,8 @@ watch(
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
+  width: 45px;
+  height: 37px;
 }
 
 .modal-body {
@@ -125,10 +216,18 @@ watch(
   font-size: 18px;
 }
 
+.rounds-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* Список раундов */
 .rounds-list {
   list-style: none;
   padding: 0;
   margin-bottom: 20px;
+  width: 40%;
 }
 
 .rounds-list li {
@@ -137,9 +236,23 @@ watch(
   font-weight: bold;
 }
 
-.highlighted-text {
-  font-weight: bold;
+.rounds-list a {
+  text-decoration: none;
   color: #1c2b4b;
-  margin-top: 20px;
+  cursor: pointer;
+}
+
+.rounds-list a:hover {
+  text-decoration: underline;
+}
+
+.round-description {
+  width: 300px;
+  background: #ffffff; 
+  padding: 15px;
+  border-radius: 6px;
+  font-size: 18px;
+  border: 2px solid #1c2b4b; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
 }
 </style>
