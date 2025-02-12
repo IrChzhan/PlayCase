@@ -230,8 +230,8 @@ onMounted(() => {
 
 .category_scroll {
   display: flex;
-  margin-left: 60px;
-  gap: 50px;
+  margin-left: 10px;
+  gap: 0px;
   align-items: center; 
 }
 
@@ -261,7 +261,7 @@ onMounted(() => {
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
-  gap: 40px; 
+  gap: 10px; 
   margin-top: 10px;
   padding: 0 15px; 
 }
