@@ -89,13 +89,6 @@
             <p class="qr-instruction">Отсканируйте код камерой<br> или в приложении банка</p>
           </div>
         </div>
-        <div v-for="(notification, index) in notifications" :key="index">
-          <Notification
-            :message="notification.message"
-            :type="notification.type"
-            @close="removeNotification(index)"
-          />
-        </div>
       </div>
     </div>
   </div>

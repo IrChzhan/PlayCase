@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal-overlay" v-if="show">
+    <div class="modal-overlay" v-if="show" @click.self="closeModal">
       <div class="modal-content">
 
         <div class="modal-header">

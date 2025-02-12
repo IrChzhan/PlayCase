@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" class="modal-overlay">
+  <div v-if="show" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title">ПРАВИЛА</h1>
