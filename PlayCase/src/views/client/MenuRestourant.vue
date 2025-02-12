@@ -188,7 +188,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.container {
+  .container {
   height: 100vh;
   width: 100%;
   font-family: 'Arial', sans-serif;

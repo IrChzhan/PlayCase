@@ -116,7 +116,7 @@ h1 {
   background-color: #CFDBF3;
 }
 
-.results-table tr.highlighted-row { /* Corrected selector */
+.results-table tr.highlighted-row { 
   background-color: lightblue;
 }
 

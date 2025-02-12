@@ -8,14 +8,12 @@
 import { RouterView } from 'vue-router'
 import {onMounted} from "vue";
 
-
 onMounted(() => {
   document.addEventListener('selectstart', (e) => {
     e.preventDefault();
   });
 })
 </script>
-
 <style>
 html,
 body {

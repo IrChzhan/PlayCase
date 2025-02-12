@@ -9,7 +9,7 @@
   outline: none;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
-  background: var(--c-white, #fff);
+  background:  #FFFFFC;
   padding: 12px 14px;
   font-size: 16px;
   font-family: 'Mulish', sans-serif;

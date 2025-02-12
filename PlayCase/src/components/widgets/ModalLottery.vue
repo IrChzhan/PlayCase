@@ -197,21 +197,21 @@ watch(
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  padding: 5px 20px;
-  font-size: 22px;
+  padding: 10px 30px;
+  font-size: 24px;
   font-weight: bold;
   text-transform: uppercase;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  margin-bottom: 20px;
-  height: 30px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  margin-bottom: 30px;
+  height: 35px;
 }
 
 .lottery_text {
-  margin-left: 300px;
+  margin-left: 550px;
   font-family: 'Mulish', sans-serif;
   font-weight: 500;
-  font-size: 33px;
+  font-size: 40px;
 }
 
 
@@ -262,43 +262,48 @@ watch(
 }
 
 .modal-content {
-  background: var(--c-white, #fff);
-  border-radius: 1vw;
-  padding: clamp(10px, 4vw, 10px); 
-  width: 100%;
-  padding: 6px;
-  max-width: 800px;
+  background: #F5F5F5;
+  border-radius: 1.5vw;
+  width: 1328px;
+  height: 714px;  
+  max-width: none; 
+  max-height: none; 
   position: relative;
   font-family: 'Mulish', sans-serif;
+  overflow: auto; 
+  padding: 5px;
 }
 
 .close-button {
   background: none;
   border: none;
   color: white;
-  font-size: 26px;
+  font-size: 60px;
+  font-weight: 200;
   cursor: pointer;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  margin-left: 500px;
 }
 
 .input_part {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 2px;
-  margin-left: 20px;
+  gap: 25px;
+  padding: 5px;
+  margin-left: 30px;
 }
 
 .btn {
   display: block;
   color: white;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
   cursor: pointer;
   background: #CC9F33;
-  border-radius: 6px;
+  border-radius: 8px;
   right: 5%;
   bottom: 10%;
+  font-size: 18px;
 }
 .btn:hover {
   background: #d1aa58;
@@ -307,7 +312,7 @@ watch(
 .modal-body {
   display: flex;
   align-items: flex-start;
-  gap: 3vw;
+  gap: 4vw;
 }
 
 .form-section,
@@ -318,45 +323,45 @@ watch(
 .form-section form {
   display: flex;
   flex-direction: column;
-  gap:3vw;
-  margin-top: 20px;
+  gap:4vw;
+  margin-top: 30px;
 }
 
 .team-title {
   display: inline-block;
-  font-size: clamp(14px, 1.5vw, 18px);
+  font-size: clamp(16px, 2vw, 20px);
   font-weight: bold;
   color: white;
   background-color: #CC9F33;
-  padding: 1vw 2vw;
-  border-radius: 12px;
-  margin-bottom: 1vw;
+  padding: 1.2vw 2.4vw;
+  border-radius: 15px;
+  margin-bottom: 1.2vw;
 }
 
 .main-heading {
-  font-size: clamp(24px, 4vw, 36px);
+  font-size: clamp(26px, 4.5vw, 38px);
   color: #0f1921;
-  margin-bottom: 2vw;
+  margin-bottom: 2.5vw;
   line-height: 1.2;
   font-weight: 700;
 }
 
 input[type='checkbox'] {
-  margin-right: 0.5vw;
+  margin-right: 0.7vw;
 }
 
 .checkbox-section {
   display: flex;
   justify-content: center;
-  margin-bottom: 2px;
-  margin-top: 0px;
-  margin-left: 25px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  margin-left: 35px;
 }
 
 .checkbox-container {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 16px;
   color: #0f1921;
 }
 
@@ -365,11 +370,11 @@ input[type='checkbox'] {
   background-color: #cc9f33;
   color: #fffffc;
   border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 16px;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 18px;
   cursor: pointer;
-  margin-left: 30px;
+  margin-left: 40px;
 }
 
 .submit-button:hover {
@@ -377,26 +382,26 @@ input[type='checkbox'] {
 }
 
 .rules-section h2 {
-  font-size: clamp(18px, 2vw, 22px);
+  font-size: clamp(20px, 2.5vw, 24px);
   color: #cc9f33;
-  margin-bottom: 1vw;
+  margin-bottom: 1.2vw;
 }
 
 .rules-section ul {
   list-style-type: disc;
-  padding-left: 2vw;
+  padding-left: 2.5vw;
   color: #0f1921;
-  font-size: clamp(12px, 1.5vw, 14px);
+  font-size: clamp(14px, 1.7vw, 16px);
   line-height: 1.6;
 }
 
 .rules-section ul li {
-  margin-bottom: 13px;
+  margin-bottom: 15px;
 }
 
 .rules-section p {
-  margin-top: 1vw;
-  font-size: clamp(12px, 1.5vw, 14px);
+  margin-top: 1.2vw;
+  font-size: clamp(14px, 1.7vw, 16px);
   color: #0f1921;
 }
 
@@ -407,9 +412,9 @@ input[type='checkbox'] {
 
 .lottery-greeting {
   color: #cc9f33;
-  font-size: clamp(12px, 1.5vw, 14px);
-  margin-top: 1vw;
-  margin-bottom: 1vw;
+  font-size: clamp(14px, 1.7vw, 16px);
+  margin-top: 1.2vw;
+  margin-bottom: 1.2vw;
   text-align: center;
 }
 
@@ -426,22 +431,22 @@ input[type='checkbox'] {
 }
 
 .success-title {
-  font-size: clamp(20px, 3vw, 28px);
+  font-size: clamp(22px, 3.5vw, 30px);
   color: #0f1921;
-  margin-bottom: 0.3vw;
+  margin-bottom: 0.4vw;
 }
 
 .success-message {
-  font-size: clamp(16px, 2vw, 20px);
+  font-size: clamp(18px, 2.5vw, 22px);
   color: #0f1921;
-  margin-bottom: 0.5vw;
+  margin-bottom: 0.6vw;
 }
 
 .success-number {
-    font-size: clamp(26px, 4vw, 34px);
+    font-size: clamp(28px, 4.5vw, 36px);
     color: #0f1921;
-    margin-bottom: 1vw;
-    margin-top: 0.3vw;
+    margin-bottom: 1.2vw;
+    margin-top: 0.4vw;
 }
 
 .policy-link {
@@ -458,28 +463,28 @@ input[type='checkbox'] {
 
 @media (max-width: 768px) {
   .modal-content {
-    width: 90vw;
-    max-width: 600px;
-    padding: 15px;
+    width: 95vw;
+    height: auto; /* Let content determine height */
+    max-width: 700px;
   }
 
   .success-title {
-    font-size: clamp(18px, 4vw, 24px);
+    font-size: clamp(20px, 4.5vw, 26px);
   }
 
   .success-message {
-    font-size: clamp(14px, 3vw, 18px);
+    font-size: clamp(16px, 3.5vw, 20px);
   }
   .success-number {
-     font-size: clamp(20px, 5vw, 28px);
+     font-size: clamp(22px, 5.5vw, 30px);
   }
   .submit-button {
-    font-size: clamp(12px, 1.5vw, 16px);
-    padding: 0.8vw 1.5vw;
+    font-size: clamp(14px, 2vw, 18px);
+    padding: 1vw 1.7vw;
   }
 
   .close-button {
-    font-size: clamp(14px, 2vw, 20px);
+    font-size: clamp(16px, 2.5vw, 22px);
   }
 }
 </style>
