@@ -3,7 +3,7 @@
     <div class="modal-content">
       <button class="close-button" @click="$emit('close')">&times;</button>
       <div class="modal-scrollable">
-        <h1 class="privacy-policy-title">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</h1>
+        <h1 class="privacy-policy-title">Политика конфиденциальности</h1>
         <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
         <br>
       <p>1.1. Настоящая Политика о конфиденциальности (далее – Политика) определяет цели, устанавливает порядок и условия
@@ -361,13 +361,17 @@ const props = defineProps({
 </script>
 
 <style scoped>
+.privacy-policy-title {
+  font-size: 18px;
+  font-weight: 400;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -375,20 +379,24 @@ const props = defineProps({
 }
 
 h2 {
+    font-size: 17px;
     margin-top: 20px;
-    font-size: 20px;
+  }
+
+  p {
+    font-size: 17px;
   }
 
 .modal-content {
   background: white;
   border-radius: 10px;
-  padding: 5%;
+  padding: 40px;
   width: 80%;
-  max-width: 900px;
-  max-height: 90%;
+  max-width: 1213px;
+  max-height: 595px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .modal-scrollable {
@@ -399,15 +407,12 @@ h2 {
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -15px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 65px;
   cursor: pointer;
-}
-
-.close-button:hover {
-  color: red;
+  font-weight: 200;
 }
 </style>

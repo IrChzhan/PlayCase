@@ -57,12 +57,12 @@ const rounds = ref([
     description: `
       <b>6 вопросов, к каждому указаны 4 варианта ответа.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Правильный ответ: +10 баллов за каждую букву</li>
-        <li>Неправильный ответ: –5 баллов за каждую букву</li>
-        <li>Время на обсуждение: 30 секунд</li>
+        <li><span style="font-weight: 700;">Правильный</span> ответ: +10 баллов за каждую букву</li>
+        <li><span style="font-weight: 700;">Неправильный</span> ответ: –5 баллов за каждую букву</li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд</span></li>
         <li>В раунде могут быть вопросы без правильных ответов или с несколькими верными вариантами</li>
-        <li>Максимум: 120 баллов</li>
       </ul>
+      <span style="font-style: italic">Максимум: 120 баллов.</span>
     ` 
   },
   { 
@@ -71,10 +71,10 @@ const rounds = ref([
     description: `
       <b>6 логических вопросов, ответы в свободной форме.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на каждый вопрос: 60 секунд</li>
-        <li>За правильный ответ: +20 баллов</li>
-        <li>Максимум: 120 баллов</li>
+        <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
+        <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
       </ul>
+      <span style="font-style: italic; margin-top: 4px">Максимум: 120 баллов.</span>
     ` 
   },
   { 
@@ -83,11 +83,11 @@ const rounds = ref([
     description: `
       <ul style="padding-left: 20px; list-style-type: disc;">
         <li>Каждой команде выдаётся 10 картинок.</li>
-        <li>Время на обсуждение: 360 секунд</li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">360 секунд</span>x</li>
         <li>Нужно отгадать зашифрованные фильмы, песни или книги и вписать ответы в бланк (номер картинки = номер вопроса)</li>
-        <li>Правильный ответ: +10 баллов</li>
-        <li>Максимум: 100 баллов</li>
+        <li><span style="font-weight: 700;">Правильный</span> ответ: +10 баллов</li>
       </ul>
+      <span style="font-style: italic; margin-top: 4px">Максимум: 100 баллов.</span>
     ` 
   },
   { 
@@ -96,11 +96,11 @@ const rounds = ref([
     description: `
       <b>6 вопросов, ответы в свободной форме.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на каждый вопрос: 60 секунд</li>
-        <li>За правильный ответ: +20 баллов</li>
+        <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
+        <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
         <li>После вопросов — выбор одной из трёх комбинаций (30 секунд). Если все ответы соответствующего цвета верны, вы получаете дополнительные  баллы. Штрафы за ошибки в комбинациях не предусмотрены.</li>
-        <li>Максимум: 170 баллов.</li>
       </ul>
+      <span style="font-style: italic; margin-top: 4px">Максимум: 170 баллов.</span>
     ` 
   },
   { 
@@ -109,11 +109,11 @@ const rounds = ref([
     description: `
       <b>6 вопросов, на каждый можно дать до трёх ответов.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на обсуждение: 30 секунд на вопрос</li>
-        <li>Правильный ответ: +5 баллов за каждый</li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд на вопрос</span></li>
+        <li><span style="font-weight: 700;">Правильный</span> ответ: +5 баллов за каждый</li>
         <li>Можно повторить один ответ или дать разные варианты</li>
-        <li>Максимум: 90 баллов</li>
       </ul>
+      <span style="font-style: italic; margin-top: 4px">Максимум: 170 баллов.</span>
     ` 
   },
   { 
@@ -122,12 +122,11 @@ const rounds = ref([
     description: `
       <b>6 вопросов, которые по цепочке связаны между собой.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на каждый вопрос: 60 секунд</li>
-        <li>За правильный ответ: +20 баллов</li>
-        <li>Важно: Первый и последний вопрос не связаны</li>
-        <li>Важно: Первый и последний вопрос не связаны</li>
-        <li>Максимум: 120 баллов</li>
+        <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
+        <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
+        <li><span style="font-weight: 700;">Важно: Первый и последний вопрос не связаны</span></li>
       </ul>
+      <span style="font-style: italic; margin-top: 4px">Максимум: 120 баллов.</span>
     ` 
   },
   { 
@@ -136,10 +135,10 @@ const rounds = ref([
     description: `
       <b>8 вопросов любого формата</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на обсуждение: 30 секунд на каждый</li>
-        <li>За правильный ответ: фиксированная ставка от +10 до +40 баллов. За неверный ответ вычитается ставка</li>
-        <li>Максимум: 280 баллов</li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд на каждый</span></li>
+        <li>За <span style="font-weight: 700;">правильный</span> ответ: фиксированная ставка от +10 до +40 баллов. За <span style="font-weight: 700;">неверный</span> ответ вычитается ставка</li>
       </ul>
+      <span style="font-style: italic; margin-top: 4px">Максимум: 280 баллов.</span>
     ` 
   }
 ]);
@@ -173,15 +172,17 @@ watch(
 }
 
 h3 {
-  font-weight: bold;
+  font-weight: 400;
+  font-size: 40px;
 }
 
 .modal-content {
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 15px;
   padding: 5px;
   padding: 6px;
-  max-width: 860px;
+  max-width: 1433px;
+  height: 820px;
   width: 95%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   font-family: 'Mulish', sans-serif;
@@ -196,16 +197,21 @@ h3 {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   text-align: center;
-  height: 30px;
+  height: 35px;
 }
 
 .modal-title {
-  font-size: 30px;
-  font-weight: 500;
+  font-size: 40px;
+  font-weight: 400;
   color: #ffffff;
   flex-grow: 1;
   text-align: center;
-  margin-left: 10px;
+  margin-left: 100px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 800;
 }
 
 .seven {
@@ -216,19 +222,18 @@ h3 {
 .close-button {
   background: none;
   border: none;
-  font-size: 30px;
-  margin-bottom: 6px;
+  font-size: 60px;
+  font-weight: 200;
+  margin-bottom: 9px;
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
-  width: 45px;
-  height: 37px;
 }
 
 .modal-body {
-  padding: 16px;
+  padding: 50px;
   color: #333;
-  font-size: 18px;
+  font-size: 26px;
 }
 
 .rounds-container {
@@ -245,7 +250,7 @@ h3 {
 }
 
 .rounds-list li {
-  font-size: 18px;
+  font-size: 26px;
   margin-bottom: 10px;
   font-weight: bold;
 }
@@ -261,7 +266,7 @@ h3 {
 }
 
 .round-description {
-  width: 350px;
+  width: 450px;
   background: #ffffff; 
   padding: 15px;
   border-radius: 15px;

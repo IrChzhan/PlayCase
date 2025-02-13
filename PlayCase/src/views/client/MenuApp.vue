@@ -6,7 +6,7 @@
 
     <div class="menu">
       <div class="menu-item" v-for="item in menuItems" :key="item.name">
-        <img :src="item.image" alt="" class="menu-image" :class="{ 'lotteryIimage': item.name === 'Лототрон' }" @click="item.function" />
+        <img :src="item.image" alt="" class="menu-image" :class="{ 'info_image': item.name === 'Правила' }" @click="item.function" />
         <p>{{ item.name }}</p>
       </div>
       <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
@@ -36,8 +36,8 @@ import cashImage from '@/assets/cash.png'
 import house from '@/assets/House_01.png'
 import contactsImage from '@/assets/contacts.png'
 import helpImage from '@/assets/help.png'
-import info from '@/assets/info.png'
-import lotteryImage from '@/assets/loto.png'
+import info from '@/assets/info.svg'
+import lotteryImage from '@/assets/loto.svg'
 import menuImage from '@/assets/menu.png'
 import ratingImage from '@/assets/rating.png'
 import ModalContacts from '@/components/widgets/ModalContacts.vue'
@@ -48,7 +48,7 @@ import {useStore} from "vuex";
 import Notification from "@/admin/Notification.vue";
 import person from '@/assets/hu.png'
 import ModalHelp from "@/components/widgets/ModalHelp.vue";
-import FeedBackImage from "@/assets/starts-group.png"
+import FeedBackImage from "@/assets/stars.svg"
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
 import Rules from "@/components/widgets/Rules.vue";
 
@@ -242,8 +242,11 @@ p {
 .lotteryIimage {
   width: 100px; 
   height: 100px; 
-  margin-top: 30px;
-  margin-left: 5px;
+  margin-top: 35px;
+}
+
+.info_image {
+  width: 83px;
 }
 
 

@@ -20,7 +20,7 @@
               <div class="checkbox-section">
                 <label class="checkbox-container">
                   <input type="checkbox" id="agree" v-model="formData.agree" required />
-                  <span>Нажимая на кнопку, вы соглашаетесь с <span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span></span>
+                  <span>Нажимая на кнопку, вы соглашаетесь с <br><span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span></br></span>
                 </label>
               </div>
 
@@ -30,6 +30,7 @@
 
           <div class="rules-section">
             <h2>Правила проведения лотереи</h2>
+            <br>
             <ul>
               <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
               <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
@@ -37,7 +38,10 @@
               <li>Победителя определяет генератор случайных чисел.</li>
               <li>Призы не подлежат обмену на деньги и возврату.</li>
             </ul>
+            <br>
             <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
+            <br>
+            <br>
             <div class="btn-con">
               <button @click.stop="toggleModal('registrateUsers', true)" class="btn">Список участников</button>
             </div>
@@ -191,7 +195,7 @@ watch(
 <style scoped>
 
 .modal-header {
-  background-color: #1c2536;
+  background-color: #1B2A46;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -204,7 +208,7 @@ watch(
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   margin-bottom: 30px;
-  height: 35px;
+  height: 30px;
 }
 
 .lottery_text {
@@ -214,6 +218,13 @@ watch(
   font-size: 40px;
 }
 
+h2 {
+  margin-top: 20px;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+input::placeholder { font-size: 24px; }
 
 .modal-overlay {
   position: fixed;
@@ -264,14 +275,14 @@ watch(
 .modal-content {
   background: #F5F5F5;
   border-radius: 1.5vw;
-  width: 1328px;
-  height: 714px;  
+  width: 1430px;
+  height: 720px;  
   max-width: none; 
   max-height: none; 
   position: relative;
   font-family: 'Mulish', sans-serif;
   overflow: auto; 
-  padding: 5px;
+  padding: 7px;
 }
 
 .close-button {
@@ -290,7 +301,7 @@ watch(
   flex-direction: column;
   gap: 25px;
   padding: 5px;
-  margin-left: 30px;
+  margin-left: 70px;
 }
 
 .btn {
@@ -312,7 +323,7 @@ watch(
 .modal-body {
   display: flex;
   align-items: flex-start;
-  gap: 4vw;
+  gap: 100px;
 }
 
 .form-section,
@@ -348,6 +359,8 @@ watch(
 
 input[type='checkbox'] {
   margin-right: 0.7vw;
+  transform: scale(1.5);
+  padding: 5px;
 }
 
 .checkbox-section {
@@ -361,24 +374,31 @@ input[type='checkbox'] {
 .checkbox-container {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 20px;
   color: #0f1921;
 }
 
 .submit-button {
-  width: 100%;
+  width: 90%;
   background-color: #cc9f33;
   color: #fffffc;
   border: none;
-  border-radius: 12px;
-  padding: 14px;
+  border-radius: 30px;
+  padding: 15px 10px;
   font-size: 18px;
   cursor: pointer;
-  margin-left: 40px;
+  margin-left: 70px;
+  margin-top: -30px;
 }
 
 .submit-button:hover {
   background-color: #b68d2f;
+}
+
+.rules-section {
+  margin-right: 100px;
+  flex: 1;
+  text-align: left;
 }
 
 .rules-section h2 {
@@ -391,7 +411,7 @@ input[type='checkbox'] {
   list-style-type: disc;
   padding-left: 2.5vw;
   color: #0f1921;
-  font-size: clamp(14px, 1.7vw, 16px);
+  font-size: 18px;
   line-height: 1.6;
 }
 
@@ -412,7 +432,8 @@ input[type='checkbox'] {
 
 .lottery-greeting {
   color: #cc9f33;
-  font-size: clamp(14px, 1.7vw, 16px);
+  font-size: 18px;
+  font-style: italic;
   margin-top: 1.2vw;
   margin-bottom: 1.2vw;
   text-align: center;
@@ -464,7 +485,7 @@ input[type='checkbox'] {
 @media (max-width: 768px) {
   .modal-content {
     width: 95vw;
-    height: auto; /* Let content determine height */
+    height: auto; 
     max-width: 700px;
   }
 

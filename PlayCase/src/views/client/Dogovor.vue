@@ -4,9 +4,7 @@
       <button class="close-button" @click="$emit('close')">&times;</button>
       <div class="modal-scrollable">
         <h1 class="contract-title">ДОГОВОР НА ПРЕДОСТАВЛЕНИЕ УСЛУГ</h1>
-        <br>
     <p class="contract-date">г. Москва «26» декабря 2024 года</p>
-    <br>
     <p>
       Индивидуальный предприниматель Богатырев Тихон Константинович, именуемый в дальнейшем "Исполнитель",
       действующий на основании записи в ЕГРИП от __.__.__ за ОГРНИП 317344300073052, предлагает любому
@@ -111,14 +109,16 @@ p {
 
 h2 {
   font-weight: 600;
+  margin-top: 18px;
+  margin-bottom: 10px;
 }
 .modal-content {
   background: white;
   border-radius: 10px;
   padding: 20px;
   width: 80%;
-  max-width: 900px;
-  max-height: 90%;
+  max-width: 1213px;
+  max-height: 595px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -135,27 +135,31 @@ h2 {
 
 .contract-title {
   text-align: left;
-  font-size: 22px;
+  font-size: 18px;
   margin-bottom: 20px;
 }
 
 .contract-date {
   text-align: left;
   margin-bottom: 20px;
-  font-style: italic;
+  margin-top: 25px;
   color: #555;
+  font-size: 18px;
+}
+
+p {
+  font-size: 18px;
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -15px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 24px;
-  font-weight: bold;
-  color: #000;
+  font-size: 65px;
   cursor: pointer;
+  font-weight: 200;
 }
 
 .close-button:hover {

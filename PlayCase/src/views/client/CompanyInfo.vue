@@ -40,10 +40,10 @@ const props = defineProps({
 
 .modal-content {
   background: white;
-  border-radius: 10px;
+  border-radius: 15px;
   width: 80%;
-  max-width: 900px;
-  max-height: 90%;
+  max-width: 830px;
+  max-height: 261px;
   overflow: hidden;
   position: relative;
   padding: 20px;
@@ -70,17 +70,18 @@ const props = defineProps({
 p {
   margin-bottom: 10px;
   font-size: 18px;
-  color: #3A4C6E;
+  color: black;
   text-align: left; 
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -15px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 65px;
   cursor: pointer;
+  font-weight: 200;
 }
 </style>

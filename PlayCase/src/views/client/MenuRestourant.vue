@@ -22,10 +22,7 @@
                 >
                   {{ category.name }}
                 </button>
-                <button
-                  @click="clearFilter"
-                  :class="{ active: selectedCategoryName === null }"
-                >
+                <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">
                   Все
                 </button>
               </div>
@@ -89,7 +86,7 @@ const selectedCategoryName = ref(null);
 const categoryFilters = ref(null);
 const categoryFiltersWrapper = ref(null);
 const isScrollLeftDisabled = ref(true);
-const isScrollRightDisabled = ref(false);
+const isScrollRightDisabled = ref(true); 
 const categoryButtons = ref([]);
 
 const showMealModal = ref(false);
@@ -149,7 +146,6 @@ const closeMealModal = () => {
 const goToMenuApp = () => {
   router.push('/client/menu-app');
 };
-
 const scrollOneCategory = async (direction) => {
   if (categoryFilters.value && categoryButtons.value.length > 0) {
     await nextTick();
@@ -171,10 +167,11 @@ const setCategoryWrapperWidth = async () => {
   if (categoryFiltersWrapper.value && categoryButtons.value.length > 0) {
     await nextTick();
     const buttonWidth = categoryButtons.value[0].offsetWidth;
-    const visibleButtonsWidth = buttonWidth * 6;
+    const visibleButtonsWidth = buttonWidth * 5; 
     categoryFiltersWrapper.value.style.maxWidth = `${visibleButtonsWidth}px`;
   }
 };
+
 
 onMounted(() => {
   fetchMenu();
@@ -184,11 +181,15 @@ onMounted(() => {
 
   setCategoryWrapperWidth();
   window.addEventListener('resize', setCategoryWrapperWidth);
+  nextTick(() => {
+    handleScroll(); 
+  });
+
 });
 </script>
 
 <style scoped>
-  .container {
+.container {
   height: 100vh;
   width: 100%;
   font-family: 'Arial', sans-serif;
@@ -202,7 +203,7 @@ onMounted(() => {
   margin-left: 40px;
   font-family: 'Mulish', sans-serif;
   font-weight: 700;
-  font-size: 40px;
+  font-size: 45px;
   margin-top: 5px;
 }
 
@@ -230,9 +231,9 @@ onMounted(() => {
 
 .category_scroll {
   display: flex;
-  margin-left: 10px;
+  margin-left: 30px;
   gap: 0px;
-  align-items: center; 
+  align-items: center;
 }
 
 .header {
@@ -253,7 +254,8 @@ onMounted(() => {
   align-items: center;
   overflow: hidden;
   flex-grow: 1;
-  transition: max-width 0.3s ease; 
+  transition: max-width 0.3s ease;
+   max-width: 1500px; 
 }
 
 .category-filters {
@@ -261,17 +263,17 @@ onMounted(() => {
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
-  gap: 10px; 
+  gap: 10px;
   margin-top: 10px;
-  padding: 0 15px; 
+  padding: 0 15px;
 }
 
 .scroll-arrow {
   width: 40px;
   height: 40px;
   cursor: pointer;
-  margin-left: 0px; 
-  margin-right: 0px; 
+  margin-left: 0px;
+  margin-right: 0px;
   transition: opacity 0.3s;
 }
 
@@ -304,16 +306,16 @@ h1 {
 }
 
 .category-filters button {
-  padding: 12px 24px; 
+  padding: 50px 30px;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   background-color: #f4f4f4;
   color: #333;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s;
   white-space: nowrap;
-  font-size: 16px; 
+  font-size: 20px;
 }
 
 .category-filters button.active {
@@ -334,8 +336,8 @@ h1 {
 
 .meals-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); 
-  gap: 8px; 
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
   justify-items: center;
   padding: 20px;
 }
@@ -345,10 +347,10 @@ h1 {
   color: #333;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 15px; 
+  padding: 15px;
   text-align: left;
-  width: 310px; 
-  height: 300px; 
+  width: 310px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -362,7 +364,7 @@ h1 {
 
 .meal-image {
   width: 100%;
-  height: 200px; 
+  height: 200px;
   border-radius: 10px;
   object-fit: contain;
 }
@@ -373,21 +375,21 @@ h1 {
 }
 
 .meal-price {
-  font-size: 25px; 
+  font-size: 25px;
   font-weight: bold;
   margin-bottom: 0px;
   color: #CC9F33;
 }
 
 .meal-name {
-  font-size: 22npm px; 
+  font-size: 22px;
   margin: 5px 0;
 }
 
 .meal-description {
-  font-size: 14px; 
+  font-size: 14px;
   color: #666;
-  height: 50px; 
+  height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -399,7 +401,6 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -502,6 +503,7 @@ h1 {
   cursor: pointer;
   margin-top: -80px;
 }
+
 .scroll-arrow {
   width: 40px;
   height: 40px;
@@ -516,7 +518,7 @@ h1 {
 }
 
 .left {
-  margin-right: 10px;
+  margin-left: 40px;
 }
 
 .right {
@@ -527,17 +529,18 @@ h1 {
   background-color: #ffa726;
   color: white;
 }
+
 .category-filters button {
-  padding: 12px 24px;
+  padding: 15px 35px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: #f4f4f4;
   color: #333;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s;
   white-space: nowrap;
-  font-size: 16px;
+  font-size: 28px;
 }
 
 .category-filters button.active {

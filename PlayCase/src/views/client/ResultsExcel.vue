@@ -1,6 +1,7 @@
 <template>
   <div class="results-page">
     <h1>Результаты игры</h1>
+    <div class="table-container">
     <table class="results-table">
       <thead>
         <tr>
@@ -33,6 +34,7 @@
         </template>
       </tbody>
     </table>
+  </div>
     <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
   </div>
 </template>
@@ -41,20 +43,18 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import {useAuthCheck} from "@/hooks/useAuthCheck.js";
+import { useAuthCheck } from '@/hooks/useAuthCheck.js';
 
 const store = useStore();
 const router = useRouter();
 const teams = ref([]);
-const { teamName } = useAuthCheck()
+const { teamName } = useAuthCheck();
 
 const watchedState = computed(() => store.state.results.result);
 
 const hasResults = computed(() => {
   return teams.value.some(
-    (team) =>
-      team.totalScore > 0 ||
-      team.scoreByRounds.some((score) => score > 0)
+    (team) => team.totalScore > 0 || team.scoreByRounds.some((score) => score > 0)
   );
 });
 
@@ -98,20 +98,35 @@ const goToMenuApp = () => {
   padding: 20px;
   height: 100%;
   font-family: 'Mulish', sans-serif;
+  font-weight: 500;
   overflow: hidden;
+}
+
+.table-container {
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden; 
+  margin-top: 40px;
+}
+
+h1 {
+  color: #FFFFFC;
+  margin-top: 40px;
+  font-size: 60px;
+  font-weight: 700;
+  font-family: 'Mulish', sans-serif;
 }
 
 .results-table {
   width: 100%;
-  border-collapse: collapse;
   font-size: 1rem;
-  margin-top: -10px;
+  margin-top: 40px;
 }
 
 .results-table th,
 .results-table td {
   border: 1px solid #ffd700;
-  padding: 10px;
+  padding: 15px;
   text-align: center;
   color: #1B2A46;
 }
@@ -126,7 +141,7 @@ const goToMenuApp = () => {
 
 .results-table tbody {
   display: block;
-  max-height: 420px;
+  max-height: 720px;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
@@ -165,8 +180,8 @@ const goToMenuApp = () => {
 }
 
 .home-button {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   position: fixed;
   bottom: 20px;
   cursor: pointer;

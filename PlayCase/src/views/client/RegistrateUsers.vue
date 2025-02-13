@@ -2,7 +2,7 @@
   <div v-if="show" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="modal-title">Список участников</span>
+        <span class="modal-title">СПИСОК УЧАСТНИКОВ</span>
         <button class="close-button" @click="closeModal">×</button>
       </div>
 
@@ -64,8 +64,9 @@ const closeModal = () => {
   z-index: 200;
 }
 .modal-content {
-  width: 700px;
-  background-color: white;
+  width: 1200px;
+  height: 370px;
+  background-color: #F5F5F5;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -79,11 +80,11 @@ const closeModal = () => {
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 36px;
+  font-weight: 500;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  height: 25px;
+  height: 22px;
 }
 .modal-title {
   flex-grow: 1;
@@ -95,8 +96,10 @@ const closeModal = () => {
   background: none;
   border: none;
   color: white;
-  font-size: 20px;
+  font-size: 50px;
+  font-weight: 500;
   cursor: pointer;
+  margin-top: -10px;
 }
 .close-button:hover {
   color: #ff5a5a;

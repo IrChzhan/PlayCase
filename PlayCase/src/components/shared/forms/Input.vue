@@ -10,7 +10,7 @@
   border: 1px solid #d9d9d9;
   border-radius: 8px;
   background:  #FFFFFC;
-  padding: 12px 14px;
+  padding: 20px 14px;
   font-size: 16px;
   font-family: 'Mulish', sans-serif;
   color: #0f1921;
