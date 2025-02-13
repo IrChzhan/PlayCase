@@ -405,6 +405,7 @@ input[type='checkbox'] {
   font-size: clamp(20px, 2.5vw, 24px);
   color: #cc9f33;
   margin-bottom: 1.2vw;
+  padding-left: 1.6vw;
 }
 
 .rules-section ul {

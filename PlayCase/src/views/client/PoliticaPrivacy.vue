@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay">
+  <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-content">
       <button class="close-button" @click="$emit('close')">&times;</button>
       <div class="modal-scrollable">
@@ -389,20 +389,23 @@ h2 {
 
 .modal-content {
   background: white;
-  border-radius: 10px;
-  padding: 40px;
+  border-radius: 23px;
+  padding: 51px 68px 40px 67px;
   width: 80%;
+  font-weight: 400;
+  color:#1B2A46;
   max-width: 1213px;
   max-height: 595px;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .modal-scrollable {
-  max-height: 80vh;
+  flex: 1;
+  max-height: 600px;
   overflow-y: auto;
-  padding-right: 10px;
+  text-align: left;
 }
 
 .close-button {
@@ -411,7 +414,7 @@ h2 {
   right: 15px;
   background: none;
   border: none;
-  font-size: 65px;
+  font-size: 75px;
   cursor: pointer;
   font-weight: 200;
 }

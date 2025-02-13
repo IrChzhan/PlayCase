@@ -1,6 +1,6 @@
 <template>
-  <div class="modal-overlay">
-    <div class="modal-content">
+  <div class="modal-overlay" @click.self="$emit('close')">
+    <div class="modal-content" >
       <button class="close-button" @click="$emit('close')">&times;</button>
       <div class="modal-scrollable">
         <h1 class="contract-title">ДОГОВОР НА ПРЕДОСТАВЛЕНИЕ УСЛУГ</h1>
@@ -114,9 +114,10 @@ h2 {
 }
 .modal-content {
   background: white;
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 23px;
+  padding: 58px 68px 40px 66px;
   width: 80%;
+  color: #0F1921;
   max-width: 1213px;
   max-height: 595px;
   display: flex;
@@ -129,7 +130,6 @@ h2 {
 .modal-scrollable {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
   text-align: left;
 }
 
@@ -143,7 +143,7 @@ h2 {
   text-align: left;
   margin-bottom: 20px;
   margin-top: 25px;
-  color: #555;
+  color: #0F1921;
   font-size: 18px;
 }
 
@@ -157,7 +157,7 @@ p {
   right: 15px;
   background: none;
   border: none;
-  font-size: 65px;
+  font-size: 75px;
   cursor: pointer;
   font-weight: 200;
 }

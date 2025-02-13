@@ -246,7 +246,7 @@ watch(
 
 .modal-content {
   background: var(--c-white, #fff);
-  border-radius: 1vw;
+  border-radius: 15px;
   padding: 6px;
   width: 100%;
   max-width: 883px;

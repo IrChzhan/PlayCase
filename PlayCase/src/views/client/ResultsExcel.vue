@@ -125,14 +125,16 @@ h1 {
 
 .results-table th,
 .results-table td {
-  border: 1px solid #ffd700;
+  font-family: 'Mulish',sans-serif;
+  border: 1px solid #FFD700;
   padding: 15px;
+  font-weight: 500;
   text-align: center;
-  color: #1B2A46;
+  color: #000000;
 }
 
 .results-table th {
-  background-color: #CC9F33;
+  background-color: #C59216;
   color: white;
   position: sticky;
   top: 0;
@@ -153,6 +155,10 @@ h1 {
   min-width: 100px;
 }
 
+thead{
+  border-radius: 15px;
+}
+
 .results-table tr {
   display: table;
   width: 100%;
@@ -164,7 +170,7 @@ h1 {
 }
 
 .results-table tr.odd-row {
-  background-color: #fff;
+  background-color: #FFFEFD;
 }
 
 .results-table tr.highlighted-row {
