@@ -30,7 +30,7 @@
             </textarea>
           </div>
           <div class="con">
-            <button v-if="formData.questionType || formData.comment" type="button" 
+            <button v-if="formData.comment" type="button" 
                   class="submit-button"
                   @click="submitForm">
             Отправить данные
@@ -47,7 +47,7 @@
         <div class="modal-body success-body">
           <h2 class="success-title">Спасибо за вашу оценку!</h2>
         </div>
-        <p class="details-text some" @click="toggleDetails">Хотите рассказать подробнее?</p>
+        <p class="details-text some" @click="toggleDetails" v-if="showToggleScreen">Хотите рассказать подробнее?</p>
       </div>
     </div>
   <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
@@ -55,7 +55,7 @@
 
 
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { useAuthCheck } from "@/hooks/useAuthCheck.js";
 import { useStore } from "vuex";
 import Notification from "@/admin/Notification.vue";
@@ -82,6 +82,13 @@ const {teamName} = useAuthCheck();
 const store = useStore();
 const selectedColor = ref('');
 const showDetails = ref(false);
+
+const formdata = ref({
+  mark: null,
+  comment: null,
+})
+
+const showToggleScreen = ref(true);
 
 const setSelectedColor = (color) => {
   selectedColor.value = color;
@@ -110,8 +117,12 @@ const submitForm = async () => {
       mark: formData.value.questionType,
       comment: formData.value.comment
     });
-    showSuccessModal.value = true;
-    formData.value.comment = ''
+    setTimeout(() => {
+      showSuccessModal.value = true;
+      getDataFeedback();
+      formData.value.comment = ''
+    }, 1000)
+    
     setTimeout(() => {
       toastMessage.value = '';
     }, 1000);
@@ -119,6 +130,20 @@ const submitForm = async () => {
     console.log(e);
   }
 };
+
+const getDataFeedback = async () => {
+  try {
+    const response = await store.dispatch('profile/getCurrentTeam')
+    formdata.value.mark = response.gameMark;
+    formdata.value.comment = response.markComment;
+    if(formdata.value.mark != null && formdata.value.mark != "" && formdata.value.comment != null && formdata.value.comment != "") {
+      showSuccessModal.value = true;
+      showToggleScreen.value = false;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 watch(
   () => props.show,
@@ -130,6 +155,11 @@ watch(
     }
   }
 );
+
+onMounted(() => {
+  getDataFeedback();
+})
+
 </script>
 
 <style scoped>
