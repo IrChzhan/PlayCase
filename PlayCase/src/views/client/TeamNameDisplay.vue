@@ -1,7 +1,15 @@
 <template>
   <div class="container">
-    <video autoplay loop muted class="background-video">
+    <video
+      ref="videoElement"
+      autoplay
+      loop
+      muted
+      playsinline
+      class="background-video"
+    >
       <source src="../../assets/fon.mp4" type="video/mp4">
+      <source src="../../assets/fon.webm" type="video/webm">
       Your browser does not support the video tag.
     </video>
     <div class="content-wrapper">
@@ -24,15 +32,24 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-
+import { onMounted, ref} from 'vue';
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 
 const { teamName } = useAuthCheck()
 const router = useRouter()
+const videoElement = ref(null)
 
 const goToMenuApp = () => {
   router.push({ name: 'MenuApp' })
 }
+
+onMounted(() => {
+  if (videoElement.value) {
+    videoElement.value.play().catch(error => {
+      console.error('Автовоспроизведение заблокировано:', error)
+    })
+  }
+})
 </script>
 
 <style scoped>
