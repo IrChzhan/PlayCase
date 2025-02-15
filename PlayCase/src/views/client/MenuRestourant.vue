@@ -200,7 +200,7 @@ onMounted(() => {
 }
 
 .menu_title {
-  margin-left: 40px;
+  margin-left: 75px;
   font-family: 'Mulish', sans-serif;
   font-weight: 700;
   font-size: 45px;
@@ -231,7 +231,7 @@ onMounted(() => {
 
 .category_scroll {
   display: flex;
-  margin-left: 30px;
+  margin-left: 10px;
   gap: 0px;
   align-items: center;
 }
@@ -255,7 +255,7 @@ onMounted(() => {
   overflow: hidden;
   flex-grow: 1;
   transition: max-width 0.3s ease;
-   max-width: 1500px; 
+   max-width: 1440px; 
 }
 
 .category-filters {
@@ -263,7 +263,7 @@ onMounted(() => {
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
-  gap: 10px;
+  gap: 25px;
   margin-top: 10px;
   padding: 0 15px;
 }
@@ -312,7 +312,7 @@ h1 {
   background-color: #f4f4f4;
   color: #333;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 400;
   transition: all 0.3s;
   white-space: nowrap;
   font-size: 20px;
@@ -337,20 +337,20 @@ h1 {
 .meals-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 10px;
   justify-items: center;
-  padding: 20px;
+  padding: 10px 85px;
 }
 
 .meal-card {
   background-color: #ffffff;
   color: #333;
-  border-radius: 10px;
+  border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 15px;
+  padding: 20px;
   text-align: left;
-  width: 310px;
-  height: 300px;
+  width: 291px;
+  height: 390px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -364,9 +364,10 @@ h1 {
 
 .meal-image {
   width: 100%;
-  height: 200px;
+  height: 220px;
   border-radius: 10px;
   object-fit: contain;
+  border-radius: 15px;
 }
 
 .meal-info {
@@ -375,14 +376,16 @@ h1 {
 }
 
 .meal-price {
-  font-size: 25px;
+  font-size: 31px;
   font-weight: bold;
   margin-bottom: 0px;
+  margin-top: 25px;
   color: #CC9F33;
 }
 
 .meal-name {
-  font-size: 22px;
+  font-size: 25px;
+  font-weight: 500;
   margin: 5px 0;
 }
 
@@ -429,10 +432,12 @@ h1 {
   border-radius: 8px;
   padding: 5px;
   width: 80%;
-  max-width: 600px;
+  max-width: 700px;
   text-align: left;
   position: relative;
   margin-left: 20px;
+  box-shadow: 0 0 4px rgba(234, 233, 232, 0.894);
+  transition: box-shadow 0.01s ease;
 }
 
 .close-button {

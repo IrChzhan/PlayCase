@@ -36,6 +36,10 @@
   color: #ff4d4f;
   margin-top: 4px;
 }
+
+.input-label {
+  font-size: 20px;
+}
 </style>
 
 <template>

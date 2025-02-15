@@ -30,7 +30,6 @@
 
           <div class="rules-section">
             <h2>Правила проведения лотереи</h2>
-            <br>
             <ul>
               <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
               <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
@@ -38,7 +37,6 @@
               <li>Победителя определяет генератор случайных чисел.</li>
               <li>Призы не подлежат обмену на деньги и возврату.</li>
             </ul>
-            <br>
             <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
             <br>
             <br>
@@ -211,6 +209,10 @@ watch(
   height: 30px;
 }
 
+.label.input-label {
+  font-size: 20px;
+}
+
 .lottery_text {
   margin-left: 550px;
   font-family: 'Mulish', sans-serif;
@@ -220,9 +222,10 @@ watch(
 
 h2 {
   margin-top: 20px;
-  font-size: 26px;
+  font-size: 300px;
   font-weight: 600;
 }
+
 
 input::placeholder { font-size: 24px; }
 
@@ -323,7 +326,7 @@ input::placeholder { font-size: 24px; }
 .modal-body {
   display: flex;
   align-items: flex-start;
-  gap: 100px;
+  gap: 150px;
 }
 
 .form-section,
@@ -433,10 +436,10 @@ input[type='checkbox'] {
 
 .lottery-greeting {
   color: #cc9f33;
-  font-size: 18px;
+  font-size: 24px;
   font-style: italic;
   margin-top: 1.2vw;
-  margin-bottom: 1.2vw;
+  margin-bottom: 3px;
   text-align: center;
 }
 
@@ -477,6 +480,10 @@ input[type='checkbox'] {
   text-decoration: underline;
   cursor: pointer;
   transition: color 0.3s;
+}
+
+li {
+  font-size: 22px;
 }
 
 .policy-link:hover {

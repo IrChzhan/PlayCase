@@ -78,6 +78,7 @@ const goToMenuApp = () => {
   word-wrap: break-word;
   text-shadow: 0 0 20px black;
   z-index: 1;
+  margin-top: 110px;
 }
 
 .team-name::before {
