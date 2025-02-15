@@ -83,7 +83,7 @@ const rounds = ref([
     description: `
       <ul style="padding-left: 20px; list-style-type: disc;">
         <li>Каждой команде выдаётся 10 картинок.</li>
-        <li>Время на обсуждение: <span style="font-weight: 700;">360 секунд</span>x</li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">360 секунд</span></li>
         <li>Нужно отгадать зашифрованные фильмы, песни или книги и вписать ответы в бланк (номер картинки = номер вопроса)</li>
         <li><span style="font-weight: 700;">Правильный</span> ответ: +10 баллов</li>
       </ul>

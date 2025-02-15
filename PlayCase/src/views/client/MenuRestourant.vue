@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :class="{ 'blur-background': showMealModal }">
     <div class="menu-page">
       <div class="header sticky-header">
         <div class="header-content">
@@ -159,7 +159,7 @@ const handleScroll = () => {
   if (categoryFilters.value) {
     const { scrollLeft, scrollWidth, clientWidth } = categoryFilters.value;
     isScrollLeftDisabled.value = scrollLeft === 0;
-    isScrollRightDisabled.value = scrollLeft + clientWidth >= scrollWidth;
+    isScrollRightDisabled.value = scrollLeft + clientWidth >= scrollWidth - 1;
   }
 };
 
@@ -402,6 +402,7 @@ h1 {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;

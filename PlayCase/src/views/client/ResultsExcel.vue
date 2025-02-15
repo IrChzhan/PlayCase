@@ -96,7 +96,7 @@ const goToMenuApp = () => {
   background-color: #1B2A46;
   color: #1B2A46;
   padding: 20px;
-  height: 100%;
+  height: 1160px;
   font-family: 'Mulish', sans-serif;
   font-weight: 500;
   overflow: hidden;
@@ -117,11 +117,11 @@ h1 {
   font-family: 'Mulish', sans-serif;
 }
 
-.results-table {
+/* .results-table {
   width: 100%;
   font-size: 1rem;
   margin-top: 40px;
-}
+} */
 
 .results-table th,
 .results-table td {
@@ -141,9 +141,15 @@ h1 {
 
 .results-table tbody {
   display: block;
-  max-height: 720px;
-  overflow-y: auto;
+  max-height: 720px; /* Ограничение высоты для прокрутки */
+  overflow-y: auto; /* Вертикальная прокрутка */
   overflow-x: hidden;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* Улучшает прокрутку на iOS */
+}
+
+.results-table {
+  display: block;
   width: 100%;
 }
 

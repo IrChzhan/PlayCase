@@ -232,6 +232,7 @@ p {
   font-family: 'Mulish', sans-serif;
   font-weight: 500;
   font-size: 30;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-image {
@@ -240,8 +241,8 @@ p {
 }
 
 .lotteryIimage {
-  width: 100px; 
-  height: 100px; 
+  width: 10px; 
+  height: 10px; 
   margin-top: 35px;
 }
 
