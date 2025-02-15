@@ -19,7 +19,6 @@
       <button class="close-button-v" @click="closeModal"><img class="image" src="@/assets/CloseImage.png" alt="closeImage"></button>
     </div>
   </div>
-  <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
 </template>
 
 <script setup>

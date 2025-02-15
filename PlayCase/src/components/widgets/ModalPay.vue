@@ -401,6 +401,9 @@ const updatePayments = (data) => {
   justify-content: flex-start;
 }
 .player-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
   background-color: #F5F5F5;
   border: 2px solid #D7D7D7;
   border-radius: 50%;
