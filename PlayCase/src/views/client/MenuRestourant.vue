@@ -337,7 +337,7 @@ h1 {
 .meals-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  gap: 15px;
   justify-items: center;
   padding: 10px 85px;
 }
@@ -371,7 +371,7 @@ h1 {
 }
 
 .meal-info {
-  margin-top: 10px;
+  margin-top: 20px;
   flex-grow: 1;
 }
 
