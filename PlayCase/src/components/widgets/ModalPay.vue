@@ -348,7 +348,6 @@ const updatePayments = (data) => {
   padding: 6px;
   width: 100%;
   max-width: 1328px;
-  margin-bottom: 50px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
@@ -365,7 +364,7 @@ const updatePayments = (data) => {
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
   color: #0F1921 ;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .title {
@@ -373,7 +372,7 @@ const updatePayments = (data) => {
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
   color: #0F1921  ;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .price-info {
@@ -403,7 +402,7 @@ const updatePayments = (data) => {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   margin-top: 15px;
   margin-right: 160px;
   width: 100%;
@@ -519,7 +518,7 @@ const updatePayments = (data) => {
   margin-bottom: 13x;
 }
 .checkbox-section {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .checkbox-section label {
   display: block;
