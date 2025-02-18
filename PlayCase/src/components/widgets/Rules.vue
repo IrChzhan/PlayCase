@@ -266,11 +266,11 @@ h3 {
 }
 
 .round-description {
-  width: 400px;
+  width: 450px;
   background: #ffffff; 
   padding: 15px;
   border-radius: 15px;
-  font-size: 20px;
+  font-size: 23px;
   border: 2px solid #1c2b4b; 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
 }

@@ -6,9 +6,9 @@
 
     <div class="menu">
       <div class="menu-item" v-for="item in menuItems" :key="item.name">
-        <img :src="item.image" alt="" class="menu-image" :class="{ 'info_image': item.name === 'Правила' }" @click="item.function" />
-        <p>{{ item.name }}</p>
-      </div>
+  <img :src="item.image" alt="" class="menu-image" :class="{ 'small-icon': item.small, 'info_image': item.name === 'Правила' }" @click="item.function" />
+  <p>{{ item.name }}</p>
+</div>
       <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
         <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />
         <p>Обратная связь</p>
@@ -32,14 +32,14 @@
 import {computed, onMounted, ref, watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import cashImage from '@/assets/cash.png'
+import cashImage from '@/assets/pay.svg'
 import house from '@/assets/House_01.png'
-import contactsImage from '@/assets/contacts.png'
-import helpImage from '@/assets/help.png'
+import contactsImage from '@/assets/contacts.svg'
+import helpImage from '@/assets/help.svg'
 import info from '@/assets/info.svg'
 import lotteryImage from '@/assets/loto.svg'
-import menuImage from '@/assets/menu.png'
-import ratingImage from '@/assets/rating.png'
+import menuImage from '@/assets/menu.svg'
+import ratingImage from '@/assets/rating.svg'
 import ModalContacts from '@/components/widgets/ModalContacts.vue'
 import ModalLottery from '@/components/widgets/ModalLottery.vue'
 import ModalPay from '@/components/widgets/ModalPay.vue'
@@ -139,8 +139,14 @@ const menuItems = ref([
     function: () => {
       router.push({ name: 'ResultsExcel' })
     },
+    small: true, 
   },
-  { name: 'Оплата', image: cashImage, function: openModalPay },
+  { 
+    name: 'Оплата', 
+    image: cashImage, 
+    function: openModalPay,
+    small: true, 
+  },
   {
     name: 'Меню ресторана',
     image: menuImage,
@@ -150,7 +156,7 @@ const menuItems = ref([
   },
   { name: 'Лототрон', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
-  { name: 'Help', image: helpImage, function: openModalHelp}
+  { name: 'Help', image: helpImage, function: openModalHelp, }
 ])
 
 const fetchGame = async () => {
@@ -177,7 +183,7 @@ onMounted(()=>{
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #1b2a46;
+  background: url('@/assets/background.jpg') no-repeat center center/cover;
 }
 
 .header {
@@ -189,7 +195,7 @@ onMounted(()=>{
   background-color: #3a4c6e;
   border: 2px solid #cc9f33;
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
   margin: 47px auto;
 }
 
@@ -228,6 +234,7 @@ p {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  gap: 15px;
   color: white;
   font-family: 'Mulish', sans-serif;
   font-weight: 500;
@@ -236,8 +243,14 @@ p {
 }
 
 .menu-image {
-  width: 131px;
-  height: 131px;
+  width: 111px;
+  height: 111px;
+}
+
+.small-icon {
+  width: 90px; 
+  height: 90px;
+  margin-top: 15px;
 }
 
 .lotteryIimage {

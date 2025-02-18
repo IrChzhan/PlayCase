@@ -93,7 +93,7 @@ const goToMenuApp = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #1B2A46;
+  background: url('@/assets/background.jpg') no-repeat center center/cover;
   color: #1B2A46;
   padding: 20px;
   height: 1160px;

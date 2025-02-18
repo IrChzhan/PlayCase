@@ -193,17 +193,17 @@ onMounted(() => {
   height: 100vh;
   width: 100%;
   font-family: 'Arial', sans-serif;
-  background: #1c2742;
+  background: url('@/assets/background.jpg') no-repeat center center/cover;
   color: #fff;
   display: flex;
   flex-direction: column;
 }
 
 .menu_title {
-  margin-left: 75px;
+  margin-left: 145px;
   font-family: 'Mulish', sans-serif;
   font-weight: 700;
-  font-size: 45px;
+  font-size: 44px;
   margin-top: 5px;
 }
 
@@ -211,7 +211,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #1c2742;
+  background: url('@/assets/background.jpg') no-repeat center center/cover;
   color: #fff;
   font-family: 'Arial', sans-serif;
   text-align: center;
@@ -231,7 +231,7 @@ onMounted(() => {
 
 .category_scroll {
   display: flex;
-  margin-left: 10px;
+  margin-left: 15px;
   gap: 0px;
   align-items: center;
 }
@@ -255,7 +255,7 @@ onMounted(() => {
   overflow: hidden;
   flex-grow: 1;
   transition: max-width 0.3s ease;
-   max-width: 1440px; 
+   max-width: 1300px; 
 }
 
 .category-filters {
@@ -263,7 +263,7 @@ onMounted(() => {
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
-  gap: 25px;
+  gap: 15px;
   margin-top: 10px;
   padding: 0 15px;
 }
@@ -306,7 +306,7 @@ h1 {
 }
 
 .category-filters button {
-  padding: 50px 30px;
+  padding: 50px 29px;
   border: none;
   border-radius: 20px;
   background-color: #f4f4f4;
@@ -337,9 +337,10 @@ h1 {
 .meals-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
-  justify-items: center;
-  padding: 10px 85px;
+  gap: 15px; 
+  padding: 10px 180px; 
+  margin-top: 20px;
+  margin-left: -25px;
 }
 
 .meal-card {
@@ -349,7 +350,7 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   text-align: left;
-  width: 291px;
+  width: 270px;
   height: 390px;
   display: flex;
   flex-direction: column;
@@ -363,30 +364,32 @@ h1 {
 }
 
 .meal-image {
-  width: 100%;
-  height: 220px;
-  border-radius: 10px;
-  object-fit: contain;
-  border-radius: 15px;
+  border-radius: 28px;
+  height: 230px;
+  margin-top: 5px; 
+  padding-left: 20px; 
+  padding-right: 20px;
 }
 
 .meal-info {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   flex-grow: 1;
+  margin-left: 22px;
 }
 
 .meal-price {
   font-size: 31px;
   font-weight: bold;
-  margin-bottom: 0px;
-  margin-top: 25px;
+  margin-top: auto; 
   color: #CC9F33;
 }
 
 .meal-name {
-  font-size: 25px;
-  font-weight: 500;
-  margin: 5px 0;
+  font-size: 26px;
+  font-weight: 600;
+  margin-top: 15px;
 }
 
 .meal-description {
@@ -430,9 +433,10 @@ h1 {
 .modal-content {
   background: #fff;
   border-radius: 8px;
-  padding: 5px;
+  padding: 7px;
   width: 80%;
-  max-width: 700px;
+  max-width: 800px;
+  height: 778px;
   text-align: left;
   position: relative;
   margin-left: 20px;
@@ -442,11 +446,11 @@ h1 {
 
 .close-button {
   position: absolute;
-  top: 5px;
-  right: 10px;
+  top: 2px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 35px;
+  font-size: 60px;
   cursor: pointer;
   color: white;
 }
@@ -459,7 +463,7 @@ h1 {
 
 .meal-modal-image {
   width: 100%;
-  height: 350px;
+  height: 500px;
   border-radius: 10px;
   margin-bottom: 20px;
   object-fit: cover;
@@ -467,27 +471,29 @@ h1 {
 
 .meal-modal-description {
   font-size: 20px;
+  font-weight: 400;
   color: #000000;
   margin-bottom: 10px;
-  margin-top: 15px;
-  margin-left: 20px;
+  margin-top: 30px;
+  margin-left: 35px;
 }
 
 .meal-modal-price {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 32px;
+  font-weight: 800;
   color: #C59216;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  margin-left: 20px;
+  margin-bottom: auto;
+  margin-top: 55px;
+  margin-left: 35px;
 }
 
 .meal-modal-name {
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 33px;
+  font-weight: 800;
   color: #0F1921;
   margin-bottom: 10px;
-  margin-left: 15px;
+  margin-left: 35px;
+  margin-top: 20px;
 }
 
 .home-button-container {
@@ -500,7 +506,7 @@ h1 {
   align-items: center;
   padding: 10px 0;
   z-index: 10;
-  height: 30px;
+  height: 35px;
 }
 
 .home-button {
@@ -537,7 +543,7 @@ h1 {
 }
 
 .category-filters button {
-  padding: 15px 35px;
+  padding: 15px 29px;
   border: none;
   border-radius: 10px;
   background-color: #f4f4f4;
