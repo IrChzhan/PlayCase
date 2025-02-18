@@ -59,7 +59,7 @@
             @click="handlePayment" 
             :disabled="picked === 'sendReceiptToEmail' && !validateEmail(selectedEmail)"
           >
-            Оплатить
+            Получить QR-код
           </button>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
@@ -80,10 +80,13 @@
             </ul>
           </div>
         </div>
-        <div class="qr-section" v-if="qrCodeUrl">
+        <div class="qr-section" >
           <div class="qr-container">
             <div class="qr-wrapper">
-              <img :src="qrCodeUrl" alt="QR-код" class="qr-code" />
+              <img v-if="qrCodeUrl" :src="qrCodeUrl" alt="QR-код" class="qr-code" />
+              <div v-else  class="qr-code-space">
+                <span class="qr-code-text">Здесь будет <br> QR-код для оплаты</span>
+              </div>
               <img class='sbp' src="@/assets/sbp.png" alt="sbp">
             </div>
             <p class="qr-instruction">Отсканируйте код камерой<br> или в приложении банка</p>
@@ -360,7 +363,7 @@ const updatePayments = (data) => {
   font-size: 40px;
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
-  color: #1B2A46  ;
+  color: #0F1921 ;
   margin-bottom: 24px;
 }
 
@@ -489,6 +492,22 @@ const updatePayments = (data) => {
   width: 328px;
   height: 272px;
   height: auto;
+}
+.qr-code-space {
+  width: 328px;
+  height: 328px;
+  background:#FFFEFD ;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.qr-code-text {
+  color: #0F1921;
+  font-size: 36px;
+  line-height: 50px;
+  font-weight: 600;
 }
 .qr-instruction {
   margin-top: 12px;
