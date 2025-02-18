@@ -14,7 +14,7 @@
               v-for="number in 8"
               :key="number"
               :class="['player-button', { active: selectedPlayers === number }]"
-              @click="selectedPlayers = number"
+              @click="selectedPlayers = number;qrCodeUrl=null"
             >
               {{ number }}
             </button>
@@ -163,6 +163,7 @@ const generateQRCode = async () => {
 watch(
   () => props.show,
   (newVal) => {
+    qrCodeUrl.value = null
     if (newVal) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -170,6 +171,10 @@ watch(
     }
   }
 );
+
+watch(picked, (newValue) => {
+  qrCodeUrl.value = null
+})
 
 watch(selectedEmail, (newEmail) => {
   if (picked.value === 'sendReceiptToEmail') {
@@ -310,7 +315,7 @@ const updatePayments = (data) => {
 .modal-body {
   display: flex;
   flex-direction: row;
-  padding: 50px 75px 46px 75px;
+  padding: 40px 75px 46px 75px;
   justify-content: space-between;
   align-items: flex-start;
 }
@@ -443,7 +448,7 @@ const updatePayments = (data) => {
   border: none;
   border-radius: 13px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   transition: background-color 0.3s;
 }
 .pay-button:hover {
@@ -503,20 +508,7 @@ const updatePayments = (data) => {
 .checkbox-section input[type="checkbox"] {
   margin-right: 10px;
 }
-.checkbox-section input[type="email"] {
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 400px;
-}
 
-
-
-.input-check {
-  font-size: 26px;
-  padding: 10px 20px;
-  font-weight: 400;
-}
 
 .list {
   display: flex;
@@ -584,7 +576,24 @@ input[type="radio"]:focus {
 
 .input-check.invalid-email:focus {
   border-color: red !important; 
-  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); /* Красная тень */
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); 
+}
+
+.input-check  {
+  margin-top: 10px;
+  outline: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background:  #FFFFFC;
+  padding: 20px 14px;
+  font-size: 16px;
+  font-family: 'Mulish', sans-serif;
+  color: #0f1921;
+  transition: border-color 0.2s;
+  width: 500px;
+  font-size: 26px;
+  padding: 10px 20px;
+  font-weight: 400;
 }
 @media (max-width: 1000px) {
   .modal-content {
