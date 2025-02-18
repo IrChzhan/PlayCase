@@ -32,7 +32,7 @@
                   value="sendReceiptToCaptain"
                   v-model="picked"
                 />
-                Отправить чек на почту регистрации
+                Отправить чек на почту, указанную при регистрации
               </label>
               <label for="two" class="text">
                 <input
@@ -59,7 +59,7 @@
             @click="handlePayment" 
             :disabled="picked === 'sendReceiptToEmail' && !validateEmail(selectedEmail)"
           >
-            Получить QR-код
+            ОПЛАТИТЬ
           </button>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
@@ -85,7 +85,7 @@
             <div class="qr-wrapper">
               <img v-if="qrCodeUrl" :src="qrCodeUrl" alt="QR-код" class="qr-code" />
               <div v-else  class="qr-code-space">
-                <span class="qr-code-text">Здесь будет <br> QR-код для оплаты</span>
+                <span class="qr-code-text">Здесь будет <br> QR-код для <br> оплаты</span>
               </div>
               <img class='sbp' src="@/assets/sbp.png" alt="sbp">
             </div>
@@ -348,6 +348,7 @@ const updatePayments = (data) => {
   padding: 6px;
   width: 100%;
   max-width: 1328px;
+  margin-bottom: 50px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }
@@ -368,7 +369,7 @@ const updatePayments = (data) => {
 }
 
 .title {
-  font-size: 40px;
+  font-size: 36px;
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
   color: #0F1921  ;
@@ -433,7 +434,7 @@ const updatePayments = (data) => {
   border-color: #cc9f33;
 }
 .form-section {
-  width: 711px;
+  width: 761px;
   margin-right: 10px;
 }
 .qr-section {
@@ -505,7 +506,7 @@ const updatePayments = (data) => {
 }
 .qr-code-text {
   color: #0F1921;
-  font-size: 36px;
+  font-size: 32px;
   line-height: 50px;
   font-weight: 600;
 }
