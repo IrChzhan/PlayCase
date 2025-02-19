@@ -5,8 +5,8 @@
     </div>
 
     <div class="menu">
-      <div class="menu-item" v-for="item in menuItems" :key="item.name">
-  <img :src="item.image" alt="" class="menu-image" :class="{ 'small-icon': item.small, 'info_image': item.name === 'Правила' }" @click="item.function" />
+      <div class="menu-item" v-for="item in menuItems" :key="item.name" :class="item.class">
+  <img :src="item.image" alt="" class="menu-image" :class="{ 'small-icon': item.small, 'info_image': item.name === 'Правила', }" @click="item.function" />
   <p>{{ item.name }}</p>
 </div>
       <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
@@ -156,7 +156,7 @@ const menuItems = ref([
   },
   { name: 'Лототрон', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
-  { name: 'Help', image: helpImage, function: openModalHelp, }
+  { name: 'Help', image: helpImage, function: openModalHelp, class: 'help-item',}
 ])
 
 const fetchGame = async () => {
@@ -242,6 +242,10 @@ p {
   -webkit-tap-highlight-color: transparent;
 }
 
+.help-item {
+  margin-left: -20px;
+}
+
 .menu-image {
   width: 111px;
   height: 111px;
@@ -286,8 +290,8 @@ p {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  margin-left: 0px;
-  margin-top: 80px;
+  margin-right: 45px;
+  margin-top: 75px;
   padding: 20px;
   margin-bottom: 0; 
   width: 161px;

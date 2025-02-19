@@ -64,10 +64,10 @@ const closeModal = () => {
   z-index: 200;
 }
 .modal-content {
-  width: 1200px;
-  height: 370px;
+  width: 1430px;
+  height: 720px;
   background-color: #F5F5F5;
-  border-radius: 10px;
+  border-radius: 1.5vw;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   padding: 6px;
@@ -79,25 +79,29 @@ const closeModal = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  font-size: 36px;
-  font-weight: 500;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  height: 22px;
+  text-align: center;
+  padding: 10px 30px;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  margin-bottom: 10px;
+  height: 30px;
 }
 .modal-title {
   flex-grow: 1;
   text-align: center;
   font-weight: 500;
-  font-size: 30px;
+  font-size: 40px;
+  margin-left: 25px;
 }
 .close-button {
   background: none;
   border: none;
   color: white;
-  font-size: 50px;
-  font-weight: 500;
+  font-size: 60px;
+  font-weight: 200;
   cursor: pointer;
   margin-top: -10px;
 }
@@ -106,13 +110,14 @@ const closeModal = () => {
 }
 .modal-body {
   padding: 15px;
-  max-height: 300px;
+  max-height: 720px;
   overflow-y: auto;
 }
 .users-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr); 
   gap: 10px;
+  margin-top: -10px;
 }
 .user-item {
   display: flex;
@@ -120,28 +125,28 @@ const closeModal = () => {
   align-items: center;
   background-color: #1B2A46;
   color: white;
-  padding: 10px 15px;
+  padding: 26px 40px;
   border-radius: 8px;
   font-size: 16px;
   margin-top: 7px;
 }
 .user-name {
   flex-grow: 1;
-  margin-left: 20px;
-  font-size: 25px;
+  margin-left: 30px;
+  font-size: 50px;
 }
 .user-number {
   background-color: white;
-  color: #1B2A46;
-  font-weight: bold;
-  font-size: 30px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border-color: yellow;
+    color: #1B2A46;
+    font-weight: 700;
+    font-size: 39px;
+    width: 95px;
+    height:95px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border-color: yellow;
 }
 .error-message {
   color: red;

@@ -222,7 +222,6 @@ onMounted(() => {
 .sticky-header {
   position: sticky;
   top: 0;
-  background-color: #1c2742;
   z-index: 5;
   width: 100%;
   padding: 20px;
@@ -364,11 +363,11 @@ h1 {
 }
 
 .meal-image {
-  border-radius: 28px;
+  border-radius: 15px;
   height: 230px;
-  margin-top: 5px; 
-  padding-left: 20px; 
-  padding-right: 20px;
+  width: 250px;
+  margin-left: 9px;
+  margin-top: 5px;
 }
 
 .meal-info {
@@ -500,7 +499,6 @@ h1 {
   position: sticky;
   bottom: 0;
   width: 100%;
-  background: #1c2742;
   display: flex;
   justify-content: center;
   align-items: center;
