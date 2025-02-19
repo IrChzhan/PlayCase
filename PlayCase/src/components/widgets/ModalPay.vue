@@ -32,7 +32,7 @@
                   value="sendReceiptToCaptain"
                   v-model="picked"
                 />
-                Отправить чек на почту регистрации
+                Отправить чек на почту, указанную при регистрации
               </label>
               <label for="two" class="text">
                 <input
@@ -59,7 +59,7 @@
             @click="handlePayment" 
             :disabled="picked === 'sendReceiptToEmail' && !validateEmail(selectedEmail)"
           >
-            Получить QR-код
+            ОПЛАТИТЬ
           </button>
           <dogovor-modal v-if="showDogovor" @close="toggleModal('dogovor', false)" />
           <policy-modal v-if="showPolitica" @close="toggleModal('politica', false)" />
@@ -85,7 +85,7 @@
             <div class="qr-wrapper">
               <img v-if="qrCodeUrl" :src="qrCodeUrl" alt="QR-код" class="qr-code" />
               <div v-else  class="qr-code-space">
-                <span class="qr-code-text">Здесь будет <br> QR-код для оплаты</span>
+                <span class="qr-code-text">Здесь будет <br> QR-код для <br> оплаты</span>
               </div>
               <img class='sbp' src="@/assets/sbp.png" alt="sbp">
             </div>
@@ -156,7 +156,7 @@ function handlePayment() {
 const generateQRCode = async () => {
   try {
     const email = picked.value === 'sendReceiptToCaptain' ? emailTeam.value : selectedEmail.value;
-    const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email });
+    const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email, count:selectedPlayers.value  });
     qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
   } catch (error) {
     console.error('Ошибка генерации QR-кода:', error);
@@ -347,6 +347,7 @@ const updatePayments = (data) => {
   border-radius: 16px;
   padding: 6px;
   width: 100%;
+  margin-top: 72px;
   max-width: 1328px;
   position: relative;
   font-family: 'Mulish', sans-serif;
@@ -364,15 +365,15 @@ const updatePayments = (data) => {
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
   color: #0F1921 ;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .title {
-  font-size: 40px;
+  font-size: 36px;
   font-family: 'Mulish',sans-serif;
   font-weight: 500;
   color: #0F1921  ;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .price-info {
@@ -402,7 +403,7 @@ const updatePayments = (data) => {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   margin-top: 15px;
   margin-right: 160px;
   width: 100%;
@@ -433,7 +434,7 @@ const updatePayments = (data) => {
   border-color: #cc9f33;
 }
 .form-section {
-  width: 711px;
+  width: 761px;
   margin-right: 10px;
 }
 .qr-section {
@@ -505,7 +506,7 @@ const updatePayments = (data) => {
 }
 .qr-code-text {
   color: #0F1921;
-  font-size: 36px;
+  font-size: 32px;
   line-height: 50px;
   font-weight: 600;
 }
@@ -518,7 +519,7 @@ const updatePayments = (data) => {
   margin-bottom: 13x;
 }
 .checkbox-section {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .checkbox-section label {
   display: block;
