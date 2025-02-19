@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import Notification from "@/admin/Notification.vue";
@@ -152,6 +152,18 @@ const fetchPayments = async () => {
   }
 };
 
+let timeoutId = null
+
+const scheduleNextFetch = () => {
+  const randomDelay = Math.floor(Math.random() * 3) + 1; 
+  const delay = 5000 + randomDelay * 1000; 
+
+  timeoutId = setTimeout(async () => {
+    await fetchPayments();
+    scheduleNextFetch(); 
+  }, delay);
+};
+
 const saveChanges = async (team) => {
   try {
     const updatedData = {
@@ -202,7 +214,16 @@ const updateTotal = (team) => {
     team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount;
 };
 
-onMounted(fetchPayments);
+onMounted(() => {
+  fetchPayments(); 
+  scheduleNextFetch(); 
+});
+
+onUnmounted(() => {
+  if (timeoutId) {
+    clearTimeout(timeoutId); 
+  }
+});
 </script>
 
 <style scoped>
