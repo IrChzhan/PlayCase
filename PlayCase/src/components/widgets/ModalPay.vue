@@ -156,7 +156,7 @@ function handlePayment() {
 const generateQRCode = async () => {
   try {
     const email = picked.value === 'sendReceiptToCaptain' ? emailTeam.value : selectedEmail.value;
-    const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email });
+    const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email, count:selectedPlayers.value  });
     qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
   } catch (error) {
     console.error('Ошибка генерации QR-кода:', error);

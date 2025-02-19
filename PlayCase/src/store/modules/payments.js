@@ -22,6 +22,7 @@ const getters = {
   getNotifications: (state) => state.notifications,
 };
 
+
 const actions = {
   async fetchPayments({ commit }, gameId) {
     try {
@@ -38,8 +39,11 @@ const actions = {
     }
   },
 
-  async createPayment({ commit }, { amount, email }) {
+  async createPayment({ commit }, { amount, email, count }) {
     try {
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/team`);
+      const f = r.data
+       
       const paymentData = {
         amount: {
           value: `${amount}.00`,
@@ -72,7 +76,12 @@ const actions = {
         },
         description: `${generateOrderNumber()}`,
         capture: true,
-        save_payment_method: false
+        save_payment_method: false,
+        metadata: {
+          gameId:f.gameId,
+          teamId:f.id,
+          count: count
+        }
       };
       const response = await fetch('https://igra-pads.ru/api/payments', {
         method: 'POST',
