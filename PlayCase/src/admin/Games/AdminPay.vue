@@ -166,6 +166,7 @@ const scheduleNextFetch = () => {
 
 const saveChanges = async (team) => {
   try {
+    
     const updatedData = {
       id: team.id,
       teamId: team.teamId,

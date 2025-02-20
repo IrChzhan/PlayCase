@@ -105,7 +105,7 @@ const actions = {
   },
   async updatePayment({ dispatch }, { gameId, teamId, data }) {
     try {
-      const { paidByQr, paidByCard, paidByCash, actualParticipantsCount } = data;
+      const { paidByQr, paidByCard, paidByCash, actualParticipantsCount, prepaidCount } = data;
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/updatePaid`, {},
         {
@@ -113,6 +113,7 @@ const actions = {
             paidByQr,
             paidByCard,
             paidByCash,
+            prepaidCount,
             actualParticipantsCount
           },
         },
