@@ -73,10 +73,6 @@
               <li class="link-li">
                 <a class="link" @click="toggleModal('politica', true)">политика конфиденциальности</a>
               </li>
-              <span class="line"></span>
-              <li class="link-li">
-                <a class="link" @click="toggleModal('info', true)">реквизиты</a>
-              </li>
             </ul>
           </div>
         </div>

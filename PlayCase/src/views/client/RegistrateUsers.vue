@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" class="modal-overlay" @click.self="closeModal">
+  <div v-if="show" class="modal-overlayd" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
         <span class="modal-title">СПИСОК УЧАСТНИКОВ</span>
@@ -50,14 +50,12 @@ const closeModal = () => {
 
 
 <style scoped>
-.modal-overlay {
+.modal-overlayd {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,7 +124,7 @@ const closeModal = () => {
   background-color: #1B2A46;
   color: white;
   padding: 26px 40px;
-  border-radius: 8px;
+  border-radius: 1.5vw;
   font-size: 16px;
   margin-top: 7px;
 }

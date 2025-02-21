@@ -20,7 +20,7 @@
               <div class="checkbox-section">
                 <label class="checkbox-container">
                   <input type="checkbox" :class="{checkboxError: checkboxError}" id="agree" v-model="formData.agree"/>
-                  <span class="el-check">Нажимая на кнопку, вы соглашаетесь с <br><span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span></br></span>
+                  <span class="el-check">Нажимая на кнопку, вы соглашаетесь с <br><span class="policy-link" @click="toggleModal('politica', true)">политикой конфиденциальности</span></br></span>
                 </label>
               </div>
 
@@ -359,7 +359,7 @@ input::placeholder { font-size: 24px; }
   border-radius: 8px;
   right: 5%;
   bottom: 10%;
-  font-size: 18px;
+  font-size: 24px;
 }
 .btn:hover {
   background: #d1aa58;
@@ -413,7 +413,6 @@ input[type='checkbox'] {
   justify-content: center;
   margin-bottom: 5px;
   margin-top: 5px;
-  margin-left: 35px;
 }
 
 .checkbox-container {
@@ -430,7 +429,7 @@ input[type='checkbox'] {
   border: none;
   border-radius: 30px;
   padding: 15px 10px;
-  font-size: 18px;
+  font-size: 24px;
   cursor: pointer;
   margin-left: 70px;
   margin-top: -30px;

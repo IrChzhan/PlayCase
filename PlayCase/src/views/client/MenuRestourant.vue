@@ -504,14 +504,13 @@ h1 {
   align-items: center;
   padding: 10px 0;
   z-index: 10;
-  height: 132px;
+  height: 135px;
 }
 
 .home-button {
   width: 120px;
   height: 120px;
   cursor: pointer;
-  margin-top: -20px;
 }
 
 .scroll-arrow {

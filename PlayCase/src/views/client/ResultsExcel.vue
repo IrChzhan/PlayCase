@@ -139,15 +139,16 @@ h1 {
   position: sticky;
   top: 0;
   z-index: 1;
+  font-size: 22px;
 }
 
 .results-table tbody {
   display: block;
-  max-height: 720px; /* Ограничение высоты для прокрутки */
-  overflow-y: auto; /* Вертикальная прокрутка */
+  max-height: 720px; 
+  overflow-y: auto; 
   overflow-x: hidden;
   width: 100%;
-  -webkit-overflow-scrolling: touch; /* Улучшает прокрутку на iOS */
+  -webkit-overflow-scrolling: touch; 
 }
 
 .results-table {
@@ -184,7 +185,7 @@ thead{
 }
 
 .no-results {
-  font-size: 1rem;
+  font-size: 32px;
   font-weight: bold;
   color: #1B2A46;
   background-color: white;
