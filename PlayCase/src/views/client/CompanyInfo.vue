@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-overlay" @click.self="$emit('close')">
+  <div class="modal-overlayd" @click.self="$emit('close')">
     <div class="modal-content">
       <button class="close-button" @click="$emit('close')">&times;</button>
       <div class="modal-scrollable">
@@ -25,12 +25,13 @@ const props = defineProps({
 </script>
 
 <style scoped>
-.modal-overlay {
+.modal-overlayd {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  backdrop-filter: blur(8px);
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -69,7 +70,7 @@ const props = defineProps({
 
 p {
   margin-bottom: 10px;
-  font-size: 18px;
+  font-size: 20px;
   color: #0F1921;
   text-align: left; 
 }

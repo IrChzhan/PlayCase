@@ -19,8 +19,8 @@
 
               <div class="checkbox-section">
                 <label class="checkbox-container">
-                  <input type="checkbox" id="agree" v-model="formData.agree" required />
-                  <span>Нажимая на кнопку, вы соглашаетесь с <br><span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span></br></span>
+                  <input type="checkbox" :class="{checkboxError: checkboxError}" id="agree" v-model="formData.agree"/>
+                  <span class="el-check">Нажимая на кнопку, вы соглашаетесь с <br><span class="policy-link" @click="toggleModal('politica', true)">политикой обработки персональных данных</span></br></span>
                 </label>
               </div>
 
@@ -47,19 +47,15 @@
         </div>
       </div>
     </div>
-
-    <div class="modal-overlay" v-if="showSuccessModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <span>Результат</span>
-          <button class="close-button" @click="closeSuccessModal">×</button>
-        </div>
-        <div class="modal-body success-body">
-          <p class="success-title">Ваш номер:</p>
-          <p class="success-number"><strong>{{ successNumber }}</strong></p>
-        </div>
-      </div>
+    <div class="modal-overlay" v-if="showSuccessModal" @click.self="closeSuccessModal">
+      <div class="modal-res" >
+          <p class="modal-success-title">Ваш номер:<br/></p>
+          
+          <p class="modal-success-title"><strong>{{ successNumber }}</strong></p>
+          <button class="close-button-v" @click="closeSuccessModal"><img class="image" src="@/assets/CloseImage.png" alt="closeImage"></button>
     </div>
+    </div>
+    
 
     <RegistrateUsers v-if="showRegistrateUsers" :show="showRegistrateUsers" @close="toggleModal('registrateUsers', false)" />
     <PolicyModal v-if="showPolitica" @close="toggleModal('politica', false)" />
@@ -102,6 +98,7 @@ const formData = ref({
 const emailError = ref('');
 const phoneError = ref('');
 const nameError = ref('');
+const checkboxError = ref(false);
 const showSuccessModal = ref(false);
 const successNumber = ref(null);
 
@@ -109,6 +106,7 @@ const submitForm = async () => {
     emailError.value = '';
     phoneError.value = '';
     nameError.value = '';
+    checkboxError.value=false;
 
     const cleanPhone = formData.value.phone.replace(/\D/g, '');
 
@@ -126,6 +124,11 @@ const submitForm = async () => {
 
     if (nameError.value || emailError.value || phoneError.value) {
         return;
+    }
+
+    if (!formData.value.agree) {
+      checkboxError.value=true;
+      return
     }
 
     try {
@@ -155,7 +158,6 @@ const submitForm = async () => {
 
 const closeSuccessModal = () => {
   showSuccessModal.value = false;
-  props.closeModal();
 };
 
 const phoneMask = (value) => {
@@ -191,6 +193,46 @@ watch(
 
 
 <style scoped>
+.el-check {
+  padding-left: 30px;
+}
+.modal-success-title{
+  font-family: 'Mulish', sans-serif;
+  font-weight: 400;
+  font-size: 42px;
+  text-align: center;
+}
+.modal-res{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 48px 0 58px 0;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-family: 'Mulish', sans-serif;
+  position: relative;
+}
+.checkboxError {
+  color: red;
+  background: red;
+}
+.close-button-v {
+  width: 21px;
+  height: 21px;
+  background: none;
+  border: none;
+  font-weight: 500;
+  color: #3A4C6E;
+  cursor: pointer;
+  position: absolute;
+  top: 21px;
+  right: 26px;
+}
 
 .modal-header {
   background-color: #1B2A46;
@@ -425,7 +467,6 @@ input[type='checkbox'] {
 
 .rules-section p {
   margin-top: 1.2vw;
-  font-size: clamp(14px, 1.7vw, 16px);
   color: #0f1921;
 }
 
@@ -438,6 +479,7 @@ input[type='checkbox'] {
   color: #cc9f33;
   font-size: 24px;
   font-style: italic;
+  font-weight: 400;
   margin-top: 1.2vw;
   margin-bottom: 3px;
   text-align: center;
@@ -488,6 +530,55 @@ li {
 
 .policy-link:hover {
   color: #b68d2f;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-container input[type="checkbox"] {
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+}
+
+
+.checkbox-container input[type="checkbox"] + span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 17px;
+  height: 17px;
+  border: 2px solid #969696;
+  border-radius: 4px;
+  background-color: white;
+  transition: border-color 0.3s;
+}
+
+.checkbox-container input[type="checkbox"]:checked + span::before {
+  background-color: #2196F3;
+  border-color: #2196F3;
+}
+
+.checkbox-container input[type="checkbox"].checkboxError + span::before {
+  border-color: red;
+}
+
+.checkbox-container input[type="checkbox"]:checked + span::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 @media (max-width: 768px) {

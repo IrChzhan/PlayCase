@@ -154,7 +154,7 @@ const menuItems = ref([
       router.push({ name: 'RestourantMenu' })
     },
   },
-  { name: 'Лототрон', image: lotteryImage, function: openModalLottery },
+  { name: 'LUCKYTRON', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
   { name: 'Help', image: helpImage, function: openModalHelp, class: 'help-item',}
 ])
@@ -202,11 +202,11 @@ onMounted(()=>{
 .team-name {
     color: white;
     font-family: 'Mulish', sans-serif;
-    font-weight: bold;
+    font-weight: 800;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
-    font-size: clamp(32px, 8vw, 50px);
+    font-size: 65px;
     padding-bottom: 5px; 
 }
 

@@ -6,9 +6,9 @@
         <button class="close-button" @click="closeModal">×</button>
       </div>
       <div class="modal-body">
-        <p>Вас ждут <b class="seven">7 раундов</b> с перерывами после 3 и 6 раундов.</p>
+        <p class="text">Вас ждут <b class="seven">7 раундов</b> с перерывами после 3 и 6 раундов.</p>
         <br>
-        <p>
+        <p class="text">
           После каждого вопроса участники команды совещаются и пишут ответ на бланках, которые лежат на столах.
           Бланки необходимо сдавать после каждого раунда. Всего за игру можно набрать максимум <b>1000 баллов</b>.
         </p>
@@ -28,13 +28,14 @@
         </div>
 
         <br>
-        <p>На наших играх запрещено пользоваться электронными устройствами, поэтому не забудьте отложить их на время вопросов.</p>
+        <p class="text">На наших играх запрещено пользоваться электронными устройствами, поэтому не забудьте отложить их на время вопросов.</p>
+        <br >
+        <p class="text">Если у вас будут появляться вопросы перед игрой или в течение неё, не стесняйтесь задавать их нашим хелперам.</p>
         <br>
-        <p>Если у вас будут появляться вопросы перед игрой или в течение неё, не стесняйтесь задавать их нашим хелперам.</p>
-        <p class="highlighted-text">
+        <p class="highlighted-text text">
           Ни в коем случае <b>нельзя забывать вкусно есть и пить во время игры!</b>
         </p>
-        <p>Меню можно посмотреть прямо на этом планшете или попросить у официанта.</p>
+        <p class="text">Меню можно посмотреть прямо на этом планшете или попросить у официанта.</p>
       </div>
     </div>
   </div>
@@ -182,7 +183,7 @@ h3 {
   padding: 5px;
   padding: 6px;
   max-width: 1433px;
-  height: 820px;
+  height: 914px;
   width: 95%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   font-family: 'Mulish', sans-serif;
@@ -231,7 +232,7 @@ h3 {
 }
 
 .modal-body {
-  padding: 50px;
+  padding: 60px 80px 50px 80px;
   color: #333;
   font-size: 26px;
 }
@@ -261,12 +262,17 @@ h3 {
   cursor: pointer;
 }
 
+.highlighted-text b {
+  color: #1c2b4b;
+  font-weight: bold;
+}
+
 .rounds-list a:hover {
   text-decoration: underline;
 }
 
 .round-description {
-  width: 450px;
+  width: 580px;
   background: #ffffff; 
   padding: 15px;
   border-radius: 15px;
@@ -274,4 +280,13 @@ h3 {
   border: 2px solid #1c2b4b; 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
 }
+
+.text {
+  font-family: "Mulish",sans-serif;
+  font-size: 26.32px;
+  font-weight: 400;
+  line-height: 33.03px;
+  color: #0F1921;
+}
+
 </style>

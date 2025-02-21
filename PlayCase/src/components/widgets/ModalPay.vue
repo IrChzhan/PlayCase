@@ -348,7 +348,7 @@ const updatePayments = (data) => {
   padding: 6px;
   width: 100%;
   margin-top: 72px;
-  max-width: 1328px;
+  max-width: 1430px;
   position: relative;
   font-family: 'Mulish', sans-serif;
 }

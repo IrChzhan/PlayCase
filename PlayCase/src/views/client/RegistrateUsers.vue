@@ -70,7 +70,7 @@ const closeModal = () => {
   border-radius: 1.5vw;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  padding: 6px;
+  padding: 7px;
   font-family: 'Mulish', sans-serif;
 }
 .modal-header {

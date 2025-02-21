@@ -318,12 +318,12 @@ h1 {
 }
 
 .category-filters button.active {
-  background-color: #ffa726;
+  background-color: #C59216;
   color: white;
 }
 
 .category-filters button:hover {
-  background-color: #ffc107;
+  background-color: #C59216;
 }
 
 .meals-scrollable {
@@ -504,14 +504,14 @@ h1 {
   align-items: center;
   padding: 10px 0;
   z-index: 10;
-  height: 35px;
+  height: 111px;
 }
 
 .home-button {
   width: 120px;
   height: 120px;
   cursor: pointer;
-  margin-top: -80px;
+  margin-top: -20px;
 }
 
 .scroll-arrow {
@@ -523,7 +523,7 @@ h1 {
 }
 
 .scroll-arrow.disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -536,7 +536,7 @@ h1 {
 }
 
 .category-filters button.active {
-  background-color: #ffa726;
+  background-color: #C59216;
   color: white;
 }
 
@@ -554,11 +554,11 @@ h1 {
 }
 
 .category-filters button.active {
-  background-color: #ffa726;
+  background-color: #C59216;
   color: white;
 }
 
 .category-filters button:hover {
-  background-color: #ffc107;
+  background-color: #C59216;
 }
 </style>

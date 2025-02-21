@@ -11,7 +11,7 @@
   border-radius: 8px;
   background:  #FFFFFC;
   padding: 20px 14px;
-  font-size: 16px;
+  font-size: 20px;
   font-family: 'Mulish', sans-serif;
   color: #0f1921;
   transition: border-color 0.2s;
