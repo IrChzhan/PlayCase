@@ -504,7 +504,7 @@ h1 {
   align-items: center;
   padding: 10px 0;
   z-index: 10;
-  height: 111px;
+  height: 132px;
 }
 
 .home-button {
