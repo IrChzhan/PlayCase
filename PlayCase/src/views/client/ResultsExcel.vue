@@ -35,7 +35,7 @@
       </tbody>
     </table>
   </div>
-    <img src="@/assets/house_light.png" class="home-button" @click="goToMenuApp" />
+    <img src="@/assets/House_04.png" class="home-button" @click="goToMenuApp" />
   </div>
 </template>
 
@@ -193,10 +193,10 @@ thead{
 }
 
 .home-button {
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   position: fixed;
-  bottom: 10px;
+  bottom: 20px;
   cursor: pointer;
 }
 </style>

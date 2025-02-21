@@ -19,7 +19,7 @@
       </div>
       <div class="container_down_menu">
         <img
-          src="../../assets/House_01.png"
+          src="../../assets/House_04.png"
           class="house-image"
           width="80"
           @click="goToMenuApp"
@@ -126,8 +126,8 @@ onMounted(() => {
   top: 270px;
   left: 50%;
   transform: translateX(-50%);
-  width: 150px;
-  height: 150px;
+  width: 110px;
+  height: 110px;
 }
 
 .right-corner {

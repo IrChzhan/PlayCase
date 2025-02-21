@@ -69,7 +69,7 @@
       </div>
     </div>
     <div class="home-button-container">
-      <img src="@/assets/House_01.png" alt="Домой" class="home-button" @click="goToMenuApp" />
+      <img src="@/assets/House_04.png" alt="Домой" class="home-button" @click="goToMenuApp" />
     </div>
   </div>
 </template>
@@ -508,8 +508,8 @@ h1 {
 }
 
 .home-button {
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   cursor: pointer;
 }
 
