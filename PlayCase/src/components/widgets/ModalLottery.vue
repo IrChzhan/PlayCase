@@ -38,8 +38,9 @@
               <li>Победитель определяется случайным образом. Участник, чей номер достал ведущий, получает приз.</li>
             </ul>
             <p class="lottery-greeting">Посмотреть номера участников своей команды можно <span class="yellow-text" @click.stop="toggleModal('registrateUsers', true)">тут</span>.</p>
-            <br>
-            <br>
+            <div class="btn-con">
+              <button @click.stop="toggleModal('registrateUsers', true)" class="btn">Список участников</button>
+            </div>
           </div>
         </div>
       </div>
