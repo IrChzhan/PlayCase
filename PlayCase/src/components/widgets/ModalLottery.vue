@@ -29,20 +29,17 @@
           </div>
 
           <div class="rules-section">
-            <h2>Правила проведения лотереи</h2>
+            <h2>Правила участия</h2>
             <ul>
-              <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
-              <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
+              <li>LUCKYTRON проходит после 7-го раунда и даёт возможность каждому участнику команды побороться за дополнительные призы.</li>
+              <li>Для участия необходимо зарегистрироваться до начала 7-го раунда, заполнив соответствующую форму.</li>
               <li>Каждый участник может зарегистрироваться <span class="special-el">только один раз</span>.</li>
-              <li>Победителя определяет генератор случайных чисел.</li>
-              <li>Призы не подлежат обмену на деньги и возврату.</li>
+              <li>После регистрации каждый участник получает свой индивидуальный номер.</li>
+              <li>Победитель определяется случайным образом. Участник, чей номер достал ведущий, получает приз.</li>
             </ul>
-            <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
+            <p class="lottery-greeting">Посмотреть номера участников своей команды можно <span class="yellow-text" @click.stop="toggleModal('registrateUsers', true)">тут</span>.</p>
             <br>
             <br>
-            <div class="btn-con">
-              <button @click.stop="toggleModal('registrateUsers', true)" class="btn">Список участников</button>
-            </div>
           </div>
         </div>
       </div>
@@ -456,7 +453,7 @@ input[type='checkbox'] {
   list-style-type: disc;
   padding-left: 2.5vw;
   color: #0f1921;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.6;
 }
 
@@ -476,7 +473,7 @@ input[type='checkbox'] {
 
 .lottery-greeting {
   color: #cc9f33;
-  font-size: 24px;
+  font-size: 20px;
   font-style: italic;
   font-weight: 400;
   margin-top: 1.2vw;
@@ -524,7 +521,7 @@ input[type='checkbox'] {
 }
 
 li {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .policy-link:hover {
@@ -578,6 +575,12 @@ li {
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+}
+
+.yellow-text {
+  font-weight: bold;
+  color: #CC9F33;
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
