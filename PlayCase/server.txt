@@ -1,0 +1,223 @@
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const http = require('http');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const { fetch } = require('undici');
+const WebSocket = require('ws');
+
+const app = express();
+
+app.use(cors());
+app.options('*', cors());
+app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  if (req.url.match(/\.(png|jpg|jpeg|gif|ico|css|js|svg|mp4|webm)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+  }
+  next();
+});
+
+app.post('/webhook', async (req, res) => {
+    try {
+        const event = req.body;
+        console.log('Received webhook:', event);
+
+        if (event.type === 'notification') {
+            const object = event.object;
+
+            switch (object.status) {
+                case 'waiting_for_capture':
+                    console.log(`Payment waiting for capture: ${object.id}`);
+                    broadcastToClients('payment.waiting_for_capture', object);
+                    break;
+                case 'succeeded':
+                    console.log(`Payment succeeded: ${object.id}`);
+                    broadcastToClients('payment.succeeded', object);
+                    console.log(object);
+                    const authUrl = 'https://back.igra-pads.ru/v1/authorization';
+                    const authData = {
+                        username: "superadmin",
+                        password: "password"
+                    };
+
+                    const authResponse = await fetch(authUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(authData),
+                    });
+
+                    if (!authResponse.ok) {
+                        throw new Error(`Ошибка авторизации: ${authResponse.status}`);
+                    }
+
+                    const authResult = await authResponse.json();
+                    const token = authResult.accessToken;
+                    console.log(token);
+                     const paymentsUrl = `https://back.igra-pads.ru/v1/game/${object.metadata.gameId}/payments`;
+
+                    const paymentsResponse = await fetch(paymentsUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+
+                    if (!paymentsResponse.ok) {
+                        throw new Error(`Ошибка при получении данных о платежах: ${paymentsResponse.status}`);
+                    }
+
+                    const paymentsData = await paymentsResponse.json();
+                    console.log('Текущие данные о платежах:', paymentsData);
+
+                    const teamData = paymentsData.find(team => team.teamId === object.metadata.teamId);
+
+                    if (!teamData) {
+                        throw new Error(`Данные для команды с teamId ${teamId} не найдены`);
+                    }
+
+                    const currentPaidByQr = Number(teamData.paidByQr) || 0;
+                const qr = currentPaidByQr + Number(object.metadata.count);
+                     const updateUrl = `https://back.igra-pads.ru/v1/game/${object.metadata.gameId}/teams/${object.metadata.teamId}/updatePaid?paidByQr=${qr}`;
+
+                    const updateResponse = await fetch(updateUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        }
+                    });
+
+                    if (!updateResponse.ok) {
+                        throw new Error(`Ошибка при обновлении данных: ${updateResponse.status}`);
+                    }
+
+                    const updateResult = await updateResponse.json();
+                    console.log('Данные обновлены:', updateResult);
+                    break;
+                case 'canceled':
+                    console.log(`Payment canceled: ${object.id}`);
+                    broadcastToClients('payment.canceled', object);
+                    break;
+                default:
+                    console.log(`Unknown payment status: ${object.status}`);
+            }
+
+            if (object.payment_method && object.payment_method.type === 'refund' && object.status === 'succeeded') {
+                console.log(`Refund succeeded: ${object.id}`);
+                broadcastToClients('refund.succeeded', object);
+            }
+        }
+
+        res.status(200).send('Webhook received');
+    } catch (error) {
+        console.error('Error processing webhook:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.post('/api/payments', async (req, res) => {
+    try {
+        const paymentData = req.body;
+        const secretKey = 'live_WDBwQwIQGYkH_YHHVNbZs166Nxma1QP3npsZ7DwHYIk';
+        const secretK = 'test_OACU1WVo7VwUy67xYn98z2IGD3FrDgI0p6-gEc3GMUM';
+        const shopId = 488741;
+        const shopI = 1015185;
+        const response = await fetch("https://api.yookassa.ru/v3/payments", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Idempotence-Key": `${Math.random()}`,
+                Authorization: `Basic ${Buffer.from(`${shopId}:${secretKey}`).toString('base64')}`,
+            },
+            body: JSON.stringify(paymentData),
+        });
+        const data = await response.json();
+        res.status(response.status).json(data);
+    } catch (error) {
+        console.error('Ошибка при запросе к YooKassa API:', error);
+        res.status(500).send('Ошибка сервера');
+    }
+});
+
+app.use(express.static(path.join(__dirname, 'dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+const isProduction = true;
+
+let wss = null;
+
+if (isProduction) {
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live/igra-pads.ru/privkey.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/letsencrypt/live/igra-pads.ru/cert.pem', 'utf8');
+    const chain = fs.readFileSync('/etc/letsencrypt/live/igra-pads.ru/chain.pem', 'utf8');
+    const credentials = { key: privateKey, cert: certificate, ca: chain };
+
+    const httpsServer = https.createServer(credentials, app);
+    wss = new WebSocket.Server({ server: httpsServer });
+
+    wss.on('connection', (ws) => {
+        console.log('Client connected');
+
+        ws.on('message', (message) => {
+            console.log(`Received message => ${message}`);
+        });
+
+        ws.on('close', () => {
+            console.log('Client disconnected');
+        });
+    });
+
+    const httpsPort = 443;
+    httpsServer.listen(httpsPort, () => {
+        console.log(`HTTPS Server running on https://igra-pads.ru`);
+    });
+
+    const httpApp = express();
+    httpApp.all('*', (req, res) => {
+        res.redirect(`https://${req.headers.host}${req.url}`);
+    });
+    const httpPort = 80;
+    http.createServer(httpApp).listen(httpPort, () => {
+        console.log('HTTP server redirecting to HTTPS');
+    });
+} else {
+    const port = 3000; // Можно использовать любой порт, например 3000
+    const httpServer = http.createServer(app);
+    wss = new WebSocket.Server({ server: httpServer });
+
+    wss.on('connection', (ws) => {
+        console.log('Client connected');
+
+        ws.on('message', (message) => {
+            console.log(`Received message => ${message}`);
+        });
+
+        ws.on('close', () => {
+            console.log('Client disconnected');
+        });
+    });
+
+    httpServer.listen(port, () => {
+        console.log(`HTTP Server running on http://localhost:${port}`);
+    });
+}
+
+function broadcastToClients(eventType, data) {
+    if (wss) {
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({ eventType, data }));
+            }
+        });
+    }
+}
+
+

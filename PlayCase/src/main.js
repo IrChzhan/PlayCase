@@ -9,15 +9,15 @@ import router from './router'
 
 const app = createApp(App)
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then((registration) => {
-        })
-        .catch((error) => {
-        });
-    });
-  }
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', () => {
+//       navigator.serviceWorker.register('/service-worker.js')
+//         .then((registration) => {
+//         })
+//         .catch((error) => {
+//         });
+//     });
+//   }
 
 app.use(router)
 app.use(store)

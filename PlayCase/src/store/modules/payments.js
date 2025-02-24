@@ -8,7 +8,7 @@ const state = {
 const generateOrderNumber = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
-  const length = 10; // Длина номера заказа
+  const length = 10; 
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     result += characters[randomIndex];
@@ -50,8 +50,11 @@ const actions = {
           currency: "RUB",
         },
         confirmation: {
-          type: "redirect",
+          type: "qr",
           return_url: "https://igra-pads.ru/success",
+        },
+        "payment_method_data": {
+          "type": "sbp"
         },
         receipt: {
           customer: {
@@ -91,8 +94,8 @@ const actions = {
         body: JSON.stringify(paymentData),
       });
       const data = await response.json();
-      if (data.confirmation && data.confirmation.confirmation_url) {
-        return data.confirmation.confirmation_url;
+      if (data.confirmation && data.confirmation.confirmation_data) {
+        return data.confirmation.confirmation_data;
       } else {
         console.error('Ошибка при создании платежа:', data);
       }

@@ -10,19 +10,23 @@
         <div v-if="error" class="error-message">
           {{ error }}
         </div>
-        <div v-else class="users-list">
-          <div v-for="i in 8" :key="i" class="user-item">
-            <div class="number-container">
-              <span class="user-number">{{ i <= registeredUsers.length ? i : '' }}</span>
+        <div v-else>
+          <div v-if="registeredUsers.length === 0" class="no-users">
+            Регистраций пока нет
+          </div>
+          <div v-else class="users-list" :class="{ 'has-scroll': registeredUsers.length > 8 }">
+            <div v-for="(user, index) in registeredUsers" :key="user.id" class="user-item">
+              <div class="number-container">
+                <span class="user-number">{{ index + 1 }}</span>
+              </div>
+              <p class="user-name">{{ user.name }}</p>
             </div>
-            <p class="user-name">{{ i <= registeredUsers.length ? registeredUsers[i - 1].name : '' }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { computed, onMounted, ref, defineProps, defineEmits } from 'vue';
 import { useStore } from 'vuex';
@@ -109,7 +113,6 @@ const closeModal = () => {
 .modal-body {
   padding: 15px;
   max-height: 720px;
-  overflow-y: auto;
 }
 .users-list {
   display: grid;
@@ -117,13 +120,17 @@ const closeModal = () => {
   gap: 10px;
   margin-top: -10px;
 }
+.users-list.has-scroll {
+  overflow-y: auto;
+  max-height: 600px;
+}
 .user-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #1B2A46;
   color: white;
-  padding: 26px 40px;
+  padding: 20px 40px;
   border-radius: 1.5vw;
   font-size: 16px;
   margin-top: 7px;
@@ -153,8 +160,14 @@ const closeModal = () => {
   text-align: center;
 }
 .no-users {
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  font-size: 14px;
-  color: #555;
+  font-size: 36px;
+  color: black;
+  font-weight: 800;
+  margin-top: 260px;
 }
 </style>
