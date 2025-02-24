@@ -38,13 +38,17 @@ const store = useStore();
 const registeredUsers = computed(() => store.state.lottery.registrations);
 const error = ref('');
 
-onMounted(async () => {
+const get = async () => {
   try {
     await store.dispatch('lottery/fetchRegistrations');
   } catch (err) {
     console.error('Ошибка при загрузке зарегистрированных пользователей:', err);
     error.value = 'Произошла ошибка при загрузке данных.';
   }
+}
+
+onMounted(() =>{
+  get();
 });
 
 const closeModal = () => {
