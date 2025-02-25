@@ -4,7 +4,7 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <span class="lottery_text">ЛОТЕРЕЯ</span>
+          <span class="lottery_text">LUCKYTRON</span>
           <button class="close-button" @click="closeModal">×</button>
         </div>
 
@@ -192,7 +192,7 @@ watch(
 
 <style scoped>
 .el-check {
-  padding-left: 30px;
+  padding-left: 45px;
 }
 .modal-success-title{
   font-family: 'Mulish', sans-serif;
@@ -549,8 +549,8 @@ li {
   position: absolute;
   left: 0;
   top: 8px;
-  width: 17px;
-  height: 17px;
+  width: 25px;
+  height: 25px;
   border: 2px solid #969696;
   border-radius: 4px;
   background-color: white;
@@ -569,10 +569,10 @@ li {
 .checkbox-container input[type="checkbox"]:checked + span::after {
   content: "";
   position: absolute;
-  left: 7px;
+  left: 9px;
   top: 10px;
-  width: 5px;
-  height: 10px;
+  width: 10px;
+  height: 14px;
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);

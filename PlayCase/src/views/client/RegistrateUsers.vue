@@ -17,7 +17,7 @@
           <div v-else class="users-list" :class="{ 'has-scroll': registeredUsers.length > 8 }">
             <div v-for="(user, index) in registeredUsers" :key="user.id" class="user-item">
               <div class="number-container">
-                <span class="user-number">{{ index + 1 }}</span>
+                <span class="user-number">{{ user.sequenceNumber }}</span>
               </div>
               <p class="user-name">{{ user.name }}</p>
             </div>
@@ -126,7 +126,25 @@ const closeModal = () => {
 }
 .users-list.has-scroll {
   overflow-y: auto;
+  padding-right: 5px;
   max-height: 600px;
+}
+.users-list.has-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.users-list.has-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 5px; 
+}
+
+.users-list.has-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px; 
+}
+
+.users-list.has-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 .user-item {
   display: flex;

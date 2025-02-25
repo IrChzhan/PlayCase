@@ -106,7 +106,7 @@ const goToMenuApp = () => {
   width: 100%;
   border-radius: 15px;
   overflow: hidden; 
-  margin-top: 40px;
+  margin-top: 50px;
 }
 
 h1 {
@@ -144,7 +144,7 @@ h1 {
 
 .results-table tbody {
   display: block;
-  max-height: 720px; 
+  max-height: 815px; 
   overflow-y: auto; 
   overflow-x: hidden;
   width: 100%;
