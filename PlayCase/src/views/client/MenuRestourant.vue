@@ -13,6 +13,9 @@
             />
             <div class="category-filters-wrapper" ref="categoryFiltersWrapper">
               <div class="category-filters" ref="categoryFilters" @scroll="handleScroll">
+                <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">
+                  Все
+                </button>
                 <button
                   v-for="category in categories"
                   :key="category.id"
@@ -21,9 +24,6 @@
                   ref="categoryButtons"
                 >
                   {{ category.name }}
-                </button>
-                <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">
-                  Все
                 </button>
               </div>
             </div>
@@ -389,6 +389,11 @@ h1 {
   font-size: 26px;
   font-weight: 600;
   margin-top: 15px;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical; 
+  overflow: hidden;
 }
 
 .meal-description {

@@ -17,7 +17,7 @@
         <div class="rounds-container">
           <ul class="rounds-list">
             <li v-for="(round, index) in rounds" :key="index">
-              <a href="#" @click.prevent="selectRound(index)"><b>{{ round.title }}</b></a>
+              <a :class="{'hasSelect': selectedRound === index}" href="#" @click.prevent="selectRound(index)"><b>{{ round.title }}</b></a>
             </li>
           </ul>
 
@@ -49,7 +49,7 @@ const props = defineProps({
   closeModal: Function,
 });
 
-const selectedRound = ref(null);
+const selectedRound = ref(0);
 
 const rounds = ref([
   { 
@@ -149,12 +149,6 @@ const selectRound = (index) => {
   selectedRound.value = index;
 };
 
-watch(
-  () => props.show,
-  (newVal) => {
-    if (!newVal) selectedRound.value = null; 
-  }
-);
 </script>
 
 <style scoped>
@@ -270,6 +264,11 @@ h3 {
 .rounds-list a:hover {
   text-decoration: underline;
 }
+
+.hasSelect b {
+  text-decoration: underline
+}
+
 
 .round-description {
   width: 580px;
