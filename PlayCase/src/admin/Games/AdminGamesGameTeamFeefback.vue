@@ -144,7 +144,6 @@ button:hover {
   background-color: #5a6268;
 }
 
-/* Цветовые классы */
 .status-finished {
   background-color: #ffcccc;
 }
@@ -162,5 +161,41 @@ button:hover {
 }
 .btn:hover {
   background: #d1aa58;
+}
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    margin-top: 40px; 
+  }
+
+  table {
+    margin-bottom: 32px; 
+  }
+
+  th, td {
+    padding: 16px; 
+    font-size: 28px; 
+  }
+
+  th {
+    font-size: 28px; 
+  }
+
+  .button-container {
+    gap: 16px; 
+  }
+
+  button {
+    padding: 16px 32px; 
+    font-size: 26px; 
+    border-radius: 8px; 
+  }
+
+  .btn {
+    padding: 16px 32px; 
+    font-size: 26px; 
+    border-radius: 8px; 
+  }
 }
 </style>

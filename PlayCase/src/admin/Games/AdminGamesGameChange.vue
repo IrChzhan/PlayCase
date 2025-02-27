@@ -318,4 +318,49 @@ button:disabled {
   pointer-events: none;
 }
 
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .edit-game {
+    padding: 40px; 
+  }
+
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px;
+  }
+
+  label {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+
+  .old-data {
+    font-size: 28px; 
+    margin-bottom: 20px;
+  }
+
+  .input {
+    padding: 17px; 
+    font-size: 26px; 
+    border-radius: 12px; 
+  }
+
+  .form-actions {
+    gap: 20px; 
+    margin-top: 40px;
+  }
+
+  button {
+    padding: 20px 35px; 
+    font-size: 28px; 
+    border-radius: 12px;
+  }
+
+  .notification {
+    padding: 25px 35px; 
+    font-size: 28px; 
+    border-radius: 12px; 
+  }
+}
+
+
 </style>

@@ -569,5 +569,92 @@ td:last-child:hover {
   border: 1px solid #ccc;
   text-align: left;
 }
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .admin-games {
+    padding: 40px; 
+  }
+
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px;
+  }
+
+  .search-bar {
+    margin-bottom: 40px;
+  }
+
+  .search-input {
+    padding: 15px; 
+    font-size: 26px; 
+  }
+
+  .games-table th,
+  .games-table td {
+    padding: 15px; 
+    font-size: 28px; 
+  }
+
+  .pagination {
+    gap: 20px; 
+    margin-bottom: 40px;
+  }
+
+  .pagination button {
+    padding: 15px 25px; 
+    font-size: 28px; 
+  }
+
+  .add-game {
+    max-width: 600px; 
+  }
+
+  .input {
+    padding: 15px; 
+    font-size: 26px; 
+  }
+
+  .button {
+    padding: 15px 25px; 
+    font-size: 26px; 
+  }
+
+  .games-table th:nth-child(1),
+  .games-table td:nth-child(1) {
+    width: 20%; 
+  }
+
+  .games-table th:nth-child(2),
+  .games-table td:nth-child(2) {
+    width: 10%;
+  }
+
+  .games-table th:nth-child(3),
+  .games-table td:nth-child(3) {
+    width: 20%;
+  }
+
+  .games-table th:nth-child(4),
+  .games-table td:nth-child(4) {
+    width: 20%;
+  }
+
+  .games-table th:nth-child(5),
+  .games-table td:nth-child(5) {
+    width: 15%;
+  }
+  .games-table th:nth-child(6),
+  .games-table td:nth-child(6) {
+    width: 6%;
+  }
+  .pagination span {
+    font-size: 26px;
+  }
+  .icon-setting {
+    width: 50px;
+    height: 50px;
+  }
+}
+
 </style>
 

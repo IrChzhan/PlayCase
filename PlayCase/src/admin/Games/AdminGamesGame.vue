@@ -267,5 +267,28 @@ button.active {
     padding: 0 5px;
   }
 }
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .sidebar {
+    min-width: 20%; 
+    padding: 20px 0; 
+  }
+
+  .sidebar button {
+    padding: 20px 30px; 
+    font-size: 24px; 
+    margin-bottom: 20px; 
+    border-radius: 8px; 
+  }
+
+  .top-bar {
+    padding: 20px 40px; 
+  }
+
+  .top-bar div {
+    font-size: 36px; 
+  }
+}
 </style>
 

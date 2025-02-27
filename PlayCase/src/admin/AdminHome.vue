@@ -140,4 +140,29 @@ body {
   background-color: #ffffff;
   padding: 20px;
 }
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    gap: 60px; 
+  }
+
+  .topbar {
+    padding: 20px 40px; 
+  }
+
+  .topbar-button {
+    font-size: 1.7rem; 
+    padding: 20px 30px; 
+    border-radius: 6px; 
+  }
+
+  .logout-button {
+    font-size: 1.7rem; 
+    padding: 20px 30px; 
+    border-radius: 6px; 
+  }
+
+  .content {
+    padding: 50px; 
+  }
+}
 </style>

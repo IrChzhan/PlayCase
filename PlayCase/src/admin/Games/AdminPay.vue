@@ -375,5 +375,45 @@ button:hover {
   background-color: #f8d7da;
 }
 
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .admin-payments {
+    padding: 40px; 
+  }
+
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px; 
+  }
+
+  .button-container {
+    gap: 20px; 
+  }
+
+  .btn {
+    padding: 15px 30px; 
+    font-size: 32px; 
+    border-radius: 10px; 
+  }
+
+  .payments-table th,
+  .payments-table td {
+    padding: 20px; 
+    font-size: 28px; 
+  }
+
+  .editable-input {
+    width: 150px; 
+    padding: 10px; 
+    font-size: 28px; 
+  }
+
+  button {
+    padding: 15px 30px; 
+    font-size: 32px; 
+    border-radius: 10px; 
+  }
+}
+
 </style>
 
