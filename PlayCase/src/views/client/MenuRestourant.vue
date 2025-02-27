@@ -69,7 +69,7 @@
       </div>
     </div>
     <div class="home-button-container">
-      <img src="@/assets/House_04.png" alt="Домой" class="home-button" @click="goToMenuApp" />
+      <img src="@/assets/House_5.svg" alt="Домой" class="home-button" @click="goToMenuApp" />
     </div>
   </div>
 </template>
@@ -516,6 +516,7 @@ h1 {
   width: 90px;
   height: 90px;
   cursor: pointer;
+  margin-bottom: 25px;
 }
 
 .scroll-arrow {

@@ -19,7 +19,7 @@
       </div>
       <div class="container_down_menu">
         <img
-          src="../../assets/House_04.png"
+          src="../../assets/House_5.svg"
           class="house-image"
           width="80"
           @click="goToMenuApp"

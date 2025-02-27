@@ -208,7 +208,7 @@ watch(
   align-items: center;
   background: #ffffff;
   border-radius: 15px;
-  padding: 48px 0 58px 0;
+  padding: 58px 0 58px 0;
   max-width: 700px;
   width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
