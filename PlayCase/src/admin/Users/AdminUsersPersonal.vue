@@ -327,4 +327,58 @@ td:last-child:hover {
 .user-table th:last-child {
   background: transparent;
 }
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    padding: 20px; 
+    gap: 40px; 
+  }
+
+  .filters input {
+    padding: 20px;
+    font-size: 28px; 
+    border-radius: 8px; 
+  }
+
+  .filters select {
+    padding: 20px; 
+    font-size: 24px; 
+    border-radius: 8px; 
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 20px;
+    font-size: 32px; 
+  }
+
+  .user-table th {
+    font-size: 32px; 
+  }
+
+  button {
+    padding: 20px 40px; 
+    font-size: 24px;
+    border-radius: 8px; 
+  }
+
+  .pagination {
+    gap: 20px; 
+  }
+
+  .create-user {
+    margin-top: 40px;
+  }
+
+  .icon-setting {
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .pagination span {
+    font-size: 28px;
+  }
+}
 </style>
