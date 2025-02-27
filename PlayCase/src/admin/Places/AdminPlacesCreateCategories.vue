@@ -2,7 +2,6 @@
   <div class="container">
     <h1>Создать категорию</h1>
     <form @submit.prevent="addCategory">
-      <small>Старое название: {{ oldName }}</small>
       <div class="form-group">
         <label for="name">Название категории:</label>
         <input
@@ -174,4 +173,46 @@ button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    padding: 40px; 
+  }
+
+  h1 {
+    font-size: 60px; 
+    margin-bottom: 40px; 
+  }
+
+  .form-group {
+    margin-bottom: 40px; 
+  }
+
+  small {
+    font-size: 28px; 
+    margin-bottom: 20px; 
+  }
+
+  label {
+    font-size: 32px; 
+    margin-bottom: 20px; 
+  }
+
+  input {
+    padding: 20px; 
+    font-size: 28px; 
+    border-radius: 12px;
+  }
+
+  button {
+    padding: 20px 40px; 
+    font-size: 32px; 
+    border-radius: 12px; 
+  }
+
+  .form-actions {
+    gap: 20px; 
+  }
+}
+
 </style>

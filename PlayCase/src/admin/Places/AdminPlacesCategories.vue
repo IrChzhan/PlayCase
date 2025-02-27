@@ -237,4 +237,48 @@ onMounted(fetchCategories)
   background-color: #ffffff;
   height: 100%;
 }
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .navbar {
+    min-width: 20%; 
+    padding: 20px; 
+  }
+
+  .add-category-button {
+    padding: 20px 40px; 
+    font-size: 28px; 
+    border-radius: 10px; 
+    margin-top: 20px; 
+  }
+
+  .category-card {
+    padding: 30px; 
+    border-radius: 16px; 
+  }
+
+  .category-card h2 {
+    font-size: 32px; 
+  }
+
+  .no-categories-message {
+    font-size: 20px; 
+    margin-top: 40px; 
+  }
+
+  .content {
+    padding: 0 40px; 
+  }
+
+  .list {
+    gap: 40px;
+  }
+
+  .icon-setting {
+    width: 40px; 
+    height: 40px;
+    margin-bottom: 20px; 
+  }
+}
+
 </style>
