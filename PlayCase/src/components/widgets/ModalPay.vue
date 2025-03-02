@@ -43,6 +43,7 @@
                 />
                 Отправить чек на другой адрес
               </label>
+              <small class="text-error" v-if="!isValidEmail && picked === 'sendReceiptToEmail'">{{emailError }}</small>
               <input
                   v-if="picked === 'sendReceiptToEmail'"
                   type="email"
@@ -57,7 +58,6 @@
           <button 
             class="pay-button" 
             @click="handlePayment" 
-            :disabled="picked === 'sendReceiptToEmail' && !validateEmail(selectedEmail)"
           >
             ОПЛАТИТЬ
           </button>
@@ -110,6 +110,7 @@ const props = defineProps({
 });
 const store = useStore();
 
+const emailError = ref('');
 const emailTeam = ref('');
 const selectedPlayers = ref(1);
 const pricePerPlayer = ref(11);
@@ -136,12 +137,19 @@ function toggleModal(type, value) {
 
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+  const a = re.test(email);
+  return a;
 }
 
-function handlePayment() {
+const handlePayment = () =>  {
   if (picked.value === 'sendReceiptToEmail' && !validateEmail(selectedEmail.value)) {
+
     isValidEmail.value = false;
+
+    if (selectedEmail.value == '') {
+      emailError.value = 'Почта не введена';
+    }
+
     store.dispatch('payments/addNotification', { message: 'Неверный формат email', type: 'error' });
     return;
   }
@@ -163,6 +171,7 @@ watch(
   () => props.show,
   (newVal) => {
     qrCodeUrl.value = null
+    isValidEmail.value=true;
     if (newVal) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -178,6 +187,14 @@ watch(picked, (newValue) => {
 watch(selectedEmail, (newEmail) => {
   if (picked.value === 'sendReceiptToEmail') {
     isValidEmail.value = validateEmail(newEmail);
+    if(newEmail==='') {
+      isValidEmail.value = false
+      emailError.value = 'Почта не введена';
+    } else {
+      if (!isValidEmail.value) {
+        emailError.value = 'Неверный формат email';
+      }
+    }
   }
 });
 
@@ -515,6 +532,8 @@ const updatePayments = (data) => {
   margin-bottom: 13x;
 }
 .checkbox-section {
+  display: flex;
+  flex-direction: column;
   margin-top: 20px;
 }
 .checkbox-section label {
@@ -593,6 +612,12 @@ input[type="radio"]:focus {
 .input-check.invalid-email:focus {
   border-color: red !important; 
   box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); 
+}
+
+.text-error {
+  color: red;
+  font-size: 18px;
+  opacity: 0.7;
 }
 
 .input-check  {

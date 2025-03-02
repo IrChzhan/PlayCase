@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <router-view></router-view>
+  <router-view ></router-view>
   <ModalFeedback
     :show="show" :closeModal="closeModal"
   />
