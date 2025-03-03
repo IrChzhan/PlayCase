@@ -1,6 +1,9 @@
 const CACHE_NAME = 'my-cache-v1'; 
 const urlsToCache = [
 '/', 
+'/src/assets/fon.mp4',
+'/src/assets/fon.webm',
+'/src/assets/fon-poster.webp',
 '/src/assets/a.png',
 '/src/assets/background.jpg',
 '/src/assets/Bad-svg-yellow.svg',
