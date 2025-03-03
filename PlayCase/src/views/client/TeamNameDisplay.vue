@@ -7,7 +7,7 @@
       muted
       playsinline
       preload
-      poster="../../assets//fon-poster.webp"
+      poster="../../assets/fon-poster.webp"
       class="background-video"
     >
       <source src="../../assets/fon.mp4" type="video/mp4">
@@ -65,7 +65,8 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background: #1B2A46;
+  background: url('../../assets/fon-poster.webp') no-repeat center center;
+  background-size: cover;
   justify-content: center;
   position: relative;
 }
