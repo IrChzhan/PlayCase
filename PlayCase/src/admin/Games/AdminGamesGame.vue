@@ -103,6 +103,15 @@ const menuItems = [
     name: 'online',
     roles: ['ADMIN', 'CASHIER', 'MANAGER'],
   },
+  {
+    label: 'Презентация',
+    route: () => {
+      router.push(`/admin/games/${route.params.gameId}/presentation`);
+      selectedMenu.value = 5;
+    },
+    name: 'presentation',
+    roles: ['ADMIN', 'CASHIER', 'MANAGER'],
+  },
 ];
 
 const fetchGameById = async () => {

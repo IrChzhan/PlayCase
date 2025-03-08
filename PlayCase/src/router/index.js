@@ -47,6 +47,7 @@ import Dogovor from '@/views/client/Dogovor.vue'
 import PoliticaPrivacy from '@/views/client/PoliticaPrivacy.vue'
 import ClientWatch from "@/views/ClientWatch.vue";
 import AdminGamesGameOnlineChangeStatus from "@/admin/Games/AdminGamesGameOnlineChangeStatus.vue";
+import AdminGamesGamePresentation from "@/admin/Games/AdminGamesGamePresentation.vue";
 import SuccessfulDeal from "@/views/SuccessfulDeal.vue";
 
 const routes = [{
@@ -265,6 +266,11 @@ const routes = [{
                         path: '/admin/games/:gameId/online',
                         name: 'AdminGamesGameOnline',
                         component: AdminGamesGameOnline,
+                    },
+                    {
+                        path: '/admin/games/:gameId/presentation',
+                        name: 'AdminGamesGamePresentation',
+                        component: AdminGamesGamePresentation,
                     },
                   {
                     path: '/admin/games/:gameId/online/:requestId/changeStatus',
