@@ -182,6 +182,14 @@ export default {
         throw error
       }
     },
+    async getCurrentSlides({commit}) {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/presentation`)
+        return res.data
+      }catch (e) {
+        console.log(e)
+      }
+    },
     logout({ commit }) {
       commit('LOGOUT')
     },
