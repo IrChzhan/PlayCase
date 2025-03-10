@@ -1,17 +1,20 @@
 <template>
   <div v-if="show" class="fullscreen-modal">
     <div class="slides-container">
-      <img :src="currentSlide?.fileUrl" alt="Slide" class="slide-image" />
+      <img v-if="currentSlide" :src="currentSlide?.fileUrl" alt="Slide" class="slide-image" />
+      <div class="empty" v-else>
+        <span class="empty-text">Трансляция скоро начнется</span>
+      </div>
     </div>
     <div class="slides-block">
-      <button class="nav-button" @click="prevSlide" :style="prevButtonStyle">
-        <img src="@/assets/arrow-left-down.svg" alt="ArrowLeft" :style="prevArrowStyle" />
+      <button v-if="currentSlide" class="nav-button" @click="prevSlide" :style="prevButtonStyle">
+        <img src="@/assets/house-arrow-left.svg" alt="ArrowLeft" :style="prevArrowStyle" />
       </button>
       <button class="close-button" @click="closeModal">
         <img src="@/assets/House_5.svg" alt="Домой" class="home-button" />
       </button>
-      <button class="nav-button" @click="nextSlide" :style="nextButtonStyle">
-        <img src="@/assets/arrow-right-up.svg" alt="ArrowRight" :style="nextArrowStyle" />
+      <button v-if="currentSlide" class="nav-button" @click="nextSlide" :style="nextButtonStyle">
+        <img src="@/assets/house-arrow-right.svg" alt="ArrowRight" :style="nextArrowStyle" />
       </button>
     </div>
   </div>
@@ -60,8 +63,10 @@ const client = new Client({
   brokerURL: "wss://back.igra-pads.ru/ws",
   reconnectDelay: 5000,
   onConnect: () => {
+    console.log(id.value, 'presa')
     client.subscribe(`/queue/game/${id.value}/activeSlides`, (message) => {
       const parsedMessage = JSON.parse(message.body);
+      console.log(parsedMessage)
       if (parsedMessage.type === "GameActiveSlidesWsMsg") {
         slides.value = parsedMessage.payload;
         if (slides.value.length > 0 && !currentSlide.value) {
@@ -70,8 +75,9 @@ const client = new Client({
       }
     });
 
-    client.subscribe(`/queue/admin/game/${id.value}`, (message) => {
+    client.subscribe(`/queue/game/${id.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
+      console.log(parsedMessage)
       if (parsedMessage.type === "GameSlideUpdatedWsMsg") {
         const updatedSlide = parsedMessage.payload;
         const index = slides.value.findIndex((slide) => slide.id === updatedSlide.id);
@@ -127,23 +133,37 @@ const fetchPresentation = async () => {
 onMounted(async () => {
   await fetchCurrentUser();
   if (id.value) {
-    client.activate();
+    await client.activate();
     await fetchPresentation();
   }
 });
 
-onBeforeUnmount(() => {
-  client.deactivate();
+onBeforeUnmount( async () => {
+  await client.deactivate();
 });
 
-watch(() => props.show, (newVal) => {
+watch(() => props.show, async (newVal) => {
   if (newVal && id.value) {
-    client.activate();
+    await client.activate();
   }
 });
 </script>
 
 <style scoped>
+.empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
+
+.empty-text {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+}
+
 .home-button {
   width: 90px;
   height: 90px;
@@ -154,8 +174,7 @@ watch(() => props.show, (newVal) => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
   background: url('@/assets/background.jpg') no-repeat center center/cover;
   display: flex;
   flex-direction: column;
@@ -167,6 +186,7 @@ watch(() => props.show, (newVal) => {
   width: 1920px;
   height: 1080px;
   position: relative;
+  background: white;
 }
 
 .slide-image {
@@ -175,6 +195,7 @@ watch(() => props.show, (newVal) => {
 }
 
 .slides-block {
+  margin-top: 10px; 
   width: 100%;
   display: flex;
   flex-direction: row;

@@ -37,7 +37,6 @@ const getNotifications = async () => {
   try {
     const res = await store.dispatch('games/fetchAllNotifications', gameId);
     messages.value = res;
-    console.log(res)
     sortMessages();
   } catch (e) {
     console.log(e);

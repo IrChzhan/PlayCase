@@ -4,7 +4,7 @@
       <div class="left-container">
         <div v-if="slides.length > 0" ref="slidesContainer" class="slides-container">
           <div
-            v-for="(slide, index) in slides"
+            v-for="slide in slides"
             :key="slide.id"
             class="slide-row"
             :data-id="slide.id"
@@ -32,8 +32,8 @@
             </span>
             <div v-else class="edit-name-container">
               <input v-model="newSlideName" class="edit-name-input" />
-              <button @click="confirmEditing(slide)" class="confirm-edit">✔️</button>
-              <button @click="cancelEditing" class="cancel-edit">❌</button>
+              <button @click="confirmEditing(slide)" class="icon-setting confirm-edit"><IconArrow/></button>
+              <button @click="cancelEditing" class="icon-setting cancel-edit"><IconClose/></button>
             </div>
 
             <img :src="slide?.fileUrl" alt="Slide" class="slide-image" />
@@ -45,7 +45,7 @@
               <button class="buck" @click="confirmDeleteSlide(slide.id)">
                 <img class="img" src="@/assets/bucked.svg" alt="bucked" />
               </button>
-              <button class="settings">
+              <button class="settings drag-handle">
                 <img class="img" src="@/assets/settings.svg" alt="setting" />
               </button>
             </div>
@@ -70,6 +70,10 @@
       />
       <button @click="triggerFileInput" class="btn-load">Загрузить презентацию</button>
       <button @click="confirmDeleteAllPresentations" class="btn-delete">Удалить презентацию</button>
+      <div class="progress-bar-container" v-if="uploadProgress > 0">
+        <div class="progress-bar" :style="{ width: uploadProgress + '%' }"></div>
+        <span class="progress-text">{{ uploadProgress }}%</span>
+    </div>
     </div>
   </div>
 
@@ -84,11 +88,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, computed, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import Sortable from "sortablejs";
 import ConfirmDialog from "@/admin/ConfirmDialog.vue";
+import IconArrow from "@/components/icons/IconArrow.vue";
+import IconClose from "@/components/icons/IconClose.vue";
 
 const slides = ref([]);
 const selectedFiles = ref([]);
@@ -106,6 +112,8 @@ const newSlideName = ref("");
 
 const route = useRoute();
 const store = useStore();
+
+const uploadProgress = computed(() => store.getters['presentation/uploadProgress']);
 
 const loadPresentations = async () => {
   try {
@@ -126,12 +134,13 @@ const initSortable = () => {
       ghostClass: "ghost", 
       chosenClass: "chosen", 
       dragClass: "drag", 
+      handle: ".drag-handle",
       onEnd: async (event) => {
         const { oldIndex, newIndex } = event;
         const movedSlide = slides.value.splice(oldIndex, 1)[0];
         slides.value.splice(newIndex, 0, movedSlide);
 
-        await updateSlideOrder(movedSlide.id, newIndex);
+        await updateSlideOrder(movedSlide.id, newIndex+1);
       },
     });
   }
@@ -144,7 +153,7 @@ const updateSlideOrder = async (slideId, newIndex) => {
       slideId: slideId,
       newIndex: newIndex
     });
-
+  
     await loadPresentations();
   } catch (error) {
     console.error("Ошибка при обновлении порядка слайдов:", error);
@@ -158,6 +167,9 @@ const updateSlideGroup = async (slide) => {
       slideId: slide.id,
       isGroup: slide.isGroup,
     });
+
+  
+
     await loadPresentations();
   } catch (error) {
     console.error("Ошибка при обновлении группового состояния слайда:", error);
@@ -171,6 +183,7 @@ const updateSlideActive = async (slide) => {
       slideId: slide.id,
       isActive: slide.isActive,
     });
+
     await loadPresentations();
   } catch (error) {
     console.error("Ошибка при обновлении активного состояния слайда:", error);
@@ -228,7 +241,7 @@ const handleFileUploadAndUpload = async (event) => {
 
 const confirmDeleteAllPresentations = () => {
   dialogTitle.value = "Удаление презентации";
-  dialogMessage.value = "Вы уверены, что хотите удалить все презентации?";
+  dialogMessage.value = "Вы уверены, что хотите удалить презентацию?";
   actionType.value = "deleteAll";
   showDialog.value = true;
 };
@@ -305,6 +318,9 @@ const replaceSlide = async (slide) => {
 
   fileInput.click();
 };
+const triggerFileInput = () => {
+  fileInput.value.click();
+};
 
 const addSlide = async () => {
   const fileInput = document.createElement("input");
@@ -336,11 +352,27 @@ const addSlide = async () => {
 onMounted(async () => {
   await loadPresentations();
   await nextTick(); 
-  initSortable(); 
+  await initSortable(); 
 });
+
+
 </script>
 
 <style scoped>
+
+.icon-setting {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+  }
+
+.drag-handle {
+  cursor: grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
 
 .ghost {
   opacity: 0.5;
@@ -388,6 +420,7 @@ onMounted(async () => {
   border: none;
   background: #C59216;
   margin-left: 20px;
+  cursor: pointer;
 }
 
 .img {
@@ -401,6 +434,7 @@ onMounted(async () => {
   border: none;
   background: #C59216;
   margin-left: 20px;
+  cursor: pointer;
 }
 
 .reverse {
@@ -408,11 +442,13 @@ onMounted(async () => {
   border-radius: 12px;
   border: none;
   background: #C59216;
+  cursor: pointer;
 }
 
 .checkbox {
   width: 35px;
   height: 35px;
+  cursor:pointer;
 }
 
 .empty-text {
@@ -507,6 +543,8 @@ onMounted(async () => {
   border: none;
   cursor: pointer;
   font-size: 24px;
+  width: 40px;
+  height: 40px;
 }
 
 .confirm-edit:hover, .cancel-edit:hover {
@@ -520,5 +558,30 @@ onMounted(async () => {
   border: none;
   border-radius: 15px;
   object-fit: cover;
+  user-select: none;
+}
+
+.progress-bar-container {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: #C59216;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-size: 14px;
 }
 </style>

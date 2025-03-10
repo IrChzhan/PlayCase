@@ -3,17 +3,24 @@ import axios from 'axios';
 const state = {
     presentations: [],
     activePresentation: null,
-  };
-  
-  const mutations = {
+    uploadProgress: 0, 
+};
+
+const mutations = {
     SET_PRESENTATIONS(state, presentations) {
-      state.presentations = presentations;
+        state.presentations = presentations;
     },
     SET_ACTIVE_PRESENTATION(state, presentation) {
-      state.activePresentation = presentation;
+        state.activePresentation = presentation;
     },
-  };
-  
+    SET_UPLOAD_PROGRESS(state, progress) {
+        state.uploadProgress = progress;
+    },
+    RESET_UPLOAD_PROGRESS(state) {
+        state.uploadProgress = 0;
+    },
+};
+
   const actions = {
     async loadPresentations({ commit }, gameId) {
       try {
@@ -26,32 +33,74 @@ const state = {
     },
   
     async addPresentation({ commit }, { gameId, presentation }) {
-      try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/batch`, presentation);
-        commit('SET_PRESENTATIONS', response.data);
-        return response.data;
-      } catch (error) {
-        console.error('Ошибка при добавлении презентации:', error);
-      }
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/batch`,
+                presentation,
+                {
+                    onUploadProgress: (progressEvent) => {
+                        const percentCompleted = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                        commit('SET_UPLOAD_PROGRESS', percentCompleted);
+                    },
+                }
+            );
+            commit('SET_PRESENTATIONS', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Ошибка при добавлении презентации:', error);
+            throw error;
+        } finally {
+            commit('RESET_UPLOAD_PROGRESS');
+        }
     },
   
     async addSlide({ commit }, { gameId, file }) {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides`, file);
+          const response = await axios.post(
+              `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides`,
+              file,
+              {
+                  onUploadProgress: (progressEvent) => {
+                      const percentCompleted = Math.round(
+                          (progressEvent.loaded * 100) / progressEvent.total
+                      );
+                      commit('SET_UPLOAD_PROGRESS', percentCompleted);
+                  },
+              }
+          );
+          return response.data;
       } catch (error) {
-        console.error('Ошибка при добавлении слайда:', error);
-        throw error;
+          console.error('Ошибка при добавлении слайда:', error);
+          throw error;
+      } finally {
+          commit('RESET_UPLOAD_PROGRESS');
       }
-    },
+  },
 
     async replaceSlide({ commit }, { gameId, slideId, file }) {
       try {
-        const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/replace`, file);
+          const response = await axios.put(
+              `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/replace`,
+              file,
+              {
+                  onUploadProgress: (progressEvent) => {
+                      const percentCompleted = Math.round(
+                          (progressEvent.loaded * 100) / progressEvent.total
+                      );
+                      commit('SET_UPLOAD_PROGRESS', percentCompleted);
+                  },
+              }
+          );
+          return response.data;
       } catch (error) {
-        console.error('Ошибка при замене слайда:', error);
-        throw error;
+          console.error('Ошибка при замене слайда:', error);
+          throw error;
+      } finally {
+          commit('RESET_UPLOAD_PROGRESS');
       }
-    },
+  },
 
     async updateSlideGroup({ commit }, { gameId, slideId, isGroup }) {
       try {
@@ -86,7 +135,7 @@ const state = {
     },
     async moveSlide({ commit }, { gameId, slideId, newIndex }) {
       try {
-        const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/move/?newIndex=${newIndex}`)
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/move?newIndex=${newIndex}`)
         return response.data;
       } catch (error) {
         console.error("Ошибка при перемещении слайда:", error);
@@ -105,10 +154,10 @@ const state = {
   };
   
   const getters = {
-    presentations: state => state.presentations,
-    activePresentation: state => state.activePresentation,
-  };
-  
+    presentations: (state) => state.presentations,
+    activePresentation: (state) => state.activePresentation,
+    uploadProgress: (state) => state.uploadProgress, 
+};
   export default {
     namespaced: true,
     state,

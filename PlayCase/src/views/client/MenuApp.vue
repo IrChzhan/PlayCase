@@ -38,7 +38,7 @@ import house from '@/assets/House_01.png'
 import contactsImage from '@/assets/contacts.svg'
 import helpImage from '@/assets/help.svg'
 import info from '@/assets/info.svg'
-import camera from '@/assets/camera.svg';
+import camera from '@/assets/stream.svg';
 import lotteryImage from '@/assets/loto.svg'
 import menuImage from '@/assets/menu.svg'
 import ratingImage from '@/assets/rating.svg'
@@ -171,7 +171,7 @@ const menuItems = ref([
   { name: 'LUCKYTRON', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
   { name: 'Help', image: helpImage, function: openModalHelp, class: 'help-item',},
-  { name: 'Трансляция', image: camera, function: openPresentation}
+  { name: 'STREAM', image: camera, function: openPresentation}
 ])
 
 const fetchGame = async () => {
