@@ -34,7 +34,7 @@ const props = defineProps({
 const slides = ref([]);
 const currentSlideIndex = ref(0);
 const currentSlide = ref(null);
-const id = ref('');
+const gameId = ref('');
 const store = useStore();
 
 const canPrev = computed(() => currentSlideIndex.value > 0);
@@ -63,21 +63,20 @@ const client = new Client({
   brokerURL: "wss://back.igra-pads.ru/ws",
   reconnectDelay: 5000,
   onConnect: () => {
-    console.log(id.value, 'presa')
-    client.subscribe(`/queue/game/${id.value}/activeSlides`, (message) => {
+    console.log(gameId.value, 'presa')
+    client.subscribe(`/queue/game/${gameId.value}/activeSlides`, async (message) => {
       const parsedMessage = JSON.parse(message.body);
-      console.log(parsedMessage)
       if (parsedMessage.type === "GameActiveSlidesWsMsg") {
         slides.value = parsedMessage.payload;
         if (slides.value.length > 0 && !currentSlide.value) {
           currentSlide.value = slides.value[0];
         }
+        await fetchPresentation();
       }
     });
 
-    client.subscribe(`/queue/game/${id.value}`, (message) => {
+    client.subscribe(`/queue/admin/game/${gameId.value}`, async (message) => {
       const parsedMessage = JSON.parse(message.body);
-      console.log(parsedMessage)
       if (parsedMessage.type === "GameSlideUpdatedWsMsg") {
         const updatedSlide = parsedMessage.payload;
         const index = slides.value.findIndex((slide) => slide.id === updatedSlide.id);
@@ -86,6 +85,7 @@ const client = new Client({
           if (currentSlide.value?.id === updatedSlide.id) {
             currentSlide.value = updatedSlide;
           }
+          await fetchPresentation();
         }
       }
     });
@@ -109,14 +109,14 @@ const nextSlide = () => {
   }
 };
 
-const fetchCurrentUser = async () => {
+const getCurrentTeam = async () => {
   try {
-    const res = await store.dispatch('profile/getCurrentUser');
-    id.value = res.id;
-  } catch (e) {
-    console.error('Error fetching current user:', e);
+    const res = await store.dispatch('profile/getCurrentTeam')
+    gameId.value = res.gameId
+  }catch (e) {
+    console.log(e)
   }
-};
+}
 
 const fetchPresentation = async () => {
   try {
@@ -124,6 +124,8 @@ const fetchPresentation = async () => {
     slides.value = res;
     if (slides.value.length > 0) {
       currentSlide.value = slides.value[0];
+    } else {
+      currentSlide.value = null
     }
   } catch (e) {
     console.error('Error fetching presentation:', e);
@@ -131,8 +133,8 @@ const fetchPresentation = async () => {
 };
 
 onMounted(async () => {
-  await fetchCurrentUser();
-  if (id.value) {
+  await getCurrentTeam();
+  if (gameId.value) {
     await client.activate();
     await fetchPresentation();
   }
@@ -143,7 +145,7 @@ onBeforeUnmount( async () => {
 });
 
 watch(() => props.show, async (newVal) => {
-  if (newVal && id.value) {
+  if (newVal && gameId.value) {
     await client.activate();
   }
 });
