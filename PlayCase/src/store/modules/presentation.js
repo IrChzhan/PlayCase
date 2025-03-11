@@ -44,13 +44,29 @@ const mutations = {
                         );
                         commit('SET_UPLOAD_PROGRESS', percentCompleted);
                     },
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                  },
+                    maxBodyLength: Infinity,
+                    maxContentLength: Infinity,
+                    maxRate: Infinity,
+                    emulateJson: true,
+                    timeout: 1000000 // 10 секун
                 }
             );
             commit('SET_PRESENTATIONS', response.data);
             return response.data;
         } catch (error) {
-            console.error('Ошибка при добавлении презентации:', error);
-            throw error;
+          console.error('Ошибка при добавлении презентации:', error);
+          if (error.response) {
+              console.error('Response data:', error.response.data);
+              console.error('Response status:', error.response.status);
+              console.error('Response headers:', error.response.headers);
+          } else if (error.request) {
+              console.error('Request:', error.request);
+          } else {
+              console.error('Error message:', error.message);
+          }
         } finally {
             commit('RESET_UPLOAD_PROGRESS');
         }

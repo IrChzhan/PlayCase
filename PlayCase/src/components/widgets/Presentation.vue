@@ -7,14 +7,16 @@
       </div>
     </div>
     <div class="slides-block">
-      <button v-if="currentSlide" class="nav-button" @click="prevSlide" :style="prevButtonStyle">
-        <img src="@/assets/house-arrow-left.svg" alt="ArrowLeft" :style="prevArrowStyle" />
+      <button v-if="currentSlide" class="nav-button" @click="prevSlide">
+        <IconArrowLeft v-if="prevButtonStyle"/>
+        <IconArrowLeftEmpty v-else/>
       </button>
       <button class="close-button" @click="closeModal">
         <img src="@/assets/House_5.svg" alt="Домой" class="home-button" />
       </button>
-      <button v-if="currentSlide" class="nav-button" @click="nextSlide" :style="nextButtonStyle">
-        <img src="@/assets/house-arrow-right.svg" alt="ArrowRight" :style="nextArrowStyle" />
+      <button v-if="currentSlide" class="nav-button" @click="nextSlide">
+        <IconArrowRight v-if="nextButtonStyle"/>
+        <IconArrowRightEmpty v-else/>
       </button>
     </div>
   </div>
@@ -24,6 +26,11 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { Client } from "@stomp/stompjs";
 import { useStore } from "vuex";
+import IconArrowLeft from "@/components/icons/IconArrowLeft.vue";
+import IconArrowLeftEmpty from "@/components/icons/IconArrowLeftEmpty.vue";
+import IconArrowRight from "@/components/icons/IconArrowRight.vue";
+import IconArrowRightEmpty from "@/components/icons/IconArrowRightEmpty.vue";
+
 
 const props = defineProps({
   show: Boolean,
@@ -41,22 +48,16 @@ const canPrev = computed(() => currentSlideIndex.value > 0);
 
 const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1);
 
-const prevButtonStyle = computed(() => ({
-  opacity: canPrev.value ? 1 : 0.5,
-  cursor: canPrev.value ? 'pointer' : 'not-allowed',
-}));
+const prevButtonStyle = computed(() => canPrev.value ? true : false);
 
 const prevArrowStyle = computed(() => ({
-  opacity: canPrev.value ? 1 : 0.5,
+  opacity: canPrev.value ? true : false,
 }));
 
-const nextButtonStyle = computed(() => ({
-  opacity: canNext.value ? 1 : 0.5,
-  cursor: canNext.value ? 'pointer' : 'not-allowed',
-}));
+const nextButtonStyle = computed(() => canNext.value ? true : false);
 
 const nextArrowStyle = computed(() => ({
-  opacity: canNext.value ? 1 : 0.5,
+  opacity: canNext.value ? true : false,
 }));
 
 const client = new Client({
@@ -70,8 +71,12 @@ const client = new Client({
         slides.value = parsedMessage.payload;
         if (slides.value.length > 0 && !currentSlide.value) {
           currentSlide.value = slides.value[0];
+         
         }
         await fetchPresentation();
+        if (slides.value.length === 1) {
+            currentSlideIndex.value = 0
+          }
       }
     });
 
@@ -84,8 +89,12 @@ const client = new Client({
           slides.value[index] = updatedSlide;
           if (currentSlide.value?.id === updatedSlide.id) {
             currentSlide.value = updatedSlide;
+            
           }
           await fetchPresentation();
+          if (slides.value.length === 1) {
+              currentSlideIndex.value = 0
+            }
         }
       }
     });

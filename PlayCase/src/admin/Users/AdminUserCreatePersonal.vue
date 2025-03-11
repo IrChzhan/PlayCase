@@ -71,7 +71,7 @@ const newUser = ref({
   role: 'MANAGER',
 })
 
-const roles = ['ADMIN', 'MANAGER', 'CASHIER']
+const roles = ['ADMIN', 'MANAGER', 'CASHIER','PRESENTER']
 const toastMessage = ref('')
 const toastType = ref('success')
 

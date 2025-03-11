@@ -110,7 +110,7 @@ const menuItems = [
       selectedMenu.value = 5;
     },
     name: 'presentation',
-    roles: ['ADMIN', 'CASHIER', 'MANAGER'],
+    roles: ['ADMIN','MANAGER','PRESENTER'],
   },
 ];
 
@@ -131,12 +131,15 @@ const isActive = (routeName) => {
 onMounted( () => {
    checkAccess()
    fetchGameById()
-  if(role.value !== 'CASHIER') {
-    selectedMenu.value = 0
-    router.push(`/admin/games/${route.params.gameId}/team`)
-  } else {
+   if (role.value === 'CASHIER') {
     selectedMenu.value = 1
     router.push(`/admin/games/${route.params.gameId}/teams/pay`);
+  } else if(role.value === 'PRESENTER'){
+    selectedMenu.value = 5
+    router.push(`/admin/games/${route.params.gameId}/presentation`);
+  } else {
+    selectedMenu.value = 0
+    router.push(`/admin/games/${route.params.gameId}/team`)
   }
 
 
@@ -147,13 +150,18 @@ watch(
   async () => {
     await fetchGameById()
     checkAccess()
-    if(role.value !== 'CASHIER') {
-      selectedMenu.value = 0
-      router.push(`/admin/games/${route.params.gameId}/team`)
-    } else {
-      selectedMenu.value = 1
-      router.push(`/admin/games/${route.params.gameId}/teams/pay`);
-    }
+    
+  if (role.value === 'CASHIER') {
+    selectedMenu.value = 1
+    router.push(`/admin/games/${route.params.gameId}/teams/pay`);
+  } else if(role.value === 'PRESENTER'){
+    selectedMenu.value = 5
+    router.push(`/admin/games/${route.params.gameId}/presentation`);
+  } else {
+    selectedMenu.value = 0
+    router.push(`/admin/games/${route.params.gameId}/team`)
+  }
+    
   },
 )
 </script>

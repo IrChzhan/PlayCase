@@ -39,13 +39,13 @@
             <img :src="slide?.fileUrl" alt="Slide" class="slide-image" />
 
             <div class="setting-container">
-              <button class="reverse" @click="replaceSlide(slide)">
-                <img class="img" src="@/assets/reverse.svg" alt="reverse" />
+              <button v-if="(role !== 'PRESENTER')" class="reverse" @click="replaceSlide(slide)">
+                <img  class="img" src="@/assets/reverse.svg" alt="reverse" />
               </button>
-              <button class="buck" @click="confirmDeleteSlide(slide.id)">
+              <button  v-if="(role !== 'PRESENTER')" class="buck" @click="confirmDeleteSlide(slide.id)">
                 <img class="img" src="@/assets/bucked.svg" alt="bucked" />
               </button>
-              <button class="settings drag-handle">
+              <button v-if="(role !== 'PRESENTER')"  class="settings drag-handle">
                 <img class="img" src="@/assets/settings.svg" alt="setting" />
               </button>
             </div>
@@ -57,7 +57,7 @@
         </div>
       </div>
 
-      <button class="btn-load" @click="addSlide">Добавить слайд</button>
+      <button class="btn-load" v-if="(role !== 'PRESENTER')" @click="addSlide">Добавить слайд</button>
     </div>
 
     <div class="right-container">
@@ -68,8 +68,8 @@
         style="display: none"
         @change="handleFileUploadAndUpload"
       />
-      <button @click="triggerFileInput" class="btn-load">Загрузить презентацию</button>
-      <button @click="confirmDeleteAllPresentations" class="btn-delete">Удалить презентацию</button>
+      <button v-if="(role !== 'PRESENTER')" @click="triggerFileInput" class="btn-load">Загрузить презентацию</button>
+      <button v-if="(role !== 'PRESENTER')" @click="confirmDeleteAllPresentations" class="btn-delete">Удалить презентацию</button>
       <div class="progress-bar-container" v-if="uploadProgress > 0">
         <div class="progress-bar" :style="{ width: uploadProgress + '%' }"></div>
         <span class="progress-text">{{ uploadProgress }}%</span>
@@ -89,7 +89,7 @@
 
 <script setup>
 import { ref, onMounted, nextTick, computed, onUnmounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import Sortable from "sortablejs";
 import ConfirmDialog from "@/admin/ConfirmDialog.vue";
@@ -112,6 +112,14 @@ const newSlideName = ref("");
 
 const route = useRoute();
 const store = useStore();
+const router = useRouter();
+
+const role = ref('')
+
+const checkAccess = () => {
+  const personalKey = localStorage.getItem('role')
+  role.value = personalKey
+}
 
 const uploadProgress = computed(() => store.getters['presentation/uploadProgress']);
 
@@ -353,6 +361,7 @@ onMounted(async () => {
   await loadPresentations();
   await nextTick(); 
   await initSortable(); 
+  await checkAccess()
 });
 
 
