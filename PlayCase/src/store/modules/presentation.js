@@ -4,6 +4,7 @@ const state = {
     presentations: [],
     activePresentation: null,
     uploadProgress: 0, 
+    isLeftColumnVisible: true,
 };
 
 const mutations = {
@@ -19,9 +20,15 @@ const mutations = {
     RESET_UPLOAD_PROGRESS(state) {
         state.uploadProgress = 0;
     },
+    SET_LEFT_COLUMN_VISIBILITY(state, isVisible) {
+      state.isLeftColumnVisible = isVisible;
+    },
 };
 
   const actions = {
+    toggleLeftColumnVisibility({ commit, state }) {
+      commit('SET_LEFT_COLUMN_VISIBILITY', !state.isLeftColumnVisible);
+    },
     async loadPresentations({ commit }, gameId) {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides`);
@@ -134,6 +141,14 @@ const mutations = {
       }
     },
 
+    async activateAllSlides({ commit }, { gameId, isActive }) {
+      try {
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/batch/active?isActive=${isActive}`);
+      } catch (error) {
+        console.error('Ошибка при обновлении активного состояния слайда:', error);
+      }
+    },
+
     async deleteSlide({ commit }, { gameId, slideId }) {
       try {
         await axios.delete(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}`);
@@ -167,12 +182,21 @@ const mutations = {
         console.error('Ошибка при удалении всех презентаций:', error);
       }
     },
+    async getHasSlides({ commit }) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/presentation/status`);
+        return response.data;
+      } catch (error) {
+        console.error('Ошибка при удалении всех презентаций:', error);
+      }
+    },
   };
   
   const getters = {
     presentations: (state) => state.presentations,
     activePresentation: (state) => state.activePresentation,
     uploadProgress: (state) => state.uploadProgress, 
+    isLeftColumnVisible: (state) => state.isLeftColumnVisible,
 };
   export default {
     namespaced: true,

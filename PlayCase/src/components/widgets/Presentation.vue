@@ -31,7 +31,6 @@ import IconArrowLeftEmpty from "@/components/icons/IconArrowLeftEmpty.vue";
 import IconArrowRight from "@/components/icons/IconArrowRight.vue";
 import IconArrowRightEmpty from "@/components/icons/IconArrowRightEmpty.vue";
 
-
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
@@ -45,38 +44,25 @@ const gameId = ref('');
 const store = useStore();
 
 const canPrev = computed(() => currentSlideIndex.value > 0);
-
 const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1);
-
-const prevButtonStyle = computed(() => canPrev.value ? true : false);
-
-const prevArrowStyle = computed(() => ({
-  opacity: canPrev.value ? true : false,
-}));
-
-const nextButtonStyle = computed(() => canNext.value ? true : false);
-
-const nextArrowStyle = computed(() => ({
-  opacity: canNext.value ? true : false,
-}));
+const prevButtonStyle = computed(() => canPrev.value);
+const nextButtonStyle = computed(() => canNext.value);
 
 const client = new Client({
   brokerURL: "wss://back.igra-pads.ru/ws",
   reconnectDelay: 5000,
   onConnect: () => {
-    console.log(gameId.value, 'presa')
     client.subscribe(`/queue/game/${gameId.value}/activeSlides`, async (message) => {
       const parsedMessage = JSON.parse(message.body);
       if (parsedMessage.type === "GameActiveSlidesWsMsg") {
         slides.value = parsedMessage.payload;
-        if (slides.value.length > 0 && !currentSlide.value) {
-          currentSlide.value = slides.value[0];
-         
+        if (slides.value.length > 0) {
+          const lastActiveSlideIndex = slides.value.length - 1;
+          currentSlideIndex.value = lastActiveSlideIndex;
+          currentSlide.value = slides.value[lastActiveSlideIndex];
+        } else {
+          currentSlide.value = null;
         }
-        await fetchPresentation();
-        if (slides.value.length === 1) {
-            currentSlideIndex.value = 0
-          }
       }
     });
 
@@ -87,14 +73,10 @@ const client = new Client({
         const index = slides.value.findIndex((slide) => slide.id === updatedSlide.id);
         if (index !== -1) {
           slides.value[index] = updatedSlide;
-          if (currentSlide.value?.id === updatedSlide.id) {
+          if (index > currentSlideIndex.value) {
+            currentSlideIndex.value = index;
             currentSlide.value = updatedSlide;
-            
           }
-          await fetchPresentation();
-          if (slides.value.length === 1) {
-              currentSlideIndex.value = 0
-            }
         }
       }
     });
@@ -120,21 +102,23 @@ const nextSlide = () => {
 
 const getCurrentTeam = async () => {
   try {
-    const res = await store.dispatch('profile/getCurrentTeam')
-    gameId.value = res.gameId
-  }catch (e) {
-    console.log(e)
+    const res = await store.dispatch('profile/getCurrentTeam');
+    gameId.value = res.gameId;
+  } catch (e) {
+    console.log(e);
   }
-}
+};
 
 const fetchPresentation = async () => {
   try {
     const res = await store.dispatch('profile/getCurrentSlides');
     slides.value = res;
     if (slides.value.length > 0) {
-      currentSlide.value = slides.value[0];
+      const lastActiveSlideIndex = slides.value.length - 1;
+      currentSlideIndex.value = lastActiveSlideIndex;
+      currentSlide.value = slides.value[lastActiveSlideIndex];
     } else {
-      currentSlide.value = null
+      currentSlide.value = null;
     }
   } catch (e) {
     console.error('Error fetching presentation:', e);
@@ -149,13 +133,14 @@ onMounted(async () => {
   }
 });
 
-onBeforeUnmount( async () => {
+onBeforeUnmount(async () => {
   await client.deactivate();
 });
 
 watch(() => props.show, async (newVal) => {
   if (newVal && gameId.value) {
     await client.activate();
+    await fetchPresentation(); 
   }
 });
 </script>

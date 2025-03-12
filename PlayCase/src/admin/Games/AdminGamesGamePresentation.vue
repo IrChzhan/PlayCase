@@ -5,13 +5,14 @@
         <div v-if="slides.length > 0" ref="slidesContainer" class="slides-container">
           <div
             v-for="slide in slides"
-            :key="slide.id"
+            :key="slide.slideIndex"
             class="slide-row"
             :data-id="slide.id"
           >
             <span class="slide-index">{{ slide.slideIndex }}</span>
 
             <input
+             :style="{ visibility: isLeftColumnVisible ? 'visible' : 'hidden' }"
               class="checkbox"
               type="checkbox"
               v-model="slide.isGroup"
@@ -31,7 +32,7 @@
               {{ slide.name }}
             </span>
             <div v-else class="edit-name-container">
-              <input v-model="newSlideName" class="edit-name-input" />
+              <input v-model="newSlideName"  @keydown.enter="confirmEditing(slide)" class="edit-name-input" />
               <button @click="confirmEditing(slide)" class="icon-setting confirm-edit"><IconArrow/></button>
               <button @click="cancelEditing" class="icon-setting cancel-edit"><IconClose/></button>
             </div>
@@ -70,6 +71,10 @@
       />
       <button v-if="(role !== 'PRESENTER')" @click="triggerFileInput" class="btn-load">Загрузить презентацию</button>
       <button v-if="(role !== 'PRESENTER')" @click="confirmDeleteAllPresentations" class="btn-delete">Удалить презентацию</button>
+      <button @click="activateAllSlides" class="btn-activate">Деактивировать все слайды</button>
+      <button @click="toggleLeftColumnVisibility" class="btn-toggle">
+        {{ isLeftColumnVisible ? 'Скрыть левый столбец' : 'Показать левый столбец' }}
+      </button>
       <div class="progress-bar-container" v-if="uploadProgress > 0">
         <div class="progress-bar" :style="{ width: uploadProgress + '%' }"></div>
         <span class="progress-text">{{ uploadProgress }}%</span>
@@ -88,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, computed, onUnmounted } from "vue";
+import { ref, onMounted, nextTick, computed, onUnmounted,watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import Sortable from "sortablejs";
@@ -116,6 +121,13 @@ const router = useRouter();
 
 const role = ref('')
 
+const isLeftColumnVisible = computed(() => store.getters['presentation/isLeftColumnVisible']);
+
+const toggleLeftColumnVisibility = () => {
+  store.dispatch('presentation/toggleLeftColumnVisibility');
+};
+
+
 const checkAccess = () => {
   const personalKey = localStorage.getItem('role')
   role.value = personalKey
@@ -135,24 +147,44 @@ const loadPresentations = async () => {
   }
 };
 
+const activateAllSlides = async () => {
+  try {
+    await store.dispatch("presentation/activateAllSlides", {
+      gameId: route.params.gameId,
+      isActive: false,
+    });
+    await loadPresentations();
+  } catch (error) {
+    console.error("Ошибка при активации всех слайдов:", error);
+    alert("Произошла ошибка при активации слайдов.");
+  }
+};
+
+
+let sortableInstance = null; 
+
 const initSortable = () => {
   if (slidesContainer.value) {
-    Sortable.create(slidesContainer.value, {
-      animation: 150, 
-      ghostClass: "ghost", 
-      chosenClass: "chosen", 
-      dragClass: "drag", 
+    if (sortableInstance) {
+      sortableInstance.destroy(); 
+      sortableInstance = null
+    }
+    sortableInstance = Sortable.create(slidesContainer.value, {
+      animation: 150,
+      ghostClass: "ghost",
+      chosenClass: "chosen",
+      dragClass: "drag",
       handle: ".drag-handle",
       onEnd: async (event) => {
         const { oldIndex, newIndex } = event;
         const movedSlide = slides.value.splice(oldIndex, 1)[0];
         slides.value.splice(newIndex, 0, movedSlide);
 
-        await updateSlideOrder(movedSlide.id, newIndex+1);
+        await updateSlideOrder(movedSlide.id, newIndex + 1);
       },
     });
   }
-};
+}
 
 const updateSlideOrder = async (slideId, newIndex) => {
   try {
@@ -175,8 +207,6 @@ const updateSlideGroup = async (slide) => {
       slideId: slide.id,
       isGroup: slide.isGroup,
     });
-
-  
 
     await loadPresentations();
   } catch (error) {
@@ -286,6 +316,10 @@ const cancelEditing = () => {
 };
 
 const confirmEditing = async (slide) => {
+  if (!newSlideName.value.trim()) {
+    return;
+  }
+
   try {
     await store.dispatch("presentation/renameSlide", {
       gameId: route.params.gameId,
@@ -357,6 +391,8 @@ const addSlide = async () => {
   fileInput.click();
 };
 
+
+
 onMounted(async () => {
   await loadPresentations();
   await nextTick(); 
@@ -364,6 +400,19 @@ onMounted(async () => {
   await checkAccess()
 });
 
+watch(slides, (newSlides, oldSlides) => {
+  if (oldSlides.length === 0 && newSlides.length > 0) {
+    nextTick(() => {
+      initSortable();
+    });
+  }
+});
+
+onUnmounted(() => {
+  if (sortableInstance) {
+    sortableInstance.destroy();
+  }
+});
 
 </script>
 
@@ -593,4 +642,32 @@ onMounted(async () => {
   color: #000;
   font-size: 14px;
 }
+
+.btn-activate {
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  padding: 18px;
+  border: none;
+  border-radius: 15px;
+  background: #5cb85c;
+  color: #ffffff;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.btn-toggle {
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  padding: 18px;
+  border: none;
+  border-radius: 15px;
+  background: #27364f;
+  color: #ffffff;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+
 </style>

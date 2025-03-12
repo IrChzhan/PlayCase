@@ -9,7 +9,11 @@
   <img :src="item.image" alt="" class="menu-image" :class="{ 'small-icon': item.small, 'info_image': item.name === 'Правила', }" @click="item.function" />
   <p>{{ item.name }}</p>
 </div>
-      <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
+      <div v-if="statusSlide" class="menu-item" :key="10">
+        <img :src="camera" alt="camera" class="menu-image image-one" @click="openPresentation" />
+        <p>STREAM</p>
+      </div>
+      <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="11">
         <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />
         <p>Обратная связь</p>
       </div>
@@ -73,7 +77,7 @@ const showModalFeedback = ref(false)
 const showPresentation = ref(false);
 
 const status = ref('')
-
+const statusSlide = ref('')
 
 const openPresentation = () => {
   showPresentation.value = true;
@@ -171,7 +175,6 @@ const menuItems = ref([
   { name: 'LUCKYTRON', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
   { name: 'Help', image: helpImage, function: openModalHelp, class: 'help-item',},
-  { name: 'STREAM', image: camera, function: openPresentation}
 ])
 
 const fetchGame = async () => {
@@ -183,12 +186,23 @@ const fetchGame = async () => {
   }
 }
 
+const fetchHasSlides = async () => {
+  try {
+    const res = await store.dispatch('presentation/getHasSlides')
+    statusSlide.value = res.hasSlides;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 watch(watchedState, () => {
   fetchGame();
+  fetchHasSlides()
 });
 
 onMounted(()=>{
   fetchGame()
+  fetchHasSlides()
 })
 
 </script>

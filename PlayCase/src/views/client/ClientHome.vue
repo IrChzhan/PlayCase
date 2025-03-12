@@ -30,9 +30,13 @@ const client = new Client({
   onConnect: () => {
     console.log("STOMP подключен", userId.value, gameId.value);
 
+    client.subscribe(`/queue/game/${gameId.value}/activeSlides`, async (message) => {
+      const parsedMessage = JSON.parse(message.body);
+      store.commit('results/setResult')
+    });
+
     client.subscribe(`/queue/game/${gameId.value}`, (message) => {
       const parsedMessage = JSON.parse(message.body);
-      console.log(parsedMessage)
       store.commit('results/setResult')
     });
 
