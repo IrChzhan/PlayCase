@@ -197,7 +197,7 @@ onMounted(() => {
   gap: 10px;
 }
 .icon-setting {
-  padding: 10px 0 ;
+  padding: 2px 0 ;
   background: none;
   border: none;
   cursor: pointer;

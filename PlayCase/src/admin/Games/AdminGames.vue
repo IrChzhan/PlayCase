@@ -323,7 +323,7 @@ onMounted(() => {
 }
 
 .icon-setting {
-  padding: 10px 0;
+  padding: 5px 0;
   background: none;
   cursor: pointer;
   border: none;
@@ -545,7 +545,7 @@ td:last-child:hover {
 
 .games-table th:nth-child(3),
 .games-table td:nth-child(3) {
-  width: 20%;
+  width: 25%;
 }
 
 .games-table th:nth-child(4),
@@ -555,7 +555,7 @@ td:last-child:hover {
 
 .games-table th:nth-child(5),
 .games-table td:nth-child(5) {
-  width: 10%;
+  width: 15%;
 }
 .abra th:last-child {
   padding: 10px;

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" class="fullscreen-modal">
+  <div v-if="show" class="fullscreen-modal" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
     <div class="slides-container">
       <img v-if="currentSlide" :src="currentSlide?.fileUrl" alt="Slide" class="slide-image" />
     </div>
@@ -39,6 +39,9 @@ const currentSlideIndex = ref(0);
 const currentSlide = ref(null);
 const gameId = ref('');
 const store = useStore();
+
+const touchStartX = ref(0);
+const touchEndX = ref(0);
 
 const canPrev = computed(() => currentSlideIndex.value > 0);
 const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1);
@@ -117,6 +120,22 @@ const fetchPresentation = async () => {
       currentSlide.value = null;
     }
   } catch (e) {
+  }
+};
+
+const handleTouchStart = (event) => {
+  touchStartX.value = event.touches[0].clientX;
+};
+
+const handleTouchMove = (event) => {
+  touchEndX.value = event.touches[0].clientX;
+};
+
+const handleTouchEnd = () => {
+  if (touchStartX.value - touchEndX.value > 50) {
+    nextSlide();
+  } else if (touchEndX.value - touchStartX.value > 50) {
+    prevSlide();
   }
 };
 

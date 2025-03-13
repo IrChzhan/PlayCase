@@ -272,7 +272,7 @@ button:disabled {
 }
 
 .icon-setting {
-  padding: 10px 0 ;
+  padding: 5px 0 ;
   background: none;
   cursor: pointer;
 }
