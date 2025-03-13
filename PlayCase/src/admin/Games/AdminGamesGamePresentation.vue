@@ -57,8 +57,7 @@
           <p class="empty-text">Презентации нет</p>
         </div>
       </div>
-
-      <button class="btn-load" v-if="(role !== 'PRESENTER')" @click="addSlide">Добавить слайд</button>
+      
     </div>
 
     <div class="right-container">
@@ -80,8 +79,11 @@
         <span class="progress-text">{{ uploadProgress }}%</span>
     </div>
     </div>
+    <div class="add-slide-container">
+      <button class="btn-load" v-if="(role !== 'PRESENTER')" @click="addSlide">Добавить слайд</button>
+      </div>
   </div>
-
+    
   <ConfirmDialog
     v-if="showDialog"
     :visible="showDialog"
@@ -170,7 +172,7 @@ const initSortable = () => {
       sortableInstance = null
     }
     sortableInstance = Sortable.create(slidesContainer.value, {
-      animation: 150,
+      animation: 100,
       ghostClass: "ghost",
       chosenClass: "chosen",
       dragClass: "drag",
@@ -417,6 +419,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.add-slide-container {
+width: 100%; 
+background: white;
+position: fixed;
+bottom: 0; 
+}
 
 .icon-setting {
     padding: 0;

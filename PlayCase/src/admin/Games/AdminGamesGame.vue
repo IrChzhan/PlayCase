@@ -55,6 +55,7 @@ const Statuses = {
   PLANNED: 'Запланирована',
   FINISHED: 'Завершена',
   IN_PROGRESS: 'В процессе',
+  RESULT_SUMMING: 'В процессе завершения'
 };
 
 const menuItems = [

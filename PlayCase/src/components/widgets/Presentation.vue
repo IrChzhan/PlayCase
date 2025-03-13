@@ -1,7 +1,10 @@
 <template>
   <div v-if="show" class="fullscreen-modal" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
     <div class="slides-container">
-      <img v-if="currentSlide" :src="currentSlide?.fileUrl" alt="Slide" class="slide-image" />
+      <transition :name="transitionName" mode="out-in">
+        <img v-if="currentSlide" :key="currentSlide.id" :src="currentSlide?.fileUrl" alt="Slide" class="slide-image" />
+        <img v-else src="@/assets/bgPresa.jpeg" alt="slide" class="slide-image">
+      </transition>
     </div>
     <div class="slides-block">
       <button v-if="currentSlide" class="nav-button" @click="prevSlide">
@@ -42,6 +45,7 @@ const store = useStore();
 
 const touchStartX = ref(0);
 const touchEndX = ref(0);
+const transitionName = ref('slide-next'); 
 
 const canPrev = computed(() => currentSlideIndex.value > 0);
 const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1);
@@ -88,6 +92,7 @@ const client = new Client({
 
 const prevSlide = () => {
   if (canPrev.value) {
+    transitionName.value = 'slide-prev';
     currentSlideIndex.value--;
     currentSlide.value = slides.value[currentSlideIndex.value];
   }
@@ -95,6 +100,7 @@ const prevSlide = () => {
 
 const nextSlide = () => {
   if (canNext.value) {
+    transitionName.value = 'slide-next';
     currentSlideIndex.value++;
     currentSlide.value = slides.value[currentSlideIndex.value];
   }
@@ -196,12 +202,15 @@ watch(() => props.show, async (newVal) => {
   width: 1920px;
   height: 1080px;
   position: relative;
-  background: url('@/assets/bgPresa.jpeg') no-repeat center center/cover;
+  overflow: hidden;
 }
 
 .slide-image {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .slides-block {
@@ -226,5 +235,28 @@ watch(() => props.show, async (newVal) => {
   color: white;
   font-size: 36px;
   cursor: pointer;
+}
+
+.slide-next-enter-active,
+.slide-next-leave-active,
+.slide-prev-enter-active,
+.slide-prev-leave-active {
+  transition: transform 0.2s ease-in-out;
+}
+
+.slide-next-enter-from {
+  transform: translateX(100%);
+}
+
+.slide-next-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-prev-enter-from {
+  transform: translateX(-100%);
+}
+
+.slide-prev-leave-to {
+  transform: translateX(100%);
 }
 </style>
