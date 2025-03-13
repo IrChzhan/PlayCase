@@ -545,7 +545,7 @@ td:last-child:hover {
 
 .games-table th:nth-child(3),
 .games-table td:nth-child(3) {
-  width: 25%;
+  width: 20%;
 }
 
 .games-table th:nth-child(4),
@@ -555,7 +555,7 @@ td:last-child:hover {
 
 .games-table th:nth-child(5),
 .games-table td:nth-child(5) {
-  width: 15%;
+  width: 10%;
 }
 .abra th:last-child {
   padding: 10px;

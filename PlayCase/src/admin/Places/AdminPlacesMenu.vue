@@ -130,7 +130,7 @@ const showDeleteDialog = (id) => {
 
 const searchQuery = ref('')
 const currentPage = ref(1)
-const mealsPerPage = ref(5)
+const mealsPerPage = ref(15)
 const showModalAdminEditMeal = ref(false)
 const mealId = ref('')
 const placeIdForEdit = ref('')

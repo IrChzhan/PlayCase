@@ -11,7 +11,7 @@
 </div>
       <div v-if="statusSlide" class="menu-item" :key="10">
         <img :src="camera" alt="camera" class="menu-image image-one" @click="openPresentation" />
-        <p>STREAM</p>
+        <p>Трансляция</p>
       </div>
       <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="11">
         <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />

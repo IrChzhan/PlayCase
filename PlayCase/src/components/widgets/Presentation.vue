@@ -2,9 +2,6 @@
   <div v-if="show" class="fullscreen-modal">
     <div class="slides-container">
       <img v-if="currentSlide" :src="currentSlide?.fileUrl" alt="Slide" class="slide-image" />
-      <div class="empty" v-else>
-        <span class="empty-text">Трансляция скоро начнется</span>
-      </div>
     </div>
     <div class="slides-block">
       <button v-if="currentSlide" class="nav-button" @click="prevSlide">
@@ -180,7 +177,7 @@ watch(() => props.show, async (newVal) => {
   width: 1920px;
   height: 1080px;
   position: relative;
-  background: white;
+  background: url('@/assets/bgPresa.jpeg') no-repeat center center/cover;
 }
 
 .slide-image {
