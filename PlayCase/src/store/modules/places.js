@@ -71,7 +71,7 @@ export default {
         commit('setCategories', { placeId, categories: response.data })
         return response.data
       } catch (error) {
-        console.error('Ошибка при загрузке категорий:', error)
+        console.error('Ошибка при загрузке категорий')
       }
     },
 
@@ -97,14 +97,13 @@ export default {
         )
         commit('updatePlace', response.data)
       } catch (error) {
-        console.error('Ошибка обновления места:', error)
+        console.error('Ошибка обновления места:')
       }
     },
     async uploadImage(_, file) {
       try {
         const formData = new FormData()
         formData.append('file', file)
-        console.log(file)
 
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/v1/files/upload`,
@@ -115,10 +114,9 @@ export default {
             },
           },
         )
-        console.log(response)
         return response.data.id
       } catch (error) {
-        console.error('Ошибка при загрузке изображения:', error)
+        console.error('Ошибка при загрузке изображения')
         throw error
       }
     },
@@ -127,7 +125,7 @@ export default {
         await axios.delete(`${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}`)
         commit('deletePlace', placeId)
       } catch (error) {
-        console.error('Ошибка удаления места:', error)
+        console.error('Ошибка удаления места')
       }
     },
 
@@ -139,7 +137,7 @@ export default {
         )
         commit('addCategory', { placeId, category: response.data })
       } catch (error) {
-        console.error('Ошибка при добавлении категории:', error)
+        console.error('Ошибка при добавлении категории')
         throw error
       }
     },
@@ -169,7 +167,7 @@ export default {
 
         await dispatch('fetchMeals', { placeId, categoryId })
       } catch (error) {
-        console.error('Ошибка при добавлении блюда:', error)
+        console.error('Ошибка при добавлении блюда')
         throw error
       }
     },

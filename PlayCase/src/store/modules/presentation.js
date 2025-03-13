@@ -5,6 +5,7 @@ const state = {
     activePresentation: null,
     uploadProgress: 0, 
     isLeftColumnVisible: true,
+    show: false,
 };
 
 const mutations = {
@@ -23,9 +24,15 @@ const mutations = {
     SET_LEFT_COLUMN_VISIBILITY(state, isVisible) {
       state.isLeftColumnVisible = isVisible;
     },
+    SET_SHOW(state, value) { 
+      state.show = value;
+    },
 };
 
   const actions = {
+    setShow({ commit }, value) { 
+      commit('SET_SHOW', value);
+    },
     toggleLeftColumnVisibility({ commit, state }) {
       commit('SET_LEFT_COLUMN_VISIBILITY', !state.isLeftColumnVisible);
     },
@@ -35,7 +42,7 @@ const mutations = {
         commit('SET_PRESENTATIONS', response.data);
         return response.data;
       } catch (error) {
-        console.error('Ошибка при загрузке презентаций:', error);
+        console.error('Ошибка при загрузке презентаций');
       }
     },
   
@@ -58,21 +65,21 @@ const mutations = {
                     maxContentLength: Infinity,
                     maxRate: Infinity,
                     emulateJson: true,
-                    timeout: 1000000 // 10 секун
+                    timeout: 1000000 
                 }
             );
             commit('SET_PRESENTATIONS', response.data);
             return response.data;
         } catch (error) {
-          console.error('Ошибка при добавлении презентации:', error);
+          console.error('Ошибка при добавлении презентации');
           if (error.response) {
-              console.error('Response data:', error.response.data);
-              console.error('Response status:', error.response.status);
-              console.error('Response headers:', error.response.headers);
+              console.error('Response data');
+              console.error('Response status');
+              console.error('Response headers');
           } else if (error.request) {
-              console.error('Request:', error.request);
+              console.error('Request');
           } else {
-              console.error('Error message:', error.message);
+              console.error('Error message');
           }
         } finally {
             commit('RESET_UPLOAD_PROGRESS');
@@ -95,7 +102,7 @@ const mutations = {
           );
           return response.data;
       } catch (error) {
-          console.error('Ошибка при добавлении слайда:', error);
+          console.error('Ошибка при добавлении слайда');
           throw error;
       } finally {
           commit('RESET_UPLOAD_PROGRESS');
@@ -118,7 +125,7 @@ const mutations = {
           );
           return response.data;
       } catch (error) {
-          console.error('Ошибка при замене слайда:', error);
+          console.error('Ошибка при замене слайда');
           throw error;
       } finally {
           commit('RESET_UPLOAD_PROGRESS');
@@ -129,7 +136,7 @@ const mutations = {
       try {
         const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/group?isGroup=${isGroup}`);
       } catch (error) {
-        console.error('Ошибка при обновлении группового состояния слайда:', error);
+        console.error('Ошибка при обновлении группового состояния слайда');
       }
     },
   
@@ -137,7 +144,7 @@ const mutations = {
       try {
         const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/active?isActive=${isActive}`);
       } catch (error) {
-        console.error('Ошибка при обновлении активного состояния слайда:', error);
+        console.error('Ошибка при обновлении активного состояния слайда');
       }
     },
 
@@ -145,7 +152,7 @@ const mutations = {
       try {
         const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/batch/active?isActive=${isActive}`);
       } catch (error) {
-        console.error('Ошибка при обновлении активного состояния слайда:', error);
+        console.error('Ошибка при обновлении активного состояния слайда');
       }
     },
 
@@ -154,14 +161,14 @@ const mutations = {
         await axios.delete(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}`);
         commit('SET_PRESENTATIONS', state.presentations.filter(p => p.id !== slideId));
       } catch (error) {
-        console.error('Ошибка при удалении презентации:', error);
+        console.error('Ошибка при удалении презентации');
       }
     },
     async renameSlide({ commit }, { gameId, slideId, newName }) {
       try {
         const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/rename?newName=${newName}`);
       } catch (error) {
-        console.error('Ошибка при переименовании слайда:', error);
+        console.error('Ошибка при переименовании слайда');
       }
     },
     async moveSlide({ commit }, { gameId, slideId, newIndex }) {
@@ -169,7 +176,7 @@ const mutations = {
         const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/slides/${slideId}/move?newIndex=${newIndex}`)
         return response.data;
       } catch (error) {
-        console.error("Ошибка при перемещении слайда:", error);
+        console.error("Ошибка при перемещении слайда");
         throw error;
       }
     },
@@ -179,7 +186,7 @@ const mutations = {
         commit('SET_PRESENTATIONS', []);
         return response.data;
       } catch (error) {
-        console.error('Ошибка при удалении всех презентаций:', error);
+        console.error('Ошибка при удалении всех презентаций');
       }
     },
     async getHasSlides({ commit }) {
@@ -187,7 +194,7 @@ const mutations = {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/presentation/status`);
         return response.data;
       } catch (error) {
-        console.error('Ошибка при удалении всех презентаций:', error);
+        console.error('Ошибка при удалении всех презентаций');
       }
     },
   };
@@ -197,6 +204,7 @@ const mutations = {
     activePresentation: (state) => state.activePresentation,
     uploadProgress: (state) => state.uploadProgress, 
     isLeftColumnVisible: (state) => state.isLeftColumnVisible,
+    show: (state) => state.show,
 };
   export default {
     namespaced: true,

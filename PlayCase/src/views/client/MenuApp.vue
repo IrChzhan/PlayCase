@@ -74,10 +74,14 @@ const showModalContacts = ref(false)
 const showModalPay = ref(false)
 const showModalHelp = ref(false)
 const showModalFeedback = ref(false)
-const showPresentation = ref(false);
 
 const status = ref('')
 const statusSlide = ref('')
+
+const showPresentation = computed({
+  get: () => store.getters['presentation/show'], 
+  set: (value) => store.dispatch('presentation/setShow', value), 
+});
 
 const openPresentation = () => {
   showPresentation.value = true;
@@ -182,7 +186,7 @@ const fetchGame = async () => {
     const res = await store.dispatch('online/getGame')
     status.value = res.status
   } catch (e) {
-    console.log(e)
+    console.log('Ошибка получения команды')
   }
 }
 
@@ -191,7 +195,7 @@ const fetchHasSlides = async () => {
     const res = await store.dispatch('presentation/getHasSlides')
     statusSlide.value = res.hasSlides;
   } catch (e) {
-    console.log(e)
+    console.log('Ошибка запроса слайдов')
   }
 }
 

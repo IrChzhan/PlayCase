@@ -127,7 +127,6 @@ const submitForm = async () => {
       toastMessage.value = '';
     }, 1000);
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -141,7 +140,6 @@ const getDataFeedback = async () => {
       showToggleScreen.value = false;
     }
   } catch (e) {
-    console.log(e);
   }
 }
 

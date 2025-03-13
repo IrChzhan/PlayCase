@@ -163,7 +163,7 @@ const generateQRCode = async () => {
     const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email, count:selectedPlayers.value  });
     qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
   } catch (error) {
-    console.error('Ошибка генерации QR-кода:', error);
+    console.error('Ошибка генерации QR-кода');
   }
 };
 
@@ -219,11 +219,9 @@ onUnmounted(() => {
 const connectWebSocket = () => {
   socket = new WebSocket(`wss://igra-pads.ru/websocket`);
   socket.onopen = () => {
-    console.log('WebSocket connection established');
   };
   socket.onmessage = (event) => {
     const message = JSON.parse(event.data);
-    console.log('Received message:', message);
     if (message.eventType === 'payment.waiting_for_capture' ||
       message.eventType === 'payment.succeeded' ||
       message.eventType === 'payment.canceled' ||
@@ -233,11 +231,10 @@ const connectWebSocket = () => {
     }
   };
   socket.onclose = () => {
-    console.log('WebSocket connection closed');
     setTimeout(connectWebSocket, 5000);
   };
   socket.onerror = (error) => {
-    console.error('WebSocket error:', error);
+    console.error('WebSocket error');
   };
 };
 

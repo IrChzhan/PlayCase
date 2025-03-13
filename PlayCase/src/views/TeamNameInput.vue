@@ -40,7 +40,7 @@ const handleLogin = async () => {
         name: 'ClientHome',
       })
     } catch (error) {
-      console.error('Ошибка загрузки команды:', error)
+      console.error('Ошибка загрузки команды')
     }
     setTimeout(() => {
       toastMessage.value = ''

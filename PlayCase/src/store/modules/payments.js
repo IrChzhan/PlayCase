@@ -34,7 +34,7 @@ const actions = {
       commit('setPayments', []);
       return [];
     } catch (error) {
-      console.error('Ошибка загрузки данных:', error);
+      console.error('Ошибка загрузки данных');
       throw error;
     }
   },
@@ -97,10 +97,10 @@ const actions = {
       if (data.confirmation && data.confirmation.confirmation_data) {
         return data.confirmation.confirmation_data;
       } else {
-        console.error('Ошибка при создании платежа:', data);
+        console.error('Ошибка при создании платежа');
       }
     } catch (error) {
-      console.error('Ошибка при запросе на создание платежа:', error);
+      console.error('Ошибка при запросе на создание платежа');
     }
   },
   removeNotification({ commit }, updatedNotifications) {
@@ -124,7 +124,7 @@ const actions = {
       await dispatch('fetchPayments', gameId);
       return response.data;
     } catch (error) {
-      console.error('Ошибка обновления данных оплаты:', error);
+      console.error('Ошибка обновления данных оплаты');
       throw error;
     }
   },

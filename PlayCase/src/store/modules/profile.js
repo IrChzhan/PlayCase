@@ -50,7 +50,7 @@ export default {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/team`)
         return response.data
       } catch (error) {
-        console.error('Ошибка при загрузке пользователей:', error)
+        console.error('Ошибка при загрузке пользователей')
       }
     },
     async fetchUsers({ commit }) {
@@ -59,7 +59,7 @@ export default {
         commit('SET_USERS', response.data)
         return response.data
       } catch (error) {
-        console.error('Ошибка при загрузке пользователей:', error)
+        console.error('Ошибка при загрузке пользователей')
       }
     },
     async fetchUsersPlanshet({commit}) {
@@ -68,7 +68,7 @@ export default {
         commit('SET_USERS_PLANSHET', response.data)
         return response.data
       } catch (error) {
-        console.error('Ошибка при загрузке пользователей:', error)
+        console.error('Ошибка при загрузке пользователей')
       }
     },
     async getUser({ commit }, id) {
@@ -76,7 +76,7 @@ export default {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users/${id}`)
         return response.data
       } catch (error) {
-        console.error('Ошибка при загрузке пользователей:', error)
+        console.error('Ошибка при загрузке пользователей')
       }
     },
     async updateUser({ commit }, { id, payload, payload_two }) {
@@ -119,7 +119,7 @@ export default {
         commit('DEL_NAME_TEAM')
         return true
       } catch (error) {
-        console.error('Ошибка при авторизации:', error)
+        console.error('Ошибка при авторизации')
         return false
       }
     },
@@ -139,7 +139,7 @@ export default {
         commit('SET_ROLE', response_two.data.authorities[0].authority)
         return true
       } catch (error) {
-        console.error('Ошибка при авторизации:', error)
+        console.error('Ошибка при авторизации')
         return false
       }
     },
@@ -148,7 +148,7 @@ export default {
         await axios.post(`${import.meta.env.VITE_API_URL}/admin/v1/users`, userPayload)
         await dispatch('fetchUsers')
       } catch (error) {
-        console.error('Ошибка при добавлении пользователя:', error)
+        console.error('Ошибка при добавлении пользователя')
         throw error
       }
     },
@@ -169,7 +169,7 @@ export default {
           }
           )
       } catch (error) {
-        console.error('Ошибка при добавлении пользователя:', error)
+        console.error('Ошибка при добавлении пользователя')
         throw error
       }
     },
@@ -178,7 +178,7 @@ export default {
         await axios.delete(`${import.meta.env.VITE_API_URL}/admin/v1/users/${id}/actions/delete`)
         await dispatch('fetchUsers')
       } catch (error) {
-        console.error('Ошибка при добавлении пользователя:', error)
+        console.error('Ошибка при добавлении пользователя')
         throw error
       }
     },
@@ -187,7 +187,6 @@ export default {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/presentation`)
         return res.data
       }catch (e) {
-        console.log(e)
       }
     },
     logout({ commit }) {

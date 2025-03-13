@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref,computed} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {Client} from "@stomp/stompjs";
 import {useStore} from "vuex";
@@ -9,7 +9,12 @@ const router = useRouter()
 const store = useStore()
 const route = useRoute()
 
-useIdleRedirect(180000)
+const showPresentation = computed({
+  get: () => store.getters['presentation/show'],
+  set: (value) => store.dispatch('presentation/setShow', value), 
+});
+
+useIdleRedirect(180000,showPresentation.value)
 
 const show = ref(false)
 
@@ -28,7 +33,6 @@ const client = new Client({
   brokerURL: "wss://back.igra-pads.ru/ws",
   reconnectDelay: 5000,
   onConnect: () => {
-    console.log("STOMP подключен", userId.value, gameId.value);
 
     client.subscribe(`/queue/game/${gameId.value}/activeSlides`, async (message) => {
       const parsedMessage = JSON.parse(message.body);
@@ -70,32 +74,28 @@ const client = new Client({
     });
   },
   onStompError: (error) => {
-    console.error("Ошибка STOMP:", error);
+    console.error("Ошибка STOMP");
   },
 });
 
 const handleHelpNotification = (message) => {
-  console.log("Уведомление о помощи:", message);
   messages.value.push(message);
 };
 
 const handleSetPlaceNotification = (message) => {
   if (message.type === "UserPlaceSetNotificationWsMsg") {
-    console.log("Уведомление о месте пользователя:", message);
 
   }
 };
 
 const handleUserUpdateNotification = (message) => {
   if (message.type === "UserUpdateWsMsg") {
-    console.log("Обновление пользователя:", message);
 
   }
 };
 
 const handleGameStatusChange = (message) => {
   if (message.type === "GameUpdateWsMsg") {
-    console.log("Смена статуса игры:", message);
 
   }
 };
@@ -106,7 +106,7 @@ const getCurrentTeam = async () => {
     userId.value = res.assignedUserId
     gameId.value = res.gameId
   }catch (e) {
-    console.log(e)
+    console.log("Ошибка запроса команды")
   }
 }
 onMounted(() => {
@@ -114,7 +114,6 @@ onMounted(() => {
     client.activate();
   })
   const temp = route.path.split('/')
-  console.log(temp)
   if (!(temp.find((el) => el !== 'watch')))  {
     router.push({name: 'TeamNameDisplay'})
   }

@@ -27,7 +27,7 @@ export function useAuthCheck() {
           return
         }
       } catch (error) {
-        console.error('Ошибка при запросе currentTeam:', error)
+        console.error('Ошибка при запросе currentTeam:')
         await router.push('/TeamNameInput')
         return
       }

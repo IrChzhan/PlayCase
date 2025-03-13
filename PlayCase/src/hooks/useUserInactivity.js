@@ -1,13 +1,17 @@
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-export default function useIdleRedirect(timeout = 300000) {
+export default function useIdleRedirect(timeout = 300000, isModalOpen = false) {
   const idleTimeout = ref(null);
   const router = useRouter();
 
   const resetIdleTimer = () => {
     if (idleTimeout.value) {
       clearTimeout(idleTimeout.value);
+    }
+
+    if (isModalOpen) {
+      return;
     }
 
     idleTimeout.value = setTimeout(() => {
@@ -34,4 +38,14 @@ export default function useIdleRedirect(timeout = 300000) {
       clearTimeout(idleTimeout.value);
     }
   });
+  watch(() => isModalOpen, (newVal) => {
+    if (newVal) {
+      if (idleTimeout.value) {
+        clearTimeout(idleTimeout.value);
+      }
+    } else {
+      resetIdleTimer();
+    }
+  });
 }
+

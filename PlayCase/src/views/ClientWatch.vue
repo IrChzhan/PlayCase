@@ -24,7 +24,7 @@ const client = new Client({
     });
   },
   onStompError: (error) => {
-    console.error("Ошибка STOMP:", error);
+    console.error("Ошибка STOMP");
   },
 });
 
@@ -36,7 +36,7 @@ const fetchCurrentUser = async () => {
   }catch (e) {
     localStorage.removeItem('token')
     router.push('/')
-    console.log('a')
+    console.log('Ошибка запроса пользователя')
   }
 }
 
@@ -49,7 +49,6 @@ const fetchTeam = async() => {
     localStorage.setItem('team', JSON.stringify(team.value))
     router.push('/client')
   } catch (e) {
-    console.log(e)
   }
 
 }

@@ -51,11 +51,6 @@ onMounted(() => {
       videoElement.value.classList.add('loaded') 
     })
   }
-  if (videoElement.value) {
-    videoElement.value.play().catch(error => {
-      console.error('Автовоспроизведение заблокировано:', error)
-    })
-  }
 })
 </script>
 

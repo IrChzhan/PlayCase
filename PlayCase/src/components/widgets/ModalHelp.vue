@@ -55,7 +55,6 @@ const callWaiter = async () => {
   } catch (e) {
     toastMessage.value = 'Ошибка при запросе!';
     toastType.value = 'error';
-    console.log(e);
   }
 };
 
@@ -75,7 +74,6 @@ const callHelper = async () => {
   } catch (e) {
     toastMessage.value = 'Ошибка при запросе!';
     toastType.value = 'error';
-    console.log(e);
   }
 };
 
@@ -86,7 +84,6 @@ const getCurrentHelp = async () => {
     calledPerson.value = res.responsiblePerson;
   } catch (e) {
     resHelp.value = '';
-    console.log(e);
   }
 };
 

@@ -38,8 +38,6 @@ const formData = ref({
 })
 
 const submitForm = () => {
-  console.log('Форма отправлена:', formData.value)
-  alert('Спасибо за ваш комментарий!')
   formData.value.comment = ''
   formData.value.questionType = ''
   formData.value.hostType = ''

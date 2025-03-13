@@ -42,7 +42,7 @@ const get = async () => {
   try {
     await store.dispatch('lottery/fetchRegistrations');
   } catch (err) {
-    console.error('Ошибка при загрузке зарегистрированных пользователей:', err);
+    console.error('Ошибка при загрузке зарегистрированных пользователей');
     error.value = 'Произошла ошибка при загрузке данных.';
   }
 }

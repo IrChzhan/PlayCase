@@ -669,5 +669,48 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
+@media screen and (max-width: 2300px) {
+  .slide-name, .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+    font-size: 24px;
+  }
 
+  .slide-row {
+    grid-template-columns: 40px 40px 40px 1fr 1fr 1fr; 
+    gap: 5px; 
+  }
+
+  .slide-image {
+    width: 120px; 
+    height: 67.5px;
+    margin-left: 40px;
+  }
+
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+    padding: 12px; 
+  }
+
+  .btn-load {
+    margin-top: 75px;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .slide-name, .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+    font-size: 20px; 
+  }
+
+  .slide-row {
+    grid-template-columns: 30px 30px 30px 1fr 1fr 1fr; 
+  }
+
+  .slide-image {
+    width: 100px; 
+    height: 56.25px; 
+    margin-left: 20px; 
+  }
+
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+    padding: 10px; 
+  }
+}
 </style>

@@ -82,7 +82,7 @@ const client = new Client({
     });
   },
   onStompError: (error) => {
-    console.error("Ошибка STOMP:", error);
+    console.error("Ошибка STOMP");
   },
 });
 
@@ -105,7 +105,6 @@ const getCurrentTeam = async () => {
     const res = await store.dispatch('profile/getCurrentTeam');
     gameId.value = res.gameId;
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -121,7 +120,6 @@ const fetchPresentation = async () => {
       currentSlide.value = null;
     }
   } catch (e) {
-    console.error('Error fetching presentation:', e);
   }
 };
 

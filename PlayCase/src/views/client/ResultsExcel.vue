@@ -73,7 +73,7 @@ const fetchResults = async () => {
     const results = await store.dispatch('games/fetchGameResults', currentGame.id);
     teams.value = results;
   } catch (error) {
-    console.error('Ошибка при получении данных:', error.message);
+    console.error('Ошибка при получении данных');
   }
 };
 
