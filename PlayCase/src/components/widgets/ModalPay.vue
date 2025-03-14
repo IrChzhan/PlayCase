@@ -113,7 +113,7 @@ const store = useStore();
 const emailError = ref('');
 const emailTeam = ref('');
 const selectedPlayers = ref(1);
-const pricePerPlayer = ref(11);
+const pricePerPlayer = ref(1000);
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
 
 const picked = ref('sendReceiptToCaptain')
