@@ -455,20 +455,20 @@ onUnmounted(() => {
 }
 
 .left-container {
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
 .slides-container {
-  display: grid;
-  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 25px;
+  margin-bottom: 50px;
 }
 
 .slide-row {
-  display: grid;
-  grid-template-columns: minmax(50px, 1fr) minmax(50px, 1fr) minmax(50px, 1fr) 2fr 2fr 3fr;
+  display: flex;
   align-items: center;
   gap: 10px;
   border: 1px solid #ccc;
@@ -543,7 +543,6 @@ onUnmounted(() => {
 .right-container {
   display: flex;
   flex-direction: column;
-  min-width: 400px;
 }
 
 .btn-delete {
@@ -560,7 +559,7 @@ onUnmounted(() => {
 }
 
 .btn-load {
-  margin-top: 55px;
+  margin-top: 20px;
   font-family: "Mulish", sans-serif;
   font-weight: 500;
   font-size: 28px;
@@ -684,7 +683,6 @@ onUnmounted(() => {
   }
 
   .slide-row {
-    grid-template-columns: minmax(40px, 1fr) minmax(40px, 1fr) minmax(40px, 1fr) 2fr 2fr 3fr;
     gap: 5px;
   }
 
@@ -708,10 +706,6 @@ onUnmounted(() => {
     font-size: 20px;
   }
 
-  .slide-row {
-    grid-template-columns: minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr) 2fr 2fr 3fr;
-  }
-
   .slide-image {
     width: 100px;
     height: 56.25px;
@@ -724,11 +718,6 @@ onUnmounted(() => {
 }
 
 @media screen and (max-width: 1200px) {
-  .slide-row {
-    grid-template-columns: minmax(20px, 1fr) minmax(20px, 1fr) minmax(20px, 1fr) 2fr 2fr 3fr;
-    gap: 5px;
-  }
-
   .slide-image {
     width: 80px;
     height: 45px;
@@ -750,11 +739,6 @@ onUnmounted(() => {
     min-width: 100%;
   }
 
-  .slide-row {
-    grid-template-columns: minmax(20px, 1fr) minmax(20px, 1fr) minmax(20px, 1fr) 2fr 2fr 2fr;
-    gap: 5px;
-  }
-
   .slide-image {
     width: 60px;
     height: 33.75px;
@@ -768,11 +752,6 @@ onUnmounted(() => {
 }
 
 @media screen and (max-width: 480px) {
-  .slide-row {
-    grid-template-columns: minmax(15px, 1fr) minmax(15px, 1fr) minmax(15px, 1fr) 2fr 2fr 2fr;
-    gap: 3px;
-  }
-
   .slide-image {
     width: 40px;
     height: 22.5px;
@@ -804,7 +783,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
 }
-
 
 @media screen and (max-width: 1200px) {
   .setting-container {
@@ -854,4 +832,9 @@ onUnmounted(() => {
   }
 }
 
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .slide-row{
+    font-size: 60px;
+  }
+}
 </style>
