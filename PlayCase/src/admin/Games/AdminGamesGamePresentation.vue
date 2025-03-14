@@ -418,19 +418,20 @@ onUnmounted(() => {
 
 </script>
 
+
 <style scoped>
 .add-slide-container {
-width: 100%; 
-background: white;
-position: fixed;
-bottom: 0; 
+  width: 100%;
+  background: white;
+  position: fixed;
+  bottom: 0;
 }
 
 .icon-setting {
-    padding: 0;
-    width: 40px;
-    height: 40px;
-  }
+  padding: 0;
+  width: 40px;
+  height: 40px;
+}
 
 .drag-handle {
   cursor: grab;
@@ -455,21 +456,21 @@ bottom: 0;
 
 .left-container {
   display: grid;
-  grid-template-rows: auto 1fr; 
-  gap: 20px; 
+  grid-template-rows: auto 1fr;
+  gap: 20px;
 }
 
 .slides-container {
   display: grid;
-  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr)); 
-  gap: 25px; 
+  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 25px;
 }
 
 .slide-row {
   display: grid;
-  grid-template-columns: 50px 50px 50px 1fr 1fr 1fr; 
-  align-items: center; 
-  gap: 10px; 
+  grid-template-columns: minmax(50px, 1fr) minmax(50px, 1fr) minmax(50px, 1fr) 2fr 2fr 3fr;
+  align-items: center;
+  gap: 10px;
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 10px;
@@ -514,7 +515,7 @@ bottom: 0;
 .checkbox {
   width: 35px;
   height: 35px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .empty-text {
@@ -536,7 +537,7 @@ bottom: 0;
   flex-direction: row;
   justify-content: space-between;
   padding: 20px;
-  gap: 20px;
+  gap: 120px;
 }
 
 .right-container {
@@ -683,18 +684,18 @@ bottom: 0;
   }
 
   .slide-row {
-    grid-template-columns: 40px 40px 40px 1fr 1fr 1fr; 
-    gap: 5px; 
+    grid-template-columns: minmax(40px, 1fr) minmax(40px, 1fr) minmax(40px, 1fr) 2fr 2fr 3fr;
+    gap: 5px;
   }
 
   .slide-image {
-    width: 120px; 
+    width: 120px;
     height: 67.5px;
     margin-left: 40px;
   }
 
   .btn-load, .btn-delete, .btn-activate, .btn-toggle {
-    padding: 12px; 
+    padding: 12px;
   }
 
   .btn-load {
@@ -704,21 +705,153 @@ bottom: 0;
 
 @media screen and (max-width: 1600px) {
   .slide-name, .btn-load, .btn-delete, .btn-activate, .btn-toggle {
-    font-size: 20px; 
+    font-size: 20px;
   }
 
   .slide-row {
-    grid-template-columns: 30px 30px 30px 1fr 1fr 1fr; 
+    grid-template-columns: minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr) 2fr 2fr 3fr;
   }
 
   .slide-image {
-    width: 100px; 
-    height: 56.25px; 
-    margin-left: 20px; 
+    width: 100px;
+    height: 56.25px;
+    margin-left: 20px;
   }
 
   .btn-load, .btn-delete, .btn-activate, .btn-toggle {
-    padding: 10px; 
+    padding: 10px;
   }
 }
+
+@media screen and (max-width: 1200px) {
+  .slide-row {
+    grid-template-columns: minmax(20px, 1fr) minmax(20px, 1fr) minmax(20px, 1fr) 2fr 2fr 3fr;
+    gap: 5px;
+  }
+
+  .slide-image {
+    width: 80px;
+    height: 45px;
+    margin-left: 10px;
+  }
+
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+    font-size: 18px;
+    padding: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .right-container {
+    min-width: 100%;
+  }
+
+  .slide-row {
+    grid-template-columns: minmax(20px, 1fr) minmax(20px, 1fr) minmax(20px, 1fr) 2fr 2fr 2fr;
+    gap: 5px;
+  }
+
+  .slide-image {
+    width: 60px;
+    height: 33.75px;
+    margin-left: 5px;
+  }
+
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+    font-size: 16px;
+    padding: 6px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .slide-row {
+    grid-template-columns: minmax(15px, 1fr) minmax(15px, 1fr) minmax(15px, 1fr) 2fr 2fr 2fr;
+    gap: 3px;
+  }
+
+  .slide-image {
+    width: 40px;
+    height: 22.5px;
+    margin-left: 2px;
+  }
+
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+    font-size: 14px;
+    padding: 4px;
+  }
+}
+
+.setting-container {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center; 
+  gap: 10px; 
+  min-width: 200px; 
+  margin-left: auto;
+}
+
+.settings, .buck, .reverse {
+  padding: 5px 15px;
+  border-radius: 12px;
+  border: none;
+  background: #C59216;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@media screen and (max-width: 1200px) {
+  .setting-container {
+    min-width: 150px; 
+    gap: 8px;
+  }
+
+  .settings, .buck, .reverse {
+    padding: 4px 12px;
+  }
+
+  .img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .setting-container {
+    min-width: 120px;
+    gap: 5px; 
+  }
+
+  .settings, .buck, .reverse {
+    padding: 3px 10px; 
+  }
+
+  .img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .setting-container {
+    min-width: 100px; 
+    gap: 3px; 
+  }
+
+  .settings, .buck, .reverse {
+    padding: 2px 8px; 
+  }
+
+  .img {
+    width: 16px; 
+    height: 16px;
+  }
+}
+
 </style>
