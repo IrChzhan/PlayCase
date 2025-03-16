@@ -58,6 +58,11 @@ const client = new Client({
   onConnect: () => {
     client.subscribe(`/queue/game/${gameId.value}/activeSlides`, async (message) => {
       const parsedMessage = JSON.parse(message.body);
+console.log(parsedMessage)
+      if(parsedMessage.mutationType === 'SLIDE_IS_ACTIVE_CHANGE') {
+        
+      }
+
       if (parsedMessage.type === "GameActiveSlidesWsMsg") {
         slides.value = parsedMessage.payload;
         if (slides.value.length > 0) {
@@ -66,21 +71,6 @@ const client = new Client({
           currentSlide.value = slides.value[lastActiveSlideIndex];
         } else {
           currentSlide.value = null;
-        }
-      }
-    });
-
-    client.subscribe(`/queue/admin/game/${gameId.value}`, async (message) => {
-      const parsedMessage = JSON.parse(message.body);
-      if (parsedMessage.type === "GameSlideUpdatedWsMsg") {
-        const updatedSlide = parsedMessage.payload;
-        const index = slides.value.findIndex((slide) => slide.id === updatedSlide.id);
-        if (index !== -1) {
-          slides.value[index] = updatedSlide;
-          if (index > currentSlideIndex.value) {
-            currentSlideIndex.value = index;
-            currentSlide.value = updatedSlide;
-          }
         }
       }
     });
