@@ -1,158 +1,248 @@
 <template>
-  <div v-if="show" class="fullscreen-modal" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+  <div
+    v-if="show"
+    class="fullscreen-modal"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd"
+  >
     <div class="slides-container">
       <transition :name="transitionName" mode="out-in">
-        <img v-if="currentSlide" :key="currentSlide.id" :src="currentSlide?.fileUrl" alt="Slide" class="slide-image" />
-        <img v-else src="@/assets/bgPresa.jpeg" alt="slide" class="slide-image">
+        <div v-if="slides.length > 0" class="slider">
+          <div
+            class="slider-track"
+            :class="{ 'no-animation': !isAnimationEnabled }"
+            :style="{ transform: `translate3d(${offsetX}px, 0, 0)` }"
+          >
+            <div
+              class="slide"
+              v-for="(slide, index) in slides"
+              :key="index"
+              :style="{ backgroundImage: `url(${slide.fileUrl})` }"
+            ></div>
+          </div>
+        </div>
+        <img v-else src="@/assets/bgPresa.jpeg" alt="slide" class="slide-image" />
       </transition>
     </div>
     <div class="slides-block">
-      <button v-if="currentSlide" class="nav-button" @click="prevSlide">
-        <IconArrowLeft v-if="prevButtonStyle"/>
-        <IconArrowLeftEmpty v-else/>
+      <button v-if="slides.length > 0" class="nav-button" @click="prevSlide">
+        <IconArrowLeft v-if="canPrev" />
+        <IconArrowLeftEmpty v-else />
       </button>
       <button class="close-button" @click="closeModal">
         <img src="@/assets/House_5.svg" alt="Домой" class="home-button" />
       </button>
-      <button v-if="currentSlide" class="nav-button" @click="nextSlide">
-        <IconArrowRight v-if="nextButtonStyle"/>
-        <IconArrowRightEmpty v-else/>
+      <button v-if="slides.length > 0" class="nav-button" @click="nextSlide">
+        <IconArrowRight v-if="canNext" />
+        <IconArrowRightEmpty v-else />
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
-import { Client } from "@stomp/stompjs";
-import { useStore } from "vuex";
-import IconArrowLeft from "@/components/icons/IconArrowLeft.vue";
-import IconArrowLeftEmpty from "@/components/icons/IconArrowLeftEmpty.vue";
-import IconArrowRight from "@/components/icons/IconArrowRight.vue";
-import IconArrowRightEmpty from "@/components/icons/IconArrowRightEmpty.vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { Client } from '@stomp/stompjs'
+import { useStore } from 'vuex'
+import IconArrowLeft from '@/components/icons/IconArrowLeft.vue'
+import IconArrowLeftEmpty from '@/components/icons/IconArrowLeftEmpty.vue'
+import IconArrowRight from '@/components/icons/IconArrowRight.vue'
+import IconArrowRightEmpty from '@/components/icons/IconArrowRightEmpty.vue'
 
 const props = defineProps({
   show: Boolean,
   closeModal: Function,
   gameId: String,
-});
+})
 
-const slides = ref([]);
-const currentSlideIndex = ref(0);
-const currentSlide = ref(null);
-const gameId = ref('');
-const store = useStore();
+const slides = ref([])
+const currentSlideIndex = ref(0)
+const gameId = ref('')
+const store = useStore()
 
-const touchStartX = ref(0);
-const touchEndX = ref(0);
-const transitionName = ref('slide-next'); 
+const touchStartX = ref(0)
+const touchEndX = ref(0)
+const transitionName = ref('slide-next')
 
-const canPrev = computed(() => currentSlideIndex.value > 0);
-const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1);
-const prevButtonStyle = computed(() => canPrev.value);
-const nextButtonStyle = computed(() => canNext.value);
+const offsetX = ref(0)
+const startX = ref(0)
+const isDragging = ref(false)
+const slideWidth = ref(1920)
+const isInitialized = ref(false)
+const isAnimationEnabled = ref(false)
+
+const canPrev = computed(() => currentSlideIndex.value > 0)
+const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1)
+
+const handleNewSlides = (newSlides, data) => {
+  isAnimationEnabled.value = false
+
+  const currentSlideIndexBeforeUpdate = currentSlideIndex.value
+  const oldArray = slides.value
+
+  newSlides.sort((a, b) => a.slideIndex - b.slideIndex)
+
+  const currentSlideInNewArray = newSlides.findIndex(
+    (slide) => slide.slideIndex === slides.value[currentSlideIndexBeforeUpdate]?.slideIndex
+  )
+
+  if (currentSlideInNewArray !== -1) {
+    currentSlideIndex.value = newSlides.length - 1
+  } else {
+    if (currentSlideIndexBeforeUpdate >= newSlides.length) {
+      currentSlideIndex.value = newSlides.length - 1
+    } else {
+      currentSlideIndex.value = currentSlideIndexBeforeUpdate
+    }
+  }
+
+  if (oldArray.length === 0) {
+    currentSlideIndex.value = newSlides.length - 1
+  }
+
+  slides.value = newSlides
+
+  offsetX.value = -currentSlideIndex.value * slideWidth.value
+
+  setTimeout(() => {
+    isAnimationEnabled.value = true
+  }, 0)
+}
 
 const client = new Client({
-  brokerURL: "wss://back.igra-pads.ru/ws",
+  brokerURL: 'wss://back.igra-pads.ru/ws',
   reconnectDelay: 5000,
   onConnect: () => {
     client.subscribe(`/queue/game/${gameId.value}/activeSlides`, async (message) => {
-      const parsedMessage = JSON.parse(message.body);
-console.log(parsedMessage)
-      if(parsedMessage.mutationType === 'SLIDE_IS_ACTIVE_CHANGE') {
-        
+      const parsedMessage = JSON.parse(message.body)
+      if (parsedMessage.type === 'GameActiveSlidesWsMsg') {
+        handleNewSlides(parsedMessage.payload, parsedMessage)
       }
-
-      if (parsedMessage.type === "GameActiveSlidesWsMsg") {
-        slides.value = parsedMessage.payload;
-        if (slides.value.length > 0) {
-          const lastActiveSlideIndex = slides.value.length - 1;
-          currentSlideIndex.value = lastActiveSlideIndex;
-          currentSlide.value = slides.value[lastActiveSlideIndex];
-        } else {
-          currentSlide.value = null;
-        }
-      }
-    });
+    })
   },
   onStompError: (error) => {
-    console.error("Ошибка STOMP");
+    console.error('Ошибка STOMP')
   },
-});
+})
+
+const animateSlide = (targetOffset) => {
+  const start = performance.now()
+  const duration = 100 
+  const startOffset = offsetX.value
+
+  const step = (timestamp) => {
+    const progress = timestamp - start
+    const percentage = Math.min(progress / duration, 1)
+    offsetX.value = startOffset + (targetOffset - startOffset) * percentage
+
+    if (percentage < 1) {
+      requestAnimationFrame(step)
+    }
+  }
+
+  requestAnimationFrame(step)
+}
 
 const prevSlide = () => {
   if (canPrev.value) {
-    transitionName.value = 'slide-prev';
-    currentSlideIndex.value--;
-    currentSlide.value = slides.value[currentSlideIndex.value];
+    const targetOffset = -(currentSlideIndex.value - 1) * slideWidth.value
+    animateSlide(targetOffset)
+    currentSlideIndex.value--
   }
-};
+}
 
 const nextSlide = () => {
   if (canNext.value) {
-    transitionName.value = 'slide-next';
-    currentSlideIndex.value++;
-    currentSlide.value = slides.value[currentSlideIndex.value];
+    const targetOffset = -(currentSlideIndex.value + 1) * slideWidth.value
+    animateSlide(targetOffset)
+    currentSlideIndex.value++
   }
-};
+}
+
+const handleTouchStart = (event) => {
+  touchStartX.value = event.touches[0].clientX
+  startX.value = event.touches[0].clientX
+  isDragging.value = true
+}
+
+const handleTouchMove = (event) => {
+  if (!isDragging.value) return
+  const clientX = event.touches[0].clientX
+  const deltaX = clientX - startX.value
+  const newOffset = -currentSlideIndex.value * slideWidth.value + deltaX
+
+  if (newOffset > 0 || newOffset < -(slides.value.length - 1) * slideWidth.value) return
+  offsetX.value = newOffset
+}
+
+const handleTouchEnd = () => {
+  if (!isDragging.value) return
+  isDragging.value = false
+
+  const deltaX = offsetX.value + currentSlideIndex.value * slideWidth.value
+  const threshold = slideWidth.value / 4
+
+  if (Math.abs(deltaX) > threshold) {
+    if (deltaX > 0) {
+      prevSlide()
+    } else {
+      nextSlide()
+    }
+  } else {
+    offsetX.value = -currentSlideIndex.value * slideWidth.value
+  }
+}
 
 const getCurrentTeam = async () => {
   try {
-    const res = await store.dispatch('profile/getCurrentTeam');
-    gameId.value = res.gameId;
-  } catch (e) {
-  }
-};
+    const res = await store.dispatch('profile/getCurrentTeam')
+    gameId.value = res.gameId
+  } catch (e) {}
+}
 
 const fetchPresentation = async () => {
   try {
-    const res = await store.dispatch('profile/getCurrentSlides');
-    slides.value = res;
+    const res = await store.dispatch('profile/getCurrentSlides')
+    slides.value = res
     if (slides.value.length > 0) {
-      const lastActiveSlideIndex = slides.value.length - 1;
-      currentSlideIndex.value = lastActiveSlideIndex;
-      currentSlide.value = slides.value[lastActiveSlideIndex];
-    } else {
-      currentSlide.value = null;
+      const lastActiveSlideIndex = slides.value.length - 1
+      currentSlideIndex.value = lastActiveSlideIndex
+      offsetX.value = -lastActiveSlideIndex * slideWidth.value
     }
-  } catch (e) {
-  }
-};
-
-const handleTouchStart = (event) => {
-  touchStartX.value = event.touches[0].clientX;
-};
-
-const handleTouchMove = (event) => {
-  touchEndX.value = event.touches[0].clientX;
-};
-
-const handleTouchEnd = () => {
-  if (touchStartX.value - touchEndX.value > 50) {
-    nextSlide();
-  } else if (touchEndX.value - touchStartX.value > 50) {
-    prevSlide();
-  }
-};
+  } catch (e) {}
+}
 
 onMounted(async () => {
-  await getCurrentTeam();
+  await getCurrentTeam()
   if (gameId.value) {
-    await client.activate();
-    await fetchPresentation();
+    await client.activate()
+    await fetchPresentation()
+    setTimeout(() => {
+      isInitialized.value = true
+      isAnimationEnabled.value = true
+    }, 0)
   }
-});
+})
 
 onBeforeUnmount(async () => {
-  await client.deactivate();
-});
+  await client.deactivate()
+  isAnimationEnabled.value = false
+})
 
-watch(() => props.show, async (newVal) => {
-  if (newVal && gameId.value) {
-    await client.activate();
-    await fetchPresentation(); 
+watch(
+  () => props.show,
+  async (newVal) => {
+    if (newVal && gameId.value) {
+      await client.activate()
+      await fetchPresentation()
+      setTimeout(() => {
+        isInitialized.value = true
+        isAnimationEnabled.value = true
+      }, 0)
+    }
   }
-});
+)
 </script>
 
 <style scoped>
@@ -161,7 +251,7 @@ watch(() => props.show, async (newVal) => {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
 }
 
 .empty-text {
@@ -204,7 +294,7 @@ watch(() => props.show, async (newVal) => {
 }
 
 .slides-block {
-  margin-top: 10px; 
+  margin-top: 10px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -227,11 +317,41 @@ watch(() => props.show, async (newVal) => {
   cursor: pointer;
 }
 
+.slider {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.7s ease;
+  will-change: transform;
+}
+
+.slider-track.no-animation {
+  transition: none;
+}
+
+.slide {
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+}
+
 .slide-next-enter-active,
 .slide-next-leave-active,
 .slide-prev-enter-active,
 .slide-prev-leave-active {
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.4s ease-in-out;
 }
 
 .slide-next-enter-from {
