@@ -63,6 +63,7 @@ const store = useStore()
 
 const touchStartX = ref(0)
 const touchEndX = ref(0)
+const touchStartTime = ref(0)
 const transitionName = ref('slide-next')
 
 const offsetX = ref(0)
@@ -126,9 +127,8 @@ const client = new Client({
   },
 })
 
-const animateSlide = (targetOffset) => {
+const animateSlide = (targetOffset, duration = 300) => {
   const start = performance.now()
-  const duration = 100 
   const startOffset = offsetX.value
 
   const step = (timestamp) => {
@@ -149,6 +149,7 @@ const prevSlide = () => {
     const targetOffset = -(currentSlideIndex.value - 1) * slideWidth.value
     animateSlide(targetOffset)
     currentSlideIndex.value--
+    transitionName.value = 'slide-prev'
   }
 }
 
@@ -157,12 +158,14 @@ const nextSlide = () => {
     const targetOffset = -(currentSlideIndex.value + 1) * slideWidth.value
     animateSlide(targetOffset)
     currentSlideIndex.value++
+    transitionName.value = 'slide-next'
   }
 }
 
 const handleTouchStart = (event) => {
   touchStartX.value = event.touches[0].clientX
   startX.value = event.touches[0].clientX
+  touchStartTime.value = performance.now()
   isDragging.value = true
 }
 
@@ -182,15 +185,16 @@ const handleTouchEnd = () => {
 
   const deltaX = offsetX.value + currentSlideIndex.value * slideWidth.value
   const threshold = slideWidth.value / 4
+  const velocity = deltaX / (performance.now() - touchStartTime.value)
 
-  if (Math.abs(deltaX) > threshold) {
-    if (deltaX > 0) {
+  if (Math.abs(deltaX) > threshold || Math.abs(velocity) > 0.5) {
+    if (deltaX > 0 || velocity > 0.5) {
       prevSlide()
     } else {
       nextSlide()
     }
   } else {
-    offsetX.value = -currentSlideIndex.value * slideWidth.value
+    animateSlide(-currentSlideIndex.value * slideWidth.value, 200) 
   }
 }
 
@@ -327,7 +331,6 @@ watch(
 
 .slider-track {
   display: flex;
-  transition: transform 0.7s ease;
   will-change: transform;
 }
 
@@ -345,13 +348,14 @@ watch(
   justify-content: center;
   background-size: cover;
   background-position: center;
+  pointer-events: none;
 }
 
 .slide-next-enter-active,
 .slide-next-leave-active,
 .slide-prev-enter-active,
 .slide-prev-leave-active {
-  transition: transform 0.4s ease-in-out;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-next-enter-from {
