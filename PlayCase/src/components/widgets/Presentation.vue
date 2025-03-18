@@ -16,10 +16,12 @@
           >
             <div
               class="slide"
+              :class="{ 'no-animation': !isAnimationEnabled }"
               v-for="(slide, index) in slides"
               :key="index"
-              :style="{ backgroundImage: `url(${slide.fileUrl})` }"
-            ></div>
+            >
+            <img :src="slide?.fileUrl" alt="slide">
+          </div>
           </div>
         </div>
         <img v-else src="@/assets/bgPresa.jpeg" alt="slide" class="slide-image" />
@@ -64,7 +66,7 @@ const store = useStore()
 const touchStartX = ref(0)
 const touchEndX = ref(0)
 const touchStartTime = ref(0)
-const transitionName = ref('slide-next')
+const transitionName = ref(null)
 
 const offsetX = ref(0)
 const startX = ref(0)
@@ -75,6 +77,29 @@ const isAnimationEnabled = ref(false)
 
 const canPrev = computed(() => currentSlideIndex.value > 0)
 const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1)
+
+let autoClickInterval = null
+
+const autoClick = () => {
+  const slides = document.querySelectorAll('.slide')
+  if (slides.length > 0) {
+    const currentSlide = slides[currentSlideIndex.value] 
+    if (currentSlide) {
+      currentSlide.click()
+    }
+  }
+}
+
+const startAutoClick = () => {
+  autoClickInterval = setInterval(autoClick, 60000) 
+}
+
+const stopAutoClick = () => {
+  if (autoClickInterval) {
+    clearInterval(autoClickInterval)
+    autoClickInterval = null
+  }
+}
 
 const handleNewSlides = (newSlides, data) => {
   isAnimationEnabled.value = false
@@ -105,10 +130,6 @@ const handleNewSlides = (newSlides, data) => {
   slides.value = newSlides
 
   offsetX.value = -currentSlideIndex.value * slideWidth.value
-
-  setTimeout(() => {
-    isAnimationEnabled.value = true
-  }, 0)
 }
 
 const client = new Client({
@@ -146,6 +167,8 @@ const animateSlide = (targetOffset, duration = 300) => {
 
 const prevSlide = () => {
   if (canPrev.value) {
+    isInitialized.value = true
+    isAnimationEnabled.value = true
     const targetOffset = -(currentSlideIndex.value - 1) * slideWidth.value
     animateSlide(targetOffset)
     currentSlideIndex.value--
@@ -155,6 +178,8 @@ const prevSlide = () => {
 
 const nextSlide = () => {
   if (canNext.value) {
+    isInitialized.value = true
+    isAnimationEnabled.value = true
     const targetOffset = -(currentSlideIndex.value + 1) * slideWidth.value
     animateSlide(targetOffset)
     currentSlideIndex.value++
@@ -163,6 +188,8 @@ const nextSlide = () => {
 }
 
 const handleTouchStart = (event) => {
+  isInitialized.value = true
+  isAnimationEnabled.value = true
   touchStartX.value = event.touches[0].clientX
   startX.value = event.touches[0].clientX
   touchStartTime.value = performance.now()
@@ -223,15 +250,15 @@ onMounted(async () => {
     await client.activate()
     await fetchPresentation()
     setTimeout(() => {
-      isInitialized.value = true
-      isAnimationEnabled.value = true
-    }, 0)
+      startAutoClick() 
+    }, 1)
   }
 })
 
 onBeforeUnmount(async () => {
   await client.deactivate()
   isAnimationEnabled.value = false
+  stopAutoClick() 
 })
 
 watch(
@@ -241,11 +268,22 @@ watch(
       await client.activate()
       await fetchPresentation()
       setTimeout(() => {
-        isInitialized.value = true
-        isAnimationEnabled.value = true
-      }, 0)
+        startAutoClick() 
+      }, 1)
+    } else {
+      stopAutoClick() 
     }
   }
+)
+
+watch(
+  () => slides.value,
+  (newSlides, oldSlides) => {
+    if (newSlides.length ===  0) {
+      transitionName.value = null
+    }
+  },
+  { deep: true } 
 )
 </script>
 
@@ -372,5 +410,9 @@ watch(
 
 .slide-prev-leave-to {
   transform: translateX(100%);
+}
+
+.slide.no-animation {
+  transition: none;
 }
 </style>

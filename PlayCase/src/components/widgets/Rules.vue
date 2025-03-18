@@ -61,7 +61,7 @@ const rounds = ref([
         <li><span style="font-weight: 700;">Правильный</span> ответ: +10 баллов за каждую букву</li>
         <li><span style="font-weight: 700;">Неправильный</span> ответ: –5 баллов за каждую букву</li>
         <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд</span></li>
-        <li>В раунде могут быть вопросы без правильных ответов или с несколькими верными вариантами</li>
+        <li>В раунде могут быть вопросы без правильных ответов или с несколькими верными вариантами. Если вы считаете, что правильного ответа на вопрос среди вариантов нет, ничего не пишите или ставьте прочерк.</li>
       </ul>
       <span style="font-style: italic">Максимум: 120 баллов.</span>
     ` 
@@ -70,7 +70,7 @@ const rounds = ref([
     title: '2 раунд. Логика', 
     pretitle: 'РАУНД 2 / Логика',
     description: `
-      <b>6 логических вопросов, ответы в свободной форме.</b>
+      <b>6 логических вопросов без вариантов ответов.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
         <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
         <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
@@ -83,9 +83,9 @@ const rounds = ref([
     pretitle: 'РАУНД 3 / Картинки',
     description: `
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Каждой команде выдаётся 10 картинок.</li>
-        <li>Время на обсуждение: <span style="font-weight: 700;">360 секунд</span></li>
-        <li>Нужно отгадать зашифрованные фильмы, песни или книги и вписать ответы в бланк (номер картинки = номер вопроса)</li>
+        <li>Каждой команде выдаётся 10 картинок и запускается таймер на 8 минут.</li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">480 секунд</span></li>
+        <li>Нужно отгадать зашифрованные фильмы, книги или исполнителей и вписать ответы в бланк на 10 ответов (номер картинки = номер вопроса). На самих картинках ничего писать не нужно!</li>
         <li><span style="font-weight: 700;">Правильный</span> ответ: +10 баллов</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 100 баллов.</span>
@@ -95,11 +95,11 @@ const rounds = ref([
     title: '4 раунд. Комбо', 
     pretitle: 'РАУНД 4 / Комбо',
     description: `
-      <b>6 вопросов, ответы в свободной форме.</b>
+      <b>6 вопросов без вариантов ответов.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
+        <li>Время на каждый вопрос: <span style="font-weight: 700;">30/60 секунд</span></li>
         <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
-        <li>После вопросов — выбор одной из трёх комбинаций (30 секунд). Если все ответы соответствующего цвета верны, вы получаете дополнительные  баллы. Штрафы за ошибки в комбинациях не предусмотрены.</li>
+        <li>В течение раунда вы отвечаете на вопросы, а в конце у вас будет дополнительно 30 секунд, чтобы сделать выбор: указать одну комбинацию из трёх возможных, чтобы получить бонусные баллы.</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 170 баллов.</span>
     ` 
@@ -108,20 +108,20 @@ const rounds = ref([
     title: '5 раунд. Хет-трик', 
     pretitle: 'РАУНД 5 / Хет-трик',
     description: `
-      <b>6 вопросов, на каждый можно дать до трёх ответов.</b>
+      <b>6 вопросов, на каждый из которых можно ответить 3 раза.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
+        <li>Если вы уверены в своём ответе, пишите все 3 раза один и тот же ответ, если не уверены, можете написать 3 разных ответа или любую другую комбинацию из трёх вариантов.</li>
+        <li>За каждый правильный ответ вы получите +5 баллов.</li>
         <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд на вопрос</span></li>
-        <li><span style="font-weight: 700;">Правильный</span> ответ: +5 баллов за каждый</li>
-        <li>Можно повторить один ответ или дать разные варианты</li>
       </ul>
-      <span style="font-style: italic; margin-top: 4px">Максимум: 170 баллов.</span>
+      <span style="font-style: italic; margin-top: 4px">Максимум: 90 баллов.</span>
     ` 
   },
   { 
     title: '6 раунд. Связь', 
     pretitle: 'РАУНД 6 / Связь',
     description: `
-      <b>6 вопросов, которые по цепочке связаны между собой.</b>
+      <b>6 вопросов, где каждый последующий ответ каким-то образом связан с предыдущим.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
         <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
         <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
@@ -134,16 +134,18 @@ const rounds = ref([
     title: '7 раунд. Финал', 
     pretitle: 'РАУНД 7 / Финал',
     description: `
-      <b>8 вопросов любого формата</b>
+      <b>8 вопросов. Рядом с каждым из вопросов указана ставка, которую можно сделать на данный вопрос.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд на каждый</span></li>
-        <li>За <span style="font-weight: 700;">правильный</span> ответ: фиксированная ставка от +10 до +40 баллов. За <span style="font-weight: 700;">неверный</span> ответ вычитается ставка</li>
+        <li>В случае правильного ответа со ставкой вы дополнительно получите указанные баллы. В случае неправильного потеряете эти баллы.</li>
+        <li>Делать ли ставку — решайте сами!</li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">30/60 секунд на каждый</span></li>
+        <li>За <span style="font-weight: 700;">правильный</span> ответ: +10 баллов</li>
+        <li>Фиксированная ставка: от +10 до +40 баллов. За <span style="font-weight: 700;">неверный</span> ответ вычитается ставка</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 280 баллов.</span>
     ` 
   }
 ]);
-
 
 const selectRound = (index) => {
   selectedRound.value = index;
@@ -177,7 +179,7 @@ h3 {
   padding: 5px;
   padding: 6px;
   max-width: 1433px;
-  height: 914px;
+  height: 980px;
   width: 95%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   font-family: 'Mulish', sans-serif;
@@ -235,6 +237,7 @@ h3 {
   display: flex;
   align-items: flex-start;
   gap: 20px;
+  height: 310px;
 }
 
 .rounds-list {
@@ -271,11 +274,12 @@ h3 {
 
 
 .round-description {
-  width: 580px;
+  width: 640px;
   background: #ffffff; 
   padding: 15px;
   border-radius: 15px;
   font-size: 23px;
+ 
   border: 2px solid #1c2b4b; 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
 }
