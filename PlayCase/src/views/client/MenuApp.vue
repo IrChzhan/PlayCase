@@ -9,11 +9,11 @@
   <img :src="item.image" alt="" class="menu-image" :class="{ 'small-icon': item.small, 'info_image': item.name === 'Правила', }" @click="item.function" />
   <p>{{ item.name }}</p>
 </div>
-      <div v-if="statusSlide" class="menu-item" :key="10">
+      <div v-show="statusSlide" class="menu-item" :key="10">
         <img :src="camera" alt="camera" class="menu-image image-one" @click="openPresentation" />
         <p>Трансляция</p>
       </div>
-      <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="11">
+      <div v-show="status === 'RESULT_SUMMING'" class="menu-item" :key="11">
         <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />
         <p>Обратная связь</p>
       </div>
@@ -199,14 +199,15 @@ const fetchHasSlides = async () => {
   }
 }
 
-watch(watchedState, () => {
-  fetchGame();
-  fetchHasSlides()
-});
+watch(watchedState, async () => {
+  await fetchHasSlides()
+  await fetchGame();
+  
+}, { immediate: true });
 
-onMounted(()=>{
-  fetchGame()
-  fetchHasSlides()
+onMounted(async ()=>{
+  await fetchHasSlides()
+  await fetchGame()
 })
 
 </script>

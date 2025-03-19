@@ -19,8 +19,8 @@
               :class="{ 'no-animation': !isAnimationEnabled }"
               v-for="(slide, index) in slides"
               :key="index"
+              :style="{ backgroundImage: `url(${slide.fileUrl})` }"
             >
-            <img :src="slide?.fileUrl" alt="slide">
           </div>
           </div>
         </div>
@@ -81,17 +81,12 @@ const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1
 let autoClickInterval = null
 
 const autoClick = () => {
-  const slides = document.querySelectorAll('.slide')
-  if (slides.length > 0) {
-    const currentSlide = slides[currentSlideIndex.value] 
-    if (currentSlide) {
-      currentSlide.click()
-    }
-  }
+  const slides = document.querySelector('.slides-container')
+  slides.click()
 }
 
 const startAutoClick = () => {
-  autoClickInterval = setInterval(autoClick, 60000) 
+  autoClickInterval = setInterval(autoClick, 30000) 
 }
 
 const stopAutoClick = () => {
@@ -101,6 +96,31 @@ const stopAutoClick = () => {
   }
 }
 
+const isImageCached = async (url) => {
+  const cache = await caches.open('my-cache-v2');
+  const response = await cache.match(url);
+  return !!response;
+};
+
+const preloadImages = async () => {
+  for (const slide of slides.value) {
+    const isCached = await isImageCached(slide.fileUrl);
+    if (!isCached) {
+      const img = new Image();
+      img.src = slide.fileUrl;
+      img.onload = () => {
+        caches.open('my-cache-v2').then((cache) => {
+          fetch(slide.fileUrl, {
+  mode: 'no-cors'
+}).then((response) => {
+            cache.put(slide.fileUrl, response);
+          });
+        });
+      };
+    } else {
+    }
+  }
+};
 const handleNewSlides = (newSlides, data) => {
   isAnimationEnabled.value = false
 
@@ -128,6 +148,7 @@ const handleNewSlides = (newSlides, data) => {
   }
 
   slides.value = newSlides
+  preloadImages() 
 
   offsetX.value = -currentSlideIndex.value * slideWidth.value
 }
@@ -240,6 +261,7 @@ const fetchPresentation = async () => {
       const lastActiveSlideIndex = slides.value.length - 1
       currentSlideIndex.value = lastActiveSlideIndex
       offsetX.value = -lastActiveSlideIndex * slideWidth.value
+      preloadImages() 
     }
   } catch (e) {}
 }
