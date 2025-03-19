@@ -81,12 +81,12 @@ const canNext = computed(() => currentSlideIndex.value < slides.value.length - 1
 let autoClickInterval = null
 
 const autoClick = () => {
-  const slides = document.querySelector('body')
+  const slides = document.querySelector('.slides-container')
   slides.click()
 }
 
 const startAutoClick = () => {
-  autoClickInterval = setInterval(autoClick, 3000) 
+  autoClickInterval = setInterval(autoClick, 30000) 
 }
 
 const stopAutoClick = () => {
@@ -292,7 +292,7 @@ watch(
       setTimeout(() => {
         startAutoClick() 
       }, 1)
-    }  else {
+    } else {
       stopAutoClick() 
     }
   }
