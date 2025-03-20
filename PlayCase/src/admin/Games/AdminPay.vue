@@ -12,6 +12,7 @@
         <th>Оплачено картой</th>
         <th>Оплачено налом</th>
         <th>Предоплата</th>
+        <th>Сертификат</th>
         <th>Итого</th>
         <th>Фактическое количество участников</th>
       </tr>
@@ -53,6 +54,15 @@
           <input
             type="text"
             v-model.number="team.prepaidCount"
+            class="editable-input"
+            @input="updateTotal(team)"
+            @blur="saveChanges(team)"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            v-model.number="team.byCertificateCount"
             class="editable-input"
             @input="updateTotal(team)"
             @blur="saveChanges(team)"
@@ -143,7 +153,7 @@ const fetchPayments = async () => {
       editablePayments.value = response.map((team) => ({
         ...team,
         totalPayments:
-          team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount,
+          team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount + team.byCertificateCount,
       })).sort((a, b) => a.teamName.localeCompare(b.teamName, "ru"));
     }
   } catch (error) {
@@ -178,6 +188,7 @@ const saveChanges = async (team) => {
       prepaidCount: team.prepaidCount || 0,
       actualParticipantsCount: team.actualParticipantsCount || 0,
       totalPayments: team.totalPayments || 0,
+      byCertificateCount: team.byCertificateCount || 0
     };
 
     await store.dispatch("payments/updatePayment", {
@@ -212,7 +223,7 @@ const saveChanges = async (team) => {
 
 const updateTotal = (team) => {
   team.totalPayments =
-    team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount;
+    team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount + team.byCertificateCount;
 };
 
 onMounted(() => {
