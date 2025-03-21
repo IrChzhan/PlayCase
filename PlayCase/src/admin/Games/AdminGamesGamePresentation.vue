@@ -74,6 +74,9 @@
       <button @click="toggleLeftColumnVisibility" class="btn-toggle">
         {{ isLeftColumnVisible ? 'Скрыть левый столбец' : 'Показать левый столбец' }}
       </button>
+      <button @click="togglePresentation" class="btn-toggle-presentation">
+        {{ isPresentationEnabled ? 'Выключить презентацию' : 'Включить презентацию' }}
+      </button>
       <div class="progress-bar-container" v-if="uploadProgress > 0">
         <div class="progress-bar" :style="{ width: uploadProgress + '%' }"></div>
         <span class="progress-text">{{ uploadProgress }}%</span>
@@ -120,6 +123,34 @@ const newSlideName = ref("");
 const route = useRoute();
 const store = useStore();
 const router = useRouter();
+
+const isPresentationEnabled = ref(false);
+
+const fetchPresentationStatus = async () => {
+  try {
+    const response = await store.dispatch("presentation/fetchPresentationStatus", {
+      gameId: route.params.gameId,
+    });
+    isPresentationEnabled.value = response.isEnabled; 
+  } catch (error) {
+    console.error("Ошибка при получении статуса презентации:", error);
+    alert("Произошла ошибка при получении статуса презентации.");
+  }
+};
+
+const togglePresentation = async () => {
+  try {
+    await store.dispatch("presentation/togglePresentation", {
+      gameId: route.params.gameId,
+      isEnabled: !isPresentationEnabled.value,
+    });
+    isPresentationEnabled.value = !isPresentationEnabled.value;
+    await loadPresentations();
+  } catch (error) {
+    console.error("Ошибка при переключении статуса презентации:", error);
+    alert("Произошла ошибка при переключении статуса презентации.");
+  }
+};
 
 const role = ref('')
 
@@ -397,6 +428,7 @@ const addSlide = async () => {
 
 onMounted(async () => {
   await loadPresentations();
+  await fetchPresentationStatus();
   await nextTick(); 
   await initSortable(); 
   await checkAccess()
@@ -677,8 +709,21 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
+.btn-toggle-presentation {
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  padding: 18px;
+  border: none;
+  border-radius: 15px;
+  background: #73a9ff;
+  color: #ffffff;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 2300px) {
-  .slide-name, .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+  .slide-name, .btn-load, .btn-delete, .btn-activate, .btn-toggle, .btn-toggle-presentation {
     font-size: 24px;
   }
 
@@ -692,17 +737,13 @@ onUnmounted(() => {
     margin-left: 40px;
   }
 
-  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle, .btn-toggle-presentation {
     padding: 12px;
-  }
-
-  .btn-load {
-    margin-top: 75px;
   }
 }
 
 @media screen and (max-width: 1600px) {
-  .slide-name, .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+  .slide-name, .btn-load, .btn-delete, .btn-activate, .btn-toggle, .btn-toggle-presentation {
     font-size: 20px;
   }
 
@@ -712,7 +753,7 @@ onUnmounted(() => {
     margin-left: 20px;
   }
 
-  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle, .btn-toggle-presentation {
     padding: 10px;
   }
 }
@@ -724,7 +765,7 @@ onUnmounted(() => {
     margin-left: 10px;
   }
 
-  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle, .btn-toggle-presentation {
     font-size: 18px;
     padding: 8px;
   }
@@ -745,7 +786,7 @@ onUnmounted(() => {
     margin-left: 5px;
   }
 
-  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle, .btn-toggle-presentation {
     font-size: 16px;
     padding: 6px;
   }
@@ -758,7 +799,7 @@ onUnmounted(() => {
     margin-left: 2px;
   }
 
-  .btn-load, .btn-delete, .btn-activate, .btn-toggle {
+  .btn-load, .btn-delete, .btn-activate, .btn-toggle, .btn-toggle-presentation {
     font-size: 14px;
     padding: 4px;
   }

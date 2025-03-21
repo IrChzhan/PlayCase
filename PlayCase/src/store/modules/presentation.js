@@ -45,7 +45,24 @@ const mutations = {
         console.error('Ошибка при загрузке презентаций');
       }
     },
-  
+    async fetchPresentationStatus({ commit }, { gameId }) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/presentation`);
+        return response.data; 
+      } catch (error) {
+        console.error("Ошибка при получении статуса презентации:", error);
+        throw error;
+      }
+    },
+    async togglePresentation({ commit }, { gameId, isEnabled }) {
+      try {
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/presentation/enable?isEnabled=${isEnabled}`);
+        return response.data;
+      } catch (error) {
+        console.error("Ошибка при переключении статуса презентации:", error);
+        throw error;
+      }
+    },
     async addPresentation({ commit }, { gameId, presentation }) {
         try {
             const response = await axios.post(
