@@ -19,10 +19,12 @@
               @change="updateSlideGroup(slide)"
             />
             <input
-              class="checkbox"
+              class="checkbox checkbox-focus"
               type="checkbox"
               v-model="slide.isActive"
               @change="updateSlideActive(slide)"
+              :tabindex="0"
+              @keydown="handleCheckboxKeydown($event, slide, 'isActive')"
             />
             <span
               v-if="editingSlideId !== slide.id"
@@ -125,6 +127,59 @@ const store = useStore();
 const router = useRouter();
 
 const isPresentationEnabled = ref(false);
+
+const focusedCheckboxIndex = ref(-1);
+const activeCheckboxes = ref([]);
+
+const updateActiveCheckboxes = () => {
+  activeCheckboxes.value = slides.value.map((slide, index) => ({
+    index,
+    element: null, 
+    slide,
+    isActive: slide.isActive
+  }));
+};
+const handleCheckboxKeydown = (event, slide, property) => {
+  const currentIndex = slides.value.findIndex(s => s.id === slide.id);
+  
+  switch (event.key) {
+    case 'ArrowUp':
+      event.preventDefault();
+      if (currentIndex > 0) {
+        focusCheckbox(currentIndex - 1);
+      }
+      break;
+    case 'ArrowDown':
+      event.preventDefault();
+      if (currentIndex < slides.value.length - 1) {
+        focusCheckbox(currentIndex + 1);
+      }
+      break;
+    case ' ':
+      event.preventDefault();
+      slide[property] = !slide[property];
+      if (property === 'isActive') {
+        updateSlideActive(slide);
+      } else {
+        updateSlideGroup(slide);
+      }
+      break;
+  }
+};
+const focusCheckbox = (index) => {
+  if (index >= 0 && index < slides.value.length) {
+    const checkbox = document.querySelectorAll('.checkbox[tabindex="0"]')[index];
+    if (checkbox) {
+      checkbox.focus();
+      focusedCheckboxIndex.value = index;
+    }
+  }
+};
+
+watch(slides, () => {
+  updateActiveCheckboxes();
+}, { deep: true });
+
 
 const fetchPresentationStatus = async () => {
   try {
@@ -432,6 +487,16 @@ onMounted(async () => {
   await nextTick(); 
   await initSortable(); 
   await checkAccess()
+  updateActiveCheckboxes();
+  
+  nextTick(() => {
+    const checkboxes = document.querySelectorAll('.checkbox[tabindex="0"]');
+    checkboxes.forEach((checkbox, index) => {
+      if (index < activeCheckboxes.value.length) {
+        activeCheckboxes.value[index].element = checkbox;
+      }
+    });
+  });
 });
 
 watch(slides, (newSlides, oldSlides) => {
@@ -877,5 +942,9 @@ onUnmounted(() => {
   .slide-row{
     font-size: 60px;
   }
+}
+.checkbox-focus:focus {
+  outline: 2px solid #C59216;
+  outline-offset: 2px;
 }
 </style>

@@ -31,7 +31,7 @@ const gameId = ref(null)
 
 const client = new Client({
   brokerURL: "wss://back.igra-pads.ru/ws",
-  reconnectDelay: 5000,
+  reconnectDelay: 1000,
   onConnect: () => {
 
     client.subscribe(`/queue/game/${gameId.value}/activeSlides`, async (message) => {
