@@ -111,7 +111,6 @@ const handleEditUser = async () => {
 
     setTimeout(() => {
       toastMessage.value = ''
-      router.push({ name: 'AdminUsersPersonal' })
     }, 1000)
   } catch (error) {
     console.error('Ошибка при обновлении пользователя:', error)

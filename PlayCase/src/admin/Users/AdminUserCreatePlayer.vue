@@ -82,7 +82,6 @@ const handleCreateUser = async () => {
 
       setTimeout(() => {
         toastMessage.value = ''
-        router.push({ name: 'AdminUsersPlayers' })
       }, 1000)
     } catch (error) {
       console.error('Ошибка при создании пользователя:', error)
