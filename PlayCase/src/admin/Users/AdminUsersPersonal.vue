@@ -152,7 +152,8 @@ const roles = {
   'ADMIN': 'Администратор',
   'MANAGER': 'Менеджер',
   'CASHIER': 'Кассир',
-  'PRESENTER': 'Презентер'
+  'PRESENTER': 'Презентер',
+  'RESULT_UPLOADER': 'Квизмен'
 }
 
 const closeModalAdminUser = () => {

@@ -77,7 +77,7 @@
             <div v-if="showEditingUsers === team.id" class="change-input">
               <select v-model="selectedUser[team.id]" class="user-dropdown">
                 <option value="" disabled selected>Выберите пользователя</option>
-                <option v-for="user in users" :key="user.id" :value="user.id">
+                <option v-for="user in users" :key="user.id" :value="user.id" class="text">
                   {{ user.name }}
                 </option>
               </select>
@@ -663,6 +663,10 @@ td:last-child:hover {
 }
 
 
+.text {
+  font-size: 20px;
+}
+
 @media screen and (min-width: 2400px) and (min-height: 1400px) {
   h1 {
     font-size: 50px; 
@@ -673,7 +677,9 @@ td:last-child:hover {
     font-size: 36px; 
     margin-bottom: 20px; 
   }
-
+  .text {
+    font-size: 26px;
+  }
   .teams-table-wrapper {
     padding: 40px; 
   }
@@ -726,4 +732,6 @@ td:last-child:hover {
     padding: 10px 30px;
   }
 }
+
+
 </style>

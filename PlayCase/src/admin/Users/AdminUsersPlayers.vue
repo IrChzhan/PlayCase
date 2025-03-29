@@ -137,6 +137,7 @@ const filterUsers = () => {
       user.authorities[0] !== 'MANAGER' &&
       user.authorities[0] !== 'CASHIER' &&
       user.authorities[0] !== 'PRESENTER' &&
+      user.authorities[0] !== 'RESULT_UPLOADER' &&
       user.authorities.length !== 0,
   )
 }
@@ -156,6 +157,7 @@ const handleDeleteUser = (id) => async () => {
             user.authorities[0] !== 'MANAGER' &&
             user.authorities[0] !== 'CASHIER' &&
             user.authorities[0] !== 'PRESENTER' &&
+            user.authorities[0] !== 'RESULT_UPLOADER' &&
             user.authorities.length !== 0,
         )
       })
@@ -178,6 +180,7 @@ onMounted(() => {
         user.authorities[0] !== 'MANAGER' &&
         user.authorities[0] !== 'CASHIER' &&
         user.authorities[0] !== 'PRESENTER' &&
+        user.authorities[0] !== 'RESULT_UPLOADER' &&
         user.authorities.length !== 0,
     )
   })

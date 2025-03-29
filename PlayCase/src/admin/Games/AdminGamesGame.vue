@@ -84,7 +84,7 @@ const menuItems = [
       selectedMenu.value = 2;
     },
     name: 'results',
-    roles: ['ADMIN', 'MANAGER'],
+    roles: ['ADMIN', 'MANAGER', 'RESULT_UPLOADER'],
   },
   {
     label: 'Лотерея',
@@ -138,7 +138,10 @@ onMounted( () => {
   } else if(role.value === 'PRESENTER'){
     selectedMenu.value = 5
     router.push(`/admin/games/${route.params.gameId}/presentation`);
-  } else {
+  } else if (role.value == 'RESULT_UPLOADER'){
+    selectedMenu.value = 2
+    router.push(`/admin/games/${route.params.gameId}/teams/results`);
+  }else {
     selectedMenu.value = 0
     router.push(`/admin/games/${route.params.gameId}/team`)
   }
@@ -158,6 +161,9 @@ watch(
   } else if(role.value === 'PRESENTER'){
     selectedMenu.value = 5
     router.push(`/admin/games/${route.params.gameId}/presentation`);
+  }else if (role.value == 'RESULT_UPLOADER'){
+    selectedMenu.value = 2
+    router.push(`/admin/games/${route.params.gameId}/teams/results`);
   } else {
     selectedMenu.value = 0
     router.push(`/admin/games/${route.params.gameId}/team`)

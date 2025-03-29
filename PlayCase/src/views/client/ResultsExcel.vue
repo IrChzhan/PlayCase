@@ -142,6 +142,10 @@ h1 {
   font-size: 22px;
 }
 
+.results-table td {
+  font-size: 28px;
+}
+
 .results-table tbody {
   display: block;
   max-height: 815px; 
@@ -158,8 +162,8 @@ h1 {
 
 .results-table td:nth-child(2),
 .results-table th:nth-child(2) {
-  width: 120px;
-  min-width: 100px;
+  width: 270px;
+  min-width: 270px;
 }
 
 thead{

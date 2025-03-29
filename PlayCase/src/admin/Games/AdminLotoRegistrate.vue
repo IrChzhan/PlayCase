@@ -61,7 +61,7 @@ const exportLottery = async () => {
       exportType: 'CSV'
     });
 
-    const data = response.data.split('\n').map(row => row.split(','));
+    const data = response.data.split('\n').map(row => row.split(';'));
 
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
