@@ -14,7 +14,6 @@
       <tbody>
         <template v-if="shouldDisplayTable">
           <tr
-
             v-for="(team, index) in teams"
             :key="team.teamName"
             :class="{'even-row': index % 2 === 0,
@@ -117,20 +116,15 @@ h1 {
   font-family: 'Mulish', sans-serif;
 }
 
-/* .results-table {
-  width: 100%;
-  font-size: 1rem;
-  margin-top: 40px;
-} */
-
 .results-table th,
 .results-table td {
   font-family: 'Mulish',sans-serif;
-  border: 1px solid #FFD700;
   padding: 15px;
   font-weight: 500;
   text-align: center;
   color: #000000;
+  border-collapse: collapse; 
+  box-shadow: none;
 }
 
 .results-table th {
@@ -140,6 +134,14 @@ h1 {
   top: 0;
   z-index: 1;
   font-size: 22px;
+  border: none; 
+}
+
+.results-table thead tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  background-color: #C59216; 
 }
 
 .results-table tbody {
@@ -149,21 +151,19 @@ h1 {
   overflow-x: hidden;
   width: 100%;
   -webkit-overflow-scrolling: touch; 
+  border-collapse: collapse;
 }
 
 .results-table {
   display: block;
   width: 100%;
+  border-collapse: collapse;
 }
 
 .results-table td:nth-child(2),
 .results-table th:nth-child(2) {
   width: 120px;
   min-width: 100px;
-}
-
-thead{
-  border-radius: 15px;
 }
 
 .results-table tr {
