@@ -148,6 +148,11 @@ const handleAddMeal = async () => {
     mealDescription.value = ''
     mealFile.value = null
     imageId.value = null
+    
+    if (fileInput.value) {
+      fileInput.value.value = ''
+    }
+    
   } catch (error) {
     console.error('Ошибка при добавлении блюда:', error)
     toastMessage.value = 'Ошибка при добавлении блюда.'

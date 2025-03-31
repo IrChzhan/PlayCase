@@ -8,16 +8,13 @@
         <div class="form-section">
           <div class="container_qr">
             <div class="tg">
-              <span>TG</span>
-              <img src="@/assets/tg-qr.svg" alt="Telegram">
+              <img src="@/assets/qr-code-tg.png" alt="Telegram">
             </div>
             <div class="inst">
-              <span>VK</span>
-              <img src="@/assets/vk-qr.svg" alt="VK">
+              <img src="@/assets/qr-code-vk.png" alt="VK">
             </div>
             <div class="vk">
-              <span>САЙТ</span>
-              <img src="@/assets/site.svg" alt="Site">
+              <img src="@/assets/qr-code-site.png" alt="Site">
             </div>
           </div>
         </div>
@@ -114,20 +111,6 @@ watch(
   flex-direction: column;
   gap: 10px;
 }
-.tg, .inst, .vk {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.tg span, .inst span, .vk span {
- text-align: center;
- font-size: 36px;
- margin-bottom: 10px;
- font-weight: 800;
- color: #cc9f33;
-}
-
 
 .tg img,
 .inst img,

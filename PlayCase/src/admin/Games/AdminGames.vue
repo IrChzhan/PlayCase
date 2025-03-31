@@ -17,7 +17,7 @@
       </select>
     </div>
     <div class="games-table-wrapper">
-      <table class="games-table" :class="{'abra':role === 'CASHIER' || role === 'PRESENTER'}">
+      <table class="games-table" :class="{'abra':role === 'CASHIER' || role === 'PRESENTER' || role === 'RESULT_UPLOADER'}">
         <thead>
         <tr>
           <th @click="sortTable('name')">
@@ -48,8 +48,8 @@
               <span v-if="sortKey === 'status' && sortOrder === 'desc'">↓</span>
             </span>
           </th>
-          <th v-if="(role !== 'CASHIER' && role !== 'PRESENTER')">Изменения статуса</th>
-          <th v-if="(role !== 'CASHIER' && role !== 'PRESENTER')"></th>
+          <th v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')">Изменения статуса</th>
+          <th v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')"></th>
         </tr>
         </thead>
         <tbody>
@@ -83,14 +83,14 @@
     'status-in-progress': game.status === 'IN_PROGRESS'
   }">{{ Statuses[game.status] }}
           </td>
-          <td v-if="(role !== 'CASHIER' && role !== 'PRESENTER')" :class="{
+          <td v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')" :class="{
     'status-finished': game.status === 'FINISHED',
     'status-result': game.status === 'RESULT_SUMMING',
     'status-in-progress': game.status === 'IN_PROGRESS'
   }">
             <button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button>
           </td>
-          <td v-if="(role !== 'CASHIER' && role !== 'PRESENTER')" class="actions-column">
+          <td v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')" class="actions-column">
             <button @click.stop="changeGame(game.id)" class="icon-setting">
               <IconsSetting />
             </button>
@@ -109,7 +109,7 @@
     </div>
     <div class="btn-container">
       <button
-        v-if="(role !== 'CASHIER' && role !== 'PRESENTER')"
+        v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')"
         @click="goToCreateGame"
         class="button primary btn-add"
         type="submit"
