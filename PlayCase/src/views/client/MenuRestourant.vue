@@ -13,6 +13,9 @@
             />
             <div class="category-filters-wrapper" ref="categoryFiltersWrapper">
               <div class="category-filters" ref="categoryFilters" @scroll="handleScroll">
+                <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">
+                  Все
+                </button>
                 <button
                   v-for="category in categories"
                   :key="category.id"
@@ -21,9 +24,6 @@
                   ref="categoryButtons"
                 >
                   {{ category.name }}
-                </button>
-                <button @click="clearFilter" :class="{ active: selectedCategoryName === null }">
-                  Все
                 </button>
               </div>
             </div>
@@ -51,8 +51,8 @@
               class="meal-image"
             />
             <div class="meal-info">
-              <h2 class="meal-name">{{ meal.name }}</h2>
-              <p class="meal-price">{{ meal.price }} ₽</p>
+              <h2 class="meal-name">{{ decodeHtmlEntities(meal.name) }}</h2>
+              <p class="meal-price">{{ decodeHtmlEntities(meal.price) }} ₽</p>
             </div>
           </div>
         </div>
@@ -63,13 +63,13 @@
       <div class="modal-content">
         <button class="close-button" @click="closeMealModal">×</button>
         <img :src="currentMeal.image || '/assets/default-image.png'" alt="Блюдо" class="meal-modal-image" />
-        <h2 class="meal-modal-name">{{ currentMeal.name }}</h2>
-        <p class="meal-modal-description">{{ currentMeal.description }}</p>
-        <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
+        <h2 class="meal-modal-name">{{ decodeHtmlEntities(currentMeal.name) }}</h2>
+        <p class="meal-modal-description">{{ decodeHtmlEntities(currentMeal.description) }}</p>
+        <p class="meal-modal-price">{{ decodeHtmlEntities(currentMeal.price) }} ₽</p>
       </div>
     </div>
     <div class="home-button-container">
-      <img src="@/assets/House_04.png" alt="Домой" class="home-button" @click="goToMenuApp" />
+      <img src="@/assets/House_5.svg" alt="Домой" class="home-button" @click="goToMenuApp" />
     </div>
   </div>
 </template>
@@ -91,6 +91,12 @@ const categoryButtons = ref([]);
 
 const showMealModal = ref(false);
 const currentMeal = ref({});
+
+const decodeHtmlEntities = (text) => {
+  const textArea = document.createElement('textarea');
+  textArea.innerHTML = text;
+  return textArea.value;
+};
 
 const fetchMenu = async () => {
   try {
@@ -389,6 +395,11 @@ h1 {
   font-size: 26px;
   font-weight: 600;
   margin-top: 15px;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical; 
+  overflow: hidden;
 }
 
 .meal-description {
@@ -511,6 +522,7 @@ h1 {
   width: 90px;
   height: 90px;
   cursor: pointer;
+  margin-bottom: 25px;
 }
 
 .scroll-arrow {

@@ -77,7 +77,7 @@
             <div v-if="showEditingUsers === team.id" class="change-input">
               <select v-model="selectedUser[team.id]" class="user-dropdown">
                 <option value="" disabled selected>Выберите пользователя</option>
-                <option v-for="user in users" :key="user.id" :value="user.id">
+                <option v-for="user in users" :key="user.id" :value="user.id" class="text">
                   {{ user.name }}
                 </option>
               </select>
@@ -661,4 +661,77 @@ td:last-child:hover {
   font-size: 14px;
   margin-top: 10px;
 }
+
+
+.text {
+  font-size: 20px;
+}
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px; 
+  }
+
+  h2 {
+    font-size: 36px; 
+    margin-bottom: 20px; 
+  }
+  .text {
+    font-size: 26px;
+  }
+  .teams-table-wrapper {
+    padding: 40px; 
+  }
+
+  .teams-table th,
+  .teams-table td {
+    padding: 15px; 
+    font-size: 26px; 
+  }
+
+  .teams-table th {
+    font-size: 28px; 
+  }
+
+  .file-button {
+    padding: 20px 35px; 
+    font-size: 24px; 
+    border-radius: 10px; 
+  }
+
+  .btn-add {
+    width: 300px;
+  }
+
+  .button {
+    padding: 15px 35px; 
+    font-size: 24px; 
+    border-radius: 8px; 
+  }
+
+  .input-change {
+    padding: 15px; 
+    font-size: 24px; 
+    border-radius: 12px; 
+  }
+
+  .file-name {
+    font-size: 35px; 
+  }
+
+  .success-message {
+    font-size: 26px; 
+  }
+  .icon-setting {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+  }
+  .user-dropdown {
+    padding: 10px 30px;
+  }
+}
+
+
 </style>

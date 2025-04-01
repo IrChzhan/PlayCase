@@ -12,6 +12,7 @@
         <th>Оплачено картой</th>
         <th>Оплачено налом</th>
         <th>Предоплата</th>
+        <th>Сертификат</th>
         <th>Итого</th>
         <th>Фактическое количество участников</th>
       </tr>
@@ -53,6 +54,15 @@
           <input
             type="text"
             v-model.number="team.prepaidCount"
+            class="editable-input"
+            @input="updateTotal(team)"
+            @blur="saveChanges(team)"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            v-model.number="team.byCertificateCount"
             class="editable-input"
             @input="updateTotal(team)"
             @blur="saveChanges(team)"
@@ -104,7 +114,7 @@ const exportPayments = async () => {
       exportType: 'CSV'
     });
 
-    const data = response.data.split('\n').map(row => row.split(','));
+    const data = response.data.split('\n').map(row => row.split(';'));
 
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -143,7 +153,7 @@ const fetchPayments = async () => {
       editablePayments.value = response.map((team) => ({
         ...team,
         totalPayments:
-          team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount,
+          team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount + team.byCertificateCount,
       })).sort((a, b) => a.teamName.localeCompare(b.teamName, "ru"));
     }
   } catch (error) {
@@ -178,6 +188,7 @@ const saveChanges = async (team) => {
       prepaidCount: team.prepaidCount || 0,
       actualParticipantsCount: team.actualParticipantsCount || 0,
       totalPayments: team.totalPayments || 0,
+      byCertificateCount: team.byCertificateCount || 0
     };
 
     await store.dispatch("payments/updatePayment", {
@@ -212,7 +223,7 @@ const saveChanges = async (team) => {
 
 const updateTotal = (team) => {
   team.totalPayments =
-    team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount;
+    team.paidByQr + team.paidByCard + team.paidByCash + team.prepaidCount + team.byCertificateCount;
 };
 
 onMounted(() => {
@@ -373,6 +384,46 @@ button:hover {
 
 .row-incomplete {
   background-color: #f8d7da;
+}
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .admin-payments {
+    padding: 40px; 
+  }
+
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px; 
+  }
+
+  .button-container {
+    gap: 20px; 
+  }
+
+  .btn {
+    padding: 15px 30px; 
+    font-size: 32px; 
+    border-radius: 10px; 
+  }
+
+  .payments-table th,
+  .payments-table td {
+    padding: 20px; 
+    font-size: 28px; 
+  }
+
+  .editable-input {
+    width: 150px; 
+    padding: 10px; 
+    font-size: 28px; 
+  }
+
+  button {
+    padding: 15px 30px; 
+    font-size: 32px; 
+    border-radius: 10px; 
+  }
 }
 
 </style>

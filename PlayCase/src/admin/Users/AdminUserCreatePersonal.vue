@@ -71,7 +71,7 @@ const newUser = ref({
   role: 'MANAGER',
 })
 
-const roles = ['ADMIN', 'MANAGER', 'CASHIER']
+const roles = ['ADMIN', 'MANAGER', 'CASHIER','PRESENTER', 'RESULT_UPLOADER']
 const toastMessage = ref('')
 const toastType = ref('success')
 
@@ -92,7 +92,6 @@ const handleCreateUser = async () => {
 
       setTimeout(() => {
         toastMessage.value = ''
-        router.push({ name: 'AdminUsersPersonal' })
       }, 1000)
     } catch (error) {
       console.error('Ошибка при создании пользователя:', error)
@@ -190,5 +189,35 @@ button[type='button']:hover {
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    padding: 20px 40px; 
+  }
+  h1 {
+    font-size: 60px; 
+    margin-bottom: 30px; 
+  }
+  .form-group {
+    margin-bottom: 30px; 
+  }
+  label {
+    font-size: 36px; 
+    margin-bottom: 25px;
+  }
+  input,
+  select {
+    padding: 15px; 
+    font-size: 32px; 
+  }
+  .form-actions {
+    gap: 20px; 
+    margin-top: 30px; 
+  }
+  button {
+    padding: 15px 30px; 
+    font-size: 32px; 
+  }
 }
 </style>

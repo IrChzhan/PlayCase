@@ -9,7 +9,11 @@
   <img :src="item.image" alt="" class="menu-image" :class="{ 'small-icon': item.small, 'info_image': item.name === 'Правила', }" @click="item.function" />
   <p>{{ item.name }}</p>
 </div>
-      <div v-if="status === 'RESULT_SUMMING'" class="menu-item" :key="10">
+      <div v-show="statusSlide" class="menu-item" :key="10">
+        <img :src="camera" alt="camera" class="menu-image image-one" @click="openPresentation" />
+        <p>Трансляция</p>
+      </div>
+      <div v-show="status === 'RESULT_SUMMING'" class="menu-item" :key="11">
         <img :src="FeedBackImage" alt="Обратная связь" class="menu-image image-one" @click="openModalFeedback" />
         <p>Обратная связь</p>
       </div>
@@ -25,6 +29,7 @@
     <ModalHelp :show="showModalHelp" :closeModal="closeModalHelp"/>
     <ModalFeedback :show="showModalFeedback" :closeModal="closeModalFeedback"/>
     <Notification v-if="toastMessage" :message="toastMessage" :type="toastType" :duration="3000" />
+    <Presentation :show="showPresentation" :closeModal="closePresentation"/>
   </div>
 </template>
 
@@ -37,11 +42,13 @@ import house from '@/assets/House_01.png'
 import contactsImage from '@/assets/contacts.svg'
 import helpImage from '@/assets/help.svg'
 import info from '@/assets/info.svg'
+import camera from '@/assets/stream.svg';
 import lotteryImage from '@/assets/loto.svg'
 import menuImage from '@/assets/menu.svg'
 import ratingImage from '@/assets/rating.svg'
 import ModalContacts from '@/components/widgets/ModalContacts.vue'
 import ModalLottery from '@/components/widgets/ModalLottery.vue'
+import Presentation from '@/components/widgets/Presentation.vue'
 import ModalPay from '@/components/widgets/ModalPay.vue'
 import { useAuthCheck } from '@/hooks/useAuthCheck.js'
 import {useStore} from "vuex";
@@ -51,6 +58,7 @@ import ModalHelp from "@/components/widgets/ModalHelp.vue";
 import FeedBackImage from "@/assets/stars.svg"
 import ModalFeedback from "@/components/widgets/ModalFeedback.vue";
 import Rules from "@/components/widgets/Rules.vue";
+
 
 const store = useStore()
 const route = useRoute()
@@ -68,6 +76,20 @@ const showModalHelp = ref(false)
 const showModalFeedback = ref(false)
 
 const status = ref('')
+const statusSlide = ref('')
+
+const showPresentation = computed({
+  get: () => store.getters['presentation/show'], 
+  set: (value) => store.dispatch('presentation/setShow', value), 
+});
+
+const openPresentation = () => {
+  showPresentation.value = true;
+}
+
+const closePresentation = () => {
+  showPresentation.value = false;
+}
 
 const openModalFeedback = () => {
   showModalFeedback.value = true
@@ -156,7 +178,7 @@ const menuItems = ref([
   },
   { name: 'LUCKYTRON', image: lotteryImage, function: openModalLottery },
   { name: 'Мы в соцсетях', image: contactsImage, function: openModalContacts },
-  { name: 'Help', image: helpImage, function: openModalHelp, class: 'help-item',}
+  { name: 'Help', image: helpImage, function: openModalHelp, class: 'help-item',},
 ])
 
 const fetchGame = async () => {
@@ -164,16 +186,28 @@ const fetchGame = async () => {
     const res = await store.dispatch('online/getGame')
     status.value = res.status
   } catch (e) {
-    console.log(e)
+    console.log('Ошибка получения команды')
   }
 }
 
-watch(watchedState, () => {
-  fetchGame();
-});
+const fetchHasSlides = async () => {
+  try {
+    const res = await store.dispatch('presentation/getHasSlides')
+    statusSlide.value = res.hasSlides;
+  } catch (e) {
+    console.log('Ошибка запроса слайдов')
+  }
+}
 
-onMounted(()=>{
-  fetchGame()
+watch(watchedState, async () => {
+  await fetchHasSlides()
+  await fetchGame();
+  
+}, { immediate: true });
+
+onMounted(async ()=>{
+  await fetchHasSlides()
+  await fetchGame()
 })
 
 </script>

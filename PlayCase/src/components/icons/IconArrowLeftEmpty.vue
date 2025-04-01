@@ -1,0 +1,36 @@
+<script setup>
+</script>
+
+<template>
+<svg width="98" height="98" viewBox="0 0 98 98" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_77_660)">
+<path d="M97.412 9.79999L97.412 88.2C97.412 93.2876 93.2876 97.412 88.2 97.412L9.79999 97.412C4.71234 97.412 0.587982 93.2876 0.587982 88.2L0.587982 9.79999C0.587982 4.71234 4.71234 0.587982 9.79999 0.587982L88.2 0.587982C93.2876 0.587982 97.412 4.71234 97.412 9.79999Z" fill="#0F1921" fill-opacity="0.5" stroke="#C59216" stroke-width="1.176"/>
+<path d="M44.6369 34.2106C44.6369 34.8418 44.8263 35.4703 45.2008 35.9752C45.5738 36.4783 46.211 36.9441 47.0516 36.9441L78.5 36.9441V60.7599H47.0516C46.211 60.7599 45.5738 61.2257 45.2008 61.7288C44.8263 62.2337 44.6369 62.8622 44.6369 63.4934V73.3709L20.1265 48.7864L44.6369 24.5887V34.2106Z" stroke="#C59316" stroke-width="3"/>
+</g>
+<defs>
+<clipPath id="clip0_77_660">
+<rect width="98" height="98" fill="white" transform="matrix(-1 0 0 -1 98 98)"/>
+</clipPath>
+</defs>
+</svg>
+</template>
+
+<style scoped>
+.icon-setting {
+  background: none;
+  cursor: pointer;
+  transition: transform 0.6s ease;
+  border-radius: 8px;
+}
+
+.icon-setting img {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.icon-setting:hover {
+  transform: scale(1.1);
+}
+</style>

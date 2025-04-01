@@ -257,4 +257,57 @@ h1 {
   background-color: #e0f7fa;
   border-color: #1abc9c;
 }
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .navbar {
+    min-width: 20%; 
+    max-width: 25%; 
+    padding: 20px; 
+  }
+
+  h1 {
+    font-size: 36px; 
+    margin-bottom: 40px; 
+  }
+
+  .bar-card {
+    padding: 30px; 
+    border-radius: 16px; 
+  }
+
+  .bar-card h2 {
+    font-size: 32px; 
+    margin-bottom: 20px; 
+  }
+
+  .bar-card p {
+    font-size: 26px; 
+  }
+
+  .add-bar-button {
+    padding: 20px 40px; 
+    font-size: 28px; 
+    border-radius: 10px; 
+  }
+
+  .no-places-message {
+    font-size: 20px; 
+    margin-top: 40px; 
+  }
+
+  .content {
+    margin-left: 40px; 
+  }
+
+  .list {
+    gap: 40px; 
+  }
+
+  .icon-setting {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 20px;
+  }
+}
 </style>

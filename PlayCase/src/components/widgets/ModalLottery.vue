@@ -4,7 +4,7 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <span class="lottery_text">ЛОТЕРЕЯ</span>
+          <span class="lottery_text">LUCKYTRON</span>
           <button class="close-button" @click="closeModal">×</button>
         </div>
 
@@ -29,17 +29,15 @@
           </div>
 
           <div class="rules-section">
-            <h2>Правила проведения лотереи</h2>
+            <h2>Правила участия</h2>
             <ul>
-              <li>Лотерея проводится в рамках ИГРЫ и доступна всем участникам.</li>
-              <li>Для участия необходимо зарегистрироваться, заполнив поля со своими данными.</li>
+              <li>LUCKYTRON проходит после 7-го раунда и даёт возможность каждому участнику команды побороться за дополнительные призы.</li>
+              <li>Для участия необходимо зарегистрироваться до начала 7-го раунда, заполнив соответствующую форму.</li>
               <li>Каждый участник может зарегистрироваться <span class="special-el">только один раз</span>.</li>
-              <li>Победителя определяет генератор случайных чисел.</li>
-              <li>Призы не подлежат обмену на деньги и возврату.</li>
+              <li>После регистрации каждый участник получает свой индивидуальный номер.</li>
+              <li>Победитель определяется случайным образом. Участник, чей номер достал ведущий, получает приз.</li>
             </ul>
-            <p class="lottery-greeting">Приятной игры и удачи в лотерее!</p>
-            <br>
-            <br>
+            <p class="lottery-greeting">Посмотреть номера участников своей команды можно <span class="yellow-text" @click.stop="toggleModal('registrateUsers', true)">тут</span>.</p>
             <div class="btn-con">
               <button @click.stop="toggleModal('registrateUsers', true)" class="btn">Список участников</button>
             </div>
@@ -194,7 +192,7 @@ watch(
 
 <style scoped>
 .el-check {
-  padding-left: 30px;
+  padding-left: 45px;
 }
 .modal-success-title{
   font-family: 'Mulish', sans-serif;
@@ -210,7 +208,7 @@ watch(
   align-items: center;
   background: #ffffff;
   border-radius: 15px;
-  padding: 48px 0 58px 0;
+  padding: 58px 0 58px 0;
   max-width: 700px;
   width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -456,7 +454,7 @@ input[type='checkbox'] {
   list-style-type: disc;
   padding-left: 2.5vw;
   color: #0f1921;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.6;
 }
 
@@ -476,7 +474,7 @@ input[type='checkbox'] {
 
 .lottery-greeting {
   color: #cc9f33;
-  font-size: 24px;
+  font-size: 20px;
   font-style: italic;
   font-weight: 400;
   margin-top: 1.2vw;
@@ -524,7 +522,7 @@ input[type='checkbox'] {
 }
 
 li {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .policy-link:hover {
@@ -551,8 +549,8 @@ li {
   position: absolute;
   left: 0;
   top: 8px;
-  width: 17px;
-  height: 17px;
+  width: 25px;
+  height: 25px;
   border: 2px solid #969696;
   border-radius: 4px;
   background-color: white;
@@ -571,13 +569,19 @@ li {
 .checkbox-container input[type="checkbox"]:checked + span::after {
   content: "";
   position: absolute;
-  left: 7px;
+  left: 9px;
   top: 10px;
-  width: 5px;
-  height: 10px;
+  width: 10px;
+  height: 14px;
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+}
+
+.yellow-text {
+  font-weight: bold;
+  color: #CC9F33;
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {

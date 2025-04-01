@@ -102,4 +102,23 @@ body {
   background-color: #ffffff;
   height: 100%;
 }
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .navbar {
+    min-width: 20%; 
+    padding: 20px 0; 
+  }
+
+  .navbar-item {
+    padding: 20px 30px; 
+    font-size: 24px; 
+    margin-bottom: 20px; 
+    border-radius: 8px; 
+  }
+
+  .content {
+    padding: 40px; 
+  }
+}
 </style>

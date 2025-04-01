@@ -39,11 +39,12 @@
       </div>
       <div class="form-group">
         <p class="old-data">Старое значение: {{ oldData.isFirstTime ? 'Да' : 'Нет' }}</p>
-        <label for="isFirstTime">
+        <label for="isFirstTime" class="check-label">
           <input
             id="isFirstTime"
             type="checkbox"
             v-model="formData.isFirstTime"
+            class="check"
           />
           Первый раз
         </label>
@@ -248,5 +249,57 @@ button.secondary {
 
 button.secondary:hover {
   background-color: #5a6268;
+}
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .edit-team {
+    padding: 40px;
+  }
+
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px;
+  }
+
+  .form-group {
+    margin-bottom: 40px; 
+  }
+
+  label {
+    font-size: 36px; 
+    margin-bottom: 20px; 
+  }
+
+  .old-data {
+    font-size: 36px; 
+    margin-bottom: 20px; 
+  }
+
+  .input {
+    padding: 20px; 
+    font-size: 32px; 
+    border-radius: 12px; 
+  }
+
+  .form-actions {
+    gap: 20px; 
+    margin-top: 40px; 
+  }
+
+  button {
+    padding: 20px 40px; 
+    font-size: 32px; 
+    border-radius: 12px; 
+  }
+  .check {
+    width: 40px;
+    height: 40px;
+  }
+  .check-label {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+  }
 }
 </style>

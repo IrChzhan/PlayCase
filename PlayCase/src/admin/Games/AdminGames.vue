@@ -17,7 +17,7 @@
       </select>
     </div>
     <div class="games-table-wrapper">
-      <table class="games-table" :class="{'abra':role === 'CASHIER'}">
+      <table class="games-table" :class="{'abra':role === 'CASHIER' || role === 'PRESENTER' || role === 'RESULT_UPLOADER'}">
         <thead>
         <tr>
           <th @click="sortTable('name')">
@@ -48,8 +48,8 @@
               <span v-if="sortKey === 'status' && sortOrder === 'desc'">↓</span>
             </span>
           </th>
-          <th v-if="role !== 'CASHIER'">Изменения статуса</th>
-          <th v-if="role !== 'CASHIER'"></th>
+          <th v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')">Изменения статуса</th>
+          <th v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')"></th>
         </tr>
         </thead>
         <tbody>
@@ -75,7 +75,7 @@
     'status-finished': game.status === 'FINISHED',
     'status-result': game.status === 'RESULT_SUMMING',
     'status-in-progress': game.status === 'IN_PROGRESS'
-  }">{{ findPlaceName(game.place.id) }}
+  }">{{ game.place.name }}
           </td>
           <td :class="{
     'status-finished': game.status === 'FINISHED',
@@ -83,14 +83,14 @@
     'status-in-progress': game.status === 'IN_PROGRESS'
   }">{{ Statuses[game.status] }}
           </td>
-          <td v-if="role !== 'CASHIER'" :class="{
+          <td v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')" :class="{
     'status-finished': game.status === 'FINISHED',
     'status-result': game.status === 'RESULT_SUMMING',
     'status-in-progress': game.status === 'IN_PROGRESS'
   }">
             <button class="button primary btn-add" @click.stop="changeStatus(game.id)">Сменить статус</button>
           </td>
-          <td v-if="role !== 'CASHIER'" class="actions-column">
+          <td v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')" class="actions-column">
             <button @click.stop="changeGame(game.id)" class="icon-setting">
               <IconsSetting />
             </button>
@@ -109,7 +109,7 @@
     </div>
     <div class="btn-container">
       <button
-        v-if="role !== 'CASHIER'"
+        v-if="(role !== 'CASHIER' && role !== 'PRESENTER' && role !== 'RESULT_UPLOADER')"
         @click="goToCreateGame"
         class="button primary btn-add"
         type="submit"
@@ -323,7 +323,7 @@ onMounted(() => {
 }
 
 .icon-setting {
-  padding: 10px 0;
+  padding: 5px 0;
   background: none;
   cursor: pointer;
   border: none;
@@ -569,5 +569,92 @@ td:last-child:hover {
   border: 1px solid #ccc;
   text-align: left;
 }
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .admin-games {
+    padding: 40px; 
+  }
+
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px;
+  }
+
+  .search-bar {
+    margin-bottom: 40px;
+  }
+
+  .search-input {
+    padding: 15px; 
+    font-size: 26px; 
+  }
+
+  .games-table th,
+  .games-table td {
+    padding: 15px; 
+    font-size: 28px; 
+  }
+
+  .pagination {
+    gap: 20px; 
+    margin-bottom: 40px;
+  }
+
+  .pagination button {
+    padding: 15px 25px; 
+    font-size: 28px; 
+  }
+
+  .add-game {
+    max-width: 600px; 
+  }
+
+  .input {
+    padding: 15px; 
+    font-size: 26px; 
+  }
+
+  .button {
+    padding: 15px 25px; 
+    font-size: 26px; 
+  }
+
+  .games-table th:nth-child(1),
+  .games-table td:nth-child(1) {
+    width: 20%; 
+  }
+
+  .games-table th:nth-child(2),
+  .games-table td:nth-child(2) {
+    width: 10%;
+  }
+
+  .games-table th:nth-child(3),
+  .games-table td:nth-child(3) {
+    width: 20%;
+  }
+
+  .games-table th:nth-child(4),
+  .games-table td:nth-child(4) {
+    width: 20%;
+  }
+
+  .games-table th:nth-child(5),
+  .games-table td:nth-child(5) {
+    width: 15%;
+  }
+  .games-table th:nth-child(6),
+  .games-table td:nth-child(6) {
+    width: 6%;
+  }
+  .pagination span {
+    font-size: 26px;
+  }
+  .icon-setting {
+    width: 50px;
+    height: 50px;
+  }
+}
+
 </style>
 

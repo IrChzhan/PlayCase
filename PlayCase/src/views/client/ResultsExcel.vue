@@ -34,7 +34,7 @@
       </tbody>
     </table>
   </div>
-    <img src="@/assets/House_04.png" class="home-button" @click="goToMenuApp" />
+    <img src="@/assets/House_5.svg" class="home-button" @click="goToMenuApp" />
   </div>
 </template>
 
@@ -72,7 +72,7 @@ const fetchResults = async () => {
     const results = await store.dispatch('games/fetchGameResults', currentGame.id);
     teams.value = results;
   } catch (error) {
-    console.error('Ошибка при получении данных:', error.message);
+    console.error('Ошибка при получении данных');
   }
 };
 
@@ -105,7 +105,7 @@ const goToMenuApp = () => {
   width: 100%;
   border-radius: 15px;
   overflow: hidden; 
-  margin-top: 40px;
+  margin-top: 50px;
 }
 
 h1 {
@@ -144,9 +144,13 @@ h1 {
   background-color: #C59216; 
 }
 
+.results-table td {
+  font-size: 28px;
+}
+
 .results-table tbody {
   display: block;
-  max-height: 720px; 
+  max-height: 815px; 
   overflow-y: auto; 
   overflow-x: hidden;
   width: 100%;
@@ -160,10 +164,15 @@ h1 {
   border-collapse: collapse;
 }
 
+.results-table td:nth-child(1),
+.results-table th:nth-child(1) {
+  width: 80px;
+  max-width: 80px;
+}
 .results-table td:nth-child(2),
 .results-table th:nth-child(2) {
-  width: 120px;
-  min-width: 100px;
+  width: 500px;
+  min-width: 500px;
 }
 
 .results-table tr {
@@ -196,7 +205,7 @@ h1 {
   width: 90px;
   height: 90px;
   position: fixed;
-  bottom: 20px;
+  bottom: 35px;
   cursor: pointer;
 }
 </style>

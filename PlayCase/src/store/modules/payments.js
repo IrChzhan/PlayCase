@@ -8,7 +8,7 @@ const state = {
 const generateOrderNumber = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
-  const length = 10; // Длина номера заказа
+  const length = 10; 
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     result += characters[randomIndex];
@@ -34,7 +34,7 @@ const actions = {
       commit('setPayments', []);
       return [];
     } catch (error) {
-      console.error('Ошибка загрузки данных:', error);
+      console.error('Ошибка загрузки данных');
       throw error;
     }
   },
@@ -50,8 +50,11 @@ const actions = {
           currency: "RUB",
         },
         confirmation: {
-          type: "redirect",
+          type: "qr",
           return_url: "https://igra-pads.ru/success",
+        },
+        "payment_method_data": {
+          "type": "sbp"
         },
         receipt: {
           customer: {
@@ -91,13 +94,13 @@ const actions = {
         body: JSON.stringify(paymentData),
       });
       const data = await response.json();
-      if (data.confirmation && data.confirmation.confirmation_url) {
-        return data.confirmation.confirmation_url;
+      if (data.confirmation && data.confirmation.confirmation_data) {
+        return data.confirmation.confirmation_data;
       } else {
-        console.error('Ошибка при создании платежа:', data);
+        console.error('Ошибка при создании платежа');
       }
     } catch (error) {
-      console.error('Ошибка при запросе на создание платежа:', error);
+      console.error('Ошибка при запросе на создание платежа');
     }
   },
   removeNotification({ commit }, updatedNotifications) {
@@ -105,7 +108,7 @@ const actions = {
   },
   async updatePayment({ dispatch }, { gameId, teamId, data }) {
     try {
-      const { paidByQr, paidByCard, paidByCash, actualParticipantsCount, prepaidCount } = data;
+      const { paidByQr, paidByCard, paidByCash, actualParticipantsCount, prepaidCount,byCertificateCount } = data;
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/${teamId}/updatePaid`, {},
         {
@@ -114,14 +117,15 @@ const actions = {
             paidByCard,
             paidByCash,
             prepaidCount,
-            actualParticipantsCount
+            actualParticipantsCount,
+            byCertificateCount
           },
         },
       );
       await dispatch('fetchPayments', gameId);
       return response.data;
     } catch (error) {
-      console.error('Ошибка обновления данных оплаты:', error);
+      console.error('Ошибка обновления данных оплаты');
       throw error;
     }
   },

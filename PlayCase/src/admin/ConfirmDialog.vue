@@ -98,4 +98,31 @@ const onCancel = () => {
 .button.confirm:hover {
   background: #d1aa58;
 }
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .modal {
+    padding: 40px; 
+    max-width: 700px; 
+    border-radius: 20px; 
+  }
+
+  .modal-title {
+    font-size: 46px; 
+    margin-bottom: 30px; 
+  }
+
+  .modal-message {
+    font-size: 34px; 
+    margin-bottom: 40px; 
+  }
+
+  .modal-actions {
+    gap: 20px; 
+  }
+
+  .button {
+    padding: 20px; 
+    font-size: 28px;
+    border-radius: 10px; 
+  }
+}
 </style>

@@ -43,6 +43,7 @@
                 />
                 Отправить чек на другой адрес
               </label>
+              <small class="text-error" v-if="!isValidEmail && picked === 'sendReceiptToEmail'">{{emailError }}</small>
               <input
                   v-if="picked === 'sendReceiptToEmail'"
                   type="email"
@@ -57,7 +58,6 @@
           <button 
             class="pay-button" 
             @click="handlePayment" 
-            :disabled="picked === 'sendReceiptToEmail' && !validateEmail(selectedEmail)"
           >
             ОПЛАТИТЬ
           </button>
@@ -110,9 +110,10 @@ const props = defineProps({
 });
 const store = useStore();
 
+const emailError = ref('');
 const emailTeam = ref('');
 const selectedPlayers = ref(1);
-const pricePerPlayer = ref(11);
+const pricePerPlayer = ref(1500);
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
 
 const picked = ref('sendReceiptToCaptain')
@@ -136,12 +137,19 @@ function toggleModal(type, value) {
 
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+  const a = re.test(email);
+  return a;
 }
 
-function handlePayment() {
+const handlePayment = () =>  {
   if (picked.value === 'sendReceiptToEmail' && !validateEmail(selectedEmail.value)) {
+
     isValidEmail.value = false;
+
+    if (selectedEmail.value == '') {
+      emailError.value = 'Почта не введена';
+    }
+
     store.dispatch('payments/addNotification', { message: 'Неверный формат email', type: 'error' });
     return;
   }
@@ -155,7 +163,7 @@ const generateQRCode = async () => {
     const paymentUrl = await store.dispatch('payments/createPayment', { amount: totalPrice.value, email: email, count:selectedPlayers.value  });
     qrCodeUrl.value = await QRCode.toDataURL(paymentUrl);
   } catch (error) {
-    console.error('Ошибка генерации QR-кода:', error);
+    console.error('Ошибка генерации QR-кода');
   }
 };
 
@@ -163,6 +171,7 @@ watch(
   () => props.show,
   (newVal) => {
     qrCodeUrl.value = null
+    isValidEmail.value=true;
     if (newVal) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -178,6 +187,14 @@ watch(picked, (newValue) => {
 watch(selectedEmail, (newEmail) => {
   if (picked.value === 'sendReceiptToEmail') {
     isValidEmail.value = validateEmail(newEmail);
+    if(newEmail==='') {
+      isValidEmail.value = false
+      emailError.value = 'Почта не введена';
+    } else {
+      if (!isValidEmail.value) {
+        emailError.value = 'Неверный формат email';
+      }
+    }
   }
 });
 
@@ -202,11 +219,9 @@ onUnmounted(() => {
 const connectWebSocket = () => {
   socket = new WebSocket(`wss://igra-pads.ru/websocket`);
   socket.onopen = () => {
-    console.log('WebSocket connection established');
   };
   socket.onmessage = (event) => {
     const message = JSON.parse(event.data);
-    console.log('Received message:', message);
     if (message.eventType === 'payment.waiting_for_capture' ||
       message.eventType === 'payment.succeeded' ||
       message.eventType === 'payment.canceled' ||
@@ -216,11 +231,10 @@ const connectWebSocket = () => {
     }
   };
   socket.onclose = () => {
-    console.log('WebSocket connection closed');
     setTimeout(connectWebSocket, 5000);
   };
   socket.onerror = (error) => {
-    console.error('WebSocket error:', error);
+    console.error('WebSocket error');
   };
 };
 
@@ -343,7 +357,6 @@ const updatePayments = (data) => {
   border-radius: 16px;
   padding: 6px;
   width: 100%;
-  margin-top: 72px;
   max-width: 1430px;
   position: relative;
   font-family: 'Mulish', sans-serif;
@@ -515,6 +528,8 @@ const updatePayments = (data) => {
   margin-bottom: 13x;
 }
 .checkbox-section {
+  display: flex;
+  flex-direction: column;
   margin-top: 20px;
 }
 .checkbox-section label {
@@ -593,6 +608,12 @@ input[type="radio"]:focus {
 .input-check.invalid-email:focus {
   border-color: red !important; 
   box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); 
+}
+
+.text-error {
+  color: red;
+  font-size: 18px;
+  opacity: 0.7;
 }
 
 .input-check  {

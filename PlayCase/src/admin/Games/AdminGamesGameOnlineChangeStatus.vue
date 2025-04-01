@@ -115,4 +115,41 @@ button:hover {
 .secondary:hover {
   background-color: #5a6268;
 }
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  h1 {
+    font-size: 50px; 
+  }
+
+  .status-manager {
+    max-width: 700px; 
+    margin: 40px auto; 
+  }
+
+  .form-group {
+    margin: 40px 0; 
+  }
+
+  label {
+    font-size: 28px; 
+    margin-bottom: 16px; 
+  }
+
+  select {
+    padding: 16px; 
+    font-size: 28px; 
+    border-radius: 8px; 
+  }
+
+  .buttons {
+    width: 600px; 
+    gap: 40px; 
+  }
+
+  button {
+    padding: 20px 40px; 
+    font-size: 28px; 
+    border-radius: 8px; 
+  }
+}
 </style>

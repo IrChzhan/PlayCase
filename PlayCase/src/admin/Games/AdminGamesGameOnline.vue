@@ -37,7 +37,6 @@ const getNotifications = async () => {
   try {
     const res = await store.dispatch('games/fetchAllNotifications', gameId);
     messages.value = res;
-    console.log(res)
     sortMessages();
   } catch (e) {
     console.log(e);
@@ -233,6 +232,38 @@ onBeforeUnmount(() => {
 
   .help-header h1 {
     font-size: 20px;
+  }
+}
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    padding: 40px; 
+  }
+
+  .help-header h1 {
+    font-size: 50px; 
+    margin-bottom: 40px; 
+  }
+
+  .button {
+    padding: 20px 40px; 
+    font-size: 28px; 
+    border-radius: 10px; 
+  }
+
+  .table-wrapper {
+    padding: 40px; 
+    border-radius: 16px;
+  }
+
+  .messages-table th,
+  .messages-table td {
+    padding: 20px;
+    font-size: 28px;
+  }
+
+  .messages-table th {
+    font-size: 28px; 
   }
 }
 </style>

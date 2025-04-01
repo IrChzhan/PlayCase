@@ -6,6 +6,8 @@
       loop
       muted
       playsinline
+      preload
+      poster="../../assets/fon-poster.webp"
       class="background-video"
     >
       <source src="../../assets/fon.mp4" type="video/mp4">
@@ -19,7 +21,7 @@
       </div>
       <div class="container_down_menu">
         <img
-          src="../../assets/House_04.png"
+          src="../../assets/House_5.svg"
           class="house-image"
           width="80"
           @click="goToMenuApp"
@@ -45,8 +47,8 @@ const goToMenuApp = () => {
 
 onMounted(() => {
   if (videoElement.value) {
-    videoElement.value.play().catch(error => {
-      console.error('Автовоспроизведение заблокировано:', error)
+    videoElement.value.addEventListener('loadeddata', () => {
+      videoElement.value.classList.add('loaded') 
     })
   }
 })
@@ -58,6 +60,8 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  background: url('../../assets/fon-poster.webp') no-repeat center center;
+  background-size: cover;
   justify-content: center;
   position: relative;
 }
@@ -70,8 +74,13 @@ onMounted(() => {
   height: 100vh;
   object-fit: cover;
   z-index: 0;
+  opacity: 1; 
+  transition: opacity 0.5s ease-in-out; 
 }
 
+.background-video.loaded {
+  opacity: 1; 
+}
 .content-wrapper {
   position: relative; 
   z-index: 1; 

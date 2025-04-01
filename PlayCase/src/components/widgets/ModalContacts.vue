@@ -8,13 +8,13 @@
         <div class="form-section">
           <div class="container_qr">
             <div class="tg">
-              <img src="@/assets/telegram.png" alt="Telegram">
+              <img src="@/assets/qr-code-tg.png" alt="Telegram">
             </div>
             <div class="inst">
-              <img src="@/assets/VK.png" alt="VK">
+              <img src="@/assets/qr-code-vk.png" alt="VK">
             </div>
             <div class="vk">
-              <img src="@/assets/site.png" alt="Site">
+              <img src="@/assets/qr-code-site.png" alt="Site">
             </div>
           </div>
         </div>
@@ -38,8 +38,6 @@ const formData = ref({
 })
 
 const submitForm = () => {
-  console.log('Форма отправлена:', formData.value)
-  alert('Спасибо за ваш комментарий!')
   formData.value.comment = ''
   formData.value.questionType = ''
   formData.value.hostType = ''

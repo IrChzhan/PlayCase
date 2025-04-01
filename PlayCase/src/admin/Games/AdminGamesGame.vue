@@ -55,6 +55,7 @@ const Statuses = {
   PLANNED: 'Запланирована',
   FINISHED: 'Завершена',
   IN_PROGRESS: 'В процессе',
+  RESULT_SUMMING: 'В процессе завершения'
 };
 
 const menuItems = [
@@ -83,7 +84,7 @@ const menuItems = [
       selectedMenu.value = 2;
     },
     name: 'results',
-    roles: ['ADMIN', 'MANAGER'],
+    roles: ['ADMIN', 'MANAGER', 'RESULT_UPLOADER'],
   },
   {
     label: 'Лотерея',
@@ -102,6 +103,15 @@ const menuItems = [
     },
     name: 'online',
     roles: ['ADMIN', 'CASHIER', 'MANAGER'],
+  },
+  {
+    label: 'Презентация',
+    route: () => {
+      router.push(`/admin/games/${route.params.gameId}/presentation`);
+      selectedMenu.value = 5;
+    },
+    name: 'presentation',
+    roles: ['ADMIN','MANAGER','PRESENTER'],
   },
 ];
 
@@ -122,12 +132,18 @@ const isActive = (routeName) => {
 onMounted( () => {
    checkAccess()
    fetchGameById()
-  if(role.value !== 'CASHIER') {
-    selectedMenu.value = 0
-    router.push(`/admin/games/${route.params.gameId}/team`)
-  } else {
+   if (role.value === 'CASHIER') {
     selectedMenu.value = 1
     router.push(`/admin/games/${route.params.gameId}/teams/pay`);
+  } else if(role.value === 'PRESENTER'){
+    selectedMenu.value = 5
+    router.push(`/admin/games/${route.params.gameId}/presentation`);
+  } else if (role.value == 'RESULT_UPLOADER'){
+    selectedMenu.value = 2
+    router.push(`/admin/games/${route.params.gameId}/teams/results`);
+  }else {
+    selectedMenu.value = 0
+    router.push(`/admin/games/${route.params.gameId}/team`)
   }
 
 
@@ -138,13 +154,21 @@ watch(
   async () => {
     await fetchGameById()
     checkAccess()
-    if(role.value !== 'CASHIER') {
-      selectedMenu.value = 0
-      router.push(`/admin/games/${route.params.gameId}/team`)
-    } else {
-      selectedMenu.value = 1
-      router.push(`/admin/games/${route.params.gameId}/teams/pay`);
-    }
+    
+  if (role.value === 'CASHIER') {
+    selectedMenu.value = 1
+    router.push(`/admin/games/${route.params.gameId}/teams/pay`);
+  } else if(role.value === 'PRESENTER'){
+    selectedMenu.value = 5
+    router.push(`/admin/games/${route.params.gameId}/presentation`);
+  }else if (role.value == 'RESULT_UPLOADER'){
+    selectedMenu.value = 2
+    router.push(`/admin/games/${route.params.gameId}/teams/results`);
+  } else {
+    selectedMenu.value = 0
+    router.push(`/admin/games/${route.params.gameId}/team`)
+  }
+    
   },
 )
 </script>
@@ -265,6 +289,29 @@ button.active {
 
   .main-content {
     padding: 0 5px;
+  }
+}
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .sidebar {
+    min-width: 20%; 
+    padding: 20px 0; 
+  }
+
+  .sidebar button {
+    padding: 20px 30px; 
+    font-size: 24px; 
+    margin-bottom: 20px; 
+    border-radius: 8px; 
+  }
+
+  .top-bar {
+    padding: 20px 40px; 
+  }
+
+  .top-bar div {
+    font-size: 36px; 
   }
 }
 </style>

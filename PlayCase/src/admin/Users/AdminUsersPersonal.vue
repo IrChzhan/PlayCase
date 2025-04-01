@@ -75,7 +75,7 @@ const userId = ref('')
 const oldName = ref('')
 const oldRole = ref('')
 const currentPage = ref(1)
-const usersPerPage = ref(5)
+const usersPerPage = ref(50)
 const searchQuery = ref('')
 const filteredUsers = ref([])
 const showDialog = ref(false)
@@ -151,7 +151,9 @@ const openModalAdminUser = (id, name, role) => {
 const roles = {
   'ADMIN': 'Администратор',
   'MANAGER': 'Менеджер',
-  'CASHIER': 'Кассир'
+  'CASHIER': 'Кассир',
+  'PRESENTER': 'Презентер',
+  'RESULT_UPLOADER': 'Квизмен'
 }
 
 const closeModalAdminUser = () => {
@@ -271,7 +273,7 @@ button:disabled {
 }
 
 .icon-setting {
-  padding: 10px 0 ;
+  padding: 5px 0 ;
   background: none;
   cursor: pointer;
 }
@@ -326,5 +328,59 @@ td:last-child:hover {
 
 .user-table th:last-child {
   background: transparent;
+}
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    padding: 20px; 
+    gap: 40px; 
+  }
+
+  .filters input {
+    padding: 20px;
+    font-size: 28px; 
+    border-radius: 8px; 
+  }
+
+  .filters select {
+    padding: 20px; 
+    font-size: 24px; 
+    border-radius: 8px; 
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 20px;
+    font-size: 32px; 
+  }
+
+  .user-table th {
+    font-size: 32px; 
+  }
+
+  button {
+    padding: 20px 40px; 
+    font-size: 24px;
+    border-radius: 8px; 
+  }
+
+  .pagination {
+    gap: 20px; 
+  }
+
+  .create-user {
+    margin-top: 40px;
+  }
+
+  .icon-setting {
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .pagination span {
+    font-size: 28px;
+  }
 }
 </style>

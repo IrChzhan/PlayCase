@@ -21,7 +21,7 @@ export default {
                 commit('SET_CURRENT_GAME', response.data)
                 return response.data
             } catch (error) {
-                console.error('Ошибка при получении текущей игры:', error)
+                console.error('Ошибка при получении текущей игры')
                 throw error
             }
         },
@@ -32,7 +32,7 @@ export default {
                 commit('SET_REGISTRATIONS', response.data);
                 return response.data;
             } catch (error) {
-                console.error('Ошибка при получении списка регистраций:', error);
+                console.error('Ошибка при получении списка регистраций');
                 throw error;
             }
         },
@@ -45,7 +45,7 @@ export default {
                 commit('SET_REGISTRATIONS', response.data);
                 return response.data;
             } catch (error) {
-                console.error('Ошибка при получении списка регистраций:', error);
+                console.error('Ошибка при получении списка регистраций');
                 throw error;
             }
         },
@@ -58,7 +58,7 @@ export default {
                 commit('SET_WINNER', response.data)
                 return response.data
             } catch (error) {
-                console.error('Ошибка при получении победителя:', error)
+                console.error('Ошибка при получении победителя')
                 throw error
             }
         },
@@ -80,9 +80,9 @@ export default {
                 )
                 return response.data
             } catch (error) {
-                console.error('Ошибка при регистрации участника:', error)
+                console.error('Ошибка при регистрации участника')
                 if (error.response && error.response.data) {
-                    throw new Error(error.response.data.message || 'Ошибка при регистрации')
+                    throw new Error('Ошибка при регистрации')
                 }
                 throw new Error('Ошибка соединения с сервером.')
             }

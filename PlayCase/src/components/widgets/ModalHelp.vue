@@ -55,7 +55,6 @@ const callWaiter = async () => {
   } catch (e) {
     toastMessage.value = 'Ошибка при запросе!';
     toastType.value = 'error';
-    console.log(e);
   }
 };
 
@@ -75,7 +74,6 @@ const callHelper = async () => {
   } catch (e) {
     toastMessage.value = 'Ошибка при запросе!';
     toastType.value = 'error';
-    console.log(e);
   }
 };
 
@@ -86,7 +84,6 @@ const getCurrentHelp = async () => {
     calledPerson.value = res.responsiblePerson;
   } catch (e) {
     resHelp.value = '';
-    console.log(e);
   }
 };
 
@@ -133,7 +130,7 @@ watch(
   align-items: center;
   background: #ffffff;
   border-radius: 15px;
-  padding: 48px 0 58px 0;
+  padding: 58px 0 58px 0;
   max-width: 722px;
   width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);

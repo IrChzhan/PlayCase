@@ -3,7 +3,7 @@
     <h1>Регистрация в лотерее</h1>
 
     <div v-if="registrations.length === 0">
-      <p>Нет зарегистрированных участников.</p>
+      <p class="span_p">Нет зарегистрированных участников.</p>
     </div>
     <div v-else>
       <table>
@@ -61,7 +61,7 @@ const exportLottery = async () => {
       exportType: 'CSV'
     });
 
-    const data = response.data.split('\n').map(row => row.split(','));
+    const data = response.data.split('\n').map(row => row.split(';'));
 
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -205,5 +205,64 @@ th {
 
 .winner-section p {
   margin: 5px 0;
+}
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .button-container {
+    gap: 20px; 
+  }
+
+  button {
+    padding: 16px 32px; 
+    font-size: 24px; 
+    border-radius: 8px; 
+  }
+
+  .btn {
+    padding: 16px 32px; 
+    font-size: 28px; 
+    border-radius: 8px; 
+  }
+
+  .lottery-container {
+    padding: 40px; 
+  }
+
+  h1 {
+    font-size: 50px; 
+    margin-bottom: 40px; 
+  }
+
+  table {
+    margin: 40px 0; 
+  }
+
+  th,
+  td {
+    padding: 20px; 
+    font-size: 28px; 
+  }
+
+  .winner-button {
+    padding: 20px 40px; 
+    font-size: 24px; 
+    border-radius: 8px; 
+    margin-top: 40px; 
+  }
+
+  .winner-section {
+    padding: 30px; 
+    margin-top: 40px; 
+  }
+
+  .winner-section p {
+    font-size: 24px; 
+    margin: 10px 0; 
+  }
+
+  .span_p {
+    font-size: 45px;
+  }
 }
 </style>

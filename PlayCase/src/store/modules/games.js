@@ -67,12 +67,12 @@ export default {
     },
     async uploadResultsFile({ commit }, { gameId, file }) {
       console.log('uploadResultsFile: Начало загрузки файла результатов')
-      console.log('uploadResultsFile: ID игры:', gameId)
-      console.log('uploadResultsFile: Файл:', file)
+      console.log('uploadResultsFile: ID игры')
+      console.log('uploadResultsFile: Файл')
 
       const formData = new FormData()
       formData.append('file', file)
-      console.log('uploadResultsFile: FormData:', formData)
+      console.log('uploadResultsFile: FormData')
       try {
         const response = await axios.put(
           `${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/results`,
@@ -84,21 +84,21 @@ export default {
           },
         )
 
-        console.log('uploadResultsFile: Ответ сервера:', response)
-        console.log('uploadResultsFile: Данные ответа:', response.data)
+        console.log('uploadResultsFile: Ответ сервера')
+        console.log('uploadResultsFile: Данные ответа')
         console.log('uploadResultsFile: Загрузка файла результатов завершена')
         return response.data
       } catch (error) {
-        console.error('uploadResultsFile: Ошибка при загрузке файла:', error)
+        console.error('uploadResultsFile: Ошибка при загрузке файла')
         if (error.response) {
-          console.error('uploadResultsFile: Ошибка ответа сервера:', error.response)
-          console.error('uploadResultsFile: Данные ошибки:', error.response.data)
-          console.error('uploadResultsFile: Статус ошибки:', error.response.status)
-          console.error('uploadResultsFile: Заголовки ошибки:', error.response.headers)
+          console.error('uploadResultsFile: Ошибка ответа сервера')
+          console.error('uploadResultsFile: Данные ошибки')
+          console.error('uploadResultsFile: Статус ошибки')
+          console.error('uploadResultsFile: Заголовки ошибки')
         } else if (error.request) {
-          console.error('uploadResultsFile: Ошибка запроса:', error.request)
+          console.error('uploadResultsFile: Ошибка запроса')
         } else {
-          console.error('uploadResultsFile: Ошибка:', error.message)
+          console.error('uploadResultsFile: Ошибка')
         }
         throw error
       }
@@ -119,7 +119,7 @@ export default {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}`)
         return response.data
       } catch (e) {
-        console.error('Ошибка при получении текущей игры:', e)
+        console.error('Ошибка при получении текущей игры')
         throw e
       }
     },
@@ -128,7 +128,6 @@ export default {
       try {
         const response = await axios.delete(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/teams/results`)
       }catch (e) {
-        console.log(e);
         throw e
       }
     },
@@ -139,7 +138,7 @@ export default {
         commit('SET_CURRENT_GAME', response.data)
         return response.data
       } catch (error) {
-        console.error('Ошибка при получении текущей игры:', error)
+        console.error('Ошибка при получении текущей игры')
         throw error
       }
     },
@@ -150,7 +149,7 @@ export default {
         commit('setTeams', { gameId, teams: response.data })
         return response.data
       } catch (error) {
-        console.error(`Ошибка получения списка команд для игры с ID ${gameId}`, error)
+        console.error(`Ошибка получения списка команд для игры с ID`)
         throw error
       }
     },
@@ -159,19 +158,19 @@ export default {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/review`)
         return response.data
       } catch (error) {
-        console.error(`Ошибка получения списка команд для игры с ID ${gameId}`, error)
+        console.error(`Ошибка получения списка команд для игры с ID`)
         throw error
       }
     },
 
     async uploadTeamsFile({ commit }, { gameId, file }) {
       console.log('uploadTeamsFile: Начало загрузки файла команд')
-      console.log('uploadTeamsFile: ID игры:', gameId)
-      console.log('uploadTeamsFile: Файл:', file)
+      console.log('uploadTeamsFile: ID игры')
+      console.log('uploadTeamsFile: Файл')
 
       const formData = new FormData()
       formData.append('file', file)
-      console.log('uploadTeamsFile: FormData:', formData)
+      console.log('uploadTeamsFile: FormData')
 
       try {
         const response = await axios.post(
@@ -184,21 +183,21 @@ export default {
           },
         )
 
-        console.log('uploadTeamsFile: Ответ сервера:', response)
-        console.log('uploadTeamsFile: Данные ответа:', response.data)
+        console.log('uploadTeamsFile: Ответ сервера')
+        console.log('uploadTeamsFile: Данные ответа')
         console.log('uploadTeamsFile: Загрузка файла команд завершена')
         return response.data
       } catch (error) {
-        console.error('uploadTeamsFile: Ошибка при загрузке файла:', error)
+        console.error('uploadTeamsFile: Ошибка при загрузке файла')
         if (error.response) {
-          console.error('uploadTeamsFile: Ошибка ответа сервера:', error.response)
-          console.error('uploadTeamsFile: Данные ошибки:', error.response.data)
-          console.error('uploadTeamsFile: Статус ошибки:', error.response.status)
-          console.error('uploadTeamsFile: Заголовки ошибки:', error.response.headers)
+          console.error('uploadTeamsFile: Ошибка ответа сервера')
+          console.error('uploadTeamsFile: Данные ошибки')
+          console.error('uploadTeamsFile: Статус ошибки')
+          console.error('uploadTeamsFile: Заголовки ошибки')
         } else if (error.request) {
-          console.error('uploadTeamsFile: Ошибка запроса:', error.request)
+          console.error('uploadTeamsFile: Ошибка запроса')
         } else {
-          console.error('uploadTeamsFile: Ошибка:', error.message)
+          console.error('uploadTeamsFile: Ошибка')
         }
         throw error
       }
@@ -212,7 +211,7 @@ export default {
         )
         return response.data
       } catch (error) {
-        console.error('Ошибка добавления команды:', error)
+        console.error('Ошибка добавления команды')
         throw error
       }
     },
@@ -224,7 +223,7 @@ export default {
         )
         return response.data
       } catch (error) {
-        console.error('Ошибка добавления команды:', error)
+        console.error('Ошибка добавления команды')
         throw error
       }
     },
@@ -235,7 +234,7 @@ export default {
         )
         return response.data
       } catch (error) {
-        console.error('Ошибка добавления команды:', error)
+        console.error('Ошибка добавления команды')
         throw error
       }
     },
@@ -249,7 +248,7 @@ export default {
         )
         return response.data
       } catch (error) {
-        console.error('Ошибка добавления команд из файла:', error)
+        console.error('Ошибка добавления команд из файла')
         throw error
       }
     },
@@ -267,8 +266,7 @@ export default {
         return response.data
       } catch (error) {
         console.error(
-          `Ошибка обновления данных команды с ID ${teamId} в игре с ID ${gameId}:`,
-          error,
+          `Ошибка обновления данных команды с ID`
         )
         throw error
       }
@@ -282,7 +280,7 @@ export default {
         )
         return response.data
       } catch (error) {
-        console.error(`Ошибка обновления данных команды с ID в игре с ID ${gameId}:`, error)
+        console.error(`Ошибка обновления данных команды с ID в игре с ID`)
         throw error
       }
     },
@@ -294,7 +292,7 @@ export default {
         )
         return response.data
       } catch (error) {
-        console.error(`Ошибка получения результатов игры с ID ${gameId}:`, error)
+        console.error(`Ошибка получения результатов игры с ID `)
         throw error
       }
     },
@@ -313,11 +311,11 @@ export default {
             },
           },
         )
-        console.log('Заменены команды:', response.data)
+        console.log('Заменены команды')
         commit('setTeams', { gameId, teams: response.data })
         return response.data
       } catch (error) {
-        console.error('Ошибка при замене команд:', error)
+        console.error('Ошибка при замене команд')
         throw error
       }
     },
@@ -330,11 +328,10 @@ export default {
         return response.data
       } catch (error) {
         console.error(
-          `Ошибка установки стола ${userId} для команды с ID ${teamId} в игре с ID ${gameId}:`,
-          error,
+          `Ошибка установки стола `
         )
         if (error.response) {
-          console.error('Ответ сервера:', error.response.data)
+          console.error('Ответ сервера')
         }
         throw error
       }
@@ -347,11 +344,10 @@ export default {
         return response.data
       } catch (error) {
         console.error(
-          `Ошибка установки стола ${userId} для команды с ID ${teamId} в игре с ID ${gameId}:`,
-          error,
+          `Ошибка установки стола`
         )
         if (error.response) {
-          console.error('Ответ сервера:', error.response.data)
+          console.error('Ответ сервера')
         }
         throw error
       }
@@ -364,7 +360,7 @@ export default {
         return response.data
       } catch (error) {
         if (error.response) {
-          console.error('Ответ сервера:', error.response.data)
+          console.error('Ответ сервера')
         }
         throw error
       }
@@ -377,7 +373,7 @@ export default {
         )
         return response.data
       } catch (error) {
-        console.error(`Ошибка при активации игры с ID ${gameId}:`, error)
+        console.error(`Ошибка при активации игры с ID`)
         throw error
       }
     },
@@ -387,7 +383,7 @@ export default {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/status`)
         return response.data
       } catch (error) {
-        console.error(`Ошибка при получении статуса игры с ID ${gameId}:`, error)
+        console.error(`Ошибка при получении статуса игры с ID`)
         throw error
       }
     },
@@ -396,7 +392,7 @@ export default {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/game/${gameId}/changeStatus?newStatus=${newStatus}`)
         return response.data
       } catch (e) {
-        console.error('Ошибка при получении текущей игры:', e)
+        console.error('Ошибка при получении текущей игры')
         throw e
       }
     },
@@ -405,7 +401,7 @@ export default {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/help/${helpRequestId}/changeStatus?status=${newStatus}`)
         return response.data
       } catch (e) {
-        console.error('Ошибка при получении текущей игры:', e)
+        console.error('Ошибка при получении текущей игры')
         throw e
       }
     },

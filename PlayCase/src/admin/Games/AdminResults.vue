@@ -271,4 +271,61 @@ button.delete-button {
 button.delete-button:hover {
   background-color: #c82333;
 }
+
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  h2 {
+    font-size: 50px;
+    margin-bottom: 40px; 
+  }
+
+  .admin-results {
+    max-width: 1400px; 
+    padding: 40px; 
+  }
+
+  .admin-results h1 {
+    font-size: 36px; 
+    margin-bottom: 40px; 
+  }
+
+  .upload-container {
+    gap: 30px; 
+  }
+
+  .file-input {
+    padding: 20px; 
+    font-size: 24px; 
+    border-radius: 10px;
+  }
+
+  .custom-file-button,
+  .upload-button,
+  .view-results-button {
+    padding: 20px 40px; 
+    font-size: 24px; 
+    border-radius: 10px; 
+  }
+
+  .success-message {
+    font-size: 24px; 
+    margin-top: 30px; 
+  }
+
+  table {
+    margin-bottom: 40px; 
+  }
+
+  th,
+  td {
+    padding: 20px; 
+    font-size: 28px; 
+  }
+
+  button.delete-button {
+    padding: 20px 40px; 
+    font-size: 24px; 
+    border-radius: 10px; 
+  }
+}
 </style>

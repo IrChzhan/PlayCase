@@ -130,7 +130,7 @@ const showDeleteDialog = (id) => {
 
 const searchQuery = ref('')
 const currentPage = ref(1)
-const mealsPerPage = ref(5)
+const mealsPerPage = ref(15)
 const showModalAdminEditMeal = ref(false)
 const mealId = ref('')
 const placeIdForEdit = ref('')
@@ -197,7 +197,7 @@ onMounted(() => {
   gap: 10px;
 }
 .icon-setting {
-  padding: 10px 0 ;
+  padding: 2px 0 ;
   background: none;
   border: none;
   cursor: pointer;
@@ -247,9 +247,9 @@ onMounted(() => {
 .menu-table th,
 .menu-table td {
   border: 1px solid #ccc;
-    padding: 5px; /* Уменьшаем отступы внутри ячеек */
+    padding: 5px; 
     text-align: left;
-    line-height: 1.2; /* Уменьшаем межстрочный интервал */
+    line-height: 1.2; 
 }
 
 .menu-table th {
@@ -309,5 +309,60 @@ button:disabled {
 
 .menu-table th:last-child {
   background: transparent;
+}
+
+@media screen and (min-width: 2400px) and (min-height: 1400px) {
+  .container {
+    padding: 0;
+    gap: 40px; 
+  }
+  .header {
+    margin-bottom: 40px; 
+  }
+
+  .filters input {
+    padding: 20px; 
+    font-size: 28px; 
+    border-radius: 8px; 
+  }
+
+  .filters select {
+    padding: 20px; 
+    font-size: 28px; 
+    border-radius: 8px; 
+  }
+
+  .menu-table th,
+  .menu-table td {
+    font-size: 28px; 
+  }
+
+  .menu-table th {
+    font-size: 28px; 
+  }
+
+  .thumbnail {
+    max-width: 100px; 
+    max-height: 100px; 
+  }
+
+  .pagination {
+    gap: 20px; 
+  }
+
+  button {
+    padding: 20px 40px; 
+    font-size: 24px; 
+    border-radius: 8px; 
+  }
+
+  .icon-setting {
+    width: 40px; 
+    height: 40px; 
+  }
+
+  .pagination span {
+    font-size: 28px;
+  }
 }
 </style>
