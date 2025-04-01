@@ -160,10 +160,15 @@ h1 {
   width: 100%;
 }
 
+.results-table td:nth-child(1),
+.results-table th:nth-child(1) {
+  width: 80px;
+  max-width: 80px;
+}
 .results-table td:nth-child(2),
 .results-table th:nth-child(2) {
-  width: 270px;
-  min-width: 270px;
+  width: 500px;
+  min-width: 500px;
 }
 
 thead{

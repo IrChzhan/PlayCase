@@ -51,8 +51,8 @@
               class="meal-image"
             />
             <div class="meal-info">
-              <h2 class="meal-name">{{ meal.name }}</h2>
-              <p class="meal-price">{{ meal.price }} ₽</p>
+              <h2 class="meal-name">{{ decodeHtmlEntities(meal.name) }}</h2>
+              <p class="meal-price">{{ decodeHtmlEntities(meal.price) }} ₽</p>
             </div>
           </div>
         </div>
@@ -63,9 +63,9 @@
       <div class="modal-content">
         <button class="close-button" @click="closeMealModal">×</button>
         <img :src="currentMeal.image || '/assets/default-image.png'" alt="Блюдо" class="meal-modal-image" />
-        <h2 class="meal-modal-name">{{ currentMeal.name }}</h2>
-        <p class="meal-modal-description">{{ currentMeal.description }}</p>
-        <p class="meal-modal-price">{{ currentMeal.price }} ₽</p>
+        <h2 class="meal-modal-name">{{ decodeHtmlEntities(currentMeal.name) }}</h2>
+        <p class="meal-modal-description">{{ decodeHtmlEntities(currentMeal.description) }}</p>
+        <p class="meal-modal-price">{{ decodeHtmlEntities(currentMeal.price) }} ₽</p>
       </div>
     </div>
     <div class="home-button-container">
@@ -91,6 +91,12 @@ const categoryButtons = ref([]);
 
 const showMealModal = ref(false);
 const currentMeal = ref({});
+
+const decodeHtmlEntities = (text) => {
+  const textArea = document.createElement('textarea');
+  textArea.innerHTML = text;
+  return textArea.value;
+};
 
 const fetchMenu = async () => {
   try {
