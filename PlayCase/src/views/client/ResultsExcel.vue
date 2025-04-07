@@ -16,8 +16,8 @@
           <tr
             v-for="(team, index) in teams"
             :key="team.teamName"
-            :class="{'even-row': index % 2 === 0,
-            'odd-row': index % 2 !== 0,
+            :class="{'odd-row': index % 2 === 0,
+            'even-row': index % 2 !== 0,
             'highlighted-row': teamName === team.teamName}"
           >
             <td>{{ team.currentPlace }}</td>
