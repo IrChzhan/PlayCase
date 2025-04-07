@@ -204,7 +204,8 @@ onMounted(async () => {
   connectWebSocket();
   const res = await store.dispatch('profile/getCurrentTeam');
   emailTeam.value = res.email;
-
+  const res2 = await store.dispatch('profile/getCurrent');
+  pricePerPlayer.value = res2.price;
   if (!emailTeam.value) {
     picked.value = 'sendReceiptToEmail';
   }

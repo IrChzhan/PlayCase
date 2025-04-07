@@ -22,7 +22,6 @@
           type="text"
           placeholder="Введите цену блюда"
           class="input"
-          required
         />
       </div>
 
@@ -61,7 +60,7 @@
         <button
           type="submit"
           class="button primary btn-add"
-          :disabled="loading || !mealName || !mealPrice || !mealFile"
+          :disabled="loading || !mealName || !mealFile"
         >
           <Loader v-if="loading" /> Добавить
         </button>

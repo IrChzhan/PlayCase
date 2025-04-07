@@ -38,6 +38,18 @@
           </option>
         </select>
       </div>
+      <div class="form-group">
+        <small class="old-data" v-if="oldGameData.price !== null">Старая цена: {{ oldGameData.price }}</small>
+        <label for="price">Цена:</label>
+        <input
+          id="price"
+          v-model="price"
+          type="number"
+          placeholder="Введите цену"
+          class="input"
+          min="10"
+        />
+      </div>
       <div class="form-actions">
         <button class="button primary" type="submit" :disabled="!isFormValid || loading">
           <Loader v-if="loading" /> Сохранить изменения
@@ -69,10 +81,12 @@ const places = ref([])
 const toastMessage = ref('')
 const toastType = ref('success')
 const gameId = ref(null)
+const price = ref(null)
 const oldGameData = ref({
   name: '',
   plannedDate: '',
-  placeName: ''
+  placeName: '',
+  price: null 
 })
 
 const saveChanges = async () => {
@@ -85,6 +99,7 @@ const saveChanges = async () => {
           plannedDate: plannedDate.value,
           placeId: selectedPlaceId.value,
           name: nameGame.value,
+          price: price.value ? Number(price.value) : 1500
         },
       }
 
@@ -125,21 +140,21 @@ const fetchPlaces = async () => {
 const fetchGameDetails = async (id) => {
   try {
     const game = await store.dispatch('games/fetchGameById', id)
-    console.log(game)
     if (game) {
       nameGame.value = game.name
       plannedDate.value = game.plannedDate
       selectedPlaceId.value = game.place.id
+      price.value = game.price || null 
       gameId.value = game.id
       oldGameData.value = {
         name: game.name,
         plannedDate: game.plannedDate,
-        placeName: places.value.find(p => p.id === game.place.id)?.name || 'Неизвестно'
+        placeName: places.value.find(p => p.id === game.place.id)?.name || 'Неизвестно',
+        price: game.price || null 
       }
-
     }
   } catch (error) {
-    console.error('Ошибка загрузки данных игры:', error)
+    console.error('Ошибка загрузки данных игры:')
   }
 }
 
@@ -150,8 +165,7 @@ const goBack = () => {
 onMounted(() => {
   fetchPlaces()
 
-  const id  = route.params.gameId
-  console.log(id)
+  const id = route.params.gameId
   if (id) {
     fetchGameDetails(id)
   }
@@ -361,6 +375,4 @@ button:disabled {
     border-radius: 12px; 
   }
 }
-
-
 </style>

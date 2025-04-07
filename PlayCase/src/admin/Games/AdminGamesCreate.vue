@@ -36,6 +36,19 @@
           </option>
         </select>
       </div>
+      
+      <div class="form-group">
+        <label for="price">Цена:</label>
+        <input
+          id="price"
+          v-model="price"
+          type="number"
+          placeholder="Введите цену"
+          class="input"
+          min="10"
+        />
+      </div>
+
       <div class="form-actions">
         <button class="button primary" type="submit" :disabled="!isFormValid || loading">
           <Loader v-if="loading" /> Добавить игру
@@ -66,6 +79,7 @@ const nameGame = ref('')
 const places = ref([])
 const toastMessage = ref('')
 const toastType = ref('success')
+const price = ref(null) 
 
 const dateInput = ref(null)
 
@@ -82,6 +96,7 @@ const addGame = async () => {
         plannedDate: plannedDate.value,
         placeId: selectedPlaceId.value,
         name: nameGame.value,
+        price: price.value ? Number(price.value) : 1500 
       }
 
       const newGame = await store.dispatch('games/createGame', newGameRequest)
@@ -95,6 +110,7 @@ const addGame = async () => {
       nameGame.value = ''
       plannedDate.value = ''
       selectedPlaceId.value = ''
+      price.value = null 
       setTimeout(() => {
         toastMessage.value = ''
         fetchGames()

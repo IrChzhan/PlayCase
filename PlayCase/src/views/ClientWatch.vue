@@ -45,6 +45,7 @@ const fetchTeam = async() => {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current/team`, {
       headers: {Authorization: `Bearer ${token.value}`},
     })
+    
     team.value = res.data.name
     localStorage.setItem('team', JSON.stringify(team.value))
     router.push('/client')

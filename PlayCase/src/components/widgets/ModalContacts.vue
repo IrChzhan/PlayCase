@@ -14,7 +14,7 @@
               <img src="@/assets/qr-code-vk.png" alt="VK">
             </div>
             <div class="vk">
-              <img src="@/assets/qr_site.png" alt="Site">
+              <img src="@/assets/qr_site-code.png" alt="Site">
             </div>
           </div>
         </div>

@@ -53,6 +53,14 @@ export default {
         console.error('Ошибка при загрузке пользователей')
       }
     },
+    async getCurrent ({commit}) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/game/current`)
+        return response.data
+      } catch (error) {
+        console.error('Ошибка при загрузке пользователей')
+      }
+    },
     async fetchUsers({ commit }) {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/v1/users`)

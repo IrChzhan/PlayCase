@@ -58,9 +58,9 @@ const rounds = ref([
     description: `
       <b>6 вопросов, к каждому указаны 4 варианта ответа.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li><span style="font-weight: 700;">Правильный</span> ответ: +10 баллов за каждую букву</li>
-        <li><span style="font-weight: 700;">Неправильный</span> ответ: –5 баллов за каждую букву</li>
-        <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд</span></li>
+        <li><span style="font-weight: 700;">Правильный ответ</span>: +10 баллов за каждую букву</li>
+        <li><span style="font-weight: 700;">Неправильный ответ</span>: –5 баллов за каждую букву</li>
+        <li><span style="font-weight: 700;">Время на обсуждение</span>: 30 секунд</li>
         <li>В раунде могут быть вопросы без правильных ответов или с несколькими верными вариантами. Если вы считаете, что правильного ответа на вопрос среди вариантов нет, ничего не пишите или ставьте прочерк.</li>
       </ul>
       <span style="font-style: italic">Максимум: 120 баллов.</span>
@@ -72,8 +72,8 @@ const rounds = ref([
     description: `
       <b>6 логических вопросов без вариантов ответов.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
-        <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
+        <li><span style="font-weight: 700;">Время на обсуждение</span>: 60 секунд</li>
+        <li>За <span style="font-weight: 700;">правильный ответ</span>: +20 баллов</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 120 баллов.</span>
     ` 
@@ -84,8 +84,9 @@ const rounds = ref([
     description: `
       <ul style="padding-left: 20px; list-style-type: disc;">
         <li>Каждой команде выдаётся 10 картинок и запускается таймер на 8 минут.</li>
-        <li>Время на обсуждение: <span style="font-weight: 700;">480 секунд</span></li>
-        <li>Нужно отгадать зашифрованные фильмы, книги или исполнителей и вписать ответы в бланк на 10 ответов (номер картинки = номер вопроса). На самих картинках ничего писать не нужно!</li>
+        <li><span style="font-weight: 700;">Время на обсуждение</span>: 480 секунд</li>
+        <li>Нужно отгадать зашифрованные названия фильмов, книг, сериалов или мультфильмов и вписать ответы в бланк на 10 ответов (номер картинки = номер вопроса). На самих картинках ничего писать не нужно!</li>
+        <li><span style="font-weight: 700;">Важно:</span> картинка к сюжету отношения не имеет, мы загадали именно названия</li>
         <li><span style="font-weight: 700;">Правильный</span> ответ: +10 баллов</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 100 баллов.</span>
@@ -95,12 +96,16 @@ const rounds = ref([
     title: '4 раунд. Комбо', 
     pretitle: 'РАУНД 4 / Комбо',
     description: `
-      <b>6 вопросов без вариантов ответов.</b>
+      <b>6 вопросов</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на каждый вопрос: <span style="font-weight: 700;">30/60 секунд</span></li>
-        <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
-        <li>В течение раунда вы отвечаете на вопросы, а в конце у вас будет дополнительно 30 секунд, чтобы сделать выбор: указать одну комбинацию из трёх возможных, чтобы получить бонусные баллы.</li>
+        <li><span style="font-weight: 700;">Время на каждый вопрос</span>: 30/60 секунд</li>
+        <li><span style="font-weight: 700;">За правильный ответ</span>: +20 баллов</li>
+        <li style="font-size: 20px;">В течение раунда вы отвечаете на вопросы, а в конце у вас будет дополнительно 30 секунд, чтобы сделать выбор: указать одну комбинацию из трёх возможных, чтобы получить бонусные баллы.</li>
+        <li style="font-size: 20px;">Например, если вы выбрали вторую комбинацию, то вам надо ответить правильно хотя бы на 2 «зелёных» вопроса и хотя бы на 1 «жёлтый».</li>
+        <li style="font-size: 20px;">Если в выбранной комбинации не будет правильных ответов нужного цвета, то баллы вы не теряете, а просто остаётесь без бонусных баллов.</li>
       </ul>
+      <p style="font-size: 20px;">В бланке плюсы на:<br>
+      30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 40 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50</p>
       <span style="font-style: italic; margin-top: 4px">Максимум: 170 баллов.</span>
     ` 
   },
@@ -108,11 +113,16 @@ const rounds = ref([
     title: '5 раунд. Хет-трик', 
     pretitle: 'РАУНД 5 / Хет-трик',
     description: `
-      <b>6 вопросов, на каждый из которых можно ответить 3 раза.</b>
+      <b>6 вопросов, на каждый можно дать до трёх ответов.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Если вы уверены в своём ответе, пишите все 3 раза один и тот же ответ, если не уверены, можете написать 3 разных ответа или любую другую комбинацию из трёх вариантов.</li>
-        <li>За каждый правильный ответ вы получите +5 баллов.</li>
-        <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд на вопрос</span></li>
+        <li>Время на обсуждение: <span style="font-weight: 700;">30 секунд</span></li>
+        <li>За <span style="font-weight: 700;">правильный</span> ответ: +5 баллов</li>
+        <li>Можно повторить один ответ или дать разные варианты</li>
+      
+      <li style="font-size: 20px;">Пример: На каком континенте находится Эфиопия?</li>
+      <li style="font-size: 20px;">Вы можете ответить «Африка, Африка, Африка» и получить 15 баллов.</li>
+      <li style="font-size: 20px;">Если вы ответили «Африка, Австралия, Евразия», вы получите 5 баллов.</li>
+      <li style="font-size: 20px;">Например, вы сомневаетесь между вариантами Африка и Австралия, но больше склоняетесь к первой версии, можете ответить «Африка, Африка, Австралия», в этом случае за этот вопрос вы получите 10 баллов.</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 90 баллов.</span>
     ` 
@@ -123,9 +133,10 @@ const rounds = ref([
     description: `
       <b>6 вопросов, где каждый последующий ответ каким-то образом связан с предыдущим.</b>
       <ul style="padding-left: 20px; list-style-type: disc;">
-        <li>Время на каждый вопрос: <span style="font-weight: 700;">60 секунд</span></li>
-        <li>За <span style="font-weight: 700;">правильный</span> ответ: +20 баллов</li>
-        <li><span style="font-weight: 700;">Важно: Первый и последний вопрос не связаны</span></li>
+        <li>Например, в раунде могут быть следующие ответы: Онегин — письмо — конверт — зарплата — деньги — время.</li>
+        <li><span style="font-weight: 700;">Время на обсуждение</span>: 30/60 секунд</li>
+        <li><span style="font-weight: 700;">За правильный ответ</span>: +20 баллов</li>
+        <li><span style="font-weight: 700;">Важно:</span> Первый и последний вопрос не связаны</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 120 баллов.</span>
     ` 
@@ -138,9 +149,9 @@ const rounds = ref([
       <ul style="padding-left: 20px; list-style-type: disc;">
         <li>В случае правильного ответа со ставкой вы дополнительно получите указанные баллы. В случае неправильного потеряете эти баллы.</li>
         <li>Делать ли ставку — решайте сами!</li>
-        <li>Время на обсуждение: <span style="font-weight: 700;">30/60 секунд на каждый</span></li>
-        <li>За <span style="font-weight: 700;">правильный</span> ответ: +10 баллов</li>
-        <li>Фиксированная ставка: от +10 до +40 баллов. За <span style="font-weight: 700;">неверный</span> ответ вычитается ставка</li>
+        <li><span style="font-weight: 700;">Время на обсуждение</span>: 30/60 секунд</li>
+        <li><span style="font-weight: 700;">За правильный ответ</span>: +10 баллов</li>
+        <li><span style="font-weight: 700;">Фиксированная ставка</span>: от +10 до +40 баллов. За неверный ответ ставка вычитается</li>
       </ul>
       <span style="font-style: italic; margin-top: 4px">Максимум: 280 баллов.</span>
     ` 
@@ -150,7 +161,6 @@ const rounds = ref([
 const selectRound = (index) => {
   selectedRound.value = index;
 };
-
 </script>
 
 <style scoped>
@@ -178,7 +188,7 @@ h3 {
   border-radius: 15px;
   padding: 5px;
   padding: 6px;
-  max-width: 1433px;
+  max-width: 1530px;
   height: 980px;
   width: 95%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -274,7 +284,7 @@ h3 {
 
 
 .round-description {
-  width: 640px;
+  width: 740px;
   background: #ffffff; 
   padding: 15px;
   border-radius: 15px;
