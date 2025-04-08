@@ -48,7 +48,7 @@ export default {
         ...state.meals,
         [categoryId]: meals,
       }
-    },
+    }
   },
   actions: {
     async fetchPlaces({ commit }) {
@@ -196,6 +196,38 @@ export default {
         categoryId: newCategoryId,
       })
     },
+    async reorderCategories({ commit }, { placeId, categoryId, newIndex }) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories/${categoryId}/moveTo?newIndex=${newIndex}`)
+        
+        return response.data
+      } catch (error) {
+        console.error('Ошибка при перемещении категории:', error)
+        throw error
+      }
+    },
+    async updateMealVisibility({ commit }, { placeId, categoryId, mealId, isVisible }) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories/${categoryId}/meals/${mealId}/setVisible?isVisible=${isVisible}`)
+        
+      } catch (error) {
+        console.error('Error updating meal visibility:', error)
+        return Promise.reject(error)
+      }
+    },
+    async reorderMeal({ commit }, { placeId, categoryId, mealId, newIndex }) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/admin/v1/places/${placeId}/categories/${categoryId}/meals/${mealId}/move?newIndex=${newIndex}`)
+        return response.data
+      } catch (error) {
+        console.error('Error reordering meal:', error)
+        throw error
+      }
+    }
+    
   },
   getters: {
     allPlaces: (state) => state.places,

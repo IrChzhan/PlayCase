@@ -115,7 +115,7 @@ const emailTeam = ref('');
 const selectedPlayers = ref(1);
 const pricePerPlayer = ref(1500);
 const totalPrice = computed(() => selectedPlayers.value * pricePerPlayer.value);
-
+const watchedState = computed(() => store.state.results.result);
 const picked = ref('sendReceiptToCaptain')
 
 const showDogovor = ref(false);
@@ -179,6 +179,11 @@ watch(
     }
   }
 );
+
+watch(watchedState, async() => {
+  const res2 = await store.dispatch('profile/getCurrent');
+  pricePerPlayer.value = res2.price;
+});
 
 watch(picked, (newValue) => {
   qrCodeUrl.value = null
