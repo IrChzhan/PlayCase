@@ -52,7 +52,7 @@
             />
             <div class="meal-info">
               <h2 class="meal-name">{{ decodeHtmlEntities(meal.name) }}</h2>
-              <p class="meal-price">{{ decodeHtmlEntities(meal.price) }} ₽</p>
+              <p class="meal-price">{{ decodeHtmlEntities(meal.price) }} {{ meal.price == null ? "" : "₽"}}</p>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
         <img :src="currentMeal.image || '/assets/default-image.png'" alt="Блюдо" class="meal-modal-image" />
         <h2 class="meal-modal-name">{{ decodeHtmlEntities(currentMeal.name) }}</h2>
         <p class="meal-modal-description">{{ decodeHtmlEntities(currentMeal.description) }}</p>
-        <p class="meal-modal-price">{{ decodeHtmlEntities(currentMeal.price) }} ₽</p>
+        <p class="meal-modal-price">{{ decodeHtmlEntities(currentMeal.price) }} {{ currentMeal.price == null ? "" : "₽"}}</p>
       </div>
     </div>
     <div class="home-button-container">
