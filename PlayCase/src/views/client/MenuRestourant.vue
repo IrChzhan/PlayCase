@@ -374,6 +374,7 @@ h1 {
   width: 250px;
   margin-left: 9px;
   margin-top: 5px;
+  object-fit: cover;
 }
 
 .meal-info {
