@@ -64,6 +64,7 @@ onMounted(() => {
   background-size: cover;
   justify-content: center;
   position: relative;
+  overflow: hidden;
 }
 
 .background-video {
