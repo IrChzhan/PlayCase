@@ -9,6 +9,15 @@ import router from './router'
 
 const app = createApp(App)
 
+router.afterEach((to) => {
+  if (typeof ym !== 'undefined') {
+    ym(100024526, 'hit', to.fullPath);
+  }
+});
+
+app.use(router);
+app.mount('#app');
+
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/service-worker.js')
